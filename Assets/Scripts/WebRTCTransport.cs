@@ -16,8 +16,8 @@ namespace Netcode.Transports.WebRTCTransport
         RTCPeerConnection _localConnection;
         RTCDataChannel _sendChannel;
         private string _password;
-        public string Address = "141.147.74.132";
-        public ushort Port = 7777;
+        private string _address = "79.72.91.98";
+        private ushort _port = 80;
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
 
@@ -64,7 +64,7 @@ namespace Netcode.Transports.WebRTCTransport
         public override async void Initialize(NetworkManager networkManager = null)
         {
             _webSocket = new ClientWebSocket();
-            await _webSocket.ConnectAsync(new Uri("ws://localhost:7777"), CancellationToken.None);
+            await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
             Task receiveTask = Task.Run(async () =>
             {
                 byte[] buffer = new byte[1024];
@@ -103,7 +103,7 @@ namespace Netcode.Transports.WebRTCTransport
                     RTCConfiguration configuration = new RTCConfiguration();
                     configuration.iceServers = new RTCIceServer[] { new RTCIceServer { urls = new string[] { "stun:stun.l.google.com:19302" } } };
                     _localConnection = new RTCPeerConnection(ref configuration);
-                    _localConnection.OnIceCandidate = async e => {  Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
+                    _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
                     {
                         Debug.Log($"Local ICE connection state changed: {state}");
@@ -141,6 +141,11 @@ namespace Netcode.Transports.WebRTCTransport
                     configuration.iceServers = new RTCIceServer[] { new RTCIceServer { urls = new string[] { "stun:stun.l.google.com:19302" } } };
                     _localConnection = new RTCPeerConnection(ref configuration2);
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
+                    _localConnection.OnIceConnectionChange = state =>
+                    {
+                        Debug.Log($"Local ICE connection state changed: {state}");
+                        HandleIceConnectionStateChange(state);
+                    };
                     RTCSessionDescription sdpOffer = new RTCSessionDescription();
                     sdpOffer.type = RTCSdpType.Offer;
                     sdpOffer.sdp = messageObject.MessageContent;
@@ -218,5 +223,5 @@ namespace Netcode.Transports.WebRTCTransport
 public class ServerMessage
 {
     public string MessageType;
-    public string? MessageContent;
+    public string MessageContent;
 }
