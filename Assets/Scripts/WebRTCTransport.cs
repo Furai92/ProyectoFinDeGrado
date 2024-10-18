@@ -101,7 +101,20 @@ namespace Netcode.Transports.WebRTCTransport
                     //Send the SDP offer to the other peer - Peer A
                     Debug.Log("Pairing request received");
                     RTCConfiguration configuration = new RTCConfiguration();
-                    configuration.iceServers = new RTCIceServer[] { new RTCIceServer { urls = new string[] { "stun:stun.l.google.com:19302" } } };
+                    configuration.iceServers = new RTCIceServer[] 
+                    {
+                        new RTCIceServer 
+                        { 
+                            urls = new string[] { "turn:79.72.91.98:3478" }, 
+                            username = "server14", 
+                            credential = "41server", 
+                            credentialType = RTCIceCredentialType.Password 
+                        },
+                        new RTCIceServer 
+                        { 
+                            urls = new string[] { "stun:79.72.91.98:3478" } 
+                        }
+                    };
                     _localConnection = new RTCPeerConnection(ref configuration);
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
@@ -138,7 +151,20 @@ namespace Netcode.Transports.WebRTCTransport
                     //Receive the SDP offer from the other peer and send back an answer - Peer B
                     Debug.Log("Received SDP offer");
                     RTCConfiguration configuration2 = new RTCConfiguration();
-                    configuration.iceServers = new RTCIceServer[] { new RTCIceServer { urls = new string[] { "stun:stun.l.google.com:19302" } } };
+                    configuration2.iceServers = new RTCIceServer[]
+                    {
+                        new RTCIceServer
+                        {
+                            urls = new string[] { "turn:79.72.91.98:3478" },
+                            username = "server14",
+                            credential = "41server",
+                            credentialType = RTCIceCredentialType.Password
+                        },
+                        new RTCIceServer
+                        {
+                            urls = new string[] { "stun:79.72.91.98:3478" }
+                        }
+                    };
                     _localConnection = new RTCPeerConnection(ref configuration2);
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
@@ -149,6 +175,7 @@ namespace Netcode.Transports.WebRTCTransport
                     RTCSessionDescription sdpOffer = new RTCSessionDescription();
                     sdpOffer.type = RTCSdpType.Offer;
                     sdpOffer.sdp = messageObject.MessageContent;
+                    Debug.Log("SDP: " + sdpOffer.sdp);
                     Debug.Log("Creating remote connection");
                     var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
                     while (!op3.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
@@ -163,7 +190,7 @@ namespace Netcode.Transports.WebRTCTransport
                     break;
 
                 case "ICECandidate":
-                    //Receive ICE candidate from the other peer
+                    //Receive ICE candidate from the other peer 
                     Debug.Log("Received ICE candidate");
                     RTCIceCandidateInit candidateInit = new RTCIceCandidateInit();
                     RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
