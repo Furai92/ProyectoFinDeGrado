@@ -101,18 +101,18 @@ namespace Netcode.Transports.WebRTCTransport
                     //Send the SDP offer to the other peer - Peer A
                     Debug.Log("Pairing request received");
                     RTCConfiguration configuration = new RTCConfiguration();
-                    configuration.iceServers = new RTCIceServer[] 
+                    configuration.iceServers = new RTCIceServer[]
                     {
-                        new RTCIceServer 
-                        { 
-                            urls = new string[] { "turn:79.72.91.98:3478" }, 
-                            username = "server14", 
-                            credential = "41server", 
-                            credentialType = RTCIceCredentialType.Password 
+                        new RTCIceServer
+                        {
+                            urls = new string[] { "stun:79.72.91.98:3478" }
                         },
-                        new RTCIceServer 
-                        { 
-                            urls = new string[] { "stun:79.72.91.98:3478" } 
+                        new RTCIceServer
+                        {
+                            urls = new string[] { "turn:79.72.91.98:3478" },
+                            username = "server14",
+                            credential = "41server",
+                            credentialType = RTCIceCredentialType.Password
                         }
                     };
                     _localConnection = new RTCPeerConnection(ref configuration);
@@ -120,10 +120,12 @@ namespace Netcode.Transports.WebRTCTransport
                     _localConnection.OnIceConnectionChange = state =>
                     {
                         Debug.Log($"Local ICE connection state changed: {state}");
-                        HandleIceConnectionStateChange(state);
                     };
 
                     _sendChannel = _localConnection.CreateDataChannel("sendChannel");
+                    _sendChannel.OnOpen += () => Debug.Log("Data channel opened");
+                    _sendChannel.OnClose += () => Debug.Log("Data channel closed");
+                    _sendChannel.OnMessage += (message) => Debug.Log($"Received message: {message}");
                     Debug.Log("Creating offer");
                     RTCSessionDescriptionAsyncOperation offer = _localConnection.CreateOffer();
                     while (!offer.IsDone) await Task.Yield();
@@ -155,14 +157,14 @@ namespace Netcode.Transports.WebRTCTransport
                     {
                         new RTCIceServer
                         {
+                            urls = new string[] { "stun:79.72.91.98:3478" }
+                        },
+                        new RTCIceServer
+                        {
                             urls = new string[] { "turn:79.72.91.98:3478" },
                             username = "server14",
                             credential = "41server",
                             credentialType = RTCIceCredentialType.Password
-                        },
-                        new RTCIceServer
-                        {
-                            urls = new string[] { "stun:79.72.91.98:3478" }
                         }
                     };
                     _localConnection = new RTCPeerConnection(ref configuration2);
@@ -170,12 +172,19 @@ namespace Netcode.Transports.WebRTCTransport
                     _localConnection.OnIceConnectionChange = state =>
                     {
                         Debug.Log($"Local ICE connection state changed: {state}");
-                        HandleIceConnectionStateChange(state);
                     };
+                    RTCDataChannel _receiveChannel = null;
+                    _localConnection.OnDataChannel = (RTCDataChannel e) =>
+                    {
+                        _receiveChannel = e;
+                        _receiveChannel.OnOpen += () => Debug.Log("Data channel opened");
+                        _receiveChannel.OnClose += () => Debug.Log("Data channel closed");
+                        _receiveChannel.OnMessage += (message) => Debug.Log($"Received message: {message}");
+                    };
+
                     RTCSessionDescription sdpOffer = new RTCSessionDescription();
                     sdpOffer.type = RTCSdpType.Offer;
                     sdpOffer.sdp = messageObject.MessageContent;
-                    Debug.Log("SDP: " + sdpOffer.sdp);
                     Debug.Log("Creating remote connection");
                     var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
                     while (!op3.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
@@ -205,38 +214,6 @@ namespace Netcode.Transports.WebRTCTransport
                     break;
             }
         }
-
-        void HandleIceConnectionStateChange(RTCIceConnectionState state)
-        {
-            switch (state)
-            {
-                case RTCIceConnectionState.New:
-                    Debug.Log("ICE connection state: New");
-                    break;
-                case RTCIceConnectionState.Checking:
-                    Debug.Log("ICE connection state: Checking");
-                    break;
-                case RTCIceConnectionState.Connected:
-                    Debug.Log("ICE connection state: Connected");
-                    break;
-                case RTCIceConnectionState.Completed:
-                    Debug.Log("ICE connection state: Completed");
-                    break;
-                case RTCIceConnectionState.Disconnected:
-                    Debug.Log("ICE connection state: Disconnected");
-                    break;
-                case RTCIceConnectionState.Failed:
-                    Debug.Log("ICE connection state: Failed");
-                    break;
-                case RTCIceConnectionState.Closed:
-                    Debug.Log("ICE connection state: Closed");
-                    break;
-                default:
-                    Debug.Log("ICE connection state: Unknown");
-                    break;
-            }
-        }
-
         async Task SendMessage(WebSocket webSocket, string type, string content)
         {
             string message = JsonUtility.ToJson(new ServerMessage { MessageType = type, MessageContent = content });
