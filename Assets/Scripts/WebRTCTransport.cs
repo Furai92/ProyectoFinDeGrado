@@ -140,6 +140,7 @@ namespace Netcode.Transports.WebRTCTransport
                     Debug.Log("Pairing request received");
                     RTCConfiguration configuration = GetRTCConfiguration();
                     _localConnection = new RTCPeerConnection(ref configuration);
+                    _localConnection = new RTCPeerConnection();
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
                     {
@@ -175,6 +176,7 @@ namespace Netcode.Transports.WebRTCTransport
                     Debug.Log("Received SDP offer");
                     RTCConfiguration configuration2 = GetRTCConfiguration();
                     _localConnection = new RTCPeerConnection(ref configuration2);
+                    _localConnection = new RTCPeerConnection();
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
                     {
@@ -198,12 +200,21 @@ namespace Netcode.Transports.WebRTCTransport
                     break;
 
                 case "ICECandidate":
-                    //Receive ICE candidate from the other peer 
+                    // Receive ICE candidate from the other peer 
                     Debug.Log("Received ICE candidate");
                     RTCIceCandidateInit candidateInit = new RTCIceCandidateInit();
-                    RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
+                    Debug.Log("Setting ICE candidate");
                     candidateInit.candidate = messageObject.MessageContent;
+                    candidateInit.sdpMid = "";
+                    candidateInit.sdpMLineIndex = 0;
+                    Debug.Log("Creating ICE candidate");
+                    Debug.Log($"Parsed ICE candidate: {candidateInit.candidate}");
+                    Debug.Log($"sdpMid: {candidateInit.sdpMid}");
+                    Debug.Log($"sdpMLineIndex: {candidateInit.sdpMLineIndex}");
+                    RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
+                    Debug.Log("Trying to add ICE candidate " + candidate);
                     _localConnection.AddIceCandidate(candidate);
+                    Debug.Log("ICE candidate added " + candidate);
                     break;
 
                 case "Disconnected":
