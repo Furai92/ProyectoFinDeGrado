@@ -141,13 +141,23 @@ namespace Netcode.Transports.WebRTCTransport
                     RTCConfiguration configuration = GetRTCConfiguration();
                     _localConnection = new RTCPeerConnection(ref configuration);
                     _localConnection = new RTCPeerConnection();
+                    _sendChannel = _localConnection.CreateDataChannel("sendChannel");
+                    _sendChannel.OnOpen = () =>
+                    {
+                        Debug.Log("Data channel open");
+                        _sendChannel.Send("Hello");
+                    };
+                    _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+                    _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
                     {
+                        if (state == RTCIceConnectionState.Connected)
+                        {
+                            Debug.Log("Connection established");
+                        }
                         Debug.Log($"Local ICE connection state changed: {state}");
                     };
-
-                    _sendChannel = _localConnection.CreateDataChannel("sendChannel");
                     Debug.Log("Creating offer");
                     RTCSessionDescriptionAsyncOperation offer = _localConnection.CreateOffer();
                     while (!offer.IsDone) await Task.Yield();
@@ -177,9 +187,27 @@ namespace Netcode.Transports.WebRTCTransport
                     RTCConfiguration configuration2 = GetRTCConfiguration();
                     _localConnection = new RTCPeerConnection(ref configuration2);
                     _localConnection = new RTCPeerConnection();
+                    // Handle incoming data channels
+                    _localConnection.OnDataChannel = channel =>
+                    {
+                        Debug.Log("Data channel received");
+                        _sendChannel = channel;
+                        _sendChannel.OnOpen = () =>
+                        {
+                            Debug.Log("Data channel open");
+                            _sendChannel.Send("Bye");
+                        };
+                        _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+                        _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+                    };
                     _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
                     _localConnection.OnIceConnectionChange = state =>
                     {
+                        if (state == RTCIceConnectionState.Completed)
+                        {
+                            Debug.Log("Connection established");
+                            
+                        }
                         Debug.Log($"Local ICE connection state changed: {state}");
                     };
 
@@ -188,7 +216,8 @@ namespace Netcode.Transports.WebRTCTransport
                     sdpOffer.sdp = messageObject.MessageContent;
                     Debug.Log("Creating remote connection");
                     var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
-                    while (!op3.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
+                    Debug.Log("Setting remote description");
+                     //while (!op3.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
 
                     Debug.Log("Creating answer");
                     RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
