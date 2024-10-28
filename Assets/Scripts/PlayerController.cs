@@ -5,9 +5,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _camVerticalRotationAxis;
 
-    private const float MOVEMENT_SPEED = 10f;
+    private const float MOVEMENT_SPEED = 5f;
     private const float ROTATION_SPEED = 360f;
-    private const float MIN_CAM_VERTICAL_ROTATION_X = 340f;
+    private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
 
 
@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
         _camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
+        StageManager.UpdatePlayerPosition(transform.position);
     }
     private void ClampCamVerticalRotation() 
     {
