@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Threading;
 using UnityEngine;
-using System.Collections;
 
 namespace Netcode.Transports.WebRTCTransport
 {
@@ -139,7 +138,7 @@ namespace Netcode.Transports.WebRTCTransport
                     //Send the SDP offer to the other peer - Peer A
                     Debug.Log("Pairing request received");
                     RTCConfiguration configuration = GetRTCConfiguration();
-                    _localConnection = new RTCPeerConnection(ref configuration);
+                    //_localConnection = new RTCPeerConnection(ref configuration);
                     _localConnection = new RTCPeerConnection();
                     _sendChannel = _localConnection.CreateDataChannel("sendChannel");
                     _sendChannel.OnOpen = () =>
@@ -158,14 +157,7 @@ namespace Netcode.Transports.WebRTCTransport
                         }
                         Debug.Log($"Local ICE connection state changed: {state}");
                     };
-                    Debug.Log("Creating offer");
-                    RTCSessionDescriptionAsyncOperation offer = _localConnection.CreateOffer();
-                    while (!offer.IsDone) await Task.Yield();
-                    Debug.Log("Offer created");
-                    RTCSessionDescription offerDesc = offer.Desc;
-                    _localConnection.SetLocalDescription(ref offerDesc);
-                    Debug.Log("Sending offer");
-                    await SendMessage(_webSocket, "SendSDPAnswer", offerDesc.sdp);
+                    await CreateOfferAsync();
                     break;
 
                 case "RecieveSDPAnswer":
@@ -175,17 +167,20 @@ namespace Netcode.Transports.WebRTCTransport
                     sdpAnswer.type = RTCSdpType.Answer;
                     sdpAnswer.sdp = messageObject.MessageContent;
                     Debug.Log("Setting remote description");
-                    var op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
-
-                    while (!op2.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
-
+                    RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
+                    await WaitForOperation(op2);
+                    if (op2.IsError)
+                    {
+                        Debug.LogError($"Failed to create offer: {op2.Error.message}");
+                        return;
+                    }
                     break;
 
                 case "SendSDPAnswer":
                     //Receive the SDP offer from the other peer and send back an answer - Peer B
                     Debug.Log("Received SDP offer");
                     RTCConfiguration configuration2 = GetRTCConfiguration();
-                    _localConnection = new RTCPeerConnection(ref configuration2);
+                    //_localConnection = new RTCPeerConnection(ref configuration2);
                     _localConnection = new RTCPeerConnection();
                     // Handle incoming data channels
                     _localConnection.OnDataChannel = channel =>
@@ -206,7 +201,6 @@ namespace Netcode.Transports.WebRTCTransport
                         if (state == RTCIceConnectionState.Completed)
                         {
                             Debug.Log("Connection established");
-                            
                         }
                         Debug.Log($"Local ICE connection state changed: {state}");
                     };
@@ -214,18 +208,7 @@ namespace Netcode.Transports.WebRTCTransport
                     RTCSessionDescription sdpOffer = new RTCSessionDescription();
                     sdpOffer.type = RTCSdpType.Offer;
                     sdpOffer.sdp = messageObject.MessageContent;
-                    Debug.Log("Creating remote connection");
-                    var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
-                    Debug.Log("Setting remote description");
-                     //while (!op3.IsDone) { Debug.Log("Waiting for remote description"); await Task.Yield(); }
-
-                    Debug.Log("Creating answer");
-                    RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
-                    while (!answer.IsDone) { Debug.Log("Waiting for answer creation"); await Task.Yield(); }
-                    RTCSessionDescription answerDesc = answer.Desc;
-                    _localConnection.SetLocalDescription(ref answerDesc);
-
-                    await SendMessage(_webSocket, "RecieveSDPAnswer", answerDesc.sdp);
+                    await CreateAnswerAsync(sdpOffer);
                     break;
 
                 case "ICECandidate":
@@ -251,6 +234,79 @@ namespace Netcode.Transports.WebRTCTransport
                     await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connected", CancellationToken.None);
                     _webSocket.Dispose();
                     break;
+            }
+        }
+        
+        private async Task CreateOfferAsync()
+        {
+            // Start the CreateOffer operation
+            RTCSessionDescriptionAsyncOperation offerOp = _localConnection.CreateOffer();
+
+            // Wait until the offer is complete
+            await WaitForOperation(offerOp);
+
+            if (offerOp.IsError)
+            {
+                Debug.LogError($"Failed to create offer: {offerOp.Error.message}");
+                return;
+            }
+
+            RTCSessionDescription offer = offerOp.Desc;
+            Debug.Log("Created offer: " + offer.sdp);
+
+            // You can now set the offer as the local description or proceed with signaling
+            var op = _localConnection.SetLocalDescription(ref offer);
+            await WaitForOperation(op);
+            if (op.IsError)
+            {
+                Debug.LogError($"Failed to create offer: {op.Error.message}");
+                return;
+            }
+            
+            await SendMessage(_webSocket, "SendSDPAnswer", offer.sdp);
+        }
+        
+        private async Task CreateAnswerAsync(RTCSessionDescription sdpOffer)
+        {
+            Debug.Log("Creating remote connection");
+            var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
+            Debug.Log("Setting remote description");
+            
+            await WaitForOperation(op3);
+            
+            if (op3.IsError)
+            {
+                Debug.LogError($"Failed to create answer: {op3.Error.message}");
+                return;
+            }
+            
+            Debug.Log("Creating answer");
+            RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
+            await WaitForOperation(answer);
+
+            if (answer.IsError)
+            {
+                Debug.LogError($"Failed to create annswer: {answer.Error.message}");
+                return;
+            }
+
+            RTCSessionDescription answerDesc = answer.Desc;
+            var localDescription = _localConnection.SetLocalDescription(ref answerDesc);
+            await WaitForOperation(localDescription);
+            if (localDescription.IsError)
+            {
+                Debug.LogError($"Failed to create answer: {localDescription.Error.message}");
+                return;
+            }
+
+            await SendMessage(_webSocket, "RecieveSDPAnswer", answerDesc.sdp);
+        }
+        
+        private async Task WaitForOperation(AsyncOperationBase operation)
+        {
+            while (!operation.IsDone)
+            {
+                await Task.Yield();
             }
         }
 
@@ -284,11 +340,4 @@ namespace Netcode.Transports.WebRTCTransport
             await webSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
-}
-
-[Serializable]
-public class ServerMessage
-{
-    public string MessageType;
-    public string MessageContent;
 }
