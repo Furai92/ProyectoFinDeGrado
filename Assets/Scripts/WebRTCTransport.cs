@@ -16,7 +16,8 @@ namespace Netcode.Transports.WebRTCTransport
         RTCConfiguration? _configuration;
         RTCDataChannel _sendChannel;
         private string _password;
-        private string _address = "79.72.91.98";
+        //private string _address = "79.72.91.98";
+        private string _address = "192.168.0.142";
         private ushort _port = 80;
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -137,7 +138,7 @@ namespace Netcode.Transports.WebRTCTransport
                 case "SendSDPOffer":
                     //Send the SDP offer to the other peer - Peer A
                     Debug.Log("Pairing request received");
-                    RTCConfiguration configuration = GetRTCConfiguration();
+                    //RTCConfiguration configuration = GetRTCConfiguration();
                     //_localConnection = new RTCPeerConnection(ref configuration);
                     _localConnection = new RTCPeerConnection();
                     _sendChannel = _localConnection.CreateDataChannel("sendChannel");
@@ -168,12 +169,6 @@ namespace Netcode.Transports.WebRTCTransport
                     sdpAnswer.sdp = messageObject.MessageContent;
                     Debug.Log("Setting remote description");
                     RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
-                    await WaitForOperation(op2);
-                    if (op2.IsError)
-                    {
-                        Debug.LogError($"Failed to create offer: {op2.Error.message}");
-                        return;
-                    }
                     break;
 
                 case "SendSDPAnswer":
@@ -242,26 +237,11 @@ namespace Netcode.Transports.WebRTCTransport
             // Start the CreateOffer operation
             RTCSessionDescriptionAsyncOperation offerOp = _localConnection.CreateOffer();
 
-            // Wait until the offer is complete
-            await WaitForOperation(offerOp);
-
-            if (offerOp.IsError)
-            {
-                Debug.LogError($"Failed to create offer: {offerOp.Error.message}");
-                return;
-            }
-
             RTCSessionDescription offer = offerOp.Desc;
             Debug.Log("Created offer: " + offer.sdp);
 
             // You can now set the offer as the local description or proceed with signaling
             var op = _localConnection.SetLocalDescription(ref offer);
-            await WaitForOperation(op);
-            if (op.IsError)
-            {
-                Debug.LogError($"Failed to create offer: {op.Error.message}");
-                return;
-            }
             
             await SendMessage(_webSocket, "SendSDPAnswer", offer.sdp);
         }
@@ -272,32 +252,11 @@ namespace Netcode.Transports.WebRTCTransport
             var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
             Debug.Log("Setting remote description");
             
-            await WaitForOperation(op3);
-            
-            if (op3.IsError)
-            {
-                Debug.LogError($"Failed to create answer: {op3.Error.message}");
-                return;
-            }
-            
             Debug.Log("Creating answer");
             RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
-            await WaitForOperation(answer);
-
-            if (answer.IsError)
-            {
-                Debug.LogError($"Failed to create annswer: {answer.Error.message}");
-                return;
-            }
 
             RTCSessionDescription answerDesc = answer.Desc;
             var localDescription = _localConnection.SetLocalDescription(ref answerDesc);
-            await WaitForOperation(localDescription);
-            if (localDescription.IsError)
-            {
-                Debug.LogError($"Failed to create answer: {localDescription.Error.message}");
-                return;
-            }
 
             await SendMessage(_webSocket, "RecieveSDPAnswer", answerDesc.sdp);
         }
