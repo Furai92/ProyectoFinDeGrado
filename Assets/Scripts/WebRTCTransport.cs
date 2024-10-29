@@ -17,7 +17,7 @@ namespace Netcode.Transports.WebRTCTransport
         RTCDataChannel _sendChannel;
         private string _password;
         //private string _address = "79.72.91.98";
-        private string _address = "192.168.0.142";
+        private string _address = "127.0.0.1";
         private ushort _port = 80;
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
