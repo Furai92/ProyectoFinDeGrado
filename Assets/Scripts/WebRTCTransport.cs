@@ -15,7 +15,6 @@ namespace Netcode.Transports.WebRTCTransport
         RTCPeerConnection _localConnection;
         RTCConfiguration? _configuration;
         RTCDataChannel _sendChannel;
-        private string _password;
         //private string _address = "79.72.91.98";
         private string _address = "127.0.0.1";
         private ushort _port = 80;
@@ -122,150 +121,210 @@ namespace Netcode.Transports.WebRTCTransport
         {
             ServerMessage messageObject = JsonUtility.FromJson<ServerMessage>(message);
 
-            if (messageObject == null)
-            {
-                Debug.Log("Failed to deserialize message.");
-                return;
-            }
-
             switch (messageObject.MessageType)
             {
                 case "Password":
-                    _password = messageObject.MessageContent;
-                    await SendMessage(webSocket, "ConnectionRequest", "");
+                    await OnPassword(webSocket);
                     break;
 
                 case "SendSDPOffer":
-                    //Send the SDP offer to the other peer - Peer A
-                    Debug.Log("Pairing request received");
-                    //RTCConfiguration configuration = GetRTCConfiguration();
-                    //_localConnection = new RTCPeerConnection(ref configuration);
-                    _localConnection = new RTCPeerConnection();
-                    _sendChannel = _localConnection.CreateDataChannel("sendChannel");
-                    _sendChannel.OnOpen = () =>
-                    {
-                        Debug.Log("Data channel open");
-                        _sendChannel.Send("Hello");
-                    };
-                    _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-                    _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                    _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
-                    _localConnection.OnIceConnectionChange = state =>
-                    {
-                        if (state == RTCIceConnectionState.Connected)
-                        {
-                            Debug.Log("Connection established");
-                        }
-                        Debug.Log($"Local ICE connection state changed: {state}");
-                    };
-                    await CreateOfferAsync();
+                    await OnSendSDPOffer(webSocket);
                     break;
 
-                case "RecieveSDPAnswer":
-                    //Receive the SDP answer from the other peer - Peer A
-                    Debug.Log("Received SDP answer");
-                    RTCSessionDescription sdpAnswer = new RTCSessionDescription();
-                    sdpAnswer.type = RTCSdpType.Answer;
-                    sdpAnswer.sdp = messageObject.MessageContent;
-                    Debug.Log("Setting remote description");
-                    RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
+                case "ReceiveSDPAnswer":
+                    await OnRecieveSDPAnswer(messageObject);
                     break;
 
                 case "SendSDPAnswer":
-                    //Receive the SDP offer from the other peer and send back an answer - Peer B
-                    Debug.Log("Received SDP offer");
-                    RTCConfiguration configuration2 = GetRTCConfiguration();
-                    //_localConnection = new RTCPeerConnection(ref configuration2);
-                    _localConnection = new RTCPeerConnection();
-                    // Handle incoming data channels
-                    _localConnection.OnDataChannel = channel =>
-                    {
-                        Debug.Log("Data channel received");
-                        _sendChannel = channel;
-                        _sendChannel.OnOpen = () =>
-                        {
-                            Debug.Log("Data channel open");
-                            _sendChannel.Send("Bye");
-                        };
-                        _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-                        _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                    };
-                    _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
-                    _localConnection.OnIceConnectionChange = state =>
-                    {
-                        if (state == RTCIceConnectionState.Completed)
-                        {
-                            Debug.Log("Connection established");
-                        }
-                        Debug.Log($"Local ICE connection state changed: {state}");
-                    };
-
-                    RTCSessionDescription sdpOffer = new RTCSessionDescription();
-                    sdpOffer.type = RTCSdpType.Offer;
-                    sdpOffer.sdp = messageObject.MessageContent;
-                    await CreateAnswerAsync(sdpOffer);
+                    await OnSendSDPAnswer(webSocket, messageObject);
                     break;
 
                 case "ICECandidate":
-                    // Receive ICE candidate from the other peer 
-                    Debug.Log("Received ICE candidate");
-                    RTCIceCandidateInit candidateInit = new RTCIceCandidateInit();
-                    Debug.Log("Setting ICE candidate");
-                    candidateInit.candidate = messageObject.MessageContent;
-                    candidateInit.sdpMid = "";
-                    candidateInit.sdpMLineIndex = 0;
-                    Debug.Log("Creating ICE candidate");
-                    Debug.Log($"Parsed ICE candidate: {candidateInit.candidate}");
-                    Debug.Log($"sdpMid: {candidateInit.sdpMid}");
-                    Debug.Log($"sdpMLineIndex: {candidateInit.sdpMLineIndex}");
-                    RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
-                    Debug.Log("Trying to add ICE candidate " + candidate);
-                    _localConnection.AddIceCandidate(candidate);
-                    Debug.Log("ICE candidate added " + candidate);
+                    OnICECandidate(messageObject);
                     break;
 
                 case "Disconnected":
-                    //Close the connection
-                    await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connected", CancellationToken.None);
-                    _webSocket.Dispose();
+                    await OnDisconnected();
                     break;
             }
         }
-        
-        private async Task CreateOfferAsync()
+
+        private async Task OnPassword(WebSocket webSocket)
         {
+            await SendMessage(webSocket, "ConnectionRequest", "");
+        }
+
+        private async Task OnRecieveSDPAnswer(ServerMessage messageObject)
+        {
+            //Receive the SDP answer from the other peer - Peer A
+            Debug.Log("Received SDP answer");
+            RTCSessionDescription sdpAnswer = new RTCSessionDescription();
+            sdpAnswer.type = RTCSdpType.Answer;
+            sdpAnswer.sdp = messageObject.MessageContent;
+            Debug.Log("Setting remote description");
+            RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
+            await WaitForOperation(op2);
+            Debug.Log("finished setting remote description");
+        }
+
+        private void OnICECandidate(ServerMessage messageObject)
+        {
+            // Receive ICE candidate from the other peer 
+            Debug.Log("Received ICE candidate");
+            RTCIceCandidateInit candidateInit = new RTCIceCandidateInit();
+            Debug.Log("Setting ICE candidate");
+            candidateInit.candidate = messageObject.MessageContent;
+            candidateInit.sdpMid = "";
+            candidateInit.sdpMLineIndex = 0;
+            Debug.Log("Creating ICE candidate");
+            Debug.Log($"Parsed ICE candidate: {candidateInit.candidate}");
+            Debug.Log($"sdpMid: {candidateInit.sdpMid}");
+            Debug.Log($"sdpMLineIndex: {candidateInit.sdpMLineIndex}");
+            RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
+            Debug.Log("Trying to add ICE candidate " + candidate);
+            _localConnection.AddIceCandidate(candidate);
+            Debug.Log("ICE candidate added " + candidate);
+        }
+
+        private async Task OnDisconnected()
+        {
+            //Close the connection
+            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connected", CancellationToken.None);
+            _webSocket.Dispose();
+        }
+
+        private async Task OnSendSDPOffer(WebSocket webSocket)
+        {
+            //Send the SDP offer to the other peer - Peer A
+            Debug.Log("Pairing request received");
+            //RTCConfiguration configuration = GetRTCConfiguration();
+            //_localConnection = new RTCPeerConnection(ref configuration);
+            _localConnection = new RTCPeerConnection();
+            await CreateOfferAsync();
+            /*_localConnection.OnIceCandidate = e =>
+            {
+                Debug.Log("ICE candidate");
+                _ = HandleIceCandidateAsync(webSocket, e.Candidate);
+            };
+            _localConnection.OnIceConnectionChange = state =>
+            {
+                if (state == RTCIceConnectionState.Completed || state == RTCIceConnectionState.Connected)
+                {
+                    Debug.Log("Connection established");
+                }
+                Debug.Log($"Local ICE connection state changed: {state}");
+            };*/
+            // _sendChannel = _localConnection.CreateDataChannel("sendChannel");
+            // _sendChannel.OnOpen = () =>
+            // {
+            //     Debug.Log("Data channel open");
+            //     _sendChannel.Send("Hello");
+            // };
+            // _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+            // _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+            // _localConnection.OnIceCandidate = async e => { Debug.Log("ICE candidate"); await SendMessage(webSocket, "ICECandidate", e.Candidate); };
+            // _localConnection.OnIceConnectionChange = state =>
+            // {
+            //     if (state == RTCIceConnectionState.Connected)
+            //     {
+            //         Debug.Log("Connection established");
+            //     }
+            //     Debug.Log($"Local ICE connection state changed: {state}");
+            // };
+        }
+
+        private async Task OnSendSDPAnswer(WebSocket webSocket, ServerMessage messageObject)
+        {
+            //Receive the SDP offer from the other peer and send back an answer - Peer B
+            Debug.Log("Received SDP offer");
+            //RTCConfiguration configuration = GetRTCConfiguration();
+            //_localConnection = new RTCPeerConnection(ref configuration2);
+            _localConnection = new RTCPeerConnection();
+
+            RTCSessionDescription sdpOffer = new RTCSessionDescription();
+            sdpOffer.type = RTCSdpType.Offer;
+            sdpOffer.sdp = messageObject.MessageContent;
+            await CreateAnswerAsync(sdpOffer);
+            Debug.Log("Finished creating answer process");
+            /*_localConnection.OnDataChannel = channel =>
+            {
+                Debug.Log("Data channel received");
+                _sendChannel = channel;
+                _sendChannel.OnOpen = () =>
+                {
+                    Debug.Log("Data channel open");
+                    _sendChannel.Send("Bye");
+                };
+                _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+                _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+            };*/
+            /*_localConnection.OnIceCandidate = e =>
+            {
+                Debug.Log("ICE candidate");
+                _ = HandleIceCandidateAsync(webSocket, e.Candidate);
+            };
+            _localConnection.OnIceConnectionChange = state =>
+            {
+                if (state == RTCIceConnectionState.Completed || state == RTCIceConnectionState.Connected)
+                {
+                    Debug.Log("Connection established");
+                }
+                Debug.Log($"Local ICE connection state changed: {state}");
+            };*/
+        }
+        
+        private async Task HandleIceCandidateAsync(WebSocket webSocket, string candidate)
+        {
+            await SendMessage(webSocket, "ICECandidate", candidate);
+        }
+
+        private async Task CreateOfferAsync()
+        { 
+            Debug.Log("Started offer");
             // Start the CreateOffer operation
             RTCSessionDescriptionAsyncOperation offerOp = _localConnection.CreateOffer();
-
+            Debug.Log("creating offer");
+            await WaitForOperation(offerOp);
             RTCSessionDescription offer = offerOp.Desc;
             Debug.Log("Created offer: " + offer.sdp);
-
-            // You can now set the offer as the local description or proceed with signaling
+            Debug.Log("setting local description");
             var op = _localConnection.SetLocalDescription(ref offer);
-            
+            await WaitForOperation(op);
+            Debug.Log("finished setting local description");
             await SendMessage(_webSocket, "SendSDPAnswer", offer.sdp);
         }
         
         private async Task CreateAnswerAsync(RTCSessionDescription sdpOffer)
         {
-            Debug.Log("Creating remote connection");
-            var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
             Debug.Log("Setting remote description");
+            var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
+            await WaitForOperation(op3);
+            Debug.Log("Finished Setting remote description");
             
             Debug.Log("Creating answer");
             RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
-
+            await WaitForOperation(answer);
+            Debug.Log("Finished creating answer");
             RTCSessionDescription answerDesc = answer.Desc;
-            var localDescription = _localConnection.SetLocalDescription(ref answerDesc);
-
-            await SendMessage(_webSocket, "RecieveSDPAnswer", answerDesc.sdp);
+            Debug.Log("setting local description");
+            var op4 = _localConnection.SetLocalDescription(ref answerDesc);
+            await WaitForOperation(op4);
+            Debug.Log("finished setting local description");
+            await SendMessage(_webSocket, "ReceiveSDPAnswer", answerDesc.sdp);
         }
         
         private async Task WaitForOperation(AsyncOperationBase operation)
         {
-            while (!operation.IsDone)
+            while (!operation.IsDone || !operation.IsError)
             {
                 await Task.Yield();
+                Debug.Log("Waiting for operation" + operation);
+            }
+            Debug.Log("Finished operation");
+            if (operation.IsError)
+            {
+                Debug.LogError("Operation failed: " + operation.Error);
+                throw new Exception("Operation failed: " + operation.Error);
             }
         }
 
