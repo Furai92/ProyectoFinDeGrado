@@ -101,6 +101,7 @@ namespace Netcode.Transports.WebRTCTransport
         public override async void Initialize(NetworkManager networkManager = null)
         {
             _webSocket = new ClientWebSocket();
+            _localConnection = new RTCPeerConnection();
             await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
             Task receiveTask = Task.Run(async () =>
             {
@@ -163,7 +164,6 @@ namespace Netcode.Transports.WebRTCTransport
             sdpAnswer.sdp = messageObject.MessageContent;
             Debug.Log("Setting remote description");
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
-            await WaitForOperation(op2);
             Debug.Log("finished setting remote description");
         }
 
@@ -199,7 +199,6 @@ namespace Netcode.Transports.WebRTCTransport
             Debug.Log("Pairing request received");
             //RTCConfiguration configuration = GetRTCConfiguration();
             //_localConnection = new RTCPeerConnection(ref configuration);
-            _localConnection = new RTCPeerConnection();
             await CreateOfferAsync();
             /*_localConnection.OnIceCandidate = e =>
             {
@@ -239,7 +238,6 @@ namespace Netcode.Transports.WebRTCTransport
             Debug.Log("Received SDP offer");
             //RTCConfiguration configuration = GetRTCConfiguration();
             //_localConnection = new RTCPeerConnection(ref configuration2);
-            _localConnection = new RTCPeerConnection();
 
             RTCSessionDescription sdpOffer = new RTCSessionDescription();
             sdpOffer.type = RTCSdpType.Offer;
@@ -288,8 +286,7 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSessionDescription offer = offerOp.Desc;
             Debug.Log("Created offer: " + offer.sdp);
             Debug.Log("setting local description");
-            var op = _localConnection.SetLocalDescription(ref offer);
-            await WaitForOperation(op);
+            RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             Debug.Log("finished setting local description");
             await SendMessage(_webSocket, "SendSDPAnswer", offer.sdp);
         }
@@ -298,7 +295,6 @@ namespace Netcode.Transports.WebRTCTransport
         {
             Debug.Log("Setting remote description");
             var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
-            await WaitForOperation(op3);
             Debug.Log("Finished Setting remote description");
             
             Debug.Log("Creating answer");
@@ -315,7 +311,7 @@ namespace Netcode.Transports.WebRTCTransport
         
         private async Task WaitForOperation(AsyncOperationBase operation)
         {
-            while (!operation.IsDone || !operation.IsError)
+            while (!operation.IsDone && !operation.IsError)
             {
                 await Task.Yield();
                 Debug.Log("Waiting for operation" + operation);
