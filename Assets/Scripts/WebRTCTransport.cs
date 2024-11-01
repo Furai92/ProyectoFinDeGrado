@@ -66,7 +66,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override ulong GetCurrentRtt(ulong clientId)
         {
-            //TODO
+            //TO DO
             return 0;
         }
 
