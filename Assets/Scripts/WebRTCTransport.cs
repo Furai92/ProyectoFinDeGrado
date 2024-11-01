@@ -43,12 +43,6 @@ namespace Netcode.Transports.WebRTCTransport
 
             return NetworkEvent.Nothing;
         }
-        
-        private void OnDestroy()
-        {
-            _sendChannel.Close();
-            _localConnection.Close();
-        }
 
         public override bool StartClient()
         {
@@ -72,12 +66,13 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override ulong GetCurrentRtt(ulong clientId)
         {
+            //TODO
             return 0;
         }
 
         public override void Shutdown()
         {
-            Debug.Log("Shutting down WebRTC transport");
+            Debug.Log("Shutting down");
 
             // Close the data channels if they are open
             if (_sendChannel != null)
@@ -101,14 +96,16 @@ namespace Netcode.Transports.WebRTCTransport
                 _webSocket = null;
             }
 
-            Debug.Log("WebRTC transport shutdown complete");
+            Debug.Log("shutdown complete");
         }
+        
+        #region General
 
         public override async void Initialize(NetworkManager networkManager = null)
         {
             _webSocket = new ClientWebSocket();
-            //RTCConfiguration configuration = GetRTCConfiguration(); // Assuming you have a method for this
-            _localConnection = new RTCPeerConnection();
+            RTCConfiguration configuration = GetRTCConfiguration();
+            _localConnection = new RTCPeerConnection(ref configuration);
             await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
             byte[] buffer = new byte[1024];
             while (_webSocket.State == WebSocketState.Open)
@@ -208,6 +205,12 @@ namespace Netcode.Transports.WebRTCTransport
             Debug.Log("Trying to add ICE candidate " + candidate);
             _localConnection.AddIceCandidate(candidate);
             Debug.Log("ICE candidate added " + candidate);
+        }
+        
+        private void OnDestroy()
+        {
+            _sendChannel.Close();
+            _localConnection.Close();
         }
 
         private async Task OnDisconnected()
@@ -324,5 +327,7 @@ namespace Netcode.Transports.WebRTCTransport
             Debug.Log($"Sending: {message}");
             await _webSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
         }
+        
+        #endregion
     }
 }
