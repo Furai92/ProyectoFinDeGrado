@@ -129,19 +129,19 @@ namespace Netcode.Transports.WebRTCTransport
             switch (messageObject.MessageType)
             {
                 case "Password":
-                    await OnPassword(webSocket);
+                    await OnPassword();
                     break;
 
                 case "SendSDPOffer":
-                    await OnSendSDPOffer(webSocket);
+                    await OnSendSDPOffer();
                     break;
 
-                case "ReceiveSDPAnswer":
+                case "RecieveSDPAnswer":
                     await OnRecieveSDPAnswer(messageObject);
                     break;
 
                 case "SendSDPAnswer":
-                    await OnSendSDPAnswer(webSocket, messageObject);
+                    await OnSendSDPAnswer(messageObject);
                     break;
 
                 case "ICECandidate":
@@ -154,9 +154,9 @@ namespace Netcode.Transports.WebRTCTransport
             }
         }
 
-        private async Task OnPassword(WebSocket webSocket)
+        private async Task OnPassword()
         {
-            await SendMessage(webSocket, "ConnectionRequest", "");
+            await SendMessage("ConnectionRequest", "");
         }
 
         private async Task OnRecieveSDPAnswer(ServerMessage messageObject)
@@ -178,7 +178,7 @@ namespace Netcode.Transports.WebRTCTransport
             _localConnection.OnIceCandidate = async e =>
             {
                 Debug.Log("ICE candidate");
-                await SendMessage(_webSocket, "ICECandidate", e.Candidate);
+                await SendMessage("ICECandidate", e.Candidate);
             };
             _localConnection.OnIceConnectionChange = state =>
             {
@@ -187,18 +187,6 @@ namespace Netcode.Transports.WebRTCTransport
                     Debug.Log("Connection established");
                 }
                 Debug.Log($"Local ICE connection state changed: {state}");
-            };
-            _localConnection.OnDataChannel = channel =>
-            {
-                Debug.Log("Data channel received");
-                _sendChannel = channel;
-                _sendChannel.OnOpen = () =>
-                {
-                    Debug.Log("Data channel open");
-                    _sendChannel.Send("Bye");
-                };
-                _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-                _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
             };
             Debug.Log("suscribed to events");
         }
@@ -229,28 +217,21 @@ namespace Netcode.Transports.WebRTCTransport
             _webSocket.Dispose();
         }
 
-        private async Task OnSendSDPOffer(WebSocket webSocket)
+        private async Task OnSendSDPOffer()
         {
             //Send the SDP offer to the other peer - Peer A
             Debug.Log("Pairing request received");
+            _sendChannel = _localConnection.CreateDataChannel("send");
+            _sendChannel.OnOpen = () =>
+            {
+                Debug.Log("Data channel open");
+                _sendChannel.Send("hello");
+
+            };
+            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+            _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
             //RTCConfiguration configuration = GetRTCConfiguration();
             //_localConnection = new RTCPeerConnection(ref configuration);
-            await CreateOfferAsync();
-        }
-
-        private async Task OnSendSDPAnswer(WebSocket webSocket, ServerMessage messageObject)
-        {
-            //Receive the SDP offer from the other peer and send back an answer - Peer B
-            Debug.Log("Received SDP offer");
-            //RTCConfiguration configuration = GetRTCConfiguration();
-            //_localConnection = new RTCPeerConnection(ref configuration2);
-            
-            await CreateAnswerAsync(messageObject);
-            Debug.Log("Finished creating answer process");
-        }
-
-        private async Task CreateOfferAsync()
-        { 
             Debug.Log("Started offer");
             // Start the CreateOffer operation
             RTCSessionDescriptionAsyncOperation offerOp = _localConnection.CreateOffer();
@@ -262,11 +243,13 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             await WaitForOperation(op);
             Debug.Log("finished setting local description");
-            await SendMessage(_webSocket, "SendSDPAnswer", offer.sdp);
+            await SendMessage("SendSDPAnswer", offer.sdp);
         }
-        
-        private async Task CreateAnswerAsync(ServerMessage messageObject)
+
+        private async Task OnSendSDPAnswer(ServerMessage messageObject)
         {
+            //Receive the SDP offer from the other peer and send back an answer - Peer B
+            Debug.Log("Received SDP offer");
             RTCSessionDescription sdpOffer = new RTCSessionDescription();
             sdpOffer.type = RTCSdpType.Offer;
             sdpOffer.sdp = messageObject.MessageContent;
@@ -274,7 +257,6 @@ namespace Netcode.Transports.WebRTCTransport
             var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
             await WaitForOperation(op3);
             Debug.Log("Finished Setting remote description");
-            
             Debug.Log("Creating answer");
             RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
             await WaitForOperation(answer);
@@ -284,8 +266,18 @@ namespace Netcode.Transports.WebRTCTransport
             var op4 = _localConnection.SetLocalDescription(ref answerDesc);
             await WaitForOperation(op4);
             Debug.Log("finished setting local description");
-            await SendMessage(_webSocket, "ReceiveSDPAnswer", answerDesc.sdp);
+            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
             SuscribeToICE();
+            _localConnection.OnDataChannel = channel =>
+            {
+                Debug.Log("Data channel received");
+                _sendChannel = channel;
+                Debug.Log(_sendChannel.ReadyState);
+                _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+                _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+                _sendChannel.Send("bye");
+            };
+            Debug.Log("Finished creating answer process");
         }
         
         private async Task WaitForOperation(AsyncOperationBase operation)
@@ -326,11 +318,11 @@ namespace Netcode.Transports.WebRTCTransport
             _configuration = config;
             return _configuration.Value;
         }
-        async Task SendMessage(WebSocket webSocket, string type, string content)
+        async Task SendMessage(string type, string content)
         {
             string message = JsonUtility.ToJson(new ServerMessage { MessageType = type, MessageContent = content });
             Debug.Log($"Sending: {message}");
-            await webSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
+            await _webSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
 }
