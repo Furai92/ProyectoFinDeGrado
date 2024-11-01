@@ -221,13 +221,9 @@ namespace Netcode.Transports.WebRTCTransport
             //Send the SDP offer to the other peer - Peer A
             Debug.Log("Pairing request received");
             _sendChannel = _localConnection.CreateDataChannel("data");
-            _sendChannel.OnOpen = () =>
-            {
-                Debug.Log("Data channel open");
-                _sendChannel.Send("hello");
-            };
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
             _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+            _sendChannel.Send("hello");
             Debug.Log("Started offer");
             
             // Start the CreateOffer operation
@@ -301,10 +297,10 @@ namespace Netcode.Transports.WebRTCTransport
             var config = _configuration.GetValueOrDefault();
             config.iceServers = new RTCIceServer[]
             {
-                        new RTCIceServer
-                        {
-                            urls = new string[] { "stun:79.72.91.98:3478" }
-                        },
+                        // new RTCIceServer
+                        // {
+                        //     urls = new string[] { "stun:79.72.91.98:3478" }
+                        // },
                         new RTCIceServer
                         {
                             urls = new string[] { "turn:79.72.91.98:3478" },
