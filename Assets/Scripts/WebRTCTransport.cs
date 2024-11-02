@@ -166,17 +166,17 @@ namespace Netcode.Transports.WebRTCTransport
             sdpAnswer.sdp = messageObject.MessageContent;
             Debug.Log("Setting remote description");
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
-            await WaitForOperation(op2);
+            await WaitForOperation(op2); 
             Debug.Log("finished setting remote description");
             SuscribeToICE();
         }
 
         private void SuscribeToICE()
         {
-            _localConnection.OnIceCandidate = async e =>
+            _localConnection.OnIceCandidate = e =>
             {
                 Debug.Log("ICE candidate");
-                await SendMessage("ICECandidate", e.Candidate);
+                _= SendMessage("ICECandidate", e.Candidate);
             };
             _localConnection.OnIceConnectionChange = state =>
             {
@@ -222,13 +222,6 @@ namespace Netcode.Transports.WebRTCTransport
         {
             //Send the SDP offer to the other peer - Peer A
             Debug.Log("Pairing request received");
-            _sendChannel = _localConnection.CreateDataChannel("send");
-            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-            _sendChannel.OnMessage = e =>
-            {
-                Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                _sendChannel.Send("hello");
-            };
             Debug.Log("Started offer");
             
             // Start the CreateOffer operation
@@ -241,6 +234,13 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             await WaitForOperation(op);
             Debug.Log("finished setting local description");
+            _sendChannel = _localConnection.CreateDataChannel("send");
+            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+            _sendChannel.OnMessage = e =>
+            {
+                Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+                _sendChannel.Send("hello");
+            };
             await SendMessage("SendSDPAnswer", offer.sdp);
         }
 
@@ -266,7 +266,6 @@ namespace Netcode.Transports.WebRTCTransport
             var op4 = _localConnection.SetLocalDescription(ref answerDesc);
             await WaitForOperation(op4);
             Debug.Log("finished setting local description");
-            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
             SuscribeToICE();
             _localConnection.OnDataChannel = channel =>
             {
@@ -278,6 +277,8 @@ namespace Netcode.Transports.WebRTCTransport
                 _sendChannel.Send("bye");
             };
             Debug.Log("Finished creating answer process");
+            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
+
         }
         
         private async Task WaitForOperation(AsyncOperationBase operation)
@@ -302,10 +303,10 @@ namespace Netcode.Transports.WebRTCTransport
             var config = _configuration.GetValueOrDefault();
             config.iceServers = new RTCIceServer[]
             {
-                        new RTCIceServer
-                        {
-                            urls = new string[] { "stun:79.72.91.98:3478" }
-                        },
+                        // new RTCIceServer
+                        // {
+                        //     urls = new string[] { "stun:79.72.91.98:3478" }
+                        // },
                         new RTCIceServer
                         {
                             urls = new string[] { "turn:79.72.91.98:3478" },
