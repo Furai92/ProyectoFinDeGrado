@@ -302,10 +302,10 @@ namespace Netcode.Transports.WebRTCTransport
             var config = _configuration.GetValueOrDefault();
             config.iceServers = new RTCIceServer[]
             {
-                        // new RTCIceServer
-                        // {
-                        //     urls = new string[] { "stun:79.72.91.98:3478" }
-                        // },
+                        new RTCIceServer
+                        {
+                            urls = new string[] { "stun:79.72.91.98:3478" }
+                        },
                         new RTCIceServer
                         {
                             urls = new string[] { "turn:79.72.91.98:3478" },
