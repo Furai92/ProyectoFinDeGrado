@@ -16,6 +16,7 @@ namespace Netcode.Transports.WebRTCTransport
         RTCConfiguration? _configuration;
         RTCDataChannel _sendChannel;
         private string _address = "79.72.91.98";
+        //private string _address = "127.0.0.1";
         private ushort _port = 80;
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -105,6 +106,7 @@ namespace Netcode.Transports.WebRTCTransport
             _webSocket = new ClientWebSocket();
             RTCConfiguration configuration = GetRTCConfiguration();
             _localConnection = new RTCPeerConnection(ref configuration);
+            //_localConnection = new RTCPeerConnection();
             await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
             byte[] buffer = new byte[1024];
             while (_webSocket.State == WebSocketState.Open)
@@ -220,14 +222,13 @@ namespace Netcode.Transports.WebRTCTransport
         {
             //Send the SDP offer to the other peer - Peer A
             Debug.Log("Pairing request received");
-            _sendChannel = _localConnection.CreateDataChannel("data");
-            _sendChannel.OnOpen = () =>
+            _sendChannel = _localConnection.CreateDataChannel("send");
+            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
+            _sendChannel.OnMessage = e =>
             {
-                Debug.Log("Data channel open");
+                Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                 _sendChannel.Send("hello");
             };
-            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-            _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
             Debug.Log("Started offer");
             
             // Start the CreateOffer operation
