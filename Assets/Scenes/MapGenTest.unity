@@ -272,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 602703f0e6cdd024bbb2d2e2a47f966e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seed: 0
   _elemPrefab: {fileID: 547991097062628684, guid: f8a6fff4b2d1250438ccdb11c16aea99, type: 3}
   _stepinfo: {fileID: 1819099647}
   _instParent: {fileID: 629311421}
@@ -420,7 +421,7 @@ RectTransform:
   m_GameObject: {fileID: 839891288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 629311421}
