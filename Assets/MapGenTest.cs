@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class MapGenTest : MonoBehaviour
 {
+    public string forcedSeed;
     public int seed;
     [SerializeField] private GameObject _elemPrefab;
-    [SerializeField] private TextMeshProUGUI _stepinfo;
+    [SerializeField] private TextMeshProUGUI _seedInfo;
     [SerializeField] private Transform _instParent;
-    private MapGenNodeData[,] map;
-    private MapNode[,] mapClean;
+    private MapNode[,] stageMap;
 
     private const int MATRIX_SIZE = 50;
     private const int PLAYABLE_MAP_SIZE = 20;
@@ -22,42 +22,56 @@ public class MapGenTest : MonoBehaviour
     {
         //StartCoroutine(TestCR());
         // Initialize the map matrix
-        mapClean = new MapNode[MATRIX_SIZE, MATRIX_SIZE];
+        stageMap = new MapNode[MATRIX_SIZE, MATRIX_SIZE];
         for (int i = 0; i < MATRIX_SIZE; i++)
         {
             for (int j = 0; j < MATRIX_SIZE; j++)
             {
                 GameObject go = Instantiate(_elemPrefab, _instParent) as GameObject; // Debug only, remove later
-                mapClean[i, j] = new MapNode(i, j, go.GetComponent<MapGenTestElement>());
+                stageMap[i, j] = new MapNode(i, j, go.GetComponent<MapGenTestElement>());
             }
         }
         GenerateMap();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) { GenerateMap(); }
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            GenerateMap();
+        }
     }
     private void GenerateMap()
     {
+        if (forcedSeed == "") 
+        {
+            seed = Random.Range(0, 99999999);
+            _seedInfo.text = "seed: " + seed.ToString();
+        } else 
+        {
+            seed = forcedSeed.GetHashCode();
+            _seedInfo.text = "seed: " + forcedSeed + " (" + seed.ToString() + ")";
+        }
+
+        Random.InitState(seed);
         // Initialize the map matrix
         for (int i = 0; i < MATRIX_SIZE; i++)
         {
             for (int j = 0; j < MATRIX_SIZE; j++) {
-                mapClean[i, j].currentType = MapNode.RoomType.None;
+                stageMap[i, j].currentType = MapNode.RoomType.None;
             }
         }
         for (int i = 0; i < MATRIX_SIZE; i++)
         {
             for (int j = 0; j < MATRIX_SIZE; j++)
             {
-                mapClean[i, j].UpdateConnections(mapClean);
+                stageMap[i, j].UpdateConnections(stageMap);
             }
         }
         // Generate the layout
         List<MapNode> potentialCells = new List<MapNode>();
         List<MapNode> usedCells = new List<MapNode>();
         // Place the starting room at the center of the map
-        MapNode initialCell = mapClean[MATRIX_SIZE / 2, MATRIX_SIZE / 2];
+        MapNode initialCell = stageMap[MATRIX_SIZE / 2, MATRIX_SIZE / 2];
         initialCell.currentType = MapNode.RoomType.Potential;
         potentialCells.Add(initialCell);
         int roomsCreated = 0;
@@ -84,17 +98,18 @@ public class MapGenTest : MonoBehaviour
                     if (checkY < 0) { continue; }
                     if (checkX >= MATRIX_SIZE) { continue; }
                     if (checkY >= MATRIX_SIZE) { continue; }
-                    if (mapClean[checkX, checkY].currentType != MapNode.RoomType.None) { continue; }
+                    if (stageMap[checkX, checkY].currentType != MapNode.RoomType.None) { continue; }
 
-                    mapClean[checkX, checkY].currentType = MapNode.RoomType.Potential;
-                    potentialCells.Add(mapClean[checkX, checkY]);
+                    stageMap[checkX, checkY].currentType = MapNode.RoomType.Potential;
+                    if (stageMap[checkX, checkY].GetNearbyUsedRooms(stageMap) >= 3) { continue; }
+                    potentialCells.Add(stageMap[checkX, checkY]);
                 }
             }
         }
         // Update connections
         for (int i = 0; i < usedCells.Count; i++)
         {
-            usedCells[i].UpdateConnections(mapClean);
+            usedCells[i].UpdateConnections(stageMap);
         }
         // Find single connection cells
         List<MapNode> singleConnectionCells = new List<MapNode>();
@@ -122,18 +137,18 @@ public class MapGenTest : MonoBehaviour
                     {
                         if (singleConnectionCells[i].pos_y - 1 >= 0)
                         {
-                            option1.Add(mapClean[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
-                            if (!mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].IsActive())
+                            option1.Add(stageMap[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
+                            if (!stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].IsActive())
                             {
-                                option1.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
+                                option1.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
                             }
                         }
                         if (singleConnectionCells[i].pos_y + 1 < MATRIX_SIZE)
                         {
-                            option2.Add(mapClean[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
-                            if (!mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].IsActive())
+                            option2.Add(stageMap[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
+                            if (!stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].IsActive())
                             {
-                                option2.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
+                                option2.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
                             }
                         }
                         break;
@@ -142,18 +157,18 @@ public class MapGenTest : MonoBehaviour
                     {
                         if (singleConnectionCells[i].pos_x - 1 >= 0)
                         {
-                            option1.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
-                            if (!mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].IsActive())
+                            option1.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
+                            if (!stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].IsActive())
                             {
-                                option1.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
+                                option1.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
                             }
                         }
                         if (singleConnectionCells[i].pos_x + 1 < MATRIX_SIZE)
                         {
-                            option2.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
-                            if (!mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].IsActive())
+                            option2.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
+                            if (!stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].IsActive())
                             {
-                                option2.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
+                                option2.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
                             }
                         }
                         break;
@@ -162,18 +177,18 @@ public class MapGenTest : MonoBehaviour
                     {
                         if (singleConnectionCells[i].pos_y - 1 >= 0)
                         {
-                            option1.Add(mapClean[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
-                            if (!mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].IsActive())
+                            option1.Add(stageMap[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
+                            if (!stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].IsActive())
                             {
-                                option1.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
+                                option1.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
                             }
                         }
                         if (singleConnectionCells[i].pos_y + 1 < MATRIX_SIZE)
                         {
-                            option2.Add(mapClean[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
-                            if (!mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].IsActive())
+                            option2.Add(stageMap[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
+                            if (!stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].IsActive())
                             {
-                                option2.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
+                                option2.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
                             }
                         }
                         break;
@@ -182,18 +197,18 @@ public class MapGenTest : MonoBehaviour
                     {
                         if (singleConnectionCells[i].pos_x - 1 >= 0)
                         {
-                            option1.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
-                            if (!mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].IsActive())
+                            option1.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
+                            if (!stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].IsActive())
                             {
-                                option1.Add(mapClean[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
+                                option1.Add(stageMap[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
                             }
                         }
                         if (singleConnectionCells[i].pos_x + 1 < MATRIX_SIZE)
                         {
-                            option2.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
-                            if (!mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].IsActive())
+                            option2.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
+                            if (!stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].IsActive())
                             {
-                                option2.Add(mapClean[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
+                                option2.Add(stageMap[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
                             }
                         }
                         break;
@@ -228,13 +243,13 @@ public class MapGenTest : MonoBehaviour
         {
             for (int i = 0; i < extraNeededCells.Count; i++)
             {
-                if (mapClean[extraNeededCells[i].pos_x, extraNeededCells[i].pos_y].currentType == MapNode.RoomType.Room) { continue; } // Added by another iteration of this loop
+                if (stageMap[extraNeededCells[i].pos_x, extraNeededCells[i].pos_y].currentType == MapNode.RoomType.Room) { continue; } // Added by another iteration of this loop
                 usedCells.Add(extraNeededCells[i]);
                 extraNeededCells[i].currentType = MapNode.RoomType.Room;
                 roomsCreated++;
             }
         }
-        for (int i = 0; i < usedCells.Count; i++) { usedCells[i].UpdateConnections(mapClean); }
+        for (int i = 0; i < usedCells.Count; i++) { usedCells[i].UpdateConnections(stageMap); }
         
         // Checking for redundant cells
         List<MapNode> redundantCells = new List<MapNode>();
@@ -249,7 +264,7 @@ public class MapGenTest : MonoBehaviour
             usedCells.Remove(redundantCells[0]);
             redundantCells.RemoveAt(0);
 
-            for (int i = 0; i < usedCells.Count; i++) { usedCells[i].UpdateConnections(mapClean); }
+            for (int i = 0; i < usedCells.Count; i++) { usedCells[i].UpdateConnections(stageMap); }
 
             redundantCells = new List<MapNode>();
             for (int i = 0; i < usedCells.Count; i++)
@@ -260,7 +275,7 @@ public class MapGenTest : MonoBehaviour
 
         for (int i = 0; i < usedCells.Count; i++)
         {
-            usedCells[i].UpdateConnections(mapClean);
+            usedCells[i].UpdateConnections(stageMap);
         }
 
         int maxRooms = (int)(usedCells.Count * ROOM_PERCENT);
@@ -282,374 +297,10 @@ public class MapGenTest : MonoBehaviour
         {
             for (int j = 0; j < MATRIX_SIZE; j++) 
             {
-                mapClean[i, j].instance.Setup(mapClean[i, j]);
+                stageMap[i, j].instance.Setup(stageMap[i, j]);
             }
         }
         print("Final count " + usedCells.Count);
-    }
-
-    IEnumerator TestCR() 
-    {
-        Random.InitState(12345);
-        print(Random.Range(0, 100));
-        print(Random.Range(0, 100));
-        print(Random.Range(0, 100));
-        print(Random.Range(0, 100));
-        _stepinfo.text = "Press SPACE to go to the next step";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        map = new MapGenNodeData[MATRIX_SIZE, MATRIX_SIZE];
-        for (int i = 0; i < MATRIX_SIZE; i++) 
-        {
-            for (int j = 0; j < MATRIX_SIZE; j++) 
-            {
-                GameObject go = Instantiate(_elemPrefab, _instParent) as GameObject;
-                map[i, j] = new MapGenNodeData(i, j, go.GetComponent<MapGenTestElement>());
-            }
-        }
-        _stepinfo.text = "Generating empty matrix, size " + MATRIX_SIZE + "," + MATRIX_SIZE;
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        List<MapGenNodeData> possibleCells = new List<MapGenNodeData>();
-        List<MapGenNodeData> usedCells = new List<MapGenNodeData>();
-
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-        _stepinfo.text = "Creating rooms ";
-
-        possibleCells.Add(map[MATRIX_SIZE / 2, MATRIX_SIZE / 2]);
-        int roomsCreated = 0;
-        while (roomsCreated < PLAYABLE_MAP_SIZE) 
-        {
-            int indexSelected = Random.Range(0, possibleCells.Count);
-            MapGenNodeData currentCell = possibleCells[indexSelected];
-            possibleCells.RemoveAt(indexSelected);
-            usedCells.Add(currentCell);
-            currentCell.UpdateStatus(MapGenNodeData.RoomType.Room, false, false, false, false);
-            roomsCreated++;
-
-
-            if (currentCell.pos_x - 1 >= 0 && !map[currentCell.pos_x - 1, currentCell.pos_y].Active) { possibleCells.Add(map[currentCell.pos_x - 1, currentCell.pos_y]); }
-            if (currentCell.pos_x + 1 < MATRIX_SIZE && !map[currentCell.pos_x + 1, currentCell.pos_y].Active) { possibleCells.Add(map[currentCell.pos_x + 1, currentCell.pos_y]); }
-            if (currentCell.pos_y - 1 >= 0 && !map[currentCell.pos_x, currentCell.pos_y - 1].Active) { possibleCells.Add(map[currentCell.pos_x, currentCell.pos_y - 1]); }
-            if (currentCell.pos_y + 1 < MATRIX_SIZE && !map[currentCell.pos_x, currentCell.pos_y + 1].Active) { possibleCells.Add(map[currentCell.pos_x, currentCell.pos_y + 1]); }
-
-
-            _stepinfo.text = "Rooms placed: " + roomsCreated + "/" + PLAYABLE_MAP_SIZE;
-            while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-            yield return null;
-        }
-
-        _stepinfo.text = "Updating connection info for active cells";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        for (int i = 0; i < usedCells.Count; i++) 
-        {
-            bool u, l, r, d;
-
-            l = usedCells[i].pos_x - 1 >= 0 && map[usedCells[i].pos_x - 1, usedCells[i].pos_y].Active;
-            r = usedCells[i].pos_x + 1 < MATRIX_SIZE && map[usedCells[i].pos_x + 1, usedCells[i].pos_y].Active;
-            d = usedCells[i].pos_y - 1 >= 0 && map[usedCells[i].pos_x, usedCells[i].pos_y - 1].Active;
-            u = usedCells[i].pos_y + 1 < MATRIX_SIZE && map[usedCells[i].pos_x, usedCells[i].pos_y + 1].Active;
-            usedCells[i].UpdateConnections(u, d, l, r);
-        }
-
-        _stepinfo.text = "Checking rooms with only one connection";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        List<MapGenNodeData> singleConnectionCells = new List<MapGenNodeData>();
-        for (int i = 0; i < usedCells.Count; i++) 
-        {
-            if (usedCells[i].connections < 2 && usedCells[i].currentType == MapGenNodeData.RoomType.Room) { singleConnectionCells.Add(usedCells[i]); }
-        }
-
-        _stepinfo.text = singleConnectionCells.Count + " cells with only a single connection.";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        List<MapGenNodeData> extraNeededCells = new List<MapGenNodeData>();
-        for (int i = 0; i < singleConnectionCells.Count; i++) 
-        {
-            int dir;
-            if (singleConnectionCells[i]._r) { dir = 2; }
-            else if (singleConnectionCells[i]._u) { dir = 3; }
-            else if (singleConnectionCells[i]._l) { dir = 0; }
-            else { dir = 1; }
-
-            switch (dir) 
-            {
-                case 0: // RIGHT
-                    {
-                        List<MapGenNodeData> option1 = new List<MapGenNodeData>();
-                        List<MapGenNodeData> option2 = new List<MapGenNodeData>();
-
-                        if (singleConnectionCells[i].pos_y-1 >= 0) 
-                        {
-                            option1.Add(map[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
-                            if (!map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].Active) 
-                            {
-                                option1.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
-                            } 
-                        }
-                        if (singleConnectionCells[i].pos_y + 1 < MATRIX_SIZE)
-                        {
-                            option2.Add(map[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
-                            if (!map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].Active)
-                            {
-                                option2.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
-                            }
-                        }
-                        if (option1.Count == option2.Count)
-                        {
-                            if (Random.Range(0, 2) == 0)
-                            {
-                                for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                            }
-                            else
-                            {
-                                for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                            }
-                        }
-                        else if (option1.Count < option2.Count)
-                        {
-                            for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                        }
-                        else 
-                        {
-                            for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                        }
-                        break;
-                    }
-                case 1: // UP
-                    {
-                        List<MapGenNodeData> option1 = new List<MapGenNodeData>();
-                        List<MapGenNodeData> option2 = new List<MapGenNodeData>();
-
-                        if (singleConnectionCells[i].pos_x - 1 >= 0)
-                        {
-                            option1.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
-                            if (!map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1].Active)
-                            {
-                                option1.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y - 1]);
-                            }
-                        }
-                        if (singleConnectionCells[i].pos_x + 1 < MATRIX_SIZE)
-                        {
-                            option2.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
-                            if (!map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].Active)
-                            {
-                                option2.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
-                            }
-                        }
-                        if (option1.Count == option2.Count)
-                        {
-                            if (Random.Range(0, 2) == 0)
-                            {
-                                for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                            }
-                            else
-                            {
-                                for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                            }
-                        }
-                        else if (option1.Count < option2.Count)
-                        {
-                            for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                        }
-                        else
-                        {
-                            for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                        }
-                        break;
-                    }
-                case 2: // LEFT
-                    {
-                        List<MapGenNodeData> option1 = new List<MapGenNodeData>();
-                        List<MapGenNodeData> option2 = new List<MapGenNodeData>();
-
-                        if (singleConnectionCells[i].pos_y - 1 >= 0)
-                        {
-                            option1.Add(map[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y - 1]);
-                            if (!map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1].Active)
-                            {
-                                option1.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y - 1]);
-                            }
-                        }
-                        if (singleConnectionCells[i].pos_y + 1 < MATRIX_SIZE)
-                        {
-                            option2.Add(map[singleConnectionCells[i].pos_x, singleConnectionCells[i].pos_y + 1]);
-                            if (!map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].Active)
-                            {
-                                option2.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
-                            }
-                        }
-                        if (option1.Count == option2.Count)
-                        {
-                            if (Random.Range(0, 2) == 0)
-                            {
-                                for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                            }
-                            else
-                            {
-                                for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                            }
-                        }
-                        else if (option1.Count < option2.Count)
-                        {
-                            for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                        }
-                        else
-                        {
-                            for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                        }
-                        break;
-                    }
-                case 3: // DOWN
-                    {
-                        List<MapGenNodeData> option1 = new List<MapGenNodeData>();
-                        List<MapGenNodeData> option2 = new List<MapGenNodeData>();
-
-                        if (singleConnectionCells[i].pos_x - 1 >= 0)
-                        {
-                            option1.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y]);
-                            if (!map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1].Active)
-                            {
-                                option1.Add(map[singleConnectionCells[i].pos_x - 1, singleConnectionCells[i].pos_y + 1]);
-                            }
-                        }
-                        if (singleConnectionCells[i].pos_x + 1 < MATRIX_SIZE)
-                        {
-                            option2.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y]);
-                            if (!map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1].Active)
-                            {
-                                option2.Add(map[singleConnectionCells[i].pos_x + 1, singleConnectionCells[i].pos_y + 1]);
-                            }
-                        }
-                        if (option1.Count == option2.Count)
-                        {
-                            if (Random.Range(0, 2) == 0)
-                            {
-                                for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                            }
-                            else
-                            {
-                                for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                            }
-                        }
-                        else if (option1.Count < option2.Count)
-                        {
-                            for (int j = 0; j < option1.Count; j++) { extraNeededCells.Add(option1[j]); }
-                        }
-                        else
-                        {
-                            for (int j = 0; j < option2.Count; j++) { extraNeededCells.Add(option2[j]); }
-                        }
-                        break;
-                    }
-            }
-
-        }
-        if (singleConnectionCells.Count > 0)
-        {
-            _stepinfo.text = "Adding additional needed cells (" + extraNeededCells.Count + ")";
-            while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-            yield return null;
-
-            for (int i = 0; i < extraNeededCells.Count; i++) 
-            {
-                if (map[extraNeededCells[i].pos_x, extraNeededCells[i].pos_y].Active) { continue; } // Added by another iteration of this loop
-                usedCells.Add(extraNeededCells[i]);
-                extraNeededCells[i].UpdateStatus(MapGenNodeData.RoomType.Room, false, false, false, false);
-                roomsCreated++;
-            }
-
-            _stepinfo.text = "Updating connections again.";
-            while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-            yield return null;
-
-            for (int i = 0; i < usedCells.Count; i++)
-            {
-                bool u, l, r, d;
-
-                l = usedCells[i].pos_x - 1 >= 0 && map[usedCells[i].pos_x - 1, usedCells[i].pos_y].Active;
-                r = usedCells[i].pos_x + 1 < MATRIX_SIZE && map[usedCells[i].pos_x + 1, usedCells[i].pos_y].Active;
-                d = usedCells[i].pos_y - 1 >= 0 && map[usedCells[i].pos_x, usedCells[i].pos_y - 1].Active;
-                u = usedCells[i].pos_y + 1 < MATRIX_SIZE && map[usedCells[i].pos_x, usedCells[i].pos_y + 1].Active;
-                usedCells[i].UpdateConnections(u, d, l, r);
-            }
-        }
-        else 
-        {
-            _stepinfo.text = "No more cells need to be added.";
-            while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-            yield return null;
-        }
-        _stepinfo.text = "Checking clustered rooms.";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        List<MapGenNodeData> redundantCells = new List<MapGenNodeData>();
-
-        for (int i = 0; i < usedCells.Count; i++)
-        {
-            if (usedCells[i]._l && map[usedCells[i].pos_x - 1, usedCells[i].pos_y].connections <= 2) { continue; }
-            if (usedCells[i]._r && map[usedCells[i].pos_x + 1, usedCells[i].pos_y].connections <= 2) { continue; }
-            if (usedCells[i]._u && map[usedCells[i].pos_x, usedCells[i].pos_y - 1].connections <= 2) { continue; }
-            if (usedCells[i]._d && map[usedCells[i].pos_x, usedCells[i].pos_y + 1].connections <= 2) { continue; }
-            if (usedCells[i].connections <= 2) { continue; }
-
-            redundantCells.Add(usedCells[i]);
-        }
-
-        _stepinfo.text = "Removing the " + redundantCells.Count + " redundant cells";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        for (int i = 0; i < redundantCells.Count; i++) 
-        {
-            redundantCells[i].UpdateStatus(MapGenNodeData.RoomType.None, false, false, false, false);
-            usedCells.Remove(redundantCells[i]);
-        }
-
-        _stepinfo.text = "Updating connections again.";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-
-        for (int i = 0; i < usedCells.Count; i++)
-        {
-            bool u, l, r, d;
-
-            l = usedCells[i].pos_x - 1 >= 0 && map[usedCells[i].pos_x - 1, usedCells[i].pos_y].Active;
-            r = usedCells[i].pos_x + 1 < MATRIX_SIZE && map[usedCells[i].pos_x + 1, usedCells[i].pos_y].Active;
-            d = usedCells[i].pos_y - 1 >= 0 && map[usedCells[i].pos_x, usedCells[i].pos_y - 1].Active;
-            u = usedCells[i].pos_y + 1 < MATRIX_SIZE && map[usedCells[i].pos_x, usedCells[i].pos_y + 1].Active;
-            usedCells[i].UpdateConnections(u, d, l, r);
-        }
-
-        int maxRooms = (int)(usedCells.Count * ROOM_PERCENT);
-        _stepinfo.text = "The map contains " + usedCells.Count + " cells, a maximum of " + maxRooms + " is allowed. The rest must be corridors, converting...";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
-        List<MapGenNodeData> convertibleCells = new List<MapGenNodeData>();
-        for (int i = 0; i < usedCells.Count; i++) { convertibleCells.Add(usedCells[i]); }
-
-        for (int i = 0; i < usedCells.Count - maxRooms; i++)
-        {
-            if (convertibleCells.Count > 0)
-            {
-                int index = Random.Range(0, convertibleCells.Count);
-                convertibleCells[index].UpdateStatus(MapGenNodeData.RoomType.Corridor, convertibleCells[index]._u, convertibleCells[index]._d, convertibleCells[index]._l, convertibleCells[index]._r);
-                convertibleCells.RemoveAt(index);
-            }
-        }
-
-        _stepinfo.text = "Map finished";
-        while (!Input.GetKeyDown(KeyCode.Space)) { yield return null; }
-        yield return null;
     }
     public class MapNode
     {
@@ -684,6 +335,17 @@ public class MapGenTest : MonoBehaviour
             if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].IsActive()) { con_down = m[pos_x, pos_y - 1]; connectionCount++; } else { con_down = null; }
             if (pos_y + 1 < MATRIX_SIZE && m[pos_x, pos_y + 1].IsActive()) { con_up = m[pos_x, pos_y + 1]; connectionCount++; } else { con_up = null; }
         }
+        public int GetNearbyUsedRooms(MapNode[,] m)
+        {
+            int cons = 0;
+
+            if (pos_x - 1 >= 0 && m[pos_x - 1, pos_y].IsActive()) {  cons++; }
+            if (pos_x + 1 < MATRIX_SIZE && m[pos_x + 1, pos_y].IsActive()) { cons++; }
+            if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].IsActive()) { cons++; }
+            if (pos_y + 1 < MATRIX_SIZE && m[pos_x, pos_y + 1].IsActive()) { cons++; }
+
+            return cons;
+        }
         public bool IsRedundant() 
         {
             if (connectionCount <= 3) { return false; }
@@ -697,52 +359,5 @@ public class MapGenTest : MonoBehaviour
             return true;
         }
     }
-    public class MapGenNodeData 
-    {
-        public enum RoomType { None, Room, Corridor }
-
-        public bool Active { get { return currentType != RoomType.None; } }
-        public RoomType currentType;
-        MapGenTestElement instance;
-        public bool potential;
-        public int pos_x;
-        public int pos_y;
-        public int connections;
-        public bool _r;
-        public bool _l;
-        public bool _u;
-        public bool _d;
-
-
-        public MapGenNodeData(int x, int y, MapGenTestElement inst) 
-        {
-            pos_x = x;
-            pos_y = y;
-            instance = inst;
-            potential = false;
-            instance.Setup(pos_x, pos_y, currentType, false, false, false, false, 0);
-        }
-        public void UpdateConnections(bool u, bool d, bool l, bool r) 
-        {
-            UpdateStatus(currentType, u, d, l, r);
-        }
-        public void UpdateStatus(RoomType rt, bool u, bool d, bool l, bool r) 
-        {
-            currentType = rt;
-            int connectionCount = 0;
-            if (l) { connectionCount++; }
-            if (r) { connectionCount++; }
-            if (u) { connectionCount++; }
-            if (d) { connectionCount++; }
-
-            _r = r;
-            _u = u;
-            _d = d;
-            _l = l;
-
-            connections = connectionCount;
-
-            instance.Setup(pos_x, pos_y, currentType, u, d, l, r, connections);
-        }
-    }
+    
 }
