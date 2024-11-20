@@ -11,6 +11,14 @@ public class MapGenTest : MonoBehaviour
     [SerializeField] private GameObject _elemPrefab;
     [SerializeField] private TextMeshProUGUI _seedInfo;
     [SerializeField] private Transform _instParent;
+
+    [SerializeField] private GameObject _roomPrefab;
+    [SerializeField] private GameObject _corridorPrefab;
+    [SerializeField] private Transform _stageInstParent;
+
+
+    private List<MapNode> _finalResultMapNodes;
+    private List<StagePiece> _finalResultMapPieces;
     private MapNode[,] stageMap;
 
     private const int MATRIX_SIZE = 50;
@@ -33,11 +41,33 @@ public class MapGenTest : MonoBehaviour
         }
         GenerateMap();
     }
+    private void InstantiateMapPieces() 
+    {
+        if (_finalResultMapNodes == null) { return; }
+        if (_finalResultMapPieces != null) { return; }
+
+        _finalResultMapPieces = new List<StagePiece>();
+
+        for (int i = 0; i < _finalResultMapNodes.Count; i++) 
+        {
+            GameObject rp = Instantiate(_finalResultMapNodes[i].currentType == MapNode.RoomType.Corridor ? _corridorPrefab : _roomPrefab, _stageInstParent) as GameObject;
+            rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
+            _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
+        }
+    }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.G)) 
         {
             GenerateMap();
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            InstantiateMapPieces();
+        }
+        if (Input.GetKeyDown(KeyCode.R)) 
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
     private void GenerateMap()
@@ -84,6 +114,11 @@ public class MapGenTest : MonoBehaviour
             currentCell.currentType = MapNode.RoomType.Room;
             roomsCreated++;
 
+            for (int k = potentialCells.Count-1; k >= 0; k--) 
+            {
+                if (potentialCells[k].GetNearbyUsedRooms(stageMap) >= 3) { potentialCells.RemoveAt(k); }
+            }
+
             // Check nearby spaces
             for (int i = -1; i <= 1; i++) 
             {
@@ -99,10 +134,11 @@ public class MapGenTest : MonoBehaviour
                     if (checkX >= MATRIX_SIZE) { continue; }
                     if (checkY >= MATRIX_SIZE) { continue; }
                     if (stageMap[checkX, checkY].currentType != MapNode.RoomType.None) { continue; }
+                    
 
-                    stageMap[checkX, checkY].currentType = MapNode.RoomType.Potential;
-                    if (stageMap[checkX, checkY].GetNearbyUsedRooms(stageMap) >= 3) { continue; }
                     potentialCells.Add(stageMap[checkX, checkY]);
+                    stageMap[checkX, checkY].currentType = MapNode.RoomType.Potential;
+
                 }
             }
         }
@@ -292,6 +328,7 @@ public class MapGenTest : MonoBehaviour
             }
         }
 
+        _finalResultMapNodes = usedCells;
         // Debug only
         for (int i = 0; i < MATRIX_SIZE; i++) 
         {
@@ -339,10 +376,10 @@ public class MapGenTest : MonoBehaviour
         {
             int cons = 0;
 
-            if (pos_x - 1 >= 0 && m[pos_x - 1, pos_y].IsActive()) {  cons++; }
-            if (pos_x + 1 < MATRIX_SIZE && m[pos_x + 1, pos_y].IsActive()) { cons++; }
-            if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].IsActive()) { cons++; }
-            if (pos_y + 1 < MATRIX_SIZE && m[pos_x, pos_y + 1].IsActive()) { cons++; }
+            if (pos_x - 1 >= 0 && m[pos_x - 1, pos_y].currentType != RoomType.None) {  cons++; }
+            if (pos_x + 1 < MATRIX_SIZE && m[pos_x + 1, pos_y].currentType!= RoomType.None) { cons++; }
+            if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].currentType != RoomType.None) { cons++; }
+            if (pos_y + 1 < MATRIX_SIZE && m[pos_x, pos_y + 1].currentType != RoomType.None) { cons++; }
 
             return cons;
         }
