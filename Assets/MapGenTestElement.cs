@@ -1,10 +1,12 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class MapGenTestElement : MonoBehaviour
 {
-    [SerializeField] private Transform _bkRoom;
-    [SerializeField] private Transform _bkCorridor;
+    [SerializeField] private Image _bkRoom;
+    [SerializeField] private Image _bkCorridor;
+    [SerializeField] private Image _bkDeco;
     [SerializeField] private Transform _conU;
     [SerializeField] private Transform _conL;
     [SerializeField] private Transform _conR;
@@ -21,10 +23,21 @@ public class MapGenTestElement : MonoBehaviour
         gameObject.SetActive(node.currentType != MapGenTest.MapNode.RoomType.None && node.currentType != MapGenTest.MapNode.RoomType.Potential);
         _bkCorridor.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Corridor);
         _bkRoom.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Room);
-        _conU.gameObject.SetActive(node.con_up != null);
-        _conD.gameObject.SetActive(node.con_down != null);
-        _conL.gameObject.SetActive(node.con_left != null);
-        _conR.gameObject.SetActive(node.con_right != null);
+        _bkDeco.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Deco);
+        _conU.gameObject.SetActive(node.con_up != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
+        _conD.gameObject.SetActive(node.con_down != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
+        _conL.gameObject.SetActive(node.con_left != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
+        _conR.gameObject.SetActive(node.con_right != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
+
+        switch (node.variation) 
+        {
+            case 1: { _bkRoom.color = _bkCorridor.color = Color.blue; break; }
+            case 2: { _bkRoom.color = _bkCorridor.color = Color.green; break; }
+            case 3: { _bkRoom.color = _bkCorridor.color = Color.yellow; break; }
+            case 4: { _bkRoom.color = _bkCorridor.color = Color.cyan; break; }
+            case 5: { _bkRoom.color = _bkCorridor.color = Color.magenta; break; }
+            default: { _bkRoom.color = _bkCorridor.color = Color.red; break; } // 0 or greater than 5
+        }
 
         _coord.text = "(" + node.pos_x + "," + node.pos_y + ")";
         _conCount.text = node.connectionCount.ToString();

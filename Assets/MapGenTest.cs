@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Runtime.CompilerServices;
 
 public class MapGenTest : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class MapGenTest : MonoBehaviour
 
     [SerializeField] private GameObject _roomPrefab;
     [SerializeField] private GameObject _corridorPrefab;
+    [SerializeField] private GameObject _decoPrefab;
     [SerializeField] private Transform _stageInstParent;
 
 
@@ -21,6 +23,14 @@ public class MapGenTest : MonoBehaviour
     private List<StagePiece> _finalResultMapPieces;
     private MapNode[,] stageMap;
 
+    private const float DECO_CHANCE_0 = 0.05f;
+    private const float DECO_CHANCE_1 = 5f;
+    private const float DECO_CHANCE_2 = 10f;
+    private const float DECO_CHANCE_3 = 40f;
+    private const float DECO_CHANCE_4 = 75f;
+    private const float CHANCE_TO_2 = 90f;
+    private const float CHANCE_TO_3 = 20f;
+    private const float CHANCE_TO_4 = 0f;
     private const int MATRIX_SIZE = 50;
     private const int PLAYABLE_MAP_SIZE = 20;
     private const float ROOM_PERCENT = 0.4f;
@@ -50,9 +60,30 @@ public class MapGenTest : MonoBehaviour
 
         for (int i = 0; i < _finalResultMapNodes.Count; i++) 
         {
-            GameObject rp = Instantiate(_finalResultMapNodes[i].currentType == MapNode.RoomType.Corridor ? _corridorPrefab : _roomPrefab, _stageInstParent) as GameObject;
-            rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
-            _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
+            switch (_finalResultMapNodes[i].currentType) 
+            {
+                case MapNode.RoomType.Room: 
+                    {
+                        GameObject rp = Instantiate(_roomPrefab, _stageInstParent) as GameObject;
+                        rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
+                        _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
+                        break;
+                    }
+                case MapNode.RoomType.Corridor:
+                    {
+                        GameObject rp = Instantiate(_corridorPrefab, _stageInstParent) as GameObject;
+                        rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
+                        _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
+                        break;
+                    }
+                case MapNode.RoomType.Deco: 
+                    {
+                        GameObject rp = Instantiate(_decoPrefab, _stageInstParent) as GameObject;
+                        rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
+                        _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
+                        break;
+                    }
+            }
         }
     }
     private void Update()
@@ -88,6 +119,7 @@ public class MapGenTest : MonoBehaviour
         {
             for (int j = 0; j < MATRIX_SIZE; j++) {
                 stageMap[i, j].currentType = MapNode.RoomType.None;
+                stageMap[i, j].variation = -1;
             }
         }
         for (int i = 0; i < MATRIX_SIZE; i++)
@@ -107,17 +139,30 @@ public class MapGenTest : MonoBehaviour
         int roomsCreated = 0;
         while (roomsCreated < PLAYABLE_MAP_SIZE)
         {
-            int indexSelected = Random.Range(0, potentialCells.Count);
-            MapNode currentCell = potentialCells[indexSelected];
-            potentialCells.RemoveAt(indexSelected);
+            List<MapNode> randomlySelectedCells = new List<MapNode>();
+            for (int i = 0; i < potentialCells.Count; i++) 
+            {
+                int nearbyUsedCells = potentialCells[i].GetNearbyUsedRooms(stageMap);
+                float chanceToAdd;
+                switch (nearbyUsedCells)
+                {
+                    case 2: { chanceToAdd = CHANCE_TO_2; break; }
+                    case 3: { chanceToAdd = CHANCE_TO_3; break; }
+                    case 4: { chanceToAdd = CHANCE_TO_4; break; }
+                    default: { chanceToAdd = 100; break; }
+                }
+                if (potentialCells.Count == 1 || Random.Range(0, 100) < chanceToAdd) 
+                {
+                    randomlySelectedCells.Add(potentialCells[i]);
+                }
+            }
+
+            int indexSelected = Random.Range(0, randomlySelectedCells.Count);
+            MapNode currentCell = randomlySelectedCells[indexSelected];
+            potentialCells.Remove(currentCell);
             usedCells.Add(currentCell);
             currentCell.currentType = MapNode.RoomType.Room;
             roomsCreated++;
-
-            for (int k = potentialCells.Count-1; k >= 0; k--) 
-            {
-                if (potentialCells[k].GetNearbyUsedRooms(stageMap) >= 3) { potentialCells.RemoveAt(k); }
-            }
 
             // Check nearby spaces
             for (int i = -1; i <= 1; i++) 
@@ -308,12 +353,12 @@ public class MapGenTest : MonoBehaviour
                 if (usedCells[i].IsRedundant()) { redundantCells.Add(usedCells[i]); }
             }
         }
-
+        // Update connections after deleting
         for (int i = 0; i < usedCells.Count; i++)
         {
             usedCells[i].UpdateConnections(stageMap);
         }
-
+        // Balance the room to corridor ratio
         int maxRooms = (int)(usedCells.Count * ROOM_PERCENT);
         List<MapNode> convertibleCells = new List<MapNode>();
         for (int i = 0; i < usedCells.Count; i++) { convertibleCells.Add(usedCells[i]); }
@@ -327,7 +372,53 @@ public class MapGenTest : MonoBehaviour
                 convertibleCells.RemoveAt(index);
             }
         }
+        // Set the variation to each room
+        for (int i = 0; i < usedCells.Count; i++) 
+        {
+            if (usedCells[i].variation >= 0) { continue; }
 
+            int variationID = Random.Range(0, 6);
+            List<MapNode> variationGroup = new List<MapNode>();
+            variationGroup.Add(usedCells[i]);
+            while (variationGroup.Count > 0) 
+            {
+                MapNode current = variationGroup[0];
+                variationGroup.RemoveAt(0);
+                current.variation = variationID;
+                if (current.con_up != null && current.currentType == current.con_up.currentType && current.con_up.variation < 0) { variationGroup.Add(current.con_up); }
+                if (current.con_down != null && current.currentType == current.con_down.currentType && current.con_down.variation < 0) { variationGroup.Add(current.con_down); }
+                if (current.con_left != null && current.currentType == current.con_left.currentType && current.con_left.variation < 0) { variationGroup.Add(current.con_left); }
+                if (current.con_right != null && current.currentType == current.con_right.currentType && current.con_right.variation < 0) { variationGroup.Add(current.con_right); }
+            }
+        }
+        // Setup decorative nodes
+        /*
+        for (int i = 0; i < MATRIX_SIZE; i++)
+        {
+            for (int j = 0; j < MATRIX_SIZE; j++)
+            {
+                if (stageMap[i, j].currentType != MapNode.RoomType.None && stageMap[i,j].currentType != MapNode.RoomType.Potential) { continue; }
+
+                int nearby = stageMap[i, j].GetNearbyUsedRooms(stageMap);
+                float chance;
+                switch (nearby) 
+                {
+
+                    case 1: { chance = DECO_CHANCE_1; break; }
+                    case 2: { chance = DECO_CHANCE_2; break; }
+                    case 3: { chance = DECO_CHANCE_3; break; }
+                    case 4: { chance = DECO_CHANCE_4; break; }
+                    default: { chance = DECO_CHANCE_0; break; }
+                }
+                if (Random.Range(0, 100) < chance) 
+                {
+                    stageMap[i, j].currentType = MapNode.RoomType.Deco;
+                    usedCells.Add(stageMap[i, j]);
+                }
+                
+            }
+        }
+        */
         _finalResultMapNodes = usedCells;
         // Debug only
         for (int i = 0; i < MATRIX_SIZE; i++) 
@@ -341,10 +432,11 @@ public class MapGenTest : MonoBehaviour
     }
     public class MapNode
     {
-        public enum RoomType { None, Potential, Room, Corridor }
+        public enum RoomType { None, Potential, Room, Corridor, Deco }
 
         public RoomType currentType;
         public MapGenTestElement instance;
+        public int variation;
         public int pos_x;
         public int pos_y;
         public int connectionCount;
@@ -358,6 +450,7 @@ public class MapGenTest : MonoBehaviour
         {
             pos_x = x;
             pos_y = y;
+            variation = -1;
             instance = inst;
             currentType = RoomType.None;
             instance.Setup(this);
