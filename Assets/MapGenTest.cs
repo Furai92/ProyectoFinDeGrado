@@ -13,8 +13,8 @@ public class MapGenTest : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _seedInfo;
     [SerializeField] private Transform _instParent;
 
-    [SerializeField] private GameObject _roomPrefab;
-    [SerializeField] private GameObject _corridorPrefab;
+    [SerializeField] private List<GameObject> _roomPrefabs;
+    [SerializeField] private List<GameObject> _corridorPrefabs;
     [SerializeField] private GameObject _decoPrefab;
     [SerializeField] private Transform _stageInstParent;
 
@@ -29,7 +29,7 @@ public class MapGenTest : MonoBehaviour
     private const float DECO_CHANCE_3 = 40f;
     private const float DECO_CHANCE_4 = 75f;
     private const float CHANCE_TO_2 = 90f;
-    private const float CHANCE_TO_3 = 20f;
+    private const float CHANCE_TO_3 = 5f;
     private const float CHANCE_TO_4 = 0f;
     private const int MATRIX_SIZE = 50;
     private const int PLAYABLE_MAP_SIZE = 20;
@@ -64,14 +64,16 @@ public class MapGenTest : MonoBehaviour
             {
                 case MapNode.RoomType.Room: 
                     {
-                        GameObject rp = Instantiate(_roomPrefab, _stageInstParent) as GameObject;
+                        int index = Mathf.Min(_roomPrefabs.Count - 1, _finalResultMapNodes[i].variation);
+                        GameObject rp = Instantiate(_roomPrefabs[index], _stageInstParent) as GameObject;
                         rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
                         _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
                         break;
                     }
                 case MapNode.RoomType.Corridor:
                     {
-                        GameObject rp = Instantiate(_corridorPrefab, _stageInstParent) as GameObject;
+                        int index = Mathf.Min(_corridorPrefabs.Count - 1, _finalResultMapNodes[i].variation);
+                        GameObject rp = Instantiate(_corridorPrefabs[index], _stageInstParent) as GameObject;
                         rp.GetComponent<StagePiece>().SetUp(_finalResultMapNodes[i]);
                         _finalResultMapPieces.Add(rp.GetComponent<StagePiece>());
                         break;
@@ -377,7 +379,7 @@ public class MapGenTest : MonoBehaviour
         {
             if (usedCells[i].variation >= 0) { continue; }
 
-            int variationID = Random.Range(0, 6);
+            int variationID = Random.Range(0, 2);
             List<MapNode> variationGroup = new List<MapNode>();
             variationGroup.Add(usedCells[i]);
             while (variationGroup.Count > 0) 
