@@ -16,8 +16,8 @@ namespace Netcode.Transports.WebRTCTransport
         RTCConfiguration? _configuration;
         RTCDataChannel _sendChannel;
         private string _address = "79.72.91.98";
-        //private string _address = "127.0.0.1";
         private ushort _port = 80;
+
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
             if (_sendChannel == null || _sendChannel.ReadyState != RTCDataChannelState.Open)
@@ -66,8 +66,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override ulong GetCurrentRtt(ulong clientId)
         {
-            //TO DO
-            return 0;
+            return 0; // TODO: Implement RTT calculation
         }
 
         public override void Shutdown()
@@ -96,17 +95,16 @@ namespace Netcode.Transports.WebRTCTransport
                 _webSocket = null;
             }
 
-            Debug.Log("shutdown complete");
+            Debug.Log("Shutdown complete");
         }
-        
-        #region General
 
         public override async void Initialize(NetworkManager networkManager = null)
         {
             _webSocket = new ClientWebSocket();
             RTCConfiguration configuration = GetRTCConfiguration();
             _localConnection = new RTCPeerConnection(ref configuration);
-            await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
+            await ConnectWebSocket();  // Try connecting to the WebSocket
+
             byte[] buffer = new byte[4096];
             while (_webSocket.State == WebSocketState.Open)
             {
@@ -117,7 +115,22 @@ namespace Netcode.Transports.WebRTCTransport
             }
         }
 
-        public override ulong ServerClientId { get; }
+        private async Task ConnectWebSocket()
+        {
+            try
+            {
+                await _webSocket.ConnectAsync(new Uri($"ws://{_address}:{_port}"), CancellationToken.None);
+                Debug.Log("WebSocket connected.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"WebSocket connection failed: {ex.Message}");
+                await Task.Delay(1000);  // Retry after a delay
+                await ConnectWebSocket();
+            }
+        }
+
+        public override ulong ServerClientId { get; } = (ulong)Guid.NewGuid().GetHashCode();
 
         async Task HandleMessage(WebSocket webSocket, string message)
         {
@@ -174,30 +187,36 @@ namespace Netcode.Transports.WebRTCTransport
             _localConnection.OnIceConnectionChange = state =>
             {
                 Debug.Log($"Local ICE connection state changed: {state}");
-        
-                if (state == RTCIceConnectionState.Connected)
+
+                switch (state)
                 {
-                    Debug.Log("ICE connection established");
-                }
-                else if (state == RTCIceConnectionState.Disconnected || state == RTCIceConnectionState.Failed)
-                {
-                    Debug.Log("ICE connection lost");
+                    case RTCIceConnectionState.Connected:
+                        Debug.Log("ICE connection established");
+                        break;
+                    case RTCIceConnectionState.Disconnected:
+                        Debug.Log("ICE connection lost");
+                        break;
+                    case RTCIceConnectionState.Failed:
+                        Debug.LogError("ICE connection failed");
+                        break;
+                    case RTCIceConnectionState.Completed:
+                        Debug.Log("ICE connection completed");
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown ICE connection state: {state}");
+                        break;
                 }
             };
         }
 
         private void OnICECandidate(ServerMessage messageObject)
         {
-            // Receive ICE candidate from the other peer 
             if (string.IsNullOrEmpty(messageObject.MessageContent))
             {
                 Debug.LogWarning("Received empty ICE candidate, skipping.");
                 return;
             }
 
-            Debug.Log("Received ICE candidate");
-
-            // Populate candidate details
             RTCIceCandidateInit candidateInit = new RTCIceCandidateInit
             {
                 candidate = messageObject.MessageContent,
@@ -205,143 +224,100 @@ namespace Netcode.Transports.WebRTCTransport
                 sdpMLineIndex = 0
             };
 
-            Debug.Log("Creating ICE candidate");
             RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
 
-            // Attempt to add the candidate
-            Debug.Log("Trying to add ICE candidate " + candidate);
             bool success = _localConnection.AddIceCandidate(candidate);
             if (success)
             {
-                Debug.Log("ICE candidate added successfully: " + candidate);
+                Debug.Log("ICE candidate added successfully");
             }
             else
             {
-                Debug.LogError("Failed to add ICE candidate: " + candidate);
+                Debug.LogError("Failed to add ICE candidate");
             }
-        }
-        
-        private void OnDestroy()
-        {
-            _sendChannel.Close();
-            _localConnection.Close();
         }
 
         private async Task OnDisconnected()
         {
-            //Close the connection
-            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connected", CancellationToken.None);
+            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Disconnected", CancellationToken.None);
             _webSocket.Dispose();
         }
 
         private async Task OnSendSDPOffer()
         {
             Debug.Log("Pairing request received");
-            Debug.Log("Started offer");
-
             _sendChannel = _localConnection.CreateDataChannel("send");
 
-            // Start the CreateOffer operation
             RTCSessionDescriptionAsyncOperation offerOp = _localConnection.CreateOffer();
-            Debug.Log("Creating offer");
-
             await WaitForOperation(offerOp);
-            if (offerOp.IsError)
-            {
-                Debug.LogError($"Offer creation failed: {offerOp.Error}");
-                return;
-            }
 
             RTCSessionDescription offer = offerOp.Desc;
-            Debug.Log("Created offer: " + offer.sdp);
 
-            Debug.Log("Setting local description");
             RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             await WaitForOperation(op);
-            if (op.IsError)
-            {
-                Debug.LogError($"Setting local description failed: {op.Error}");
-                return;
-            }
 
-            Debug.Log("Finished setting local description");
             await SendMessage("SendSDPAnswer", offer.sdp);
         }
-        
+
         private async Task OnRecieveSDPAnswer(ServerMessage messageObject)
         {
-            Debug.Log("Received SDP answer");
             RTCSessionDescription sdpAnswer = new RTCSessionDescription
             {
                 type = RTCSdpType.Answer,
                 sdp = messageObject.MessageContent
             };
-            Debug.Log("Setting remote description");
+
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
-            if (op2.IsError)
-            {
-                Debug.LogError($"Setting remote description failed: {op2.Error}");
-                return;
-            }
-            Debug.Log("Finished setting remote description");
             SuscribeToICE();
-            // Set up channel callbacks
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-            _sendChannel.OnMessage = e =>
-            {
+            _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+            _sendChannel.OnMessage = e => {
                 Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                _sendChannel.Send("hello");
+                _sendChannel.Send("bye");
             };
         }
 
         private async Task OnSendSDPAnswer(ServerMessage messageObject)
         {
-            //Receive the SDP offer from the other peer and send back an answer - Peer B
-            Debug.Log("Received SDP offer");
-            RTCSessionDescription sdpOffer = new RTCSessionDescription();
-            sdpOffer.type = RTCSdpType.Offer;
-            sdpOffer.sdp = messageObject.MessageContent;
-            Debug.Log("Setting remote description");
-            var op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
+            RTCSessionDescription sdpOffer = new RTCSessionDescription
+            {
+                type = RTCSdpType.Offer,
+                sdp = messageObject.MessageContent
+            };
+
+            RTCSetSessionDescriptionAsyncOperation op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
             await WaitForOperation(op3);
-            Debug.Log("Finished Setting remote description");
-            
-            Debug.Log("Creating answer");
+
             RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
             await WaitForOperation(answer);
-            Debug.Log("Finished creating answer");
+
             RTCSessionDescription answerDesc = answer.Desc;
-            
-            Debug.Log("setting local description");
-            var op4 = _localConnection.SetLocalDescription(ref answerDesc);
+            RTCSetSessionDescriptionAsyncOperation op4 = _localConnection.SetLocalDescription(ref answerDesc);
             await WaitForOperation(op4);
-            Debug.Log("finished setting local description");
-            Debug.Log("Finished creating answer process");
+
             await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
             SuscribeToICE();
+
             _localConnection.OnDataChannel = channel =>
             {
-                Debug.Log("Data channel received");
                 _sendChannel = channel;
-                Debug.Log(_sendChannel.ReadyState);
                 _sendChannel.OnClose = () => Debug.Log("Data channel closed");
                 _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                _sendChannel.Send("bye");
+                _sendChannel.Send("hello");
             };
         }
-        
+
         private async Task WaitForOperation(AsyncOperationBase operation)
         {
             while (!operation.IsDone && !operation.IsError)
             {
                 await Task.Yield();
-                Debug.Log("Waiting for operation" + operation);
             }
-            Debug.Log("Finished operation");
+
             if (operation.IsError)
             {
-                Debug.LogError("Operation failed: " + operation.Error);
+                Debug.LogError($"Operation failed: {operation.Error}");
             }
         }
 
@@ -362,17 +338,30 @@ namespace Netcode.Transports.WebRTCTransport
                         credential = "41server",
                         credentialType = RTCIceCredentialType.Password
                     }
-                }
+                },
+                iceTransportPolicy = RTCIceTransportPolicy.All
             };
-
             return _configuration.Value;
         }
-        async Task SendMessage(string type, string content)
+
+        private async Task SendMessage(string messageType, string messageContent)
         {
-            string message = JsonUtility.ToJson(new ServerMessage { MessageType = type, MessageContent = content });
-            Debug.Log($"Sending: {message}");
-            await _webSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
+            ServerMessage message = new ServerMessage
+            {
+                MessageType = messageType,
+                MessageContent = messageContent
+            };
+            string jsonMessage = JsonUtility.ToJson(message);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
+
+            if (_webSocket != null && _webSocket.State == WebSocketState.Open)
+            {
+                await _webSocket.SendAsync(new ArraySegment<byte>(messageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            else
+            {
+                Debug.LogError("WebSocket is not connected.");
+            }
         }
-        #endregion
     }
 }
