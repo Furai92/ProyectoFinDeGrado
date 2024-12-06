@@ -337,26 +337,47 @@ namespace Netcode.Transports.WebRTCTransport
         }
 
         private RTCConfiguration GetRTCConfiguration()
+{
+    return new RTCConfiguration
+    {
+        iceServers = new RTCIceServer[]
         {
-            return new RTCConfiguration
+            new RTCIceServer
             {
-                iceServers = new RTCIceServer[]
-                {
-                    new RTCIceServer
-                    {
-                        urls = new string[] { "stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302" }
-                    },
-                    new RTCIceServer
-                    {
-                        urls = new string[] { "turn:79.72.91.98:3478" },
-                        username = "server14",
-                        credential = "41server",
-                        credentialType = RTCIceCredentialType.Password
-                    }
-                },
-                iceTransportPolicy = RTCIceTransportPolicy.All
-            };
-        }
+                urls = new string[] { "stun:stun.relay.metered.ca:80" }
+            },
+            new RTCIceServer
+            {
+                urls = new string[] { "turn:global.relay.metered.ca:80" },
+                username = "1ff01721b24d7e5ca58007f4",
+                credential = "tgKQZK+k/T6CLuUs",
+                credentialType = RTCIceCredentialType.Password
+            },
+            new RTCIceServer
+            {
+                urls = new string[] { "turn:global.relay.metered.ca:80?transport=tcp" },
+                username = "1ff01721b24d7e5ca58007f4",
+                credential = "tgKQZK+k/T6CLuUs",
+                credentialType = RTCIceCredentialType.Password
+            },
+            new RTCIceServer
+            {
+                urls = new string[] { "turn:global.relay.metered.ca:443" },
+                username = "1ff01721b24d7e5ca58007f4",
+                credential = "tgKQZK+k/T6CLuUs",
+                credentialType = RTCIceCredentialType.Password
+            },
+            new RTCIceServer
+            {
+                urls = new string[] { "turns:global.relay.metered.ca:443?transport=tcp" },
+                username = "1ff01721b24d7e5ca58007f4",
+                credential = "tgKQZK+k/T6CLuUs",
+                credentialType = RTCIceCredentialType.Password
+            }
+        },
+        iceTransportPolicy = RTCIceTransportPolicy.All
+    };
+}
 
         private async Task SendMessage(string type, string content, string sdpMid = null, int sdpMLineIndex = 0)
         {
