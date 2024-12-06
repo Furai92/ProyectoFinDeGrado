@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Netcode.Transports.WebRTCTransport
 {
-    [Serializable]
-    public class ServerMessage
-    {
-        public string MessageType;
-        public string MessageContent;
-        public string sdpMid;
-        public int sdpMLineIndex;
-    }
-
     public class WebRTCTransport : NetworkTransport
     {
         private ClientWebSocket _webSocket;
@@ -25,6 +17,9 @@ namespace Netcode.Transports.WebRTCTransport
         private RTCDataChannel _sendChannel;
         private string _address = "79.72.91.98";
         private ushort _port = 80;
+        private Queue<(byte[] data, float timestamp)> _messageQueue = new Queue<(byte[] data, float timestamp)>();
+        private object _queueLock = new object();
+        private bool _isInitialized = false;
 
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -46,13 +41,56 @@ namespace Netcode.Transports.WebRTCTransport
             clientId = 0;
             payload = new ArraySegment<byte>();
             receiveTime = 0.0f;
+            try
+            {
+                if (_sendChannel == null || _sendChannel.ReadyState != RTCDataChannelState.Open)
+                {
+                    return NetworkEvent.Disconnect;
+                }
 
-            return NetworkEvent.Nothing;
+                lock (_queueLock)
+                {
+                    if (_messageQueue.Count > 0)
+                    {
+                        var (data, timestamp) = _messageQueue.Dequeue();
+                        payload = new ArraySegment<byte>(data);
+                        receiveTime = timestamp;
+                        return NetworkEvent.Data;
+                    }
+                }
+                return NetworkEvent.Nothing;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error in PollEvent: {ex.Message}");
+                return NetworkEvent.Disconnect;
+            }
+        }
+
+        public override ulong GetCurrentRtt(ulong clientId)
+        {
+            return 0;
         }
 
         public override bool StartClient()
         {
-            return true;
+            if (_isInitialized)
+            {
+                Debug.LogWarning("Client already initialized");
+                return false;
+            }
+
+            try 
+            {
+                Initialize();
+                _isInitialized = true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to start client: {ex}");
+                return false;
+            }
         }
 
         public override bool StartServer()
@@ -68,11 +106,6 @@ namespace Netcode.Transports.WebRTCTransport
         public override void DisconnectLocalClient()
         {
             Shutdown();
-        }
-
-        public override ulong GetCurrentRtt(ulong clientId)
-        {
-            return 0; // TODO: Implement RTT calculation
         }
 
         public override void Shutdown()
@@ -97,6 +130,8 @@ namespace Netcode.Transports.WebRTCTransport
                 _webSocket.Dispose();
                 _webSocket = null;
             }
+
+            _isInitialized = false;
 
             Debug.Log("Shutdown complete");
         }
@@ -162,6 +197,10 @@ namespace Netcode.Transports.WebRTCTransport
                 case "Disconnected":
                     await OnDisconnected();
                     break;
+
+                default:
+                    Debug.LogWarning($"Unknown message type: {messageObject.MessageType}");
+                    break;
             }
         }
 
@@ -224,8 +263,8 @@ namespace Netcode.Transports.WebRTCTransport
             RTCIceCandidateInit candidateInit = new RTCIceCandidateInit
             {
                 candidate = messageObject.MessageContent,
-                sdpMid = messageObject.sdpMid,
-                sdpMLineIndex = messageObject.sdpMLineIndex
+                sdpMid = messageObject.SdpMid,
+                sdpMLineIndex = messageObject.SdpMLineIndex
             };
 
             RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
@@ -283,12 +322,7 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
 
-            _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
-            _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-            _sendChannel.OnMessage = e => {
-                Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
-                _sendChannel.Send("bye");
-            };
+            SetupDataChannelCallbacks(_sendChannel);
         }
 
         private async Task OnSendSDPAnswer(ServerMessage messageObject)
@@ -316,10 +350,23 @@ namespace Netcode.Transports.WebRTCTransport
             _localConnection.OnDataChannel = channel =>
             {
                 _sendChannel = channel;
-                _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
-                _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-                _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
+                SetupDataChannelCallbacks(channel);
                 _sendChannel.Send("hello");
+            };
+        }
+
+        private void SetupDataChannelCallbacks(RTCDataChannel channel)
+        {
+            channel.OnOpen = () => Debug.Log("Data channel is open");
+            channel.OnClose = () => Debug.Log("Data channel closed");
+            channel.OnMessage = bytes => 
+            {
+                lock (_queueLock)
+                {
+                    _messageQueue.Enqueue((bytes, Time.realtimeSinceStartup));
+                    Debug.Log($"Received {bytes.Length} bytes");
+                    Debug.Log("Trying to decode message as string: " + Encoding.UTF8.GetString(bytes));
+                }
             };
         }
 
@@ -378,15 +425,14 @@ namespace Netcode.Transports.WebRTCTransport
         iceTransportPolicy = RTCIceTransportPolicy.All
     };
 }
-
         private async Task SendMessage(string type, string content, string sdpMid = null, int sdpMLineIndex = 0)
         {
             ServerMessage message = new ServerMessage
             {
                 MessageType = type,
                 MessageContent = content,
-                sdpMid = sdpMid,
-                sdpMLineIndex = sdpMLineIndex
+                SdpMid = sdpMid,
+                SdpMLineIndex = sdpMLineIndex
             };
 
             string jsonMessage = JsonUtility.ToJson(message);
