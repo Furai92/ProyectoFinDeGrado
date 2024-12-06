@@ -104,6 +104,7 @@ namespace Netcode.Transports.WebRTCTransport
             RTCConfiguration configuration = GetRTCConfiguration();
             _localConnection = new RTCPeerConnection(ref configuration);
             await ConnectWebSocket();  // Try connecting to the WebSocket
+            SuscribeToICE();  // Subscribe to ICE events
 
             byte[] buffer = new byte[4096];
             while (_webSocket.State == WebSocketState.Open)
@@ -275,7 +276,6 @@ namespace Netcode.Transports.WebRTCTransport
                 Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                 _sendChannel.Send("bye");
             };
-            SuscribeToICE();
         }
 
         private async Task OnSendSDPAnswer(ServerMessage messageObject)
@@ -306,7 +306,6 @@ namespace Netcode.Transports.WebRTCTransport
                 _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                 _sendChannel.Send("hello");
             };
-            SuscribeToICE();
         }
 
         private async Task WaitForOperation(AsyncOperationBase operation)
