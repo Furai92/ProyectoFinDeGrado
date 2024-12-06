@@ -125,8 +125,6 @@ namespace Netcode.Transports.WebRTCTransport
             catch (Exception ex)
             {
                 Debug.LogError($"WebSocket connection failed: {ex.Message}");
-                await Task.Delay(1000);  // Retry after a delay
-                await ConnectWebSocket();
             }
         }
 
@@ -173,6 +171,7 @@ namespace Netcode.Transports.WebRTCTransport
         {
             _localConnection.OnIceCandidate = e =>
             {
+                Debug.Log("ICE candidate gathering");
                 if (e.Candidate != null)
                 {
                     Debug.Log("New ICE candidate");
@@ -217,23 +216,24 @@ namespace Netcode.Transports.WebRTCTransport
                 return;
             }
 
+            Debug.Log($"Received ICE candidate: {messageObject.MessageContent}");
             RTCIceCandidateInit candidateInit = new RTCIceCandidateInit
             {
                 candidate = messageObject.MessageContent,
-                sdpMid = "",
+                sdpMid = "", // Ensure these values match your SDP
                 sdpMLineIndex = 0
             };
 
             RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
-
             bool success = _localConnection.AddIceCandidate(candidate);
+
             if (success)
             {
-                Debug.Log("ICE candidate added successfully");
+                Debug.Log("ICE candidate added successfully.");
             }
             else
             {
-                Debug.LogError("Failed to add ICE candidate");
+                Debug.LogError("Failed to add ICE candidate.");
             }
         }
 
@@ -269,13 +269,13 @@ namespace Netcode.Transports.WebRTCTransport
 
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
-            SuscribeToICE();
+            _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
-            _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
             _sendChannel.OnMessage = e => {
                 Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                 _sendChannel.Send("bye");
             };
+            SuscribeToICE();
         }
 
         private async Task OnSendSDPAnswer(ServerMessage messageObject)
@@ -297,15 +297,16 @@ namespace Netcode.Transports.WebRTCTransport
             await WaitForOperation(op4);
 
             await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
-            SuscribeToICE();
 
             _localConnection.OnDataChannel = channel =>
             {
                 _sendChannel = channel;
+                _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
                 _sendChannel.OnClose = () => Debug.Log("Data channel closed");
                 _sendChannel.OnMessage = e => Debug.Log($"Received message: {Encoding.UTF8.GetString(e)}");
                 _sendChannel.Send("hello");
             };
+            SuscribeToICE();
         }
 
         private async Task WaitForOperation(AsyncOperationBase operation)
@@ -329,7 +330,7 @@ namespace Netcode.Transports.WebRTCTransport
                 {
                     new RTCIceServer
                     {
-                        urls = new string[] { "stun:stun.l.google.com:19302" }
+                        urls = new string[] { "stun:[::1]:19302", "stun:stun.l.google.com:19302" }
                     },
                     new RTCIceServer
                     {
@@ -357,6 +358,7 @@ namespace Netcode.Transports.WebRTCTransport
             if (_webSocket != null && _webSocket.State == WebSocketState.Open)
             {
                 await _webSocket.SendAsync(new ArraySegment<byte>(messageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                Debug.Log($"Sent message: {jsonMessage}");
             }
             else
             {
