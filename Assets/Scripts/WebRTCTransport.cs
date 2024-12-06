@@ -107,7 +107,6 @@ namespace Netcode.Transports.WebRTCTransport
             RTCConfiguration configuration = GetRTCConfiguration();
             _localConnection = new RTCPeerConnection(ref configuration);
             await ConnectWebSocket();
-            SubscribeToICE();
 
             byte[] buffer = new byte[4096];
             while (_webSocket.State == WebSocketState.Open)
@@ -282,6 +281,8 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
 
+            SubscribeToICE();
+
             _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
             _sendChannel.OnMessage = e => {
@@ -309,6 +310,8 @@ namespace Netcode.Transports.WebRTCTransport
             await WaitForOperation(op4);
 
             await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
+
+            SubscribeToICE();
 
             _localConnection.OnDataChannel = channel =>
             {
