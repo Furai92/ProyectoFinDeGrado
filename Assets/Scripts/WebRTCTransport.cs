@@ -9,12 +9,20 @@ using UnityEngine;
 
 namespace Netcode.Transports.WebRTCTransport
 {
+    [Serializable]
+    public class ServerMessage
+    {
+        public string MessageType;
+        public string MessageContent;
+        public string sdpMid;
+        public int sdpMLineIndex;
+    }
+
     public class WebRTCTransport : NetworkTransport
     {
         private ClientWebSocket _webSocket;
-        RTCPeerConnection _localConnection;
-        RTCConfiguration? _configuration;
-        RTCDataChannel _sendChannel;
+        private RTCPeerConnection _localConnection;
+        private RTCDataChannel _sendChannel;
         private string _address = "79.72.91.98";
         private ushort _port = 80;
 
@@ -26,11 +34,9 @@ namespace Netcode.Transports.WebRTCTransport
                 return;
             }
 
-            // Convert ArraySegment<byte> to byte[]
             byte[] buffer = new byte[data.Count];
             if (data.Array != null) Array.Copy(data.Array, data.Offset, buffer, 0, data.Count);
 
-            // Send the data over the data channel
             _sendChannel.Send(buffer);
             Debug.Log($"Sent {data.Count} bytes to client {clientId}");
         }
@@ -73,21 +79,18 @@ namespace Netcode.Transports.WebRTCTransport
         {
             Debug.Log("Shutting down");
 
-            // Close the data channels if they are open
             if (_sendChannel != null)
             {
                 _sendChannel.Close();
                 _sendChannel = null;
             }
 
-            // Close the peer connection
             if (_localConnection != null)
             {
                 _localConnection.Close();
                 _localConnection = null;
             }
 
-            // Close the WebSocket connection if it is open
             if (_webSocket != null && _webSocket.State == WebSocketState.Open)
             {
                 _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Shutdown", CancellationToken.None).Wait();
@@ -103,8 +106,8 @@ namespace Netcode.Transports.WebRTCTransport
             _webSocket = new ClientWebSocket();
             RTCConfiguration configuration = GetRTCConfiguration();
             _localConnection = new RTCPeerConnection(ref configuration);
-            await ConnectWebSocket();  // Try connecting to the WebSocket
-            SuscribeToICE();  // Subscribe to ICE events
+            await ConnectWebSocket();
+            SubscribeToICE();
 
             byte[] buffer = new byte[4096];
             while (_webSocket.State == WebSocketState.Open)
@@ -168,7 +171,7 @@ namespace Netcode.Transports.WebRTCTransport
             await SendMessage("ConnectionRequest", "");
         }
 
-        private void SuscribeToICE()
+        private void SubscribeToICE()
         {
             _localConnection.OnIceCandidate = e =>
             {
@@ -176,7 +179,7 @@ namespace Netcode.Transports.WebRTCTransport
                 if (e.Candidate != null)
                 {
                     Debug.Log("New ICE candidate");
-                    _ = SendMessage("ICECandidate", e.Candidate);
+                    _ = SendMessage("ICECandidate", e.Candidate, e.SdpMid, e.SdpMLineIndex ?? 0);
                 }
                 else
                 {
@@ -218,23 +221,31 @@ namespace Netcode.Transports.WebRTCTransport
             }
 
             Debug.Log($"Received ICE candidate: {messageObject.MessageContent}");
+
             RTCIceCandidateInit candidateInit = new RTCIceCandidateInit
             {
                 candidate = messageObject.MessageContent,
-                sdpMid = "", // Ensure these values match your SDP
-                sdpMLineIndex = 0
+                sdpMid = messageObject.sdpMid,
+                sdpMLineIndex = messageObject.sdpMLineIndex
             };
 
             RTCIceCandidate candidate = new RTCIceCandidate(candidateInit);
-            bool success = _localConnection.AddIceCandidate(candidate);
 
-            if (success)
+            if (_localConnection != null)
             {
-                Debug.Log("ICE candidate added successfully.");
+                bool success = _localConnection.AddIceCandidate(candidate);
+                if (success)
+                {
+                    Debug.Log("ICE candidate added successfully.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to add ICE candidate.");
+                }
             }
             else
             {
-                Debug.LogError("Failed to add ICE candidate.");
+                Debug.LogWarning("Local connection not initialized.");
             }
         }
 
@@ -270,6 +281,7 @@ namespace Netcode.Transports.WebRTCTransport
 
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
+
             _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
             _sendChannel.OnMessage = e => {
@@ -323,13 +335,13 @@ namespace Netcode.Transports.WebRTCTransport
 
         private RTCConfiguration GetRTCConfiguration()
         {
-            _configuration = new RTCConfiguration
+            return new RTCConfiguration
             {
                 iceServers = new RTCIceServer[]
                 {
                     new RTCIceServer
                     {
-                        urls = new string[] { "stun:[::1]:19302", "stun:stun.l.google.com:19302" }
+                        urls = new string[] { "stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302" }
                     },
                     new RTCIceServer
                     {
@@ -341,22 +353,24 @@ namespace Netcode.Transports.WebRTCTransport
                 },
                 iceTransportPolicy = RTCIceTransportPolicy.All
             };
-            return _configuration.Value;
         }
 
-        private async Task SendMessage(string messageType, string messageContent)
+        private async Task SendMessage(string type, string content, string sdpMid = null, int sdpMLineIndex = 0)
         {
             ServerMessage message = new ServerMessage
             {
-                MessageType = messageType,
-                MessageContent = messageContent
+                MessageType = type,
+                MessageContent = content,
+                sdpMid = sdpMid,
+                sdpMLineIndex = sdpMLineIndex
             };
+
             string jsonMessage = JsonUtility.ToJson(message);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
+            byte[] bytes = Encoding.UTF8.GetBytes(jsonMessage);
 
             if (_webSocket != null && _webSocket.State == WebSocketState.Open)
             {
-                await _webSocket.SendAsync(new ArraySegment<byte>(messageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                await _webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
                 Debug.Log($"Sent message: {jsonMessage}");
             }
             else
