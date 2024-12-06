@@ -267,6 +267,8 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             await WaitForOperation(op);
 
+            SubscribeToICE();
+
             await SendMessage("SendSDPAnswer", offer.sdp);
         }
 
@@ -280,8 +282,6 @@ namespace Netcode.Transports.WebRTCTransport
 
             RTCSetSessionDescriptionAsyncOperation op2 = _localConnection.SetRemoteDescription(ref sdpAnswer);
             await WaitForOperation(op2);
-
-            SubscribeToICE();
 
             _sendChannel.OnOpen = () => Debug.Log("Data channel is open");
             _sendChannel.OnClose = () => Debug.Log("Data channel closed");
@@ -309,9 +309,9 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op4 = _localConnection.SetLocalDescription(ref answerDesc);
             await WaitForOperation(op4);
 
-            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
-
             SubscribeToICE();
+
+            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
 
             _localConnection.OnDataChannel = channel =>
             {
