@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +16,6 @@ public class PlayerController : MonoBehaviour
         float movementInputV = Input.GetAxis("Vertical");
         float rotationInputH = Input.GetAxis("Mouse X");
         float rotationInputV = Input.GetAxis("Mouse Y");
-
         
         transform.position += movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.forward;
         transform.position += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.right;

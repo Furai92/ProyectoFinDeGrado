@@ -15,17 +15,20 @@ namespace Netcode.Transports.WebRTCTransport
         private ClientWebSocket _webSocket;
         private RTCPeerConnection _localConnection;
         private RTCDataChannel _sendChannel;
-        private string _address = "79.72.91.98";
+        public override ulong ServerClientId => (ulong)Guid.NewGuid().GetHashCode();
+
+        //private string _address = "79.72.91.98";
+        private string _address = "127.0.0.1";
         private ushort _port = 80;
         private Queue<(byte[] data, float timestamp)> _messageQueue = new Queue<(byte[] data, float timestamp)>();
         private object _queueLock = new object();
-        private bool _isInitialized = false;
+        private bool _isConnected = false;
 
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
             if (_sendChannel == null || _sendChannel.ReadyState != RTCDataChannelState.Open)
             {
-                Debug.LogError("Data channel is not open.");
+                Debug.Log("Data channel is not open.");
                 return;
             }
 
@@ -40,11 +43,24 @@ namespace Netcode.Transports.WebRTCTransport
         {
             clientId = 0;
             payload = new ArraySegment<byte>();
-            receiveTime = 0.0f;
+            receiveTime = Time.realtimeSinceStartup;
+
             try
             {
-                if (_sendChannel == null || _sendChannel.ReadyState != RTCDataChannelState.Open)
+                if (_sendChannel == null)
                 {
+                    return NetworkEvent.Nothing;
+                }
+
+                if (_sendChannel.ReadyState == RTCDataChannelState.Open && !_isConnected)
+                {
+                    _isConnected = true;
+                    return NetworkEvent.Connect;
+                }
+
+                if (_sendChannel.ReadyState != RTCDataChannelState.Open && _isConnected)
+                {
+                    _isConnected = false;
                     return NetworkEvent.Disconnect;
                 }
 
@@ -58,11 +74,13 @@ namespace Netcode.Transports.WebRTCTransport
                         return NetworkEvent.Data;
                     }
                 }
+
                 return NetworkEvent.Nothing;
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error in PollEvent: {ex.Message}");
+                _isConnected = false;
                 return NetworkEvent.Disconnect;
             }
         }
@@ -74,28 +92,11 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override bool StartClient()
         {
-            if (_isInitialized)
-            {
-                Debug.LogWarning("Client already initialized");
-                return false;
-            }
-
-            try 
-            {
-                Initialize();
-                _isInitialized = true;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to start client: {ex}");
-                return false;
-            }
+            return true;
         }
-
         public override bool StartServer()
         {
-            return StartClient();
+            return true;
         }
 
         public override void DisconnectRemoteClient(ulong clientId)
@@ -112,44 +113,58 @@ namespace Netcode.Transports.WebRTCTransport
         {
             Debug.Log("Shutting down");
 
-            if (_sendChannel != null)
+            try
             {
-                _sendChannel.Close();
-                _sendChannel = null;
-            }
+                if (_sendChannel != null)
+                {
+                    _sendChannel.Close();
+                    _sendChannel = null;
+                }
 
-            if (_localConnection != null)
+                if (_localConnection != null)
+                {
+                    _localConnection.Close();
+                    _localConnection = null;
+                }
+
+                if (_webSocket != null && _webSocket.State == WebSocketState.Open)
+                {
+                    _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Shutdown", CancellationToken.None).Wait();
+                    _webSocket.Dispose();
+                    _webSocket = null;
+                }
+            }
+            catch (Exception ex)
             {
-                _localConnection.Close();
-                _localConnection = null;
+                Debug.Log($"Error in Shutdown: {ex.Message}");
             }
-
-            if (_webSocket != null && _webSocket.State == WebSocketState.Open)
-            {
-                _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Shutdown", CancellationToken.None).Wait();
-                _webSocket.Dispose();
-                _webSocket = null;
-            }
-
-            _isInitialized = false;
 
             Debug.Log("Shutdown complete");
         }
 
         public override async void Initialize(NetworkManager networkManager = null)
         {
-            _webSocket = new ClientWebSocket();
-            RTCConfiguration configuration = GetRTCConfiguration();
-            _localConnection = new RTCPeerConnection(ref configuration);
-            await ConnectWebSocket();
-
-            byte[] buffer = new byte[4096];
-            while (_webSocket.State == WebSocketState.Open)
+            try
             {
-                WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                Debug.Log("Received: " + message);
-                await HandleMessage(_webSocket, message);
+                Debug.Log("Initializing WebRTC transport");
+                _webSocket = new ClientWebSocket();
+                RTCConfiguration configuration = GetRTCConfiguration();
+                _localConnection = new RTCPeerConnection(ref configuration);
+                await ConnectWebSocket();
+
+                byte[] buffer = new byte[4096];
+                while (_webSocket.State == WebSocketState.Open)
+                {
+                    WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    Debug.Log("Received: " + message);
+                    await HandleMessage(_webSocket, message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log($"Initialization failed: {ex}");
+                Shutdown();
             }
         }
 
@@ -162,11 +177,48 @@ namespace Netcode.Transports.WebRTCTransport
             }
             catch (Exception ex)
             {
-                Debug.LogError($"WebSocket connection failed: {ex.Message}");
+                Debug.Log($"WebSocket connection failed: {ex.Message}");
+                throw;
             }
         }
 
-        public override ulong ServerClientId { get; } = (ulong)Guid.NewGuid().GetHashCode();
+        private async Task CloseWebSocket()
+        {
+            try 
+            {
+                if (_webSocket != null && _webSocket.State == WebSocketState.Open)
+                {
+                    Debug.Log("Closing signaling WebSocket connection");
+                    
+                    using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+                    {
+                        try
+                        {
+                            await _webSocket.CloseAsync(
+                                WebSocketCloseStatus.NormalClosure,
+                                "ICE connection established",
+                                cts.Token
+                            );
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Debug.Log("WebSocket close timed out, forcing disposal");
+                        }
+                        catch (WebSocketException)
+                        {
+                            Debug.Log("WebSocket already closed by remote party");
+                        }
+                    }
+                    _webSocket.Dispose();
+                    _webSocket = null;
+                    Debug.Log("WebSocket connection closed");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"Non-critical error closing WebSocket: {ex.Message}");
+            }
+        }
 
         async Task HandleMessage(WebSocket webSocket, string message)
         {
@@ -199,7 +251,7 @@ namespace Netcode.Transports.WebRTCTransport
                     break;
 
                 default:
-                    Debug.LogWarning($"Unknown message type: {messageObject.MessageType}");
+                    Debug.Log($"Unknown message type: {messageObject.MessageType}");
                     break;
             }
         }
@@ -238,13 +290,13 @@ namespace Netcode.Transports.WebRTCTransport
                         Debug.Log("ICE connection lost");
                         break;
                     case RTCIceConnectionState.Failed:
-                        Debug.LogError("ICE connection failed");
+                        Debug.Log("ICE connection failed");
                         break;
                     case RTCIceConnectionState.Completed:
                         Debug.Log("ICE connection completed");
                         break;
                     default:
-                        Debug.LogWarning($"Unknown ICE connection state: {state}");
+                        Debug.Log($"Unknown ICE connection state: {state}");
                         break;
                 }
             };
@@ -254,7 +306,7 @@ namespace Netcode.Transports.WebRTCTransport
         {
             if (string.IsNullOrEmpty(messageObject.MessageContent))
             {
-                Debug.LogWarning("Received empty ICE candidate, skipping.");
+                Debug.Log("Received empty ICE candidate, skipping.");
                 return;
             }
 
@@ -278,12 +330,12 @@ namespace Netcode.Transports.WebRTCTransport
                 }
                 else
                 {
-                    Debug.LogError("Failed to add ICE candidate.");
+                    Debug.Log("Failed to add ICE candidate.");
                 }
             }
             else
             {
-                Debug.LogWarning("Local connection not initialized.");
+                Debug.Log("Local connection not initialized.");
             }
         }
 
@@ -327,37 +379,54 @@ namespace Netcode.Transports.WebRTCTransport
 
         private async Task OnSendSDPAnswer(ServerMessage messageObject)
         {
-            RTCSessionDescription sdpOffer = new RTCSessionDescription
+            if (_localConnection == null)
             {
-                type = RTCSdpType.Offer,
-                sdp = messageObject.MessageContent
-            };
+                Debug.Log("Local connection is not initialized.");
+                return;
+            }
 
-            RTCSetSessionDescriptionAsyncOperation op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
-            await WaitForOperation(op3);
-
-            RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
-            await WaitForOperation(answer);
-
-            RTCSessionDescription answerDesc = answer.Desc;
-            RTCSetSessionDescriptionAsyncOperation op4 = _localConnection.SetLocalDescription(ref answerDesc);
-            await WaitForOperation(op4);
-
-            SubscribeToICE();
-
-            await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
-
-            _localConnection.OnDataChannel = channel =>
+            if (messageObject == null)
             {
-                _sendChannel = channel;
-                SetupDataChannelCallbacks(channel);
-                _sendChannel.Send("hello");
-            };
+                Debug.Log("Received null ServerMessage.");
+                return;
+            }
+
+            try
+            {
+                RTCSessionDescription sdpOffer = new RTCSessionDescription
+                {
+                    type = RTCSdpType.Offer,
+                    sdp = messageObject.MessageContent
+                };
+
+                RTCSetSessionDescriptionAsyncOperation op3 = _localConnection.SetRemoteDescription(ref sdpOffer);
+                await WaitForOperation(op3);
+
+                RTCSessionDescriptionAsyncOperation answer = _localConnection.CreateAnswer();
+                await WaitForOperation(answer);
+
+                RTCSessionDescription answerDesc = answer.Desc;
+                RTCSetSessionDescriptionAsyncOperation op4 = _localConnection.SetLocalDescription(ref answerDesc);
+                await WaitForOperation(op4);
+
+                SubscribeToICE();
+
+                await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
+
+                _localConnection.OnDataChannel = channel =>
+                {
+                    _sendChannel = channel;
+                    SetupDataChannelCallbacks(channel);
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.Log($"Error in OnSendSDPAnswer: {ex.Message}");
+            }
         }
 
         private void SetupDataChannelCallbacks(RTCDataChannel channel)
         {
-            channel.OnOpen = () => Debug.Log("Data channel is open");
             channel.OnClose = () => Debug.Log("Data channel closed");
             channel.OnMessage = bytes => 
             {
@@ -379,7 +448,7 @@ namespace Netcode.Transports.WebRTCTransport
 
             if (operation.IsError)
             {
-                Debug.LogError($"Operation failed: {operation.Error}");
+                Debug.Log($"Operation failed: {operation.Error}");
             }
         }
 
@@ -445,7 +514,7 @@ namespace Netcode.Transports.WebRTCTransport
             }
             else
             {
-                Debug.LogError("WebSocket is not connected.");
+                Debug.Log("WebSocket is not connected.");
             }
         }
     }
