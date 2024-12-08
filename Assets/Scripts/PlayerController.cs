@@ -16,6 +16,12 @@ public class PlayerController : NetworkBehaviour
 
     private void Start () 
     {
+        if (IsOwner || NetworkManager.Singleton == null)
+        {
+            _isPlayerControlsEnabled = true;
+            _playerCamera.gameObject.SetActive(true);
+        }
+
         if(IsHost && IsOwner)
         {
             _cube.GetComponent<Renderer>().material.color = Color.green;
@@ -35,15 +41,6 @@ public class PlayerController : NetworkBehaviour
         {
             _cube.GetComponent<Renderer>().material.color = Color.green;
             _capsule.GetComponent<Renderer>().material.color = Color.green;
-        }
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (IsOwner)
-        {
-            _isPlayerControlsEnabled = true;
-            _playerCamera.gameObject.SetActive(true);
         }
     }
     private void Update()

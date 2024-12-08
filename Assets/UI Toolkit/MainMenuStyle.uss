@@ -101,3 +101,33 @@
     border-bottom-width: 1px;
     border-left-width: 1px;
 }
+
+.unity-text-input {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+}
+
+#Buttons > .unity-text-input > #unity-text-input > .unity-text-element--inner-input-field-component {
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 230, 0);
+    -unity-text-align: middle-center;
+    font-size: 40px;
+}
+
+#Buttons > .unity-text-input > #unity-text-input {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    top: auto;
+}
+
+#Buttons > .unity-text-input > .unity-text-field__label {
+    top: -15px;
+}

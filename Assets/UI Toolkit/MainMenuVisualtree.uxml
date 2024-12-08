@@ -1,14 +1,12 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1542262633d8b7e4db68ec8a01d77c7b&amp;type=3#MainMenuStyle" />
-    <engine:VisualElement name="Container" style="flex-grow: 1;">
-        <engine:Label text="3D SURVIVAL" class="header" style="font-size: 130px; -unity-font-definition: resource(&apos;FlatSkin/Font/Roboto-Italic&apos;); -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 0; color: rgb(255, 255, 255);" />
-    </engine:VisualElement>
+    <engine:VisualElement name="Container" style="flex-grow: 1;" />
     <engine:VisualElement name="Buttons" style="flex-grow: 1; top: 134px; scale: 0.7 0.7;">
-        <engine:Button text="PLAY" class="button" style="top: 25px;" />
-        <engine:TextField label="JOIN CODE" max-length="4" hide-placeholder-on-focus="false" language-direction="Inherit" multiline="false" class="textfield" style="align-items: stretch; justify-content: center; white-space: nowrap; flex-direction: column; font-size: 28px; -unity-text-outline-width: 0; -unity-text-outline-color: rgb(0, 0, 0); text-shadow: 0.5px 0 0 rgb(0, 0, 0); -unity-text-align: middle-center; flex-wrap: nowrap;" />
+        <engine:Button text="PLAY" class="button" style="top: -10px;" />
+        <engine:TextField label="JOIN A GAME" max-length="4" hide-placeholder-on-focus="false" language-direction="Inherit" multiline="false" class="textfield unity-label unity-text-input" style="align-items: stretch; justify-content: center; white-space: nowrap; flex-direction: column; font-size: 30px; -unity-text-outline-width: 0; -unity-text-outline-color: rgb(0, 0, 0); text-shadow: 0.5px 0 0 rgb(0, 0, 0); -unity-text-align: middle-center; flex-wrap: nowrap; -unity-background-image-tint-color: rgb(255, 255, 255); width: 206px;" />
         <engine:Button text="JOIN" class="button button-2" style="top: 74px;" />
         <engine:Label text="HOST A GAME" class="label" />
-        <engine:Label text="1234" class="code" />
+        <engine:Label text="1234" class="code" style="color: rgb(255, 224, 0);" />
         <engine:Button text="HOST" class="button button-2" style="top: 120px;" />
     </engine:VisualElement>
 </engine:UXML>
