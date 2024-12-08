@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _cube;
     [SerializeField] private GameObject _capsule;
 
-    private const float MOVEMENT_SPEED = 0.5f;
+    private const float MOVEMENT_SPEED = 0.9f;
     private const float ROTATION_SPEED = 200f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
