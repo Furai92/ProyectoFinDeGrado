@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class StartMenu : MonoBehaviour
+public class StartGame : NetworkBehaviour
 {
     [SerializeField] private NetworkManager _networkManager;
     [SerializeField] private Camera _camera;
@@ -40,7 +40,9 @@ public class StartMenu : MonoBehaviour
 
     [ClientRpc]
     private void ReceiveChatMessageClientRpc(string message, ulong senderClientId) {
-        if (senderClientId == NetworkManager.Singleton.LocalClientId) {
+  
+        if (senderClientId == NetworkManager.Singleton.LocalClientId)
+        {
             return; // Don't update the chat for the sender
         }
         _chatLabel.text = message; 
