@@ -31,22 +31,26 @@ public class StartGame : NetworkBehaviour
     private void SendChatMessage(string message) {
         _chatTextField.value = ""; // Clear text field
         SendChatMessageServerRpc(message); // Send message to server
+        Debug.Log($"Sent message: {message} ");
     }
 
-    [ServerRpc (RequireOwnership = false)]
-    private void SendChatMessageServerRpc(string message) {
-       ReceiveChatMessageClientRpc(message, NetworkManager.Singleton.LocalClientId);
+    [ServerRpc(RequireOwnership = false)]
+    private void SendChatMessageServerRpc(string message, ServerRpcParams rpcParams = default)
+    {
+        ulong senderClientId = rpcParams.Receive.SenderClientId;
+        ReceiveChatMessageClientRpc(message, senderClientId);
     }
 
     [ClientRpc]
-    private void ReceiveChatMessageClientRpc(string message, ulong senderClientId) {
-  
+    private void ReceiveChatMessageClientRpc(string message, ulong senderClientId)
+    {
         if (senderClientId == NetworkManager.Singleton.LocalClientId)
         {
             return; // Don't update the chat for the sender
         }
-        _chatLabel.text = message; 
+        _chatLabel.text = message;
     }
+
 
 
     void OnGUI()
