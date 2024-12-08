@@ -15,7 +15,7 @@ namespace Netcode.Transports.WebRTCTransport
         private ClientWebSocket _webSocket;
         private RTCPeerConnection _localConnection;
         private RTCDataChannel _sendChannel;
-        public override ulong ServerClientId => (ulong)Guid.NewGuid().GetHashCode();
+        public override ulong ServerClientId => 0;
 
         //private string _address = "79.72.91.98";
         private string _address = "127.0.0.1";
@@ -41,7 +41,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override NetworkEvent PollEvent(out ulong clientId, out ArraySegment<byte> payload, out float receiveTime)
         {
-            clientId = 0;
+            clientId = NetworkManager.Singleton.LocalClientId;
             payload = new ArraySegment<byte>();
             receiveTime = Time.realtimeSinceStartup;
 
@@ -434,7 +434,6 @@ namespace Netcode.Transports.WebRTCTransport
                 {
                     _messageQueue.Enqueue((bytes, Time.realtimeSinceStartup));
                     Debug.Log($"Received {bytes.Length} bytes");
-                    Debug.Log("Trying to decode message as string: " + Encoding.UTF8.GetString(bytes));
                 }
             };
         }
