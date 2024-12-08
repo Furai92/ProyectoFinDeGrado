@@ -41,7 +41,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         public override NetworkEvent PollEvent(out ulong clientId, out ArraySegment<byte> payload, out float receiveTime)
         {
-            clientId = NetworkManager.Singleton.LocalClientId;
+            clientId = 0;
             payload = new ArraySegment<byte>();
             receiveTime = Time.realtimeSinceStartup;
 
@@ -55,13 +55,8 @@ namespace Netcode.Transports.WebRTCTransport
                 if (_sendChannel.ReadyState == RTCDataChannelState.Open && !_isConnected)
                 {
                     _isConnected = true;
+                    clientId = (ulong)_sendChannel.Id;
                     return NetworkEvent.Connect;
-                }
-
-                if (_sendChannel.ReadyState != RTCDataChannelState.Open && _isConnected)
-                {
-                    _isConnected = false;
-                    return NetworkEvent.Disconnect;
                 }
 
                 lock (_queueLock)
@@ -71,6 +66,7 @@ namespace Netcode.Transports.WebRTCTransport
                         var (data, timestamp) = _messageQueue.Dequeue();
                         payload = new ArraySegment<byte>(data);
                         receiveTime = timestamp;
+                        clientId = (ulong)_sendChannel.Id;
                         return NetworkEvent.Data;
                     }
                 }

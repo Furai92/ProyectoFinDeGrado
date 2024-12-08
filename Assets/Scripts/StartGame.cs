@@ -37,7 +37,7 @@ public class StartMenu : MonoBehaviour
             _networkManager.StartHost();
             Debug.Log("Started as Host");
             _hasStarted = true; // Hide GUI
-            //Destroy(_camera.gameObject); // Destroy camera
+            Destroy(_camera.gameObject); // Destroy camera
         }
         else
         {
@@ -52,7 +52,7 @@ public class StartMenu : MonoBehaviour
             _networkManager.StartClient();
             Debug.Log("Started as Client");
             _hasStarted = true; // Hide GUI
-            //Destroy(_camera.gameObject); // Destroy camera
+            Destroy(_camera.gameObject); // Destroy camera
         }
         else
         {
