@@ -16,15 +16,25 @@ public class PlayerController : NetworkBehaviour
 
     private void Start () 
     {
-        if(IsOwner)
+        if(IsHost && IsOwner)
         {
             _cube.GetComponent<Renderer>().material.color = Color.green;
             _capsule.GetComponent<Renderer>().material.color = Color.green;
         }
-        else
+        else if (IsHost && !IsOwner)
         {
             _cube.GetComponent<Renderer>().material.color = Color.red;
             _capsule.GetComponent<Renderer>().material.color = Color.red;
+        }
+        else if (!IsHost && IsOwner)
+        {
+            _cube.GetComponent<Renderer>().material.color = Color.red;
+            _capsule.GetComponent<Renderer>().material.color = Color.red;
+        }
+        else if (!IsHost && !IsOwner)
+        {
+            _cube.GetComponent<Renderer>().material.color = Color.green;
+            _capsule.GetComponent<Renderer>().material.color = Color.green;
         }
     }
 

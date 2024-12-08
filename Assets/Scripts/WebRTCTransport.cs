@@ -36,7 +36,7 @@ namespace Netcode.Transports.WebRTCTransport
             if (data.Array != null) Array.Copy(data.Array, data.Offset, buffer, 0, data.Count);
 
             _sendChannel.Send(buffer);
-            Debug.Log($"Sent {data.Count} bytes to client {clientId}");
+            //Debug.Log($"Sent {data.Count} bytes to client {clientId}");
         }
 
         public override NetworkEvent PollEvent(out ulong clientId, out ArraySegment<byte> payload, out float receiveTime)
@@ -429,7 +429,7 @@ namespace Netcode.Transports.WebRTCTransport
                 lock (_queueLock)
                 {
                     _messageQueue.Enqueue((bytes, Time.realtimeSinceStartup));
-                    Debug.Log($"Received {bytes.Length} bytes");
+                    //Debug.Log($"Received {bytes.Length} bytes");
                 }
             };
         }
