@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement style="flex-grow: 1; align-content: auto; align-self: center; justify-content: flex-start; align-items: stretch;">
+    <engine:VisualElement style="flex-grow: initial; align-content: auto; align-self: center; justify-content: flex-start; align-items: stretch;">
         <engine:VisualElement style="flex-grow: initial; flex-direction: row;">
             <engine:TextField placeholder-text="Send a message..." name="chat-text-field" max-length="62" style="width: 874px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; font-size: 24px;" />
             <engine:Button text="SEND" name="send-button" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
