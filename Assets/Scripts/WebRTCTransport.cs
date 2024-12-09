@@ -22,7 +22,6 @@ namespace Netcode.Transports.WebRTCTransport
         private Queue<(byte[] data, float timestamp)> _messageQueue = new Queue<(byte[] data, float timestamp)>();
         private object _queueLock = new object();
         private bool _isConnected = false;
-        private CancellationTokenSource _receiveMessageCancellationTokenSource;
 
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -77,6 +76,7 @@ namespace Netcode.Transports.WebRTCTransport
             {
                 Debug.LogError($"Error in PollEvent: {ex.Message}");
                 _isConnected = false;
+                Shutdown();
                 return NetworkEvent.Disconnect;
             }
         }
@@ -144,7 +144,6 @@ namespace Netcode.Transports.WebRTCTransport
             {
                 Debug.Log("Initializing WebRTC transport");
                 _webSocket = new ClientWebSocket();
-                _receiveMessageCancellationTokenSource = new CancellationTokenSource();
                 RTCConfiguration configuration = GetRTCConfiguration();
                 _localConnection = new RTCPeerConnection(ref configuration);
                 await ConnectWebSocket();
@@ -152,7 +151,7 @@ namespace Netcode.Transports.WebRTCTransport
                 byte[] buffer = new byte[4096];
                 while (!_isConnected)
                 {
-                    WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), _receiveMessageCancellationTokenSource.Token);
+                    WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
@@ -272,12 +271,9 @@ namespace Netcode.Transports.WebRTCTransport
                     GameTools.ClearLogConsole();
                     Debug.Log(await GetConnectionDetailsAsync(_localConnection));
                     Debug.Log("The WebSocket connection will now be closed.");
-                    await SendMessage("Disconnected", "");
-                    _receiveMessageCancellationTokenSource?.Cancel();
+                    await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                     _webSocket.Dispose();
                     _webSocket = null;
-                    _receiveMessageCancellationTokenSource.Dispose();
-                    _receiveMessageCancellationTokenSource = null;
                 }
             };
         }
