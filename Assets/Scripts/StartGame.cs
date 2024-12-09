@@ -51,30 +51,41 @@ public class StartGame : NetworkBehaviour
         _chatLabel.text = message;
     }
 
-
-
-    void OnGUI()
+void OnGUI()
+{
+    if (!_hasStarted)
     {
-        if (!_hasStarted)
+        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button)
         {
-            // Set up GUI layout
-            GUILayout.BeginArea(new Rect(10, 10, 200, 100));
+            fontSize = 40,
+            padding = new RectOffset(30, 30, 15, 15),
+            alignment = TextAnchor.MiddleCenter
+        };
 
-            // Host button
-            if (GUILayout.Button("Start Host"))
-            {
-                StartHost();
-            }
+        float areaWidth = 800;
+        float areaHeight = 500;
+        float x = (Screen.width - areaWidth) / 2;
+        float y = (Screen.height - areaHeight) / 2;
 
-            // Client button
-            if (GUILayout.Button("Start Client"))
-            {
-                StartClient();
-            }
+        GUILayout.BeginArea(new Rect(x, y, areaWidth, areaHeight));
 
-            GUILayout.EndArea();
+        GUILayout.Space(40);
+
+        if (GUILayout.Button("Start Host", buttonStyle, GUILayout.Width(600), GUILayout.Height(150)))
+        {
+            StartHost();
         }
+
+        GUILayout.Space(40);
+
+        if (GUILayout.Button("Start Client", buttonStyle, GUILayout.Width(600), GUILayout.Height(150)))
+        {
+            StartClient();
+        }
+
+        GUILayout.EndArea();
     }
+}
 
     private void StartHost()
     {
