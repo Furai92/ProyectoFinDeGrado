@@ -22,6 +22,12 @@ namespace Netcode.Transports.WebRTCTransport
         private Queue<(byte[] data, float timestamp)> _messageQueue = new Queue<(byte[] data, float timestamp)>();
         private object _queueLock = new object();
         private bool _isConnected = false;
+        private string _joinCode = "";
+        public string JoinCode { get => _joinCode; set => _joinCode = value; }
+        private string _password = "";
+        public string Password { get { return _password; } }
+        public event Action OnWebSocketConnected;
+        public event Action OnP2PConnectionEstablished;
 
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -194,6 +200,8 @@ namespace Netcode.Transports.WebRTCTransport
             switch (messageObject.MessageType)
             {
                 case "Password":
+                    _password = messageObject.MessageContent;
+                    OnWebSocketConnected?.Invoke();
                     await OnPassword();
                     break;
 
@@ -221,7 +229,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         private async Task OnPassword()
         {
-            await SendMessage("ConnectionRequest", "");
+            await SendMessage("ConnectionRequest", _joinCode);
         }
 
         private void RegisterIceEventHandlers()
@@ -274,6 +282,7 @@ namespace Netcode.Transports.WebRTCTransport
                     await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                     _webSocket.Dispose();
                     _webSocket = null;
+                    OnP2PConnectionEstablished?.Invoke();
                 }
             };
         }

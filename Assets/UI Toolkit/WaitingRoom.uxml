@@ -1,0 +1,13 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1542262633d8b7e4db68ec8a01d77c7b&amp;type=3#MainMenuStyle" />
+    <engine:VisualElement style="flex-grow: 1; top: 77px;">
+        <engine:Button text="CANCEL" name="cancel-button" class="button-2 button" />
+    </engine:VisualElement>
+    <engine:VisualElement name="host-visual-element" style="flex-grow: 1;">
+        <engine:Label text="SHARE THIS CODE" name="role-status-label" class="label" />
+        <engine:Label text="9999" name="code-label" class="code" />
+    </engine:VisualElement>
+    <engine:VisualElement style="flex-grow: 1;">
+        <engine:Label text="..." name="status-label" class="label" />
+    </engine:VisualElement>
+</engine:UXML>
