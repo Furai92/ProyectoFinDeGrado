@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1542262633d8b7e4db68ec8a01d77c7b&amp;type=3#MainMenuStyle" />
     <engine:VisualElement name="Buttons" style="flex-grow: 1; top: 161px; scale: 0.7 0.7; height: auto; align-items: stretch; justify-content: center; align-self: auto; align-content: auto; width: auto;">
-        <engine:Button text="PLAY" name="play-button" class="button" style="top: 0;" />
+        <engine:Button text="OFFLINE" name="play-button" class="button" style="top: 0;" />
         <engine:UnsignedIntegerField value="0" max-length="4" name="code-integer-field" hide-placeholder-on-focus="false" placeholder-text="XXXX" class="unity-text-input textfield" />
         <engine:Button text="JOIN" name="join-button" class="button button-2" style="top: 74px;" />
         <engine:Label text="OR" class="label" />

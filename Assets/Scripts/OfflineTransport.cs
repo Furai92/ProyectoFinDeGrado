@@ -1,10 +1,9 @@
 using Unity.Netcode;
-using UnityEngine;
 using System;
 
 public class OfflineTransport : NetworkTransport
 {
-    public override ulong ServerClientId => throw new System.NotImplementedException();
+    public override ulong ServerClientId => 0;
 
     public override void Initialize(NetworkManager networkManager)
     {
@@ -28,12 +27,12 @@ public class OfflineTransport : NetworkTransport
 
     public override void DisconnectLocalClient()
     {
-        Shutdown();
+        
     }
 
     public override void DisconnectRemoteClient(ulong clientId)
     {
-        Shutdown();
+        
     }
 
     public override ulong GetCurrentRtt(ulong clientId)

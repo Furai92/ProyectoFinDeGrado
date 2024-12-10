@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private UIDocument _waitingRoomDocument;
     [SerializeField] private NetworkManager _networkManager;
     [SerializeField] private WebRTCTransport _webRTCTransport;
+    [SerializeField] private OfflineTransport _offlineTransport;
     private Button _playButton;
     private Button _hostButton;
     private Button _joinButton;
@@ -34,7 +35,7 @@ public class MainMenu : MonoBehaviour
 
     void OnP2PConnectionEstablished()
     {
-        if(_networkManager.IsServer)
+        if(_networkManager.IsHost)
         {
             NetworkManager.Singleton.SceneManager.LoadScene("MultiplayerTest", LoadSceneMode.Single);
         }
@@ -82,7 +83,9 @@ public class MainMenu : MonoBehaviour
 
         _playButton.clicked += () =>
         {
+            _networkManager.NetworkConfig.NetworkTransport = _offlineTransport;
             _networkManager.StartHost();
+            OnP2PConnectionEstablished();
         };
         _hostButton.clicked += () =>
         {

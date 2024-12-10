@@ -1,0 +1,42 @@
+using UnityEngine;
+
+public class InputManager : MonoBehaviour
+{
+    public static InputManager Instance { get; private set; }
+    private InputSystem_Actions _inputActions;
+    
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        _inputActions = new InputSystem_Actions();
+    }
+
+    void OnEnable()
+    {
+        _inputActions.Enable();
+        
+    }
+
+    void OnDisable()
+    {
+        _inputActions.Disable();
+    }
+
+    public Vector2 GetMovementInput()
+    {
+        return _inputActions.Player.Move.ReadValue<Vector2>();
+    }
+
+    public Vector2 GetLookInput()
+    {
+        return _inputActions.Player.Look.ReadValue<Vector2>();
+    }
+}
