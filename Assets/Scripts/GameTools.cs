@@ -2,6 +2,17 @@
 
 public class GameTools
 {
+    #region Debug
+    public static void ClearLogConsole()
+    {
+        #if UNITY_EDITOR
+        System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(typeof(UnityEditor.SceneView));
+        System.Type type = assembly.GetType("UnityEditor.LogEntries");
+        System.Reflection.MethodInfo method = type.GetMethod("Clear");
+        method.Invoke(new object(), null);
+        #endif
+    }
+    #endregion
     #region Positioning And Rotation
     /// <summary> Advances a vector into the specified direction. </summary>
     public static Vector3 DisplaceVector(Vector3 start, float angle, float distance)

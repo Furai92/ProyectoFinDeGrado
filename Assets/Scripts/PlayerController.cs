@@ -8,8 +8,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _cube;
     [SerializeField] private GameObject _capsule;
 
-    private const float MOVEMENT_SPEED = 0.9f;
-    private const float ROTATION_SPEED = 200f;
+    private const float MOVEMENT_SPEED = 0.5f;
+    private const float ROTATION_SPEED = 15f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
     private bool _isPlayerControlsEnabled = false;
@@ -47,10 +47,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (!_isPlayerControlsEnabled) return;
 
-        float movementInputH = Input.GetAxis("Horizontal");
-        float movementInputV = Input.GetAxis("Vertical");
-        float rotationInputH = Input.GetAxis("Mouse X");
-        float rotationInputV = Input.GetAxis("Mouse Y");
+        float movementInputH = InputManager.Instance.GetMovementInput().x;
+        float movementInputV = InputManager.Instance.GetMovementInput().y;
+        float rotationInputH = InputManager.Instance.GetLookInput().x;
+        float rotationInputV = InputManager.Instance.GetLookInput().y;
         
         transform.position += movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.forward;
         transform.position += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.right;

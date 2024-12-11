@@ -16,12 +16,18 @@ namespace Netcode.Transports.WebRTCTransport
         private RTCPeerConnection _localConnection;
         private RTCDataChannel _sendChannel;
         public override ulong ServerClientId => 0;
-        private string _address = "79.72.91.98";
-        //private string _address = "127.0.0.1";
+        //private string _address = "79.72.91.98";
+        private string _address = "127.0.0.1";
         private ushort _port = 80;
         private Queue<(byte[] data, float timestamp)> _messageQueue = new Queue<(byte[] data, float timestamp)>();
         private object _queueLock = new object();
         private bool _isConnected = false;
+        private string _joinCode = "";
+        public string JoinCode { get => _joinCode; set => _joinCode = value; }
+        private string _password = "";
+        public string Password { get { return _password; } }
+        public event Action OnWebSocketConnected;
+        public event Action OnP2PConnectionEstablished;
 
         public override void Send(ulong clientId, ArraySegment<byte> data, NetworkDelivery delivery)
         {
@@ -46,12 +52,12 @@ namespace Netcode.Transports.WebRTCTransport
 
             try
             {
-                if (_sendChannel == null)
+                if (_localConnection == null || _sendChannel == null)
                 {
                     return NetworkEvent.Nothing;
                 }
 
-                if (_sendChannel.ReadyState == RTCDataChannelState.Open && !_isConnected)
+                if (_localConnection.ConnectionState == RTCPeerConnectionState.Connected && !_isConnected)
                 {
                     _isConnected = true;
                     clientId = (ulong)_sendChannel.Id;
@@ -76,6 +82,7 @@ namespace Netcode.Transports.WebRTCTransport
             {
                 Debug.LogError($"Error in PollEvent: {ex.Message}");
                 _isConnected = false;
+                Shutdown();
                 return NetworkEvent.Disconnect;
             }
         }
@@ -124,7 +131,7 @@ namespace Netcode.Transports.WebRTCTransport
 
                 if (_webSocket != null && _webSocket.State == WebSocketState.Open)
                 {
-                    _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Shutdown", CancellationToken.None).Wait();
+                    _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None).Wait();
                     _webSocket.Dispose();
                     _webSocket = null;
                 }
@@ -148,17 +155,26 @@ namespace Netcode.Transports.WebRTCTransport
                 await ConnectWebSocket();
 
                 byte[] buffer = new byte[4096];
-                while (_webSocket.State == WebSocketState.Open)
+                while (!_isConnected)
                 {
                     WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    if (result.MessageType == WebSocketMessageType.Close)
+                    {
+                        Debug.Log("WebSocket connection closed.");
+                        break;
+                    }
+                    if(string.IsNullOrWhiteSpace(message))
+                    {
+                        continue;
+                    }
                     Debug.Log("Received: " + message);
                     await HandleMessage(_webSocket, message);
                 }
             }
             catch (Exception ex)
             {
-                Debug.Log($"Initialization failed: {ex}");
+                Debug.Log($"Error in Initialize: {ex.Message}");
                 Shutdown();
             }
         }
@@ -177,44 +193,6 @@ namespace Netcode.Transports.WebRTCTransport
             }
         }
 
-        private async Task CloseWebSocket()
-        {
-            try 
-            {
-                if (_webSocket != null && _webSocket.State == WebSocketState.Open)
-                {
-                    Debug.Log("Closing signaling WebSocket connection");
-                    
-                    using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
-                    {
-                        try
-                        {
-                            await _webSocket.CloseAsync(
-                                WebSocketCloseStatus.NormalClosure,
-                                "ICE connection established",
-                                cts.Token
-                            );
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            Debug.Log("WebSocket close timed out, forcing disposal");
-                        }
-                        catch (WebSocketException)
-                        {
-                            Debug.Log("WebSocket already closed by remote party");
-                        }
-                    }
-                    _webSocket.Dispose();
-                    _webSocket = null;
-                    Debug.Log("WebSocket connection closed");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning($"Non-critical error closing WebSocket: {ex.Message}");
-            }
-        }
-
         async Task HandleMessage(WebSocket webSocket, string message)
         {
             ServerMessage messageObject = JsonUtility.FromJson<ServerMessage>(message);
@@ -222,6 +200,8 @@ namespace Netcode.Transports.WebRTCTransport
             switch (messageObject.MessageType)
             {
                 case "Password":
+                    _password = messageObject.MessageContent;
+                    OnWebSocketConnected?.Invoke();
                     await OnPassword();
                     break;
 
@@ -241,10 +221,6 @@ namespace Netcode.Transports.WebRTCTransport
                     OnICECandidate(messageObject);
                     break;
 
-                case "Disconnected":
-                    await OnDisconnected();
-                    break;
-
                 default:
                     Debug.Log($"Unknown message type: {messageObject.MessageType}");
                     break;
@@ -253,10 +229,10 @@ namespace Netcode.Transports.WebRTCTransport
 
         private async Task OnPassword()
         {
-            await SendMessage("ConnectionRequest", "");
+            await SendMessage("ConnectionRequest", _joinCode);
         }
 
-        private void SubscribeToICE()
+        private void RegisterIceEventHandlers()
         {
             _localConnection.OnIceCandidate = e =>
             {
@@ -274,25 +250,39 @@ namespace Netcode.Transports.WebRTCTransport
 
             _localConnection.OnIceConnectionChange = state =>
             {
-                Debug.Log($"Local ICE connection state changed: {state}");
+                //Debug.Log($"Local ICE connection state changed: {state}");
 
                 switch (state)
                 {
                     case RTCIceConnectionState.Connected:
-                        Debug.Log("ICE connection established");
+                        //Debug.Log("ICE connection established");
                         break;
                     case RTCIceConnectionState.Disconnected:
-                        Debug.Log("ICE connection lost");
+                        //Debug.Log("ICE connection lost");
                         break;
                     case RTCIceConnectionState.Failed:
-                        Debug.Log("ICE connection failed");
+                        //Debug.Log("ICE connection failed");
                         break;
                     case RTCIceConnectionState.Completed:
-                        Debug.Log("ICE connection completed");
+                        //Debug.Log("ICE connection completed");
                         break;
                     default:
-                        Debug.Log($"Unknown ICE connection state: {state}");
+                        //Debug.Log($"Unknown ICE connection state: {state}");
                         break;
+                }
+            };
+
+            _localConnection.OnConnectionStateChange = async state =>
+            {
+                if(state == RTCPeerConnectionState.Connected)
+                {
+                    GameTools.ClearLogConsole();
+                    Debug.Log(await GetConnectionDetailsAsync(_localConnection));
+                    Debug.Log("The WebSocket connection will now be closed.");
+                    await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                    _webSocket.Dispose();
+                    _webSocket = null;
+                    OnP2PConnectionEstablished?.Invoke();
                 }
             };
         }
@@ -305,7 +295,7 @@ namespace Netcode.Transports.WebRTCTransport
                 return;
             }
 
-            Debug.Log($"Received ICE candidate: {messageObject.MessageContent}");
+            //Debug.Log($"Received ICE candidate: {messageObject.MessageContent}");
 
             RTCIceCandidateInit candidateInit = new RTCIceCandidateInit
             {
@@ -321,7 +311,7 @@ namespace Netcode.Transports.WebRTCTransport
                 bool success = _localConnection.AddIceCandidate(candidate);
                 if (success)
                 {
-                    Debug.Log("ICE candidate added successfully.");
+                    //Debug.Log("ICE candidate added successfully.");
                 }
                 else
                 {
@@ -333,13 +323,6 @@ namespace Netcode.Transports.WebRTCTransport
                 Debug.Log("Local connection not initialized.");
             }
         }
-
-        private async Task OnDisconnected()
-        {
-            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Disconnected", CancellationToken.None);
-            _webSocket.Dispose();
-        }
-
         private async Task OnSendSDPOffer()
         {
             Debug.Log("Pairing request received");
@@ -353,7 +336,7 @@ namespace Netcode.Transports.WebRTCTransport
             RTCSetSessionDescriptionAsyncOperation op = _localConnection.SetLocalDescription(ref offer);
             await WaitForOperation(op);
 
-            SubscribeToICE();
+            RegisterIceEventHandlers();
 
             await SendMessage("SendSDPAnswer", offer.sdp);
         }
@@ -404,7 +387,7 @@ namespace Netcode.Transports.WebRTCTransport
                 RTCSetSessionDescriptionAsyncOperation op4 = _localConnection.SetLocalDescription(ref answerDesc);
                 await WaitForOperation(op4);
 
-                SubscribeToICE();
+                RegisterIceEventHandlers();
 
                 await SendMessage("RecieveSDPAnswer", answerDesc.sdp);
 
@@ -422,6 +405,7 @@ namespace Netcode.Transports.WebRTCTransport
 
         private void SetupDataChannelCallbacks(RTCDataChannel channel)
         {
+            //channel.OnOpen = () => Debug.Log("Data channel opened");
             channel.OnClose = () => Debug.Log("Data channel closed");
             channel.OnMessage = bytes => 
             {
@@ -447,47 +431,120 @@ namespace Netcode.Transports.WebRTCTransport
         }
 
         private RTCConfiguration GetRTCConfiguration()
-{
-    return new RTCConfiguration
-    {
-        iceServers = new RTCIceServer[]
         {
-            new RTCIceServer
+            return new RTCConfiguration
             {
-                urls = new string[] { "stun:stun.relay.metered.ca:80" }
-            },
-            new RTCIceServer
+                iceServers = new RTCIceServer[]
+                {
+                    new RTCIceServer
+                    {
+                        urls = new string[] { "stun:stun.relay.metered.ca:80" }
+                    },
+                    new RTCIceServer
+                    {
+                        urls = new string[] { "turn:global.relay.metered.ca:80" },
+                        username = "1ff01721b24d7e5ca58007f4",
+                        credential = "tgKQZK+k/T6CLuUs",
+                        credentialType = RTCIceCredentialType.Password
+                    },
+                    new RTCIceServer
+                    {
+                        urls = new string[] { "turn:global.relay.metered.ca:80?transport=tcp" },
+                        username = "1ff01721b24d7e5ca58007f4",
+                        credential = "tgKQZK+k/T6CLuUs",
+                        credentialType = RTCIceCredentialType.Password
+                    },
+                    new RTCIceServer
+                    {
+                        urls = new string[] { "turn:global.relay.metered.ca:443" },
+                        username = "1ff01721b24d7e5ca58007f4",
+                        credential = "tgKQZK+k/T6CLuUs",
+                        credentialType = RTCIceCredentialType.Password
+                    },
+                    new RTCIceServer
+                    {
+                        urls = new string[] { "turns:global.relay.metered.ca:443?transport=tcp" },
+                        username = "1ff01721b24d7e5ca58007f4",
+                        credential = "tgKQZK+k/T6CLuUs",
+                        credentialType = RTCIceCredentialType.Password
+                    }
+                },
+                iceTransportPolicy = RTCIceTransportPolicy.All
+            };
+        }
+
+        public async Task<string> GetConnectionDetailsAsync(RTCPeerConnection peerConnection)
+        {
+            try
             {
-                urls = new string[] { "turn:global.relay.metered.ca:80" },
-                username = "1ff01721b24d7e5ca58007f4",
-                credential = "tgKQZK+k/T6CLuUs",
-                credentialType = RTCIceCredentialType.Password
-            },
-            new RTCIceServer
-            {
-                urls = new string[] { "turn:global.relay.metered.ca:80?transport=tcp" },
-                username = "1ff01721b24d7e5ca58007f4",
-                credential = "tgKQZK+k/T6CLuUs",
-                credentialType = RTCIceCredentialType.Password
-            },
-            new RTCIceServer
-            {
-                urls = new string[] { "turn:global.relay.metered.ca:443" },
-                username = "1ff01721b24d7e5ca58007f4",
-                credential = "tgKQZK+k/T6CLuUs",
-                credentialType = RTCIceCredentialType.Password
-            },
-            new RTCIceServer
-            {
-                urls = new string[] { "turns:global.relay.metered.ca:443?transport=tcp" },
-                username = "1ff01721b24d7e5ca58007f4",
-                credential = "tgKQZK+k/T6CLuUs",
-                credentialType = RTCIceCredentialType.Password
+                var statsWaitOperation = peerConnection.GetStats();
+                await WaitForOperation(statsWaitOperation);
+                RTCStatsReport stats = statsWaitOperation.Value;
+                bool foundActivePair = false;
+
+                foreach (var stat in stats.Stats.Values)
+                {
+                    // Look for active/current candidate pair
+                    if (stat is RTCTransportStats transport)
+                    {
+                        var selectedCandidatePairId = transport.selectedCandidatePairId;
+                        if (!string.IsNullOrEmpty(selectedCandidatePairId) && 
+                            stats.Stats.TryGetValue(selectedCandidatePairId, out var candidatePairStat))
+                        {
+                            var candidatePair = candidatePairStat as RTCIceCandidatePairStats;
+                            if (candidatePair != null)
+                            {
+                                foundActivePair = true;
+
+                                RTCIceCandidateStats localCandidate = null;
+                                // Get local candidate details
+                                if (stats.Stats.TryGetValue(candidatePair.localCandidateId, out var localStat))
+                                {
+                                    localCandidate = localStat as RTCIceCandidateStats;
+                                }
+
+                                // Get remote candidate details
+                                if (stats.Stats.TryGetValue(candidatePair.remoteCandidateId, out var remoteStat))
+                                {
+                                    if (remoteStat is RTCIceCandidateStats remoteCandidate)
+                                    {
+                                        // Determine connection type
+                                        if (localCandidate?.candidateType == RTCIceCandidateType.Relay.ToString() ||
+                                            remoteCandidate.candidateType == RTCIceCandidateType.Relay.ToString())
+                                        {
+                                            return "Connection is using a TURN relay server so it may be slower.";
+                                        }
+                                        else
+                                        {
+                                            if (localCandidate.address.Contains(":") || remoteCandidate.address.Contains(":"))  
+                                            {
+                                                return "Connection is pure P2P using IPv6.";
+                                            }
+                                            else
+                                            {
+                                                return "Connection is pure P2P using IPv4.";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!foundActivePair)
+                {
+                    return "No active ICE candidate pair found";
+                }
             }
-        },
-        iceTransportPolicy = RTCIceTransportPolicy.All
-    };
-}
+            catch (Exception ex)
+            {
+                return $"Error getting connection details: {ex.Message}";
+            }
+            
+            return "No connection details available";
+        }
+        
         private async Task SendMessage(string type, string content, string sdpMid = null, int sdpMLineIndex = 0)
         {
             ServerMessage message = new ServerMessage
