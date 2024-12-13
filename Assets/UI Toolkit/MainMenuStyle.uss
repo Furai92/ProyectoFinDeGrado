@@ -108,14 +108,14 @@
     color: rgb(255, 255, 255);
 }
 
-#Buttons > .unity-text-input > #unity-text-input > .unity-text-element--inner-input-field-component {
+#main-menu > .unity-text-input > #unity-text-input > .unity-text-element--inner-input-field-component {
     background-color: rgba(0, 0, 0, 0);
     color: rgb(255, 230, 0);
     -unity-text-align: middle-center;
     font-size: 40px;
 }
 
-#Buttons > .unity-text-input > #unity-text-input {
+#main-menu > .unity-text-input > #unity-text-input {
     border-left-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
@@ -128,6 +128,24 @@
     top: auto;
 }
 
-#Buttons > .unity-text-input > .unity-text-field__label {
+#main-menu > .unity-text-input > .unity-text-field__label {
     top: -15px;
+}
+
+.code {
+    top: 100px;
+    -unity-text-align: middle-center;
+    font-size: 40px;
+    color: rgb(255, 206, 0);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    width: 120px;
+    align-self: center;
+    align-content: center;
 }

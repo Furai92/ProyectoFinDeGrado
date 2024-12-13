@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Runtime.CompilerServices;
+using UnityEngine.InputSystem;
 
 public class MapGenTest : MonoBehaviour
 {
@@ -90,15 +91,15 @@ public class MapGenTest : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G)) 
+        if (Keyboard.current.gKey.wasPressedThisFrame) 
         {
             GenerateMap();
         }
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Keyboard.current.iKey.wasPressedThisFrame)
         {
             InstantiateMapPieces();
         }
-        if (Input.GetKeyDown(KeyCode.R)) 
+        if (Keyboard.current.rKey.wasPressedThisFrame) 
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }

@@ -22,12 +22,14 @@ public class InputManager : MonoBehaviour
     void OnEnable()
     {
         _inputActions.Enable();
+        UIManager.Instance.OnUIMenuChanged += OnUIMenuChanged;
         
     }
 
     void OnDisable()
     {
         _inputActions.Disable();
+        UIManager.Instance.OnUIMenuChanged -= OnUIMenuChanged;
     }
 
     public Vector2 GetMovementInput()
@@ -38,5 +40,19 @@ public class InputManager : MonoBehaviour
     public Vector2 GetLookInput()
     {
         return _inputActions.Player.Look.ReadValue<Vector2>();
+    }
+
+    private void OnUIMenuChanged(bool status)
+    {
+        if (status)
+        {
+            Debug.Log("UI is active");
+            _inputActions.Player.Disable();
+        }
+        else
+        {
+            Debug.Log("UI is inactive");
+            _inputActions.Player.Enable();
+        }
     }
 }

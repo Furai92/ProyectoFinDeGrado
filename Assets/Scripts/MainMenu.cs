@@ -4,13 +4,8 @@ using UnityEngine.UIElements;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : UIMenu
 {
-    [SerializeField] private UIDocument _mainMenuDocument;
-    [SerializeField] private UIDocument _waitingRoomDocument;
-    [SerializeField] private NetworkManager _networkManager;
-    [SerializeField] private WebRTCTransport _webRTCTransport;
-    [SerializeField] private OfflineTransport _offlineTransport;
     private Button _playButton;
     private Button _hostButton;
     private Button _joinButton;
@@ -19,78 +14,42 @@ public class MainMenu : MonoBehaviour
     private Label _statusLabel;
     private Label _codeLabel;
     private Label _roleStatusLabel;
+    private VisualElement _waitingRoomSubMenu;
     private bool _isHost = false;
+    protected override string MainParentName => "MainMenu";
 
     void OnEnable()
     {
-       _webRTCTransport.OnWebSocketConnected += SetUpWaitingRoomUI;
-       _webRTCTransport.OnP2PConnectionEstablished += OnP2PConnectionEstablished;
+       ConnectionManager.Instance.WebRTCTransport.OnWebSocketConnected += OnWebSocketConnected;
+       ConnectionManager.Instance.WebRTCTransport.OnP2PConnectionEstablished += OnP2PConnectionEstablished;
     }
 
     void OnDisable()
     {
-        _webRTCTransport.OnWebSocketConnected -= SetUpWaitingRoomUI;
-        _webRTCTransport.OnP2PConnectionEstablished -= OnP2PConnectionEstablished;
+        ConnectionManager.Instance.WebRTCTransport.OnWebSocketConnected -= OnWebSocketConnected;
+        ConnectionManager.Instance.WebRTCTransport.OnP2PConnectionEstablished -= OnP2PConnectionEstablished;
     }
 
-    void OnP2PConnectionEstablished()
+    public override void InitializeUI()
     {
-        if(_networkManager.IsHost)
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene("MultiplayerTest", LoadSceneMode.Single);
-        }
-    }
 
-    void Start()
-    {
-        SetUpMainMenuUI();
-    }
-
-    void SetUpWaitingRoomUI()
-    {
-        _cancelButton = _waitingRoomDocument.rootVisualElement.Q<Button>("cancel-button");
-        _statusLabel = _waitingRoomDocument.rootVisualElement.Q<Label>("status-label");
-        _codeLabel = _waitingRoomDocument.rootVisualElement.Q<Label>("code-label");
-        _roleStatusLabel = _waitingRoomDocument.rootVisualElement.Q<Label>("role-status-label");
-
-        _cancelButton.clicked += () =>
-        {
-            _networkManager.Shutdown();
-            SwitchMenu("main");
-        };
-
-        if (_isHost)
-        {
-            _statusLabel.text = "Waiting for player...";
-            _roleStatusLabel.text = "SHARE THIS CODE";
-            _codeLabel.text = _webRTCTransport.Password;
-        }
-        else
-        {
-            _statusLabel.text = "Joining game...\n The host may not be available on that code.";
-            _roleStatusLabel.text = "JOINING WITH CODE";
-            _codeLabel.text = _codeIntegerField.value.ToString();
-        }
-        SwitchMenu("waiting");
-    }
-    void SetUpMainMenuUI()
-    {
-        // Set up UI
-        _playButton = _mainMenuDocument.rootVisualElement.Q<Button>("play-button");
-        _hostButton = _mainMenuDocument.rootVisualElement.Q<Button>("host-button");
-        _joinButton = _mainMenuDocument.rootVisualElement.Q<Button>("join-button");
-        _codeIntegerField = _mainMenuDocument.rootVisualElement.Q<UnsignedIntegerField>("code-integer-field");
+        _playButton = RootVisualElement.Q<Button>("play-button");
+        _hostButton = RootVisualElement.Q<Button>("host-button");
+        _joinButton = RootVisualElement.Q<Button>("join-button");
+        _codeIntegerField = RootVisualElement.Q<UnsignedIntegerField>("code-integer-field");
 
         _playButton.clicked += () =>
         {
-            _networkManager.NetworkConfig.NetworkTransport = _offlineTransport;
-            _networkManager.StartHost();
+            ConnectionManager.Instance.NetworkConfig.NetworkTransport = ConnectionManager.Instance.OfflineTransport;
+            ConnectionManager.Instance.StartHost();
             OnP2PConnectionEstablished();
         };
         _hostButton.clicked += () =>
         {
-            _networkManager.StartHost();
+            ConnectionManager.Instance.StartHost();
             _isHost = true;
+            //UIManager.Instance.OpenMenu(MenuSelection.WaitingRoom);
+            AddSubMenu(_waitingRoomSubMenu, true);
         };
         _joinButton.clicked += () =>
         {
@@ -98,29 +57,52 @@ public class MainMenu : MonoBehaviour
             {
                 Debug.Log("Joining game with code: " + _codeIntegerField.value);
                 ChangeJoinCode(_codeIntegerField.value.ToString());
-                _networkManager.StartClient();
+                ConnectionManager.Instance.StartClient();
                 _isHost = false;
             }
         };
-        SwitchMenu("main");
+
+
+        _cancelButton = RootVisualElement.Q<Button>("cancel-button");
+        _statusLabel = RootVisualElement.Q<Label>("status-label");
+        _codeLabel = RootVisualElement.Q<Label>("code-label");
+        _roleStatusLabel = RootVisualElement.Q<Label>("role-status-label");
+        _waitingRoomSubMenu = RootVisualElement.Q<VisualElement>("waiting-room-sub-menu");
+
+        _cancelButton.clicked += () =>
+        {
+            ConnectionManager.Instance.Shutdown();
+            //SwitchMenu("main");
+        };
+
+        if (_isHost)
+        {
+            _statusLabel.text = "Waiting for player...";
+            _roleStatusLabel.text = "SHARE THIS CODE";
+            _codeLabel.text = ConnectionManager.Instance.WebRTCTransport.Password;
+        }
+        else
+        {
+            _statusLabel.text = "Joining game...\n The host may not be available on that code.";
+            _roleStatusLabel.text = "JOINING WITH CODE";
+            _codeLabel.text = _codeIntegerField.value.ToString();
+        }
     }
 
-    private void SwitchMenu(string menu)
+    void OnWebSocketConnected()
     {
-        if (menu == "main")
-        {
-            _mainMenuDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-            _waitingRoomDocument.rootVisualElement.style.display = DisplayStyle.None;
-        }
-        else if (menu == "waiting")
-        {
-            _mainMenuDocument.rootVisualElement.style.display = DisplayStyle.None;
-            _waitingRoomDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        }
+        AddSubMenu(_waitingRoomSubMenu);
     }
 
+    void OnP2PConnectionEstablished()
+    {
+        if(ConnectionManager.Instance.NetworkManager.IsHost)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("MultiplayerTest", LoadSceneMode.Single);
+        }
+    }
     private void ChangeJoinCode(string code)
     {
-        _webRTCTransport.JoinCode = code;
+        ConnectionManager.Instance.WebRTCTransport.JoinCode = code;
     }
 }

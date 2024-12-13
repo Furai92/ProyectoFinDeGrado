@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4524587341762148556}
-  - component: {fileID: 2450757596663796455}
+  - component: {fileID: 6898062082329238952}
   - component: {fileID: 4691946587626161208}
   - component: {fileID: 1590766947952675783}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: ConnectionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2450757596663796455
+--- !u!114 &6898062082329238952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4719179678559194765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
+  m_Script: {fileID: 11500000, guid: e09dbbe9aac959541a3d3147a6d5e9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkManagerExpanded: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: bc5b5440f41e18246ac12665f07e7360, type: 2}
+      - {fileID: 11400000, guid: 987d292979bed61478d525eaf997ee2d, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0

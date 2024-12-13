@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class StartGame : NetworkBehaviour
 {
-    [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private GameObject _playerPrefab;
     private Button _sendButton;
     private TextField _chatTextField;
@@ -14,6 +13,7 @@ public class StartGame : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        //UIManager.Instance.SwitchUIMenu("chat");
         SetUpUI();
         if (NetworkManager.Singleton == null) return;
         NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadComplete;
@@ -45,9 +45,9 @@ public class StartGame : NetworkBehaviour
     void SetUpUI()
     {
         // Set up UI
-        _sendButton = _uiDocument.rootVisualElement.Q<Button>("send-button");
-        _chatTextField = _uiDocument.rootVisualElement.Q<TextField>("chat-text-field");
-        _chatLabel = _uiDocument.rootVisualElement.Q<Label>("chat-text");
+        _sendButton = UIManager.Instance.RootVisualElement.Q<Button>("send-button");
+        _chatTextField = UIManager.Instance.RootVisualElement.Q<TextField>("chat-text-field");
+        _chatLabel = UIManager.Instance.RootVisualElement.Q<Label>("chat-text");
 
         // Set up event listener for send button
         _sendButton.clicked += () =>
