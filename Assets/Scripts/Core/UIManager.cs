@@ -103,6 +103,5 @@ public class UIManager : MonoBehaviour
 public enum MenuSelection
 {
     Main,
-    Chat,
-    WaitingRoom
+    Chat
 }
