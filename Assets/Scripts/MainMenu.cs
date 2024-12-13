@@ -16,7 +16,7 @@ public class MainMenu : UIMenu
     private Label _roleStatusLabel;
     private VisualElement _waitingRoomSubMenu;
     private bool _isHost = false;
-    protected override string MainParentName => "MainMenu";
+    protected override string MainParentName => "main-menu";
 
     void OnEnable()
     {
@@ -32,7 +32,6 @@ public class MainMenu : UIMenu
 
     public override void InitializeUI()
     {
-
         _playButton = RootVisualElement.Q<Button>("play-button");
         _hostButton = RootVisualElement.Q<Button>("host-button");
         _joinButton = RootVisualElement.Q<Button>("join-button");
@@ -72,6 +71,7 @@ public class MainMenu : UIMenu
         _cancelButton.clicked += () =>
         {
             ConnectionManager.Instance.Shutdown();
+            RemoveSubMenu();
             //SwitchMenu("main");
         };
 

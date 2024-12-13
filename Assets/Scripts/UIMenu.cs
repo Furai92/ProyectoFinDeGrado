@@ -6,7 +6,7 @@ public abstract class UIMenu : MonoBehaviour
 {
     protected VisualElement RootVisualElement => UIManager.Instance.RootVisualElement;
     protected abstract string MainParentName { get; }
-    protected VisualElement MainParent { get; }
+    protected VisualElement MainParent { get => GetMainParent(); }
     private Stack<VisualElement> _subMenuStack = new Stack<VisualElement>();
     public abstract void InitializeUI();
 
@@ -30,6 +30,7 @@ public abstract class UIMenu : MonoBehaviour
 
     protected void RemoveSubMenu()
     {
+        Debug.Log(MainParent);
         MainParent.style.display = DisplayStyle.Flex;
         VisualElement subMenu = _subMenuStack.Pop();
     }
