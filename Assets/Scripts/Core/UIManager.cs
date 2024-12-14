@@ -63,19 +63,14 @@ public class UIManager : MonoBehaviour
     {
         RootVisualElement.Clear();
         _uiDocument.visualTreeAsset = _gameDatabase.Menus[menu].Item1;
-        UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
-        gameObject.AddComponent(uIMenu.GetType());
-        uIMenu.InitializeUI();
-        OnUIMenuChanged?.Invoke(true);
+        AddMenu(menu);
     }
     public void AddMenu(MenuSelection menu)
     {
-        //RootVisualElement.Add(_gameDatabase.Menus[menu].Item1.CloneTree());
-        //_uiDocument.visualTreeAsset = _gameDatabase.Menus[menu].Item1;
-        RootVisualElement.style.display = DisplayStyle.Flex;
         UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
+        Debug.Log("Adding menu: " + uIMenu);
         gameObject.AddComponent(uIMenu.GetType());
-        uIMenu.InitializeUI();
+        Debug.Log(uIMenu.MainParent);
         OnUIMenuChanged?.Invoke(true);
     }    
     public void RemoveMenu(MenuSelection menu)

@@ -6,13 +6,19 @@ public abstract class UIMenu : MonoBehaviour
 {
     protected VisualElement RootVisualElement => UIManager.Instance.RootVisualElement;
     protected abstract string MainParentName { get; }
-    protected VisualElement MainParent { get => GetMainParent(); }
+    public VisualElement MainParent { get; private set; }
     private Stack<VisualElement> _subMenuStack = new Stack<VisualElement>();
     public abstract void InitializeUI();
 
-    protected VisualElement GetMainParent()
+    void Awake()
     {
-        return RootVisualElement.Q<VisualElement>(MainParentName);
+        SetMainParent();
+        InitializeUI();
+    }
+
+    public void SetMainParent()
+    {
+        MainParent = RootVisualElement.Q<VisualElement>(MainParentName);
     }
 
     protected void AddSubMenu(VisualElement root, bool hideChildren = false)
@@ -24,6 +30,7 @@ public abstract class UIMenu : MonoBehaviour
                 child.style.display = DisplayStyle.None;
             }
         }
+        Debug.Log(root);
         root.style.display = DisplayStyle.Flex;
         _subMenuStack.Push(root);
     }
@@ -33,6 +40,7 @@ public abstract class UIMenu : MonoBehaviour
         Debug.Log(MainParent);
         MainParent.style.display = DisplayStyle.Flex;
         VisualElement subMenu = _subMenuStack.Pop();
+        subMenu.style.display = DisplayStyle.None;
     }
 
     protected void RemoveAllSubMenus()

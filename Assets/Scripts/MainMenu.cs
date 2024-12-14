@@ -36,6 +36,7 @@ public class MainMenu : UIMenu
         _hostButton = RootVisualElement.Q<Button>("host-button");
         _joinButton = RootVisualElement.Q<Button>("join-button");
         _codeIntegerField = RootVisualElement.Q<UnsignedIntegerField>("code-integer-field");
+        _waitingRoomSubMenu = RootVisualElement.Q<VisualElement>("waiting-room-sub-menu");
 
         _playButton.clicked += () =>
         {
@@ -45,10 +46,8 @@ public class MainMenu : UIMenu
         };
         _hostButton.clicked += () =>
         {
-            ConnectionManager.Instance.StartHost();
             _isHost = true;
-            //UIManager.Instance.OpenMenu(MenuSelection.WaitingRoom);
-            AddSubMenu(_waitingRoomSubMenu, true);
+            ConnectionManager.Instance.StartHost();
         };
         _joinButton.clicked += () =>
         {
@@ -56,23 +55,20 @@ public class MainMenu : UIMenu
             {
                 Debug.Log("Joining game with code: " + _codeIntegerField.value);
                 ChangeJoinCode(_codeIntegerField.value.ToString());
-                ConnectionManager.Instance.StartClient();
                 _isHost = false;
+                ConnectionManager.Instance.StartClient();
             }
         };
-
 
         _cancelButton = RootVisualElement.Q<Button>("cancel-button");
         _statusLabel = RootVisualElement.Q<Label>("status-label");
         _codeLabel = RootVisualElement.Q<Label>("code-label");
         _roleStatusLabel = RootVisualElement.Q<Label>("role-status-label");
-        _waitingRoomSubMenu = RootVisualElement.Q<VisualElement>("waiting-room-sub-menu");
 
         _cancelButton.clicked += () =>
         {
             ConnectionManager.Instance.Shutdown();
             RemoveSubMenu();
-            //SwitchMenu("main");
         };
 
         if (_isHost)
@@ -91,7 +87,7 @@ public class MainMenu : UIMenu
 
     void OnWebSocketConnected()
     {
-        AddSubMenu(_waitingRoomSubMenu);
+        AddSubMenu(_waitingRoomSubMenu, true);
     }
 
     void OnP2PConnectionEstablished()

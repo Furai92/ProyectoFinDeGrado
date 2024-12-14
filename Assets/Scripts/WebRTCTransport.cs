@@ -174,7 +174,7 @@ namespace Netcode.Transports.WebRTCTransport
             }
             catch (Exception ex)
             {
-                Debug.Log($"Error in Initialize: {ex.Message}");
+                Debug.Log(ex);
                 Shutdown();
             }
         }
@@ -399,7 +399,7 @@ namespace Netcode.Transports.WebRTCTransport
             }
             catch (Exception ex)
             {
-                Debug.Log($"Error in OnSendSDPAnswer: {ex.Message}");
+                Debug.Log(ex);
             }
         }
 
