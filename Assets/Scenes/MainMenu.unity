@@ -378,10 +378,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConnectionManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6898062082329238952, guid: a6debcfbd07714d46bd70da9c1b39e5b, type: 3}
-      propertyPath: NetworkManagerExpanded
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

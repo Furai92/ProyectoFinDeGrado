@@ -18,7 +18,6 @@ public class UIManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()
@@ -68,9 +67,7 @@ public class UIManager : MonoBehaviour
     public void AddMenu(MenuSelection menu)
     {
         UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
-        Debug.Log("Adding menu: " + uIMenu);
         gameObject.AddComponent(uIMenu.GetType());
-        Debug.Log(uIMenu.MainParent);
         OnUIMenuChanged?.Invoke(true);
     }    
     public void RemoveMenu(MenuSelection menu)
@@ -92,6 +89,15 @@ public class UIManager : MonoBehaviour
     {
         RootVisualElement.style.display = DisplayStyle.None;
         OnUIMenuChanged?.Invoke(false);
+    }
+
+    public void Reset()
+    {
+        _uiDocument.visualTreeAsset = null;
+        foreach (UIMenu child in _uiDocument.gameObject.GetComponentsInChildren<UIMenu>())
+        {
+            Destroy(child);
+        }
     }
 }
 
