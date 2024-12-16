@@ -1,0 +1,41 @@
+#unity-text-input {
+    background-color: rgb(43, 40, 40);
+    --unity-cursor-color: rgb(255, 255, 255);
+}
+
+#unity-text-input > TextElement {
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-left;
+    font-size: 14px;
+    overflow: visible;
+    align-self: auto;
+    align-content: auto;
+}
+
+#debug-console-menu-container > VisualElement > .unity-scroller--vertical > #unity-slider > .unity-slider__input > #unity-drag-container > #unity-tracker {
+    background-color: rgb(43, 40, 40);
+}
+
+#debug-console-menu-container > #console-container > #ScrollView > #unity-content-and-vertical-scroll-container > .unity-disabled {
+    top: 6px;
+}
+
+#debug-console-menu-container > #console-container > #ScrollView > #unity-content-and-vertical-scroll-container > .unity-disabled > #unity-high-button {
+    height: 20px;
+    bottom: 5px;
+}
+
+#debug-console-menu-container > #console-container > #ScrollView > #unity-content-and-vertical-scroll-container > .unity-disabled > #unity-low-button {
+    height: 20px;
+    top: 5px;
+}
+
+#debug-console-menu-container > #console-container > #text-field-container > #console-text-field > #unity-text-input {
+    align-items: auto;
+    justify-content: flex-start;
+    align-self: auto;
+    align-content: auto;
+    height: 43px;
+    -unity-text-align: upper-left;
+    top: -7px;
+}

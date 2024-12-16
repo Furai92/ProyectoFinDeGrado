@@ -16,6 +16,6 @@ MonoBehaviour:
   - menuSelection: 0
     visualTreeAsset: {fileID: 9197481963319205126, guid: 491da1f65640b134286fddca49fe4a51, type: 3}
     uiMenu: {fileID: 246477629767463023, guid: 921bb114b05795a479dd26fa4d97f597, type: 3}
-  - menuSelection: 2
-    visualTreeAsset: {fileID: 9197481963319205126, guid: 5ef1874fcce1976469ad05e32dc565a0, type: 3}
-    uiMenu: {fileID: 246477629767463023, guid: 921bb114b05795a479dd26fa4d97f597, type: 3}
+  - menuSelection: 1
+    visualTreeAsset: {fileID: 9197481963319205126, guid: 83273d1e3ecdfe7489732aa636d262c5, type: 3}
+    uiMenu: {fileID: 6756335115566577762, guid: b8aaab6b4e6531a4d86603aa14efafd5, type: 3}

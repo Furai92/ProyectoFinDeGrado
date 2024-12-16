@@ -67,7 +67,7 @@ public class UIManager : MonoBehaviour
     public void AddMenu(MenuSelection menu)
     {
         UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
-        gameObject.AddComponent(uIMenu.GetType());
+        if(uIMenu != null) gameObject.AddComponent(uIMenu.GetType());
         OnUIMenuChanged?.Invoke(true);
     }    
     public void RemoveMenu(MenuSelection menu)
@@ -104,5 +104,5 @@ public class UIManager : MonoBehaviour
 public enum MenuSelection
 {
     Main,
-    Chat
+    DebugConsole
 }
