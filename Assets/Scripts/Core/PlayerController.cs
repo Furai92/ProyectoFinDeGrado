@@ -57,7 +57,7 @@ public class PlayerController : NetworkBehaviour
         transform.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
         _camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
-        StageManager.UpdatePlayerPosition(transform.position);
+        StageManagerBase.UpdatePlayerPosition(transform.position);
     }
     private void ClampCamVerticalRotation() 
     {

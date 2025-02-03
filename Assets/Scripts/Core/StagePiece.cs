@@ -9,11 +9,11 @@ public class StagePiece : MonoBehaviour
 
     private const float PIECE_SPACING = 10f;
 
-    public void SetUp(MapGenTest.MapNode n)
+    public void SetUp(MapNode n)
     {
         transform.position = new Vector3(n.pos_x * PIECE_SPACING, 0, n.pos_y * PIECE_SPACING);
 
-        if (n.currentType == MapGenTest.MapNode.RoomType.Deco) { return; }
+        if (n.currentType == MapNode.RoomType.Deco) { return; }
 
         _u_blockedParent.gameObject.SetActive(n.con_up == null);
         _d_blockedParent.gameObject.SetActive(n.con_down == null);

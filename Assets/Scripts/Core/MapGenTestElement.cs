@@ -17,17 +17,17 @@ public class MapGenTestElement : MonoBehaviour
 
     private const float SPACING = 110f;
 
-    public void Setup(MapGenTest.MapNode node)
+    public void Setup(MapNode node)
     {
         transform.localPosition = new Vector3(SPACING * node.pos_x, SPACING * node.pos_y, 0);
-        gameObject.SetActive(node.currentType != MapGenTest.MapNode.RoomType.None && node.currentType != MapGenTest.MapNode.RoomType.Potential);
-        _bkCorridor.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Corridor);
-        _bkRoom.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Room);
-        _bkDeco.gameObject.SetActive(node.currentType == MapGenTest.MapNode.RoomType.Deco);
-        _conU.gameObject.SetActive(node.con_up != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
-        _conD.gameObject.SetActive(node.con_down != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
-        _conL.gameObject.SetActive(node.con_left != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
-        _conR.gameObject.SetActive(node.con_right != null && node.currentType != MapGenTest.MapNode.RoomType.Deco);
+        gameObject.SetActive(node.currentType != MapNode.RoomType.None && node.currentType != MapNode.RoomType.Potential);
+        _bkCorridor.gameObject.SetActive(node.currentType == MapNode.RoomType.Corridor);
+        _bkRoom.gameObject.SetActive(node.currentType == MapNode.RoomType.Room);
+        _bkDeco.gameObject.SetActive(node.currentType == MapNode.RoomType.Deco);
+        _conU.gameObject.SetActive(node.con_up != null && node.currentType != MapNode.RoomType.Deco);
+        _conD.gameObject.SetActive(node.con_down != null && node.currentType != MapNode.RoomType.Deco);
+        _conL.gameObject.SetActive(node.con_left != null && node.currentType != MapNode.RoomType.Deco);
+        _conR.gameObject.SetActive(node.con_right != null && node.currentType != MapNode.RoomType.Deco);
 
         switch (node.variation) 
         {

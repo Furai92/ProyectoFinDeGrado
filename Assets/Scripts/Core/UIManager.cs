@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private GameDatabase _gameDatabase;
-    public event Action<bool> OnUIMenuChanged;
     public VisualElement RootVisualElement => _uiDocument.rootVisualElement;
 
     void Awake()
@@ -46,7 +45,7 @@ public class UIManager : MonoBehaviour
     {
         if(evt.target is TextInputBaseField<string>) 
         {
-            OnUIMenuChanged?.Invoke(true);
+            EventManager.OnUiFocusChanged(true);
         }
     }
 
@@ -54,7 +53,7 @@ public class UIManager : MonoBehaviour
     {
         if(evt.target is TextInputBaseField<string>) 
         {
-            OnUIMenuChanged?.Invoke(false);
+            EventManager.OnUiFocusChanged(false);
         }
     }
 
@@ -68,7 +67,7 @@ public class UIManager : MonoBehaviour
     {
         UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
         if(uIMenu != null) gameObject.AddComponent(uIMenu.GetType());
-        OnUIMenuChanged?.Invoke(true);
+        EventManager.OnUiFocusChanged(true);
     }    
     public void RemoveMenu(MenuSelection menu)
     {
@@ -83,12 +82,12 @@ public class UIManager : MonoBehaviour
     public void ShowMenu()
     {
         RootVisualElement.style.display = DisplayStyle.Flex;
-        OnUIMenuChanged?.Invoke(true);
+        EventManager.OnUiFocusChanged(true);
     }
     public void CloseMenu()
     {
         RootVisualElement.style.display = DisplayStyle.None;
-        OnUIMenuChanged?.Invoke(false);
+        EventManager.OnUiFocusChanged(false);
     }
 
     public void Reset()

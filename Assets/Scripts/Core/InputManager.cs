@@ -21,14 +21,14 @@ public class InputManager : MonoBehaviour
     void OnEnable()
     {
         _inputActions.Enable();
-        UIManager.Instance.OnUIMenuChanged += OnUIMenuChanged;
+        EventManager.UiFocusChangedEvent += OnUiFocusChanged;
         
     }
 
     void OnDisable()
     {
         _inputActions.Disable();
-        UIManager.Instance.OnUIMenuChanged -= OnUIMenuChanged;
+        EventManager.UiFocusChangedEvent -= OnUiFocusChanged;
     }
 
     public Vector2 GetMovementInput()
@@ -41,7 +41,7 @@ public class InputManager : MonoBehaviour
         return _inputActions.Player.Look.ReadValue<Vector2>();
     }
 
-    private void OnUIMenuChanged(bool status)
+    private void OnUiFocusChanged(bool status)
     {
         if (status)
         {

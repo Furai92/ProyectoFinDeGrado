@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class TestAgent : MonoBehaviour
 {
-    [SerializeField] private Pathfinding.TerrainType movementTier;
+    [SerializeField] private PathfindingManager.TerrainType movementTier;
 
     private const float SPEED = 5f;
     private const float FIND_PATH_COOLDOWN = 0.5f;
@@ -20,8 +20,8 @@ public class TestAgent : MonoBehaviour
     {
         if (_path.Count > 0)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _path.Peek(), Time.fixedDeltaTime * SPEED);
-            if (transform.position == _path.Peek()) 
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(_path.Peek().x,transform.position.y, _path.Peek().z), Time.fixedDeltaTime * SPEED);
+            if (transform.position.x == _path.Peek().x && transform.position.z == _path.Peek().z) 
             {
                 _path.Pop();
                 if (Time.time > _pathRequestAvailable) { RequestNewPath(); }
@@ -38,6 +38,6 @@ public class TestAgent : MonoBehaviour
     private void RequestNewPath() 
     {
         _pathRequestAvailable = Time.time + FIND_PATH_COOLDOWN;
-        _path = StageManager.GetPath(transform.position, StageManager.GetPlayerPosition(), movementTier);
+        _path = StageManagerBase.GetPath(transform.position, StageManagerBase.GetPlayerPosition(), movementTier);
     }
 }

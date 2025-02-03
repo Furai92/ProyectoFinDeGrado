@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Utils;
 
-public class Pathfinding : MonoBehaviour
+public class PathfindingManager : MonoBehaviour
 {
     public enum TerrainType { Ground, Pitfall, Wall }
     [SerializeField] private GameObject _debugDrawGridPrefab;
