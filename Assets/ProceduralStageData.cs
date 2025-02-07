@@ -4,15 +4,15 @@ using UnityEngine;
 public class ProceduralStageData : IMapData
 {
     private MapNode[,] stageMatrix;
+    private MapNode firstRoom;
     private List<MapNode> stageList;
     private List<Vector3> enemySpawnPositions;
     private List<StagePiece> stagePieces;
-    private Vector3 playerSpawnPosition;
 
     private const float ROOM_PERCENT = 0.4f;
-    private const float CHANCE_TO_2 = 0f;
-    private const float CHANCE_TO_3 = 0f;
-    private const float CHANCE_TO_4 = 0f;
+    private const float CHANCE_TO_2 = 0.2f;
+    private const float CHANCE_TO_3 = 0.1f;
+    private const float CHANCE_TO_4 = 0.5f;
 
     public ProceduralStageData(int seed, int size, List<GameObject> roomPrefabs, List<GameObject> corridorPrefabs, List<GameObject> decoPrefabs, Transform instParent) 
     {
@@ -65,6 +65,7 @@ public class ProceduralStageData : IMapData
             int indexSelected = Random.Range(0, randomlySelectedCells.Count);
             MapNode currentCell = randomlySelectedCells[indexSelected];
             potentialCells.Remove(currentCell);
+            if (stageList.Count == 0) { firstRoom = currentCell; }
             stageList.Add(currentCell);
             currentCell.currentType = MapNode.RoomType.Room;
             roomsCreated++;
@@ -340,7 +341,7 @@ public class ProceduralStageData : IMapData
 
     public Vector3 GetPlayerSpawnPosition()
     {
-        return playerSpawnPosition;
+        return firstRoom.piece.transform.position;
     }
 
     public MapNode[,] GetLayoutMatrix()

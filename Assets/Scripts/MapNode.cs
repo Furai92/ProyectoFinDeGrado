@@ -33,14 +33,14 @@ public class MapNode
     }
     public int GetNearbyUsedRooms(MapNode[,] m)
     {
-        int cons = 0;
+        int count = 0;
 
-        if (pos_x - 1 >= 0 && m[pos_x - 1, pos_y].currentType != RoomType.None) { cons++; }
-        if (pos_x + 1 < StageManagerBase.STAGE_SIZE && m[pos_x + 1, pos_y].currentType != RoomType.None) { cons++; }
-        if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].currentType != RoomType.None) { cons++; }
-        if (pos_y + 1 < StageManagerBase.STAGE_SIZE && m[pos_x, pos_y + 1].currentType != RoomType.None) { cons++; }
+        if (pos_x - 1 >= 0 && m[pos_x - 1, pos_y].IsActive()) { count++; }
+        if (pos_x + 1 < StageManagerBase.STAGE_SIZE && m[pos_x + 1, pos_y].IsActive()) { count++; }
+        if (pos_y - 1 >= 0 && m[pos_x, pos_y - 1].IsActive()) { count++; }
+        if (pos_y + 1 < StageManagerBase.STAGE_SIZE && m[pos_x, pos_y + 1].IsActive()) { count++; }
 
-        return cons;
+        return count;
     }
     public bool IsRedundant()
     {

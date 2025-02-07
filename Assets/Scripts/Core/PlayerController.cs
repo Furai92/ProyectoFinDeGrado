@@ -8,10 +8,17 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _cube;
     [SerializeField] private GameObject _capsule;
 
-    private const float MOVEMENT_SPEED = 0.5f;
+    float movementInputH;
+    float movementInputV;
+    float rotationInputH;
+    float rotationInputV;
+
+    private const float MOVEMENT_SPEED = 10f;
     private const float ROTATION_SPEED = 15f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
+    private const float LOCK_Y = 1.0f;
+
     private bool _isPlayerControlsEnabled = false;
 
     private void Start () 
@@ -45,18 +52,23 @@ public class PlayerController : NetworkBehaviour
     }
     private void Update()
     {
-        if (!_isPlayerControlsEnabled) return;
+        movementInputH = InputManager.Instance.GetMovementInput().x;
+        movementInputV = InputManager.Instance.GetMovementInput().y;
+        rotationInputH = InputManager.Instance.GetLookInput().x;
+        rotationInputV = InputManager.Instance.GetLookInput().y;
 
-        float movementInputH = InputManager.Instance.GetMovementInput().x;
-        float movementInputV = InputManager.Instance.GetMovementInput().y;
-        float rotationInputH = InputManager.Instance.GetLookInput().x;
-        float rotationInputV = InputManager.Instance.GetLookInput().y;
-        
-        transform.position += movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.forward;
-        transform.position += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.right;
         transform.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
         _camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
+    }
+    private void FixedUpdate()
+    {
+        if (!_isPlayerControlsEnabled) return;
+
+        transform.position += movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.forward;
+        transform.position += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.right;
+        
+        transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
     private void ClampCamVerticalRotation() 

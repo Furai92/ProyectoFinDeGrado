@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public abstract class StageManagerBase : MonoBehaviour
 {
     [SerializeField] private PathfindingManager pathfindingMng;
+    [SerializeField] private GameObject playerPrefab;
 
     private Vector3 playerPosition;
     private IMapData stageMapData;
@@ -16,9 +17,15 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         _instance = this;
         stageMapData = GenerateMap(0);
-        playerPosition = stageMapData.GetPlayerSpawnPosition();
+        SpawnPlayer(stageMapData.GetPlayerSpawnPosition());
         pathfindingMng.Initialize();
         InitializeStage();
+    }
+
+    private void SpawnPlayer(Vector3 pos) 
+    {
+        GameObject p = Instantiate(playerPrefab);
+        p.transform.position = pos;
     }
 
     
