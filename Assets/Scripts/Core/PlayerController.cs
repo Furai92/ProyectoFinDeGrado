@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private Transform _camVerticalRotationAxis;
-    [SerializeField] private Camera _playerCamera;
+    [SerializeField] private Transform m_camVerticalRotationAxis;
+    [SerializeField] private Transform m_rotationParent;
+    [SerializeField] private Camera m_playerCamera;
     [SerializeField] private GameObject _cube;
     [SerializeField] private GameObject _capsule;
+    [SerializeField] private Rigidbody m_rb;
 
     float movementInputH;
     float movementInputV;
     float rotationInputH;
     float rotationInputV;
 
-    private const float MOVEMENT_SPEED = 10f;
+    private const float MOVEMENT_SPEED = 500f;
     private const float ROTATION_SPEED = 15f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
@@ -26,7 +28,7 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner || NetworkManager.Singleton == null)
         {
             _isPlayerControlsEnabled = true;
-            _playerCamera.gameObject.SetActive(true);
+            m_playerCamera.gameObject.SetActive(true);
         }
 
         if(IsHost && IsOwner)
@@ -57,24 +59,23 @@ public class PlayerController : NetworkBehaviour
         rotationInputH = InputManager.Instance.GetLookInput().x;
         rotationInputV = InputManager.Instance.GetLookInput().y;
 
-        transform.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
-        _camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
+        m_rotationParent.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
+        m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
     }
     private void FixedUpdate()
     {
         if (!_isPlayerControlsEnabled) return;
 
-        transform.position += movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.forward;
-        transform.position += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * transform.right;
-        
+        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
     private void ClampCamVerticalRotation() 
     {
-        float x = _camVerticalRotationAxis.localRotation.eulerAngles.x;
+        float x = m_camVerticalRotationAxis.localRotation.eulerAngles.x;
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360); 
-        _camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
+        m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
     }
 }

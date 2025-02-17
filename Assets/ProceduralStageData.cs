@@ -238,32 +238,6 @@ public class ProceduralStageData : IMapData
         }
         for (int i = 0; i < stageList.Count; i++) { stageList[i].UpdateConnections(stageMatrix); }
 
-        // Checking for redundant cells
-        List<MapNode> redundantCells = new List<MapNode>();
-        for (int i = 0; i < stageList.Count; i++)
-        {
-            if (stageList[i].IsRedundant()) { redundantCells.Add(stageList[i]); }
-        }
-        Debug.Log("Redundant " + redundantCells.Count);
-        while (redundantCells.Count > 0)
-        {
-            redundantCells[0].currentType = MapNode.RoomType.None;
-            stageList.Remove(redundantCells[0]);
-            redundantCells.RemoveAt(0);
-
-            for (int i = 0; i < stageList.Count; i++) { stageList[i].UpdateConnections(stageMatrix); }
-
-            redundantCells = new List<MapNode>();
-            for (int i = 0; i < stageList.Count; i++)
-            {
-                if (stageList[i].IsRedundant()) { redundantCells.Add(stageList[i]); }
-            }
-        }
-        // Update connections after deleting
-        for (int i = 0; i < stageList.Count; i++)
-        {
-            stageList[i].UpdateConnections(stageMatrix);
-        }
         // Balance the room to corridor ratio
         int maxRooms = (int)(stageList.Count * ROOM_PERCENT);
         List<MapNode> convertibleCells = new List<MapNode>();
