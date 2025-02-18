@@ -10,12 +10,16 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _capsule;
     [SerializeField] private Rigidbody m_rb;
 
+    private float rangedAttackReadyTime;
+    private float meleeAttackReadyTime;
+    private float currentDirection;
     float movementInputH;
     float movementInputV;
     float rotationInputH;
     float rotationInputV;
 
-    private const float MOVEMENT_SPEED = 500f;
+    private const float BASE_FIRERATE = 1f;
+    private const float BASE_MOVEMENT_SPEED = 500f;
     private const float ROTATION_SPEED = 15f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
@@ -23,6 +27,12 @@ public class PlayerController : NetworkBehaviour
 
     private bool _isPlayerControlsEnabled = false;
 
+    private void OnEnable()
+    {
+        currentDirection = 0;
+        rangedAttackReadyTime = meleeAttackReadyTime = 0;
+        UpdateRotation();
+    }
     private void Start () 
     {
         if (IsOwner || NetworkManager.Singleton == null)
@@ -52,6 +62,10 @@ public class PlayerController : NetworkBehaviour
             _capsule.GetComponent<Renderer>().material.color = Color.green;
         }
     }
+    private void UpdateRotation() 
+    {
+        m_rotationParent.transform.rotation = Quaternion.Euler(0, currentDirection, 0);
+    }
     private void Update()
     {
         movementInputH = InputManager.Instance.GetMovementInput().x;
@@ -59,16 +73,23 @@ public class PlayerController : NetworkBehaviour
         rotationInputH = InputManager.Instance.GetLookInput().x;
         rotationInputV = InputManager.Instance.GetLookInput().y;
 
-        m_rotationParent.Rotate(0, rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED, 0);
+        currentDirection += rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED;
+        UpdateRotation();
         m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
+
+        if (InputManager.Instance.GetRangedAttackInput() && Time.time > rangedAttackReadyTime) 
+        {
+            ObjectPoolManager.GetPlayerAttackFromPool("").SetUp(currentDirection, transform.position);
+            rangedAttackReadyTime = Time.time + BASE_FIRERATE;
+        }
     }
     private void FixedUpdate()
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * MOVEMENT_SPEED * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * MOVEMENT_SPEED * m_rotationParent.right;
+        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }

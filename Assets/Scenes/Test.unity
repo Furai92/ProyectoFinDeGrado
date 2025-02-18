@@ -423,7 +423,7 @@ Transform:
   m_GameObject: {fileID: 439905352}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.87, y: 0, z: 44.66}
+  m_LocalPosition: {x: 17.85, y: 0.2, z: 44.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -524,6 +524,7 @@ GameObject:
   - component: {fileID: 705383477}
   - component: {fileID: 705383480}
   - component: {fileID: 705383481}
+  - component: {fileID: 705383482}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -591,6 +592,19 @@ MonoBehaviour:
   - {fileID: 991592059765072839, guid: db1d01183cb40c541ab57e94e2921438, type: 3}
   decoPrefabs:
   - {fileID: 991592059765072839, guid: da4e61d85f49f834eb1cfe73e3895a44, type: 3}
+--- !u!114 &705383482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705383476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7531fa84824329547a2e568bce2c4061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _projectilePrefab: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

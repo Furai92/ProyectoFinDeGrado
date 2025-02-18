@@ -40,6 +40,14 @@ public class InputManager : MonoBehaviour
     {
         return _inputActions.Player.Look.ReadValue<Vector2>();
     }
+    public bool GetRangedAttackInput() 
+    {
+        return _inputActions.Player.RangedAttack.ReadValue<float>() > 0;
+    }
+    public bool GetMeleeAttackInput()
+    {
+        return _inputActions.Player.MeleeAttack.ReadValue<float>() > 0;
+    }
 
     private void OnUiFocusChanged(bool status)
     {

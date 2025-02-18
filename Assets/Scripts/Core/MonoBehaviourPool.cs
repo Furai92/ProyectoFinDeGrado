@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class MonoBehaviourPool<T> where T : MonoBehaviour
 {
-    private List<PoolPair> _pool;
+    private List<T> _pool;
     private GameObject _prefab;
     private Transform _instParent;
 
@@ -11,7 +11,7 @@ public class MonoBehaviourPool<T> where T : MonoBehaviour
 
     public MonoBehaviourPool(GameObject prefab, Transform instParent)
     {
-        _pool = new List<PoolPair>();
+        _pool = new List<T>();
         _prefab = prefab;
         _instParent = instParent;
 
@@ -21,28 +21,19 @@ public class MonoBehaviourPool<T> where T : MonoBehaviour
         }
     }
 
-    public PoolPair AddCopyToPool() 
+    public T AddCopyToPool() 
     {
-        PoolPair p = new PoolPair();
-        GameObject g = GameObject.Instantiate(_prefab, _instParent);
-        p.GO = g;
-        p.Component = g.GetComponent<T>();
-        _pool.Add(p);
-        return p;
+        GameObject newGO = GameObject.Instantiate(_prefab, _instParent);
+        T component = newGO.GetComponent<T>();
+        _pool.Add(component);
+        return component;
     }
-    public PoolPair GetCopyFromPool() 
+    public T GetCopyFromPool() 
     {
         for (int i = 0; i < _pool.Count; i++) 
         {
-            if (!_pool[i].GO.activeInHierarchy) { return _pool[i]; }
+            if (!_pool[i].gameObject.activeInHierarchy) { return _pool[i]; }
         }
         return AddCopyToPool();
-    }
-
-
-    public struct PoolPair 
-    {
-        public T Component;
-        public GameObject GO;
     }
 }
