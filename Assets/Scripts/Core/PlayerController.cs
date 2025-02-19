@@ -18,7 +18,7 @@ public class PlayerController : NetworkBehaviour
     float rotationInputH;
     float rotationInputV;
 
-    private const float BASE_FIRERATE = 1f;
+    private const float BASE_ATTACK_COOLDOWN = 0.5f;
     private const float BASE_MOVEMENT_SPEED = 500f;
     private const float ROTATION_SPEED = 15f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
@@ -81,7 +81,7 @@ public class PlayerController : NetworkBehaviour
         if (InputManager.Instance.GetRangedAttackInput() && Time.time > rangedAttackReadyTime) 
         {
             ObjectPoolManager.GetPlayerAttackFromPool("").SetUp(currentDirection, transform.position);
-            rangedAttackReadyTime = Time.time + BASE_FIRERATE;
+            rangedAttackReadyTime = Time.time + BASE_ATTACK_COOLDOWN;
         }
     }
     private void FixedUpdate()

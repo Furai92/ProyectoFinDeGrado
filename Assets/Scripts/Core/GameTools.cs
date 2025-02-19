@@ -34,16 +34,9 @@ public class GameTools
     /// <summary> Transforms a Vector3 normal into an euler degree. </summary>
     public static float NormalToEuler(Vector3 normal)
     {
-        if (normal.x == 0) { return normal.y > 0 ? 90 : 270; }
-        if (normal.y == 0) { return normal.x > 0 ? 0 : 180; }
-        return Mathf.Atan2(normal.y, normal.x) * Mathf.Rad2Deg + 180;
-    }
-    /// <summary> Transforms a Vector2 normal into an euler degree. </summary>
-    public static float NormalToEuler(Vector2 normal)
-    {
-        if (normal.x == 0) { return normal.y > 0 ? 90 : 270; }
-        if (normal.y == 0) { return normal.x > 0 ? 0 : 180; }
-        return Mathf.Atan2(normal.y, normal.x) * Mathf.Rad2Deg + 180;
+        if (normal.x == 0) { return normal.z > 0 ? 90 : 270; } // Prevents NaN
+        if (normal.z == 0) { return normal.x > 0 ? 0 : 180; }  // Prevents NaN
+        return Mathf.Atan2(normal.z, normal.x) * Mathf.Rad2Deg + 180;
     }
     /// <summary> Transforms an euler angle into a 2D vector. </summary>
     public static Vector3 AngleToVector(float angle)
