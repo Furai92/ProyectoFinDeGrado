@@ -10,6 +10,7 @@ public class TestMapGeneration : IMapData
 
     }
 
+
     public List<Vector3> GetEnemySpawnPositions()
     {
         return new List<Vector3>() { Vector3.zero };
@@ -31,6 +32,11 @@ public class TestMapGeneration : IMapData
     }
 
     public Vector3 GetPlayerSpawnPosition()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public List<StagePiece> GetStagePieces()
     {
         throw new System.NotImplementedException();
     }

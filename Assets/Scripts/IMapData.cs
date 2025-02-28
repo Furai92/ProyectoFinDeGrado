@@ -7,4 +7,5 @@ public interface IMapData
     public Vector3 GetPlayerSpawnPosition();
     public MapNode[,] GetLayoutMatrix();
     public List<MapNode> GetLayoutList();
+    public List<StagePiece> GetStagePieces();
 }

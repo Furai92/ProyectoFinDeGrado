@@ -7,7 +7,7 @@ public class StagePiece : MonoBehaviour
     [SerializeField] private Transform _l_blockedParent;
     [SerializeField] private Transform _r_blockedParent;
 
-    private const float PIECE_SPACING = 20f;
+    public const float PIECE_SPACING = 20f;
     private const float PIECE_SCALE = 2f;
 
     public void SetUp(MapNode n)

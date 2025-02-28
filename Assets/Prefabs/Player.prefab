@@ -523,6 +523,24 @@ MonoBehaviour:
   _cube: {fileID: 8539914130103832518}
   _capsule: {fileID: 1054689199229883879}
   m_rb: {fileID: 5315466479892381301}
+  <STMight>k__BackingField: 0
+  <STDexterity>k__BackingField: 0
+  <STEndurance>k__BackingField: 0
+  <STIntellect>k__BackingField: 0
+  <STSpeed>k__BackingField: 1
+  <RWAttackID>k__BackingField: 
+  <RWMagnitude>k__BackingField: 1
+  <RWFirerate>k__BackingField: 1
+  <RWMultishoot>k__BackingField: 1
+  <RWBounces>k__BackingField: 1
+  <RWPierces>k__BackingField: 1
+  <RWSplash>k__BackingField: 1
+  <RWCritMultiplier>k__BackingField: 1
+  <RWBuildupRate>k__BackingField: 1
+  <RWReloadSpeed>k__BackingField: 1
+  <RWMagazineSize>k__BackingField: 1
+  <RWTimescale>k__BackingField: 1
+  <RWSizeMultiplier>k__BackingField: 1
 --- !u!114 &6564613708941309522
 MonoBehaviour:
   m_ObjectHideFlags: 0

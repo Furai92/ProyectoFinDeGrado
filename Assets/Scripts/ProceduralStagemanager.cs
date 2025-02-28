@@ -10,7 +10,7 @@ public class ProceduralStagemanager : StageManagerBase
 
     public override IMapData GenerateMap(int seed)
     {
-        return new ProceduralStageData(seed, 20, roomPrefabs, corridorPrefabs, decoPrefabs, transform);
+        return new ProceduralStageData(seed, 30, roomPrefabs, corridorPrefabs, decoPrefabs, transform);
     }
 
     public override void InitializeStage()

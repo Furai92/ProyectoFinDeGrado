@@ -2,6 +2,34 @@
 
 public class GameTools
 {
+    private const float MIGHT_TO_DAMAGE = 0.01f;
+    private const float NEGATIVE_MIGHT_TO_DAMAGE_DIV = 0.01f;
+    private const float DEXTERITY_TO_DAMAGE = 0.01f;
+    private const float NEGATIVE_DEXTERITY_TO_DAMAGE_DIV = 0.01f;
+    private const float INTELLECT_TO_BUILDUP = 0.01f;
+    private const float NEGATIVE_INTELLECT_TO_BUILDUP_DIV = 0.01f;
+    private const float ENDURANCE_TO_DR_DIV = 0.01f;
+    private const float NEGATIVE_ENDURANCE_TO_DAMAGE = 0.01f;
+
+
+    #region Stats
+    public static float MightToDamageMultiplier(float m)
+    {
+        return m >= 0 ? 1 + m * MIGHT_TO_DAMAGE : 1 / (1 + NEGATIVE_MIGHT_TO_DAMAGE_DIV);
+    }
+    public static float DexterityToDamageMultiplier(float d)
+    {
+        return d >= 0 ? 1 + d * DEXTERITY_TO_DAMAGE : 1 / (1 + NEGATIVE_DEXTERITY_TO_DAMAGE_DIV);
+    }
+    public static float IntellectToBuildupMultiplier(float i)
+    {
+        return i >= 0 ? 1 + i * INTELLECT_TO_BUILDUP : 1 / (1 + NEGATIVE_INTELLECT_TO_BUILDUP_DIV);
+    }
+    public static float EnduranceToDamageMultiplier(float e) 
+    {
+        return e >= 0 ? 1 / (1 + e * ENDURANCE_TO_DR_DIV) : 1 + e * NEGATIVE_ENDURANCE_TO_DAMAGE;
+    }
+    #endregion
     #region Debug
     public static void ClearLogConsole()
     {
@@ -29,7 +57,7 @@ public class GameTools
     public static float AngleBetween(Vector3 pos1, Vector3 pos2)
     {
         Vector3 posDelta = pos2 - pos1;
-        return Mathf.Atan2(posDelta.y, posDelta.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(posDelta.z, posDelta.x) * Mathf.Rad2Deg;
     }
     /// <summary> Transforms a Vector3 normal into an euler degree. </summary>
     public static float NormalToEuler(Vector3 normal)

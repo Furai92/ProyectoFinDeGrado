@@ -25,8 +25,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     }
     private void FixedUpdate()
     {
-        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * Timescale * Vector3.forward);
-        lifetimeRemaining -= Time.fixedDeltaTime * Timescale;
+        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * SetupData.timescale * Vector3.forward);
+        lifetimeRemaining -= Time.fixedDeltaTime * SetupData.timescale;
         if (lifetimeRemaining < 0) 
         {
             OnLifetimeExpired();
@@ -40,14 +40,17 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
         if (h.collider != null)
         {
-            print("Wall has the normal: " + h.normal + " -> " + GameTools.NormalToEuler(h.normal));
-            print("Attack Direction is " + Direction + " reflected into wall " + GameTools.NormalToEuler(h.normal) + " resulting in " + GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal)));
-            Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
-            transform.rotation = Quaternion.Euler(0, Direction, 0);
-            //gameObject.SetActive(false);
+            if (BouncesRemaining > 0)
+            {
+                Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
+                transform.rotation = Quaternion.Euler(0, Direction, 0);
+                BouncesRemaining--;
+            }
+            else 
+            {
+                gameObject.SetActive(false);
+            }
+
         }
-
-
-
     }
 }

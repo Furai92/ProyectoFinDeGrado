@@ -10,6 +10,27 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _capsule;
     [SerializeField] private Rigidbody m_rb;
 
+    [field: SerializeField] public float STMight { get; private set; }
+    [field: SerializeField] public float STDexterity { get; private set; }
+    [field: SerializeField] public float STEndurance { get; private set; }
+    [field: SerializeField] public float STIntellect { get; private set; }
+    [field: SerializeField] public float STSpeed { get; private set; }
+
+    [field: SerializeField] public string RWAttackID { get; private set; }
+    [field: SerializeField] public float RWMagnitude { get; private set; }
+    [field: SerializeField] public float RWFirerate { get; private set; }
+    [field: SerializeField] public int RWMultishoot { get; private set; }
+    [field: SerializeField] public int RWBounces { get; private set; }
+    [field: SerializeField] public int RWPierces { get; private set; }
+    [field: SerializeField] public float RWSplash { get; private set; }
+    [field: SerializeField] public float RWCritMultiplier { get; private set; }
+    [field: SerializeField] public float RWBuildupRate { get; private set; }
+    [field: SerializeField] public float RWReloadSpeed { get; private set; }
+    [field: SerializeField] public int RWMagazineSize { get; private set; }
+    [field: SerializeField] public float RWTimescale { get; private set; }
+    [field: SerializeField] public float RWSizeMultiplier { get; private set; }
+
+
     private float rangedAttackReadyTime;
     private float meleeAttackReadyTime;
     private float currentDirection;
@@ -80,7 +101,19 @@ public class PlayerController : NetworkBehaviour
 
         if (InputManager.Instance.GetRangedAttackInput() && Time.time > rangedAttackReadyTime) 
         {
-            ObjectPoolManager.GetPlayerAttackFromPool("").SetUp(currentDirection, transform.position);
+            WeaponAttackSetupData sd = new WeaponAttackSetupData()
+            {
+                magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(STDexterity),
+                bounces = RWBounces,
+                builduprate = RWBuildupRate,
+                critdamage = RWCritMultiplier, 
+                pierces = RWPierces, 
+                sizemult = RWSizeMultiplier, 
+                splash = RWSplash, 
+                timescale = RWTimescale
+            };
+
+            ObjectPoolManager.GetPlayerAttackFromPool("").SetUp(sd, currentDirection, transform.position);
             rangedAttackReadyTime = Time.time + BASE_ATTACK_COOLDOWN;
         }
     }
@@ -88,8 +121,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * m_rotationParent.right;
+        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * STSpeed * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * STSpeed * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
