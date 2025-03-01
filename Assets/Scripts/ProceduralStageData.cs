@@ -227,6 +227,13 @@ public class ProceduralStageData : IMapData
                     }
             }
         }
+        // Setup enemy spawn positions
+        // TO DO: Improve logic, for now just use room center
+        enemySpawnPositions = new List<Vector3>();
+        for (int i = 0; i < stagePieces.Count; i++) 
+        {
+            enemySpawnPositions.Add(stagePieces[i].transform.position);
+        }
         Debug.Log("Map finished with a size of " + stageList.Count);
     }
     private List<MapNode> GetAntiDeadEndStrip(MapNode deadEndNode) 

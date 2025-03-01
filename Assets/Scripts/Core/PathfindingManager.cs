@@ -59,11 +59,14 @@ public class PathfindingManager : MonoBehaviour
                     int checkX = current.x + i;
                     int checkY = current.y + j;
 
-                    if (i != 0 && j != 0) { continue; } // Disable diagonals
                     if (checkX < 0 || checkX >= GetGridSize()) { continue; } // Out of bounds
                     if (checkY < 0 || checkY >= GetGridSize()) { continue; } // Out of bounds
                     if (_terrainGrid[checkX, checkY] == TerrainType.Wall) { continue; } // Invalid Terrain
                     if (_pathfindingData[checkX, checkY].iteration >= _currentIteration) { continue; } // Already visited
+                    if (i != 0 && j != 0) // Logic to prevent diagonals from going trough walls
+                    {
+                        if (_terrainGrid[checkX, checkY-j] == TerrainType.Wall || _terrainGrid[checkX-i, checkY] == TerrainType.Wall) { continue; }
+                    }
 
                     float movementCost = i != 0 && j != 0 ? MOVEMENT_COST_DIAGONAL : MOVEMENT_COST_STRAIGHT;
                     _pathfindingData[checkX, checkY].prev_x = current.x;

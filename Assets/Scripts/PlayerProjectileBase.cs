@@ -33,24 +33,41 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             gameObject.SetActive(false);
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("EnemyHitbox")) 
+        {
+            EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
+            if (e != null)
+            {
+                e.DealDamage(SetupData.magnitude, SetupData.critchance, SetupData.critdamage, SetupData.builduprate, SetupData.element);
+            }
+            else { print("s"); }
+        }
+    }
     private void OnCollisionStay(Collision collision)
     {
-        RaycastHit h;
-        Physics.Raycast(transform.position, transform.forward, out h, NORMAL_CHECK_RAYCAST_LENGHT, normalCheckRaycastMask);
-
-        if (h.collider != null)
+        if (collision.gameObject.CompareTag("Wall"))
         {
-            if (BouncesRemaining > 0)
+            RaycastHit h;
+            Physics.Raycast(transform.position, transform.forward, out h, NORMAL_CHECK_RAYCAST_LENGHT, normalCheckRaycastMask);
+
+            if (h.collider != null)
             {
-                Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
-                transform.rotation = Quaternion.Euler(0, Direction, 0);
-                BouncesRemaining--;
-            }
-            else 
-            {
-                gameObject.SetActive(false);
+                if (BouncesRemaining > 0)
+                {
+                    Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
+                    transform.rotation = Quaternion.Euler(0, Direction, 0);
+                    BouncesRemaining--;
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
+
             }
 
         }
+
     }
 }

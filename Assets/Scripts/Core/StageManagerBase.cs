@@ -8,8 +8,9 @@ public abstract class StageManagerBase : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
 
     private Vector3 playerPosition;
+    protected List<EnemyEntity> enemiesInStage;
     private List<PlayerController> players;
-    private IMapData stageMapData;
+    protected IMapData stageMapData;
 
     private static StageManagerBase _instance;
 
@@ -18,15 +19,15 @@ public abstract class StageManagerBase : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(Startcr());
-        
     }
     private IEnumerator Startcr() 
     {
         _instance = this;
         stageMapData = GenerateMap(Random.Range(0, 999999));
-        yield return new WaitForFixedUpdate();
-        SpawnPlayers(stageMapData.GetPlayerSpawnPosition());
+        yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
+        enemiesInStage = new List<EnemyEntity>();
+        SpawnPlayers(stageMapData.GetPlayerSpawnPosition());
         InitializeStage();
     }
 
@@ -38,7 +39,14 @@ public abstract class StageManagerBase : MonoBehaviour
         players.Add(p.GetComponent<PlayerController>());
     }
 
-    
+    public static void RegisterEnemy(EnemyEntity e)
+    {
+        if (_instance != null) { _instance.enemiesInStage.Add(e); }
+    }
+    public static void UnregisterEnemy(EnemyEntity e)
+    {
+        if (_instance != null) { _instance.enemiesInStage.Remove(e); }
+    }
     public static Stack<Vector3> GetPath(Vector3 src, Vector3 dst) 
     {
         return _instance == null ? new Stack<Vector3>() : _instance.pathfindingMng.GetPath(src, dst);
@@ -48,6 +56,10 @@ public abstract class StageManagerBase : MonoBehaviour
         if (_instance != null) { _instance.playerPosition = newpos; }  
     }
     public static Vector3 GetClosestPlayerPosition(Vector3 pos) 
+    {
+        return _instance == null ? Vector3.zero : _instance.playerPosition;
+    }
+    public static Vector3 GetRandomPlayerPosition()
     {
         return _instance == null ? Vector3.zero : _instance.playerPosition;
     }

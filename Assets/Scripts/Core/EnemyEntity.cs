@@ -46,11 +46,16 @@ public class EnemyEntity : MonoBehaviour
     [SerializeField] private Transform rotationParent;
 
 
-
+    public void SetUp(Vector3 pos) 
+    {
+        transform.position = pos;
+        gameObject.SetActive(true);
+    }
     private void OnEnable()
     {
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
+        currentHealth = MaxHealth;
         LoSMask = LayerMask.GetMask("Walls");
         SetupAi();
         statusBuildups = new float[10];
@@ -83,34 +88,18 @@ public class EnemyEntity : MonoBehaviour
         if (currentState.IsFinished()) 
         {
             currentState.EndState();
-            if (inCombat)
+
+            if (IsInCombatRange())
             {
-                if (IsInCombatRange())
-                {
-                    inCombat = true;
-                    currentState = currentState.GetNextState();
-                }
-                else 
-                {
-                    inCombat = false;
-                    currentState = pathfindingSearchState;
-                }
+                currentState = inCombat ? currentState.GetNextState() : combatRootState;
+                inCombat = true;
             }
-            else 
+            else
             {
-                if (IsInCombatRange())
-                {
-                    inCombat = true;
-                    currentState = combatRootState;
-                }
-                else
-                {
-                    inCombat = false;
-                    currentState = pathfindingSearchState;
-                }
+                currentState = pathfindingSearchState;
+                inCombat = false;
             }
             currentState.StartState();
-            print(inCombat);
         }
     }
     private void UpdateMovement()
@@ -120,7 +109,7 @@ public class EnemyEntity : MonoBehaviour
     }
     private void UpdateRotation() 
     {
-        float targetAngle = GameTools.AngleBetween(transform.position, TargetLookPosition);
+        float targetAngle = -GameTools.AngleBetween(transform.position, TargetLookPosition); // TO DO: Negative???
         currentLookRotation = Mathf.MoveTowardsAngle(currentLookRotation, targetAngle, Time.fixedDeltaTime * VISUAL_ROTATION_SPEED);
         rotationParent.rotation = Quaternion.Euler(0, currentLookRotation, 0);
     }
@@ -146,7 +135,14 @@ public class EnemyEntity : MonoBehaviour
 
         statusBuildups[(int)element] += ((magnitude/currentHealth) / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) * buildupMultiplier;
 
+        // Reduce health
+
         EventManager.OnEnemyDirectDamageTaken(transform.position, magnitude, 0, element);
+        currentHealth -= magnitude;
+
+        // Kill if necessary
+
+        if (currentHealth < 0) { gameObject.SetActive(false); }
 
     }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public struct WeaponAttackSetupData
 {
+    public GameEnums.DamageElement element;
     public float magnitude;
     public float critchance;
     public float critdamage;
