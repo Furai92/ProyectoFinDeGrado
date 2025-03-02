@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1430101208
+  GlobalObjectIdHash: 4147952776
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -528,13 +528,13 @@ MonoBehaviour:
   <STEndurance>k__BackingField: 0
   <STIntellect>k__BackingField: 0
   <STSpeed>k__BackingField: 2
-  <RWAttackID>k__BackingField: 
-  <RWMagnitude>k__BackingField: 1
+  <RWAttackID>k__BackingField: PROJ_STANDARD
+  <RWMagnitude>k__BackingField: 100
   <RWFirerate>k__BackingField: 1
   <RWMultishoot>k__BackingField: 1
-  <RWBounces>k__BackingField: 1
-  <RWPierces>k__BackingField: 1
-  <RWSplash>k__BackingField: 1
+  <RWBounces>k__BackingField: 0
+  <RWPierces>k__BackingField: 0
+  <RWSplash>k__BackingField: 30
   <RWCritMultiplier>k__BackingField: 1
   <RWBuildupRate>k__BackingField: 1
   <RWReloadSpeed>k__BackingField: 1

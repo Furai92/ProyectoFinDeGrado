@@ -58,9 +58,35 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                if (setupData.splash > 0)
+                {
+                    Explode();
+                }
+                else 
+                {
+                    e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                }
+                piercesRemaining--;
+                if (piercesRemaining <= 0) 
+                {
+                    gameObject.SetActive(false);
+                }
+
             }
         }
+    }
+    private void Explode() 
+    {
+        WeaponAttackSetupData sd = new WeaponAttackSetupData()
+        {
+            element = setupData.element,
+            magnitude = setupData.magnitude,
+            critchance = setupData.critchance,
+            critdamage = setupData.critdamage,
+            sizemult = setupData.splash,
+            builduprate = setupData.builduprate,
+        };
+        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(transform.position, 0, sd);
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -71,6 +97,10 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
             if (h.collider != null)
             {
+                if (setupData.splash > 0) 
+                {
+                    Explode();
+                }
                 if (bouncesRemaining > 0)
                 {
                     SetNewDirection(GameTools.AngleReflection(currentDirection, GameTools.NormalToEuler(h.normal) + 90));

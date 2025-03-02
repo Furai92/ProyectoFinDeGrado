@@ -15,7 +15,9 @@ MonoBehaviour:
   <PlayerAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: EXPLOSION
     <Data>k__BackingField: {fileID: 4017137939848322881, guid: 42aae0c0f5af746418dc662dbde7dce5, type: 3}
-  - <ID>k__BackingField: BULLET_STANDARD
+  - <ID>k__BackingField: PROJ_STANDARD
+    <Data>k__BackingField: {fileID: 2524257755043567697, guid: 6f3ddf3ea5a7a7545b8d1ef1154108f4, type: 3}
+  - <ID>k__BackingField: MORTAR
     <Data>k__BackingField: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: DEBUG_WALKING

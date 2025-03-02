@@ -113,7 +113,7 @@ public class PlayerController : NetworkBehaviour
                 timescale = RWTimescale
             };
 
-            StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("BULLET_STANDARD").SetUp(transform.position, currentDirection, sd);
+            StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd);
             rangedAttackReadyTime = Time.time + BASE_ATTACK_COOLDOWN;
         }
     }
