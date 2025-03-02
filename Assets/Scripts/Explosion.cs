@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Explosion : PlayerAttackBase
 {
     private float magnitude;
     private float removeTime;

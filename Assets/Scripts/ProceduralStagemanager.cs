@@ -15,8 +15,8 @@ public class ProceduralStagemanager : StageManagerBase
 
     private const float ENEMY_SPAWN_INTERVAL = 2.5f;
     private const int MAX_ENEMIES = 20;
-    private const float MIN_DIST_TO_SPAWN = 55f;
-    private const float MAX_DIST_TO_SPAWN = 200f;
+    private const float MIN_DIST_TO_SPAWN = 75f;
+    private const float MAX_DIST_TO_SPAWN = 100f;
 
     public override IMapData GenerateMap(int seed)
     {

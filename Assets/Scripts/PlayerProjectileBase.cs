@@ -40,9 +40,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                e.DealDamage(SetupData.magnitude, SetupData.critchance, SetupData.critdamage, SetupData.builduprate, SetupData.element);
+                DamageEnemy(e);
             }
-            else { print("s"); }
         }
     }
     private void OnCollisionStay(Collision collision)
@@ -54,11 +53,11 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
             if (h.collider != null)
             {
-                if (BouncesRemaining > 0)
+                if (BouncesDone < SetupData.bounces)
                 {
                     Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
                     transform.rotation = Quaternion.Euler(0, Direction, 0);
-                    BouncesRemaining--;
+                    BouncesDone++;
                 }
                 else
                 {

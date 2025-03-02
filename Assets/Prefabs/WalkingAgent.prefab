@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5dc81644a1cd449071f2b111cfbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MovementSpeed>k__BackingField: 5
+  <MovementSpeed>k__BackingField: 10
   <MaxHealth>k__BackingField: 10
   AiFile: {fileID: 0}
   <MaxCombatDistance>k__BackingField: 30

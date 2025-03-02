@@ -59,18 +59,23 @@ public class UIManager : MonoBehaviour
 
     public void OpenMenu(MenuSelection menu)
     {
+        /*
         RootVisualElement.Clear();
         _uiDocument.visualTreeAsset = _gameDatabase.Menus[menu].Item1;
         AddMenu(menu);
+        */
     }
     public void AddMenu(MenuSelection menu)
     {
+        /*
         UIMenu uIMenu = _gameDatabase.Menus[menu].Item2.GetComponent<UIMenu>();
         if(uIMenu != null) gameObject.AddComponent(uIMenu.GetType());
         EventManager.OnUiFocusChanged(true);
+        */
     }    
     public void RemoveMenu(MenuSelection menu)
     {
+        /*
         RootVisualElement.Remove(_gameDatabase.Menus[menu].Item1.CloneTree());
         GameObject newMenu = Instantiate(_gameDatabase.Menus[menu].Item2);
         newMenu.transform.SetParent(transform);
@@ -78,6 +83,7 @@ public class UIManager : MonoBehaviour
         {
             CloseMenu();
         }
+        */
     }
     public void ShowMenu()
     {
