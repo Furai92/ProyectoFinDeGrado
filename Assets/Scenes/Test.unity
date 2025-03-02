@@ -240,6 +240,37 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &549356386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 549356387}
+  m_Layer: 0
+  m_Name: StageParts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &549356387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549356386}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 705383479}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &618982366
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +431,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 549356387}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &705383480
@@ -428,8 +460,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathfindingMng: {fileID: 705383477}
+  objectPoolMng: {fileID: 705383482}
   playerPrefab: {fileID: 7124537718408826897, guid: 19a199bf75e0a1f4fb1c4fa00512d64a, type: 3}
-  enemyPrefab: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
+  stagePartsInstParent: {fileID: 549356387}
   roomPrefabs:
   - {fileID: 991592059765072839, guid: 79cd37e5fd4c89c4d9645645d7b32883, type: 3}
   corridorPrefabs:
@@ -448,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7531fa84824329547a2e568bce2c4061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
+  database: {fileID: 11400000, guid: f12e1996912f03d47a9106154ca5d43b, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

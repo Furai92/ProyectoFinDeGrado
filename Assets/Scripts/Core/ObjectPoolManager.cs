@@ -1,28 +1,42 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private GameDatabase database;
 
-    private MonoBehaviourPool<PlayerAttackBase> projpool;
+    private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> attackPools;
+    private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
 
-    private static ObjectPoolManager _instance;
-
-    private void OnEnable()
+    public void InitializePools() 
     {
-        _instance = this;
-        InitializePools();
+        // Attacks
+        attackPools = new Dictionary<string, MonoBehaviourPool<PlayerAttackBase>>();
+        for (int i = 0; i < database.PlayerAttackPrefabs.Count; i++) 
+        {
+            attackPools.Add(database.PlayerAttackPrefabs[i].ID, new MonoBehaviourPool<PlayerAttackBase>(database.PlayerAttackPrefabs[i].Data, transform));
+        }
+        // Enemies
+        enemyPools = new Dictionary<string, MonoBehaviourPool<EnemyEntity>>();
+        for (int i = 0; i < database.EnemyPrefabs.Count; i++) 
+        {
+            enemyPools.Add(database.EnemyPrefabs[i].ID, new MonoBehaviourPool<EnemyEntity>(database.EnemyPrefabs[i].Data, transform));
+        }
     }
-    private void InitializePools() 
+
+    public PlayerAttackBase GetPlayerAttackFromPool(string id)
     {
-        projpool = new MonoBehaviourPool<PlayerAttackBase>(_projectilePrefab, transform);
+        if (!attackPools.ContainsKey(id)) { return null; }
+
+        return attackPools[id].GetCopyFromPool();
     }
 
-    public static PlayerAttackBase GetPlayerAttackFromPool(string id) 
+    public EnemyEntity GetEnemyFromPool(string id)
     {
-        if (_instance == null) { return null; }
+        if (!enemyPools.ContainsKey(id)) { return null; }
 
-        return _instance.projpool.GetCopyFromPool();
+        return enemyPools[id].GetCopyFromPool();
     }
 
 }

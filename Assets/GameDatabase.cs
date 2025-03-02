@@ -4,8 +4,8 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "GameDatabase", menuName = "Core/GameDatabase")]
 public class GameDatabase : ScriptableObject
 {
-    [field: SerializeField] public List<InspectorPair<PlayerAttackBase>> PlayerAttackPrefabs { get; private set; }
-    [field: SerializeField] public List<InspectorPair<EnemyEntity>> EnemyPrefabs { get; private set; }
+    [field: SerializeField] public List<InspectorPair<GameObject>> PlayerAttackPrefabs { get; private set; }
+    [field: SerializeField] public List<InspectorPair<GameObject>> EnemyPrefabs { get; private set; }
 }
 
 [System.Serializable]

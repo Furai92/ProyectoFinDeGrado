@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: EXPLOSION
-    <Data>k__BackingField: {fileID: 3304562941756831185, guid: 42aae0c0f5af746418dc662dbde7dce5, type: 3}
+    <Data>k__BackingField: {fileID: 4017137939848322881, guid: 42aae0c0f5af746418dc662dbde7dce5, type: 3}
   - <ID>k__BackingField: BULLET_STANDARD
-    <Data>k__BackingField: {fileID: 8412884104379480156, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
+    <Data>k__BackingField: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: DEBUG_WALKING
-    <Data>k__BackingField: {fileID: 5628125138159533317, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
+    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}

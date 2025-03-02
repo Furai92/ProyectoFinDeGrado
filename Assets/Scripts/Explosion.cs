@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class Explosion : PlayerAttackBase
 {
-    private float magnitude;
+    private WeaponAttackSetupData setupData;
+
     private float removeTime;
     private const float LIFETIME = 1f;
 
-    public void SetUp(float size, float mag) { 
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd) {
+        setupData = sd;
         gameObject.SetActive(true);
-        transform.localScale = Vector3.one * size;
+        transform.position = pos;
+        transform.localScale = Vector3.one * sd.sizemult;
         removeTime = Time.time + LIFETIME;
-        magnitude = mag;
     }
 
     void Update()

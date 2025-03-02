@@ -14,7 +14,7 @@ public class HudDamageNotificationsElement : MonoBehaviour
     private const float ANIMATION_MAX_SCALE = 10f;
     private const float ANIMATION_MIN_SCALE = 1f;
     private const float ANIMATION_DURATION = 0.33f;
-    private const float LIFETIME = 1.5f;
+    private const float LIFETIME = 1f;
 
 
     public void SetUp(Vector3 wpos, float magnitude, int critlevel, GameEnums.DamageElement element) 

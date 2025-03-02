@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class ProceduralStagemanager : StageManagerBase
 {
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Transform stagePartsInstParent;
+
 
     [SerializeField] private List<GameObject> roomPrefabs;
     [SerializeField] private List<GameObject> corridorPrefabs;
     [SerializeField] private List<GameObject> decoPrefabs;
 
-    private MonoBehaviourPool<EnemyEntity> enemyPool;
     private float nextEnemySpawn;
 
     private const float ENEMY_SPAWN_INTERVAL = 2.5f;
@@ -20,12 +20,11 @@ public class ProceduralStagemanager : StageManagerBase
 
     public override IMapData GenerateMap(int seed)
     {
-        return new ProceduralStageData(seed, 30, roomPrefabs, corridorPrefabs, decoPrefabs, transform);
+        return new ProceduralStageData(seed, 30, roomPrefabs, corridorPrefabs, decoPrefabs, stagePartsInstParent);
     }
 
     public override void InitializeStage()
     {
-        enemyPool = new MonoBehaviourPool<EnemyEntity>(enemyPrefab, transform);
         nextEnemySpawn = Time.time + ENEMY_SPAWN_INTERVAL;
     }
     private void Update()
@@ -46,7 +45,7 @@ public class ProceduralStagemanager : StageManagerBase
             if (dist < MIN_DIST_TO_SPAWN || dist > MAX_DIST_TO_SPAWN) { continue; }
             validSpawns.Add(allSpawns[i]);
         }
-        print(validSpawns.Count);
-        enemyPool.GetCopyFromPool().SetUp(validSpawns[Random.Range(0, validSpawns.Count)]);
+        
+        objectPoolMng.GetEnemyFromPool("DEBUG_WALKING").SetUp(validSpawns[Random.Range(0, validSpawns.Count)]);
     }
 }

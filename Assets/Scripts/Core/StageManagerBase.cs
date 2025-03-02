@@ -4,8 +4,9 @@ using System.Collections;
 
 public abstract class StageManagerBase : MonoBehaviour
 {
-    [SerializeField] private PathfindingManager pathfindingMng;
-    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] protected PathfindingManager pathfindingMng;
+    [SerializeField] protected ObjectPoolManager objectPoolMng;
+    [SerializeField] protected GameObject playerPrefab;
 
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
@@ -23,6 +24,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private IEnumerator Startcr() 
     {
         _instance = this;
+        objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
@@ -68,6 +70,12 @@ public abstract class StageManagerBase : MonoBehaviour
         if (_instance == null) { return null; }
 
         return _instance.players[0];
+    }
+    public static ObjectPoolManager GetObjectPool() 
+    {
+        if (_instance == null) { return null; }
+
+        return _instance.objectPoolMng;
     }
 
     public abstract IMapData GenerateMap(int seed);

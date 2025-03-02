@@ -2,8 +2,11 @@ using UnityEngine;
 
 public abstract class PlayerProjectileBase : PlayerAttackBase
 {
-
+    private WeaponAttackSetupData setupData;
     private float lifetimeRemaining;
+    protected int bouncesRemaining;
+    protected int piercesRemaining;
+    protected float currentDirection;
     private LayerMask normalCheckRaycastMask;
 
     private const float NORMAL_CHECK_RAYCAST_LENGHT = 2f;
@@ -17,16 +20,31 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     protected abstract void OnSpawn();
 
 
-    private void OnEnable()
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd) 
     {
+        setupData = sd;
+        transform.position = pos;
+        bouncesRemaining = sd.bounces;
+        piercesRemaining = sd.pierces;
+        SetNewDirection(dir);
         normalCheckRaycastMask = LayerMask.GetMask("Walls");
         OnSpawn();
         lifetimeRemaining = LIFETIME;
+        gameObject.gameObject.SetActive(true);
+    }
+    private void SetNewDirection(float newdir) 
+    {
+        currentDirection = newdir;
+        transform.rotation = Quaternion.Euler(0, currentDirection, 0);
+    }
+    private void OnEnable()
+    {
+
     }
     private void FixedUpdate()
     {
-        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * SetupData.timescale * Vector3.forward);
-        lifetimeRemaining -= Time.fixedDeltaTime * SetupData.timescale;
+        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.timescale * Vector3.forward);
+        lifetimeRemaining -= Time.fixedDeltaTime * setupData.timescale;
         if (lifetimeRemaining < 0) 
         {
             OnLifetimeExpired();
@@ -40,7 +58,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                DamageEnemy(e);
+                e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
             }
         }
     }
@@ -53,11 +71,10 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
             if (h.collider != null)
             {
-                if (BouncesDone < SetupData.bounces)
+                if (bouncesRemaining > 0)
                 {
-                    Direction = GameTools.AngleReflection(Direction, GameTools.NormalToEuler(h.normal) + 90);
-                    transform.rotation = Quaternion.Euler(0, Direction, 0);
-                    BouncesDone++;
+                    SetNewDirection(GameTools.AngleReflection(currentDirection, GameTools.NormalToEuler(h.normal) + 90));
+                    bouncesRemaining--;
                 }
                 else
                 {

@@ -9,7 +9,7 @@ public struct WeaponAttackSetupData
     public float timescale;
     public float sizemult;
     public float builduprate;
-    public float bounces;
-    public float pierces;
+    public int bounces;
+    public int pierces;
     public float splash;
 }
