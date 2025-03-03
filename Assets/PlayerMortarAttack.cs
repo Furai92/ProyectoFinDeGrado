@@ -11,6 +11,7 @@ public class PlayerMortarAttack : PlayerAttackBase
     protected float currentDirection;
     private LayerMask normalCheckRaycastMask;
 
+    private const float BOUNCE_INITIAL_T = 0.25f;
     private const float BOUNCE_VISUAL_HEIGHT_MIN = -0.8f;
     private const float BOUNCE_VISUAL_HEIGHT_MAX = 2f;
     private const float BOUNCES_PER_SECOND = 1.25f;
@@ -18,7 +19,7 @@ public class PlayerMortarAttack : PlayerAttackBase
     private const float BASE_PROJECTILE_SPEED = 20f;
 
 
-    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd)
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
         setupData = sd;
         transform.position = pos;
@@ -26,7 +27,7 @@ public class PlayerMortarAttack : PlayerAttackBase
         piercesRemaining = sd.pierces;
         SetNewDirection(dir);
         normalCheckRaycastMask = LayerMask.GetMask("Walls");
-        bounceT = 0;
+        bounceT = BOUNCE_INITIAL_T;
         UpdateBounceVisual();
         gameObject.gameObject.SetActive(true);
     }
@@ -63,7 +64,7 @@ public class PlayerMortarAttack : PlayerAttackBase
             sizemult = setupData.splash,
             builduprate = setupData.builduprate,
         };
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(bounceVisualParent.position, 0, sd);
+        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(bounceVisualParent.position, 0, sd, this);
     }
     private void OnCollisionStay(Collision collision)
     {

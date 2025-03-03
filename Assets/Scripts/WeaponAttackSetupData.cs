@@ -12,4 +12,5 @@ public struct WeaponAttackSetupData
     public int bounces;
     public int pierces;
     public float splash;
+    public int enemyIgnored;
 }

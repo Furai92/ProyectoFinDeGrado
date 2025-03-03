@@ -39,6 +39,7 @@ public class EnemyEntity : MonoBehaviour
 
     // Other/Cached variables
 
+    public int EnemyInstanceID { get; private set; }
     private LayerMask LoSMask;
 
     // References
@@ -59,6 +60,11 @@ public class EnemyEntity : MonoBehaviour
         LoSMask = LayerMask.GetMask("Walls");
         SetupAi();
         statusBuildups = new float[10];
+        EnemyInstanceID = StageManagerBase.RegisterEnemy(this);
+    }
+    private void OnDisable()
+    {
+        StageManagerBase.UnregisterEnemy(this);
     }
     private void FixedUpdate()
     {

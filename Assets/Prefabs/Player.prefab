@@ -528,11 +528,11 @@ MonoBehaviour:
   <STEndurance>k__BackingField: 0
   <STIntellect>k__BackingField: 0
   <STSpeed>k__BackingField: 2
-  <RWAttackID>k__BackingField: PROJ_STANDARD
-  <RWMagnitude>k__BackingField: 100
-  <RWFirerate>k__BackingField: 1
+  <RWAttackID>k__BackingField: BEAM
+  <RWMagnitude>k__BackingField: 1
+  <RWFirerate>k__BackingField: 8
   <RWMultishoot>k__BackingField: 1
-  <RWBounces>k__BackingField: 0
+  <RWBounces>k__BackingField: 6
   <RWPierces>k__BackingField: 0
   <RWSplash>k__BackingField: 30
   <RWCritMultiplier>k__BackingField: 1

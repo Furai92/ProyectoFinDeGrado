@@ -31,17 +31,16 @@ public class PlayerController : NetworkBehaviour
     [field: SerializeField] public float RWSizeMultiplier { get; private set; }
 
 
-    private float rangedAttackReadyTime;
-    private float meleeAttackReadyTime;
+    private float rangedAttackReady;
+    private float meleeAttackReady;
     private float currentDirection;
     float movementInputH;
     float movementInputV;
     float rotationInputH;
     float rotationInputV;
 
-    private const float BASE_ATTACK_COOLDOWN = 0.5f;
     private const float BASE_MOVEMENT_SPEED = 500f;
-    private const float ROTATION_SPEED = 15f;
+    private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
     private const float LOCK_Y = 1.0f;
@@ -51,7 +50,7 @@ public class PlayerController : NetworkBehaviour
     private void OnEnable()
     {
         currentDirection = 0;
-        rangedAttackReadyTime = meleeAttackReadyTime = 0;
+        rangedAttackReady = meleeAttackReady = 1;
         UpdateRotation();
     }
     private void Start () 
@@ -94,12 +93,14 @@ public class PlayerController : NetworkBehaviour
         rotationInputH = InputManager.Instance.GetLookInput().x;
         rotationInputV = InputManager.Instance.GetLookInput().y;
 
-        currentDirection += rotationInputH * Time.fixedDeltaTime * ROTATION_SPEED;
+        currentDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
         UpdateRotation();
-        m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.fixedDeltaTime * ROTATION_SPEED, 0, 0);
+        m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
 
-        if (InputManager.Instance.GetRangedAttackInput() && Time.time > rangedAttackReadyTime) 
+        rangedAttackReady += Time.deltaTime * RWFirerate;
+
+        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady > 1) 
         {
             WeaponAttackSetupData sd = new WeaponAttackSetupData()
             {
@@ -113,8 +114,8 @@ public class PlayerController : NetworkBehaviour
                 timescale = RWTimescale
             };
 
-            StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd);
-            rangedAttackReadyTime = Time.time + BASE_ATTACK_COOLDOWN;
+            StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd, null);
+            rangedAttackReady = 0;
         }
     }
     private void FixedUpdate()

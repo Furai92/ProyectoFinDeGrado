@@ -12,9 +12,11 @@ public abstract class StageManagerBase : MonoBehaviour
     protected List<EnemyEntity> enemiesInStage;
     private List<PlayerController> players;
     protected IMapData stageMapData;
+    private int enemyIDCounter;
 
     private static StageManagerBase _instance;
 
+    public const float MAX_BOUNCE_DISTANCE_MAG = 200f;
     public const int STAGE_SIZE = 100;
 
     private void OnEnable()
@@ -41,9 +43,15 @@ public abstract class StageManagerBase : MonoBehaviour
         players.Add(p.GetComponent<PlayerController>());
     }
 
-    public static void RegisterEnemy(EnemyEntity e)
+    public static int RegisterEnemy(EnemyEntity e)
     {
-        if (_instance != null) { _instance.enemiesInStage.Add(e); }
+        if (_instance != null) 
+        {
+            _instance.enemiesInStage.Add(e);
+            _instance.enemyIDCounter++;
+            return _instance.enemyIDCounter;
+        }
+        return -1;
     }
     public static void UnregisterEnemy(EnemyEntity e)
     {
@@ -56,6 +64,21 @@ public abstract class StageManagerBase : MonoBehaviour
     public static void UpdatePlayerPosition(Vector3 newpos) 
     {
         if (_instance != null) { _instance.playerPosition = newpos; }  
+    }
+    public static EnemyEntity GetBounceTarget(Vector3 pos, int ignored = -1)
+    {
+        if (_instance == null) { return null; }
+
+        EnemyEntity selected = null;
+        float bestMag = Mathf.Infinity;
+        for (int i = 0; i < _instance.enemiesInStage.Count; i++) 
+        {
+            if (_instance.enemiesInStage[i].EnemyInstanceID == ignored) { continue; }
+
+            float mag = (_instance.enemiesInStage[i].transform.position - pos).sqrMagnitude;
+            if (mag < bestMag && mag < MAX_BOUNCE_DISTANCE_MAG) { bestMag = mag; selected = _instance.enemiesInStage[i]; }
+        }
+        return selected;
     }
     public static Vector3 GetClosestPlayerPosition(Vector3 pos) 
     {

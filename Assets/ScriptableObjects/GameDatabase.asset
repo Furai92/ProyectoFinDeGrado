@@ -19,6 +19,8 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 2524257755043567697, guid: 6f3ddf3ea5a7a7545b8d1ef1154108f4, type: 3}
   - <ID>k__BackingField: MORTAR
     <Data>k__BackingField: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
+  - <ID>k__BackingField: BEAM
+    <Data>k__BackingField: {fileID: 2514393828548108971, guid: 2b44b41b8c4dc5a488eec7ea24c60ec9, type: 3}
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: DEBUG_WALKING
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}

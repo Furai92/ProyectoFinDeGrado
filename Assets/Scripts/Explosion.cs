@@ -9,7 +9,7 @@ public class Explosion : PlayerAttackBase
     private float animT;
     private const float LIFETIME = 0.35f;
 
-    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd) {
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack) {
         setupData = sd;
         gameObject.SetActive(true);
         transform.position = pos;

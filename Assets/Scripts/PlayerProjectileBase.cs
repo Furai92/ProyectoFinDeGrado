@@ -20,7 +20,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     protected abstract void OnSpawn();
 
 
-    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd) 
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack) 
     {
         setupData = sd;
         transform.position = pos;
@@ -86,7 +86,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             sizemult = setupData.splash,
             builduprate = setupData.builduprate,
         };
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(transform.position, 0, sd);
+        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(transform.position, 0, sd, this);
     }
     private void OnCollisionStay(Collision collision)
     {
