@@ -4,8 +4,6 @@ public class Explosion : PlayerAttackBase
 {
     [SerializeField] private Transform explosionVisualParent;
 
-    private WeaponAttackSetupData setupData;
-
     private float animT;
     private const float LIFETIME = 0.35f;
 

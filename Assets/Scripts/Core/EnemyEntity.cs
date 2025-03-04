@@ -115,7 +115,7 @@ public class EnemyEntity : MonoBehaviour
     }
     private void UpdateRotation() 
     {
-        float targetAngle = -GameTools.AngleBetween(transform.position, TargetLookPosition); // TO DO: Negative???
+        float targetAngle = GameTools.AngleBetween(transform.position, TargetLookPosition); // TO DO: Negative???
         currentLookRotation = Mathf.MoveTowardsAngle(currentLookRotation, targetAngle, Time.fixedDeltaTime * VISUAL_ROTATION_SPEED);
         rotationParent.rotation = Quaternion.Euler(0, currentLookRotation, 0);
     }

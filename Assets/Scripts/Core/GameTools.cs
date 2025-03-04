@@ -57,7 +57,7 @@ public class GameTools
     public static float AngleBetween(Vector3 pos1, Vector3 pos2)
     {
         Vector3 posDelta = pos2 - pos1;
-        return Mathf.Atan2(posDelta.z, posDelta.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(posDelta.x, posDelta.z) * Mathf.Rad2Deg;
     }
     /// <summary> Transforms a Vector3 normal into an euler degree. </summary>
     public static float NormalToEuler(Vector3 normal)

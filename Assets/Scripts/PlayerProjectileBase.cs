@@ -2,7 +2,6 @@ using UnityEngine;
 
 public abstract class PlayerProjectileBase : PlayerAttackBase
 {
-    private WeaponAttackSetupData setupData;
     private float lifetimeRemaining;
     protected int bouncesRemaining;
     protected int piercesRemaining;
@@ -60,7 +59,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             {
                 if (setupData.splash > 0)
                 {
-                    Explode();
+                    Explode(transform.position);
                 }
                 else 
                 {
@@ -75,19 +74,6 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             }
         }
     }
-    private void Explode() 
-    {
-        WeaponAttackSetupData sd = new WeaponAttackSetupData()
-        {
-            element = setupData.element,
-            magnitude = setupData.magnitude,
-            critchance = setupData.critchance,
-            critdamage = setupData.critdamage,
-            sizemult = setupData.splash,
-            builduprate = setupData.builduprate,
-        };
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(transform.position, 0, sd, this);
-    }
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
@@ -99,7 +85,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             {
                 if (setupData.splash > 0) 
                 {
-                    Explode();
+                    Explode(transform.position);
                 }
                 if (bouncesRemaining > 0)
                 {

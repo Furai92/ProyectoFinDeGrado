@@ -5,8 +5,6 @@ public class PlayerBeamAttack : PlayerAttackBase
 {
     [SerializeField] private Transform visual;
 
-    private WeaponAttackSetupData setupData;
-
     private int phase;
     private float phaseT;
     private float direction;
@@ -15,7 +13,7 @@ public class PlayerBeamAttack : PlayerAttackBase
     private const float CAST_LENGHT = 50f;
     private const float CAST_RADIUS = 0.25f;
     private const float INHERITED_LAUNCH_DELAY = 0.05f;
-    private const float LIFETIME = 0.5f;
+    private const float LIFETIME = 0.3f;
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
@@ -64,7 +62,7 @@ public class PlayerBeamAttack : PlayerAttackBase
         List<Collider> disabledColliders = new List<Collider>();
         while (!beamInterrupted && currentBeamPos != beamEnd) 
         {
-            Physics.SphereCast(currentBeamPos - transform.forward * beamDiameter, beamDiameter * 0.5f, transform.forward, out entityHits, Vector3.Distance(currentBeamPos, beamEnd), hitboxMask);
+            Physics.SphereCast(currentBeamPos - (beamDiameter * 2 * transform.forward), beamDiameter * 0.5f, transform.forward, out entityHits, Vector3.Distance(currentBeamPos, beamEnd), hitboxMask);
             if (entityHits.collider != null)
             {
                 // The spherecast found a hitbox on the way
@@ -78,7 +76,15 @@ public class PlayerBeamAttack : PlayerAttackBase
                 // If the enemy hit is supposed to be ignored, skip this part
                 if (enemyHit.EnemyInstanceID != setupData.enemyIgnored) 
                 {
-                    enemyHit.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                    if (setupData.splash > 0) 
+                    {
+                        Explode(enemyHit.transform.position); 
+                    }
+                    else 
+                    {
+                        enemyHit.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                    }
+                    
                     // Spend pierces to continue
                     if (setupData.pierces > 0)
                     {
@@ -93,7 +99,7 @@ public class PlayerBeamAttack : PlayerAttackBase
                         {
                             setupData.bounces--;
                             EnemyEntity closestEnemy = StageManagerBase.GetBounceTarget(beamEnd, enemyHit.EnemyInstanceID);
-                            CreateBounce(currentBeamPos, closestEnemy == null ? Random.Range(0, 361) : -GameTools.AngleBetween(beamEnd, closestEnemy.transform.position)+90, enemyHit.EnemyInstanceID);
+                            CreateBounce(currentBeamPos, closestEnemy == null ? Random.Range(0, 361) : GameTools.AngleBetween(beamEnd, closestEnemy.transform.position), enemyHit.EnemyInstanceID);
                         }
                     }
                 }
@@ -110,6 +116,7 @@ public class PlayerBeamAttack : PlayerAttackBase
         {
             if (setupData.bounces > 0)
             {
+                if (setupData.splash > 0) { Explode(beamEnd); }
                 setupData.bounces--;
                 CreateBounce(beamEnd, GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainHits.normal) + 90), -1);
             }

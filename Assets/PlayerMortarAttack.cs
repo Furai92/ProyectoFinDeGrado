@@ -4,7 +4,6 @@ public class PlayerMortarAttack : PlayerAttackBase
 {
     [SerializeField] private Transform bounceVisualParent;
 
-    private WeaponAttackSetupData setupData;
     private float bounceT;
     protected int bouncesRemaining;
     protected int piercesRemaining;
@@ -42,7 +41,7 @@ public class PlayerMortarAttack : PlayerAttackBase
         UpdateBounceVisual();
         if (bounceT == 1) 
         {
-            Explode();
+            Explode(transform.position);
             bouncesRemaining--;
             if (bouncesRemaining < 0) { gameObject.SetActive(false); }
             bounceT = 0;
@@ -52,19 +51,6 @@ public class PlayerMortarAttack : PlayerAttackBase
     private void UpdateBounceVisual() 
     {
         bounceVisualParent.transform.localPosition = new Vector3(0, BOUNCE_VISUAL_HEIGHT_MIN + Mathf.Sin(bounceT*180*Mathf.Deg2Rad) * BOUNCE_VISUAL_HEIGHT_MAX, 0);
-    }
-    private void Explode()
-    {
-        WeaponAttackSetupData sd = new WeaponAttackSetupData()
-        {
-            element = setupData.element,
-            magnitude = setupData.magnitude,
-            critchance = setupData.critchance,
-            critdamage = setupData.critdamage,
-            sizemult = setupData.splash,
-            builduprate = setupData.builduprate,
-        };
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(bounceVisualParent.position, 0, sd, this);
     }
     private void OnCollisionStay(Collision collision)
     {
