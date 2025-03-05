@@ -10,12 +10,18 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _capsule;
     [SerializeField] private Rigidbody m_rb;
 
-    [field: SerializeField] public float STMight { get; private set; }
-    [field: SerializeField] public float STDexterity { get; private set; }
-    [field: SerializeField] public float STEndurance { get; private set; }
-    [field: SerializeField] public float STIntellect { get; private set; }
-    [field: SerializeField] public float STSpeed { get; private set; }
+    [field: SerializeField] public float StatusHeatRanged { get; private set; }
+    [field: SerializeField] public float StatusHeatMelee { get; private set; }
+    [field: SerializeField] public bool StatusOverheatRanged { get; private set; }
+    [field: SerializeField] public bool StatusOverheatMelee { get; private set; }
 
+    [field: SerializeField] public float StatMight { get; private set; }
+    [field: SerializeField] public float StatDexterity { get; private set; }
+    [field: SerializeField] public float StatEndurance { get; private set; }
+    [field: SerializeField] public float StatIntellect { get; private set; }
+    [field: SerializeField] public float StatSpeed { get; private set; }
+
+    [field: SerializeField] public GameEnums.DamageElement RWElement { get; private set; }
     [field: SerializeField] public string RWAttackID { get; private set; }
     [field: SerializeField] public float RWMagnitude { get; private set; }
     [field: SerializeField] public float RWFirerate { get; private set; }
@@ -26,7 +32,7 @@ public class PlayerController : NetworkBehaviour
     [field: SerializeField] public float RWCritMultiplier { get; private set; }
     [field: SerializeField] public float RWBuildupRate { get; private set; }
     [field: SerializeField] public float RWReloadSpeed { get; private set; }
-    [field: SerializeField] public int RWMagazineSize { get; private set; }
+    [field: SerializeField] public float RWHeatGen { get; private set; }
     [field: SerializeField] public float RWTimescale { get; private set; }
     [field: SerializeField] public float RWSizeMultiplier { get; private set; }
 
@@ -34,11 +40,15 @@ public class PlayerController : NetworkBehaviour
     private float rangedAttackReady;
     private float meleeAttackReady;
     private float currentDirection;
+    private float heatDecayMelee;
+    private float heatDecayRanged;
+
     float movementInputH;
     float movementInputV;
     float rotationInputH;
     float rotationInputV;
 
+    private const float HEAT_DECAY_GROWTH = 0.05f;
     private const float BASE_MOVEMENT_SPEED = 500f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
@@ -99,19 +109,29 @@ public class PlayerController : NetworkBehaviour
         ClampCamVerticalRotation();
 
         rangedAttackReady += Time.deltaTime * RWFirerate;
+        heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
+        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
+        if (StatusOverheatRanged && StatusHeatRanged == 0) { StatusOverheatRanged = false; }
 
-        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady > 1) 
+        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady > 1 && !StatusOverheatRanged) 
         {
+            heatDecayRanged = 0;
+            StatusHeatRanged += RWHeatGen;
+            if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
             WeaponAttackSetupData sd = new WeaponAttackSetupData()
             {
-                magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(STDexterity),
+                user = this,
+                magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
                 bounces = RWBounces,
                 builduprate = RWBuildupRate,
-                critdamage = RWCritMultiplier, 
-                pierces = RWPierces, 
-                sizemult = RWSizeMultiplier, 
-                splash = RWSplash, 
-                timescale = RWTimescale
+                critdamage = RWCritMultiplier,
+                critchance = 0,
+                pierces = RWPierces,
+                sizemult = RWSizeMultiplier,
+                splash = RWSplash,
+                timescale = RWTimescale,
+                enemyIgnored = -1,
+                element = RWElement
             };
 
             StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd, null);
@@ -122,8 +142,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * STSpeed * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * STSpeed * m_rotationParent.right;
+        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }

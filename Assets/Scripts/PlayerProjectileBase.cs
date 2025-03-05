@@ -65,12 +65,20 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                 {
                     e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
                 }
-                piercesRemaining--;
-                if (piercesRemaining <= 0) 
+                if (bouncesRemaining > 0)
                 {
-                    gameObject.SetActive(false);
+                    bouncesRemaining--;
+                    lifetimeRemaining = LIFETIME;
+                    SetNewDirection(GetBounceDirection(transform.position, collision.collider));
                 }
-
+                else 
+                {
+                    piercesRemaining--;
+                    if (piercesRemaining <= 0)
+                    {
+                        gameObject.SetActive(false);
+                    }
+                }
             }
         }
     }
@@ -91,6 +99,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                 {
                     SetNewDirection(GameTools.AngleReflection(currentDirection, GameTools.NormalToEuler(h.normal) + 90));
                     bouncesRemaining--;
+                    lifetimeRemaining = LIFETIME;
                 }
                 else
                 {

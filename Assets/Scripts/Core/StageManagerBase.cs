@@ -6,6 +6,7 @@ public abstract class StageManagerBase : MonoBehaviour
 {
     [SerializeField] protected PathfindingManager pathfindingMng;
     [SerializeField] protected ObjectPoolManager objectPoolMng;
+    [SerializeField] protected IngameHudManager hudMng;
     [SerializeField] protected GameObject playerPrefab;
 
     private Vector3 playerPosition;
@@ -32,6 +33,7 @@ public abstract class StageManagerBase : MonoBehaviour
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
         enemiesInStage = new List<EnemyEntity>();
         SpawnPlayers(stageMapData.GetPlayerSpawnPosition());
+        hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
     }
 
@@ -64,21 +66,6 @@ public abstract class StageManagerBase : MonoBehaviour
     public static void UpdatePlayerPosition(Vector3 newpos) 
     {
         if (_instance != null) { _instance.playerPosition = newpos; }  
-    }
-    public static EnemyEntity GetBounceTarget(Vector3 pos, int ignored = -1)
-    {
-        if (_instance == null) { return null; }
-
-        EnemyEntity selected = null;
-        float bestMag = Mathf.Infinity;
-        for (int i = 0; i < _instance.enemiesInStage.Count; i++) 
-        {
-            if (_instance.enemiesInStage[i].EnemyInstanceID == ignored) { continue; }
-
-            float mag = (_instance.enemiesInStage[i].transform.position - pos).sqrMagnitude;
-            if (mag < bestMag && mag < MAX_BOUNCE_DISTANCE_MAG) { bestMag = mag; selected = _instance.enemiesInStage[i]; }
-        }
-        return selected;
     }
     public static Vector3 GetClosestPlayerPosition(Vector3 pos) 
     {

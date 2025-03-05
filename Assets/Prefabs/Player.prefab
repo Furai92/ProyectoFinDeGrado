@@ -523,22 +523,24 @@ MonoBehaviour:
   _cube: {fileID: 8539914130103832518}
   _capsule: {fileID: 1054689199229883879}
   m_rb: {fileID: 5315466479892381301}
-  <STMight>k__BackingField: 0
-  <STDexterity>k__BackingField: 0
-  <STEndurance>k__BackingField: 0
-  <STIntellect>k__BackingField: 0
-  <STSpeed>k__BackingField: 2
+  <StatusHeatRanged>k__BackingField: 0
+  <StatusHeatMelee>k__BackingField: 0
+  <StatMight>k__BackingField: 1
+  <StatDexterity>k__BackingField: 1
+  <StatEndurance>k__BackingField: 1
+  <StatIntellect>k__BackingField: 1
+  <StatSpeed>k__BackingField: 1
   <RWAttackID>k__BackingField: BEAM
   <RWMagnitude>k__BackingField: 1
   <RWFirerate>k__BackingField: 8
   <RWMultishoot>k__BackingField: 1
-  <RWBounces>k__BackingField: 6
+  <RWBounces>k__BackingField: 0
   <RWPierces>k__BackingField: 0
-  <RWSplash>k__BackingField: 30
+  <RWSplash>k__BackingField: 10
   <RWCritMultiplier>k__BackingField: 1
   <RWBuildupRate>k__BackingField: 1
   <RWReloadSpeed>k__BackingField: 1
-  <RWMagazineSize>k__BackingField: 1
+  <RWHeatGen>k__BackingField: 0.015
   <RWTimescale>k__BackingField: 1
   <RWSizeMultiplier>k__BackingField: 1
 --- !u!114 &6564613708941309522

@@ -6,7 +6,6 @@ public class ProceduralStagemanager : StageManagerBase
 {
     [SerializeField] private Transform stagePartsInstParent;
 
-
     [SerializeField] private List<GameObject> roomPrefabs;
     [SerializeField] private List<GameObject> corridorPrefabs;
     [SerializeField] private List<GameObject> decoPrefabs;

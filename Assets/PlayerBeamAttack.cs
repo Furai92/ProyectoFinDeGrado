@@ -98,8 +98,7 @@ public class PlayerBeamAttack : PlayerAttackBase
                         if (setupData.bounces > 0)
                         {
                             setupData.bounces--;
-                            EnemyEntity closestEnemy = StageManagerBase.GetBounceTarget(beamEnd, enemyHit.EnemyInstanceID);
-                            CreateBounce(currentBeamPos, closestEnemy == null ? Random.Range(0, 361) : GameTools.AngleBetween(beamEnd, closestEnemy.transform.position), enemyHit.EnemyInstanceID);
+                            CreateBounce(currentBeamPos, GetBounceDirection(enemyHit.transform.position, entityHits.collider), enemyHit.EnemyInstanceID);
                         }
                     }
                 }
@@ -114,9 +113,9 @@ public class PlayerBeamAttack : PlayerAttackBase
         // If nothing stopped the entity spherecast and the terrain raycast found something...
         if (!beamInterrupted && terrainHits.collider != null)
         {
+            if (setupData.splash > 0) { Explode(beamEnd); }
             if (setupData.bounces > 0)
             {
-                if (setupData.splash > 0) { Explode(beamEnd); }
                 setupData.bounces--;
                 CreateBounce(beamEnd, GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainHits.normal) + 90), -1);
             }
