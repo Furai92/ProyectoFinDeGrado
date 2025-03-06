@@ -77,7 +77,7 @@ public class EnemyEntity : MonoBehaviour
     private void SetupAi() 
     {
         pathfindingSearchState = new AiStatePathfindingSearch(this);
-        combatRootState = new AiStateWalkStraightToTarget(this);
+        combatRootState = new AiStateChargeRangedAttack(this);
         if (IsInCombatRange()) 
         {
             currentState = combatRootState;

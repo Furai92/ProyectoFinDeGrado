@@ -48,7 +48,7 @@ public class PlayerBeamAttack : PlayerAttackBase
     {
         // Setup masks and hit buffers
         LayerMask terrainMask = LayerMask.GetMask("Walls");
-        LayerMask hitboxMask = LayerMask.GetMask("Hitboxes");
+        LayerMask hitboxMask = LayerMask.GetMask("EnemyHitboxes");
         RaycastHit terrainHits;
         RaycastHit entityHits;
         // Raycast ONLY WITH TERRAIN to create a path for the beam
@@ -127,7 +127,7 @@ public class PlayerBeamAttack : PlayerAttackBase
         // Return the colliders to their layer
         for (int i = 0; i < disabledColliders.Count; i++) 
         {
-            disabledColliders[i].gameObject.layer = LayerMask.NameToLayer("Hitboxes");
+            disabledColliders[i].gameObject.layer = LayerMask.NameToLayer("EnemyHitboxes");
         }
     }
     private void CreateBounce(Vector3 startPos, float bdir, int lastHitEnemyID) 

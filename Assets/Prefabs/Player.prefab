@@ -168,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7280116910719744703}
   - component: {fileID: 3169452193134726794}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: AutoPickupRadius
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -481,6 +481,7 @@ Transform:
   m_Children:
   - {fileID: 1892808105939200760}
   - {fileID: 7280116910719744703}
+  - {fileID: 3640105808311591985}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1517066478532184196
@@ -590,13 +591,15 @@ MonoBehaviour:
   <RWAttackID>k__BackingField: BEAM
   <RWMagnitude>k__BackingField: 1
   <RWFirerate>k__BackingField: 8
-  <RWMultishoot>k__BackingField: 1
+  <RWMultishoot>k__BackingField: 3
+  <RWArc>k__BackingField: 40
   <RWBounces>k__BackingField: 0
   <RWPierces>k__BackingField: 0
   <RWSplash>k__BackingField: 10
   <RWCritMultiplier>k__BackingField: 1
   <RWBuildupRate>k__BackingField: 1
   <RWReloadSpeed>k__BackingField: 1
+  <RWKnockback>k__BackingField: 0
   <RWHeatGen>k__BackingField: 0.015
   <RWTimescale>k__BackingField: 1
   <RWSizeMultiplier>k__BackingField: 1
@@ -636,6 +639,89 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!1 &8054334387340985246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3640105808311591985}
+  - component: {fileID: 815359632076291844}
+  - component: {fileID: 7100754279420976169}
+  m_Layer: 10
+  m_Name: Hitbox
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3640105808311591985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054334387340985246}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6044688241897104939}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &815359632076291844
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054334387340985246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 1.3
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.45, z: 0}
+--- !u!54 &7100754279420976169
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054334387340985246}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8539914130103832518
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class AiStatePathfindingSearch : AiStateBase
     private float stateEndTime;
     private Stack<Vector3> path;
 
-    private const float STATE_DURATION = 3f;
+    private const float STATE_DURATION = 2f;
     private const float DISTANCE_TO_REACH_CHECKPOINT = 1.5f;
 
     public AiStatePathfindingSearch(EnemyEntity e) 

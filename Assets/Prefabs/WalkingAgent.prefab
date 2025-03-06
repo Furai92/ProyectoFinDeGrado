@@ -244,10 +244,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5dc81644a1cd449071f2b111cfbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MovementSpeed>k__BackingField: 4
+  <MovementSpeed>k__BackingField: 5
   <MaxHealth>k__BackingField: 10
   AiFile: {fileID: 0}
-  <MaxCombatDistance>k__BackingField: 30
+  <MaxCombatDistance>k__BackingField: 15
   <RequiresLosForCombat>k__BackingField: 1
   rb: {fileID: 8733903310432010687}
   rotationParent: {fileID: 6177083335514777297}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 326065790030863041}
   - component: {fileID: 979216828854330775}
   - component: {fileID: 4511226945574905921}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: HurtBox
   m_TagString: EnemyHitbox
   m_Icon: {fileID: 0}

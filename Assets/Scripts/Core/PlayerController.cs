@@ -26,6 +26,7 @@ public class PlayerController : NetworkBehaviour
     [field: SerializeField] public float RWMagnitude { get; private set; }
     [field: SerializeField] public float RWFirerate { get; private set; }
     [field: SerializeField] public int RWMultishoot { get; private set; }
+    [field: SerializeField] public int RWArc { get; private set; }
     [field: SerializeField] public int RWBounces { get; private set; }
     [field: SerializeField] public int RWPierces { get; private set; }
     [field: SerializeField] public float RWSplash { get; private set; }
@@ -50,7 +51,7 @@ public class PlayerController : NetworkBehaviour
     float rotationInputV;
 
     private const float HEAT_DECAY_GROWTH = 0.05f;
-    private const float BASE_MOVEMENT_SPEED = 500f;
+    private const float BASE_MOVEMENT_SPEED = 10f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
@@ -117,35 +118,40 @@ public class PlayerController : NetworkBehaviour
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady > 1 && !StatusOverheatRanged) 
         {
             heatDecayRanged = 0;
+            rangedAttackReady = 0;
             StatusHeatRanged += RWHeatGen;
             if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
-            WeaponAttackSetupData sd = new WeaponAttackSetupData()
-            {
-                User = this,
-                Magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
-                Bounces = RWBounces,
-                BuildupRate = RWBuildupRate,
-                CritDamage = RWCritMultiplier,
-                CritChance = 0,
-                Pierces = RWPierces,
-                SizeMultiplier = RWSizeMultiplier,
-                Splash = RWSplash,
-                Timescale = RWTimescale,
-                EnemyIgnored = -1,
-                Knockback = RWKnockback,
-                Element = RWElement
-            };
 
-            StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd, null);
-            rangedAttackReady = 0;
+            float currentMultishootAngle = -RWArc / 2;
+            for (int i = 0; i < RWMultishoot; i++) 
+            {
+                WeaponAttackSetupData sd = new WeaponAttackSetupData()
+                {
+                    User = this,
+                    Magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
+                    Bounces = RWBounces,
+                    BuildupRate = RWBuildupRate,
+                    CritDamage = RWCritMultiplier,
+                    CritChance = 0,
+                    Pierces = RWPierces,
+                    SizeMultiplier = RWSizeMultiplier,
+                    Splash = RWSplash,
+                    Timescale = RWTimescale,
+                    EnemyIgnored = -1,
+                    Knockback = RWKnockback,
+                    Element = RWElement
+                };
+                StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
+                currentMultishootAngle += RWArc / (RWMultishoot - 1);
+            }
         }
     }
     private void FixedUpdate()
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * Time.fixedDeltaTime * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.right;
+        m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }

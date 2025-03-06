@@ -16,7 +16,7 @@ public abstract class PlayerAttackBase : MonoBehaviour
     }
     public float GetBounceDirection(Vector3 pos, Collider hitboxIgnored = null)
     {
-        LayerMask mask = LayerMask.GetMask("Hitboxes");
+        LayerMask mask = LayerMask.GetMask("EnemyHitboxes");
         Collider[] hitboxesFound = Physics.OverlapSphere(pos, BOUNCE_TARGET_SEARCH_RADIUS, mask);
 
         Collider hitboxSelected;
