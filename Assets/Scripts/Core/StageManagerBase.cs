@@ -12,6 +12,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
     private List<PlayerController> players;
+    private List<float> playerCurrencies;
     protected IMapData stageMapData;
     private int enemyIDCounter;
 
@@ -32,17 +33,19 @@ public abstract class StageManagerBase : MonoBehaviour
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
         enemiesInStage = new List<EnemyEntity>();
-        SpawnPlayers(stageMapData.GetPlayerSpawnPosition());
+        SetupPlayers(stageMapData.GetPlayerSpawnPosition());
         hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
     }
 
-    private void SpawnPlayers(Vector3 pos) 
+    private void SetupPlayers(Vector3 pos) 
     {
         players = new List<PlayerController>();
+        playerCurrencies = new List<float>();
         GameObject p = Instantiate(playerPrefab);
         p.transform.position = pos;
         players.Add(p.GetComponent<PlayerController>());
+        playerCurrencies.Add(0);
     }
 
     public static int RegisterEnemy(EnemyEntity e)
@@ -54,6 +57,19 @@ public abstract class StageManagerBase : MonoBehaviour
             return _instance.enemyIDCounter;
         }
         return -1;
+    }
+    public static void AddCurrency(float amount) 
+    {
+        if (_instance == null) { return; }
+
+        _instance.playerCurrencies[0] += amount;
+        EventManager.OnCurrencyUpdated();
+    }
+    public static float GetPlayerCurrency(int playerindex) 
+    {
+        if (_instance == null) { return 0; }
+
+        return _instance.playerCurrencies[0];
     }
     public static void UnregisterEnemy(EnemyEntity e)
     {

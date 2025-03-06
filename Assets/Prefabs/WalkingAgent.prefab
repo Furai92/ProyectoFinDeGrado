@@ -249,6 +249,7 @@ MonoBehaviour:
   AiFile: {fileID: 0}
   <MaxCombatDistance>k__BackingField: 30
   <RequiresLosForCombat>k__BackingField: 1
+  rb: {fileID: 8733903310432010687}
   rotationParent: {fileID: 6177083335514777297}
 --- !u!54 &8733903310432010687
 Rigidbody:
@@ -259,7 +260,7 @@ Rigidbody:
   m_GameObject: {fileID: 6007917864536491662}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 50
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

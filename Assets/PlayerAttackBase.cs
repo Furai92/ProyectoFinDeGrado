@@ -9,15 +9,9 @@ public abstract class PlayerAttackBase : MonoBehaviour
 
     protected void Explode(Vector3 center)
     {
-        WeaponAttackSetupData explosionsd = new WeaponAttackSetupData()
-        {
-            element = setupData.element,
-            magnitude = setupData.magnitude,
-            critchance = setupData.critchance,
-            critdamage = setupData.critdamage,
-            sizemult = setupData.splash,
-            builduprate = setupData.builduprate,
-        };
+        WeaponAttackSetupData explosionsd = new WeaponAttackSetupData(setupData);
+        explosionsd.SizeMultiplier = setupData.Splash;
+
         StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(center, 0, explosionsd, this);
     }
     public float GetBounceDirection(Vector3 pos, Collider hitboxIgnored = null)

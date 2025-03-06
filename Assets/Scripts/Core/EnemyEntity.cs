@@ -27,10 +27,12 @@ public class EnemyEntity : MonoBehaviour
     private AiStateBase combatRootState;
     private bool inCombat;
 
-    // Movement ================================================
+    // Movement and Physics ================================================
 
+    [SerializeField] private Rigidbody rb;
     public Vector3 TargetMovementPosition { get; set; }
     public Vector3 TargetLookPosition { get; set; }
+ 
 
     private float currentLookRotation;
 
@@ -130,6 +132,14 @@ public class EnemyEntity : MonoBehaviour
         }
         return false;
     }
+    public void Knockback(float magnitude, float direction)
+    {
+        Knockback(magnitude, GameTools.AngleToVector(direction));
+    }
+    public void Knockback(float magnitude, Vector3 direction)
+    {
+        rb.linearVelocity += direction.normalized * magnitude;
+    }
     public void DealDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
     {
         // Roll for critical hits
@@ -148,7 +158,13 @@ public class EnemyEntity : MonoBehaviour
 
         // Kill if necessary
 
-        if (currentHealth < 0) { gameObject.SetActive(false); }
+        if (currentHealth < 0) 
+        {
+            gameObject.SetActive(false);
+            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1); 
+            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+        }
 
     }
 

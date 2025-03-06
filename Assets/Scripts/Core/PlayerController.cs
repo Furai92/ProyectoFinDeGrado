@@ -32,6 +32,7 @@ public class PlayerController : NetworkBehaviour
     [field: SerializeField] public float RWCritMultiplier { get; private set; }
     [field: SerializeField] public float RWBuildupRate { get; private set; }
     [field: SerializeField] public float RWReloadSpeed { get; private set; }
+    [field: SerializeField] public float RWKnockback { get; private set; }
     [field: SerializeField] public float RWHeatGen { get; private set; }
     [field: SerializeField] public float RWTimescale { get; private set; }
     [field: SerializeField] public float RWSizeMultiplier { get; private set; }
@@ -120,18 +121,19 @@ public class PlayerController : NetworkBehaviour
             if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
             WeaponAttackSetupData sd = new WeaponAttackSetupData()
             {
-                user = this,
-                magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
-                bounces = RWBounces,
-                builduprate = RWBuildupRate,
-                critdamage = RWCritMultiplier,
-                critchance = 0,
-                pierces = RWPierces,
-                sizemult = RWSizeMultiplier,
-                splash = RWSplash,
-                timescale = RWTimescale,
-                enemyIgnored = -1,
-                element = RWElement
+                User = this,
+                Magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
+                Bounces = RWBounces,
+                BuildupRate = RWBuildupRate,
+                CritDamage = RWCritMultiplier,
+                CritChance = 0,
+                Pierces = RWPierces,
+                SizeMultiplier = RWSizeMultiplier,
+                Splash = RWSplash,
+                Timescale = RWTimescale,
+                EnemyIgnored = -1,
+                Knockback = RWKnockback,
+                Element = RWElement
             };
 
             StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection, sd, null);

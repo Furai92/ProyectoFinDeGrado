@@ -22,8 +22,8 @@ public class PlayerMortarAttack : PlayerAttackBase
     {
         setupData = sd;
         transform.position = pos;
-        bouncesRemaining = sd.bounces;
-        piercesRemaining = sd.pierces;
+        bouncesRemaining = sd.Bounces;
+        piercesRemaining = sd.Pierces;
         SetNewDirection(dir);
         normalCheckRaycastMask = LayerMask.GetMask("Walls");
         bounceT = BOUNCE_INITIAL_T;
@@ -37,7 +37,7 @@ public class PlayerMortarAttack : PlayerAttackBase
     }
     private void FixedUpdate()
     {
-        bounceT = Mathf.MoveTowards(bounceT, 1, BOUNCES_PER_SECOND * setupData.timescale * Time.fixedDeltaTime);
+        bounceT = Mathf.MoveTowards(bounceT, 1, BOUNCES_PER_SECOND * setupData.Timescale * Time.fixedDeltaTime);
         UpdateBounceVisual();
         if (bounceT == 1) 
         {
@@ -46,7 +46,7 @@ public class PlayerMortarAttack : PlayerAttackBase
             if (bouncesRemaining < 0) { gameObject.SetActive(false); }
             bounceT = 0;
         }
-        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.timescale * Vector3.forward);
+        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.Timescale * Vector3.forward);
     }
     private void UpdateBounceVisual() 
     {

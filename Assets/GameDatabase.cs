@@ -6,6 +6,8 @@ public class GameDatabase : ScriptableObject
 {
     [field: SerializeField] public List<InspectorPair<GameObject>> PlayerAttackPrefabs { get; private set; }
     [field: SerializeField] public List<InspectorPair<GameObject>> EnemyPrefabs { get; private set; }
+    [Header("Ungrouped prefabs")]
+    [field: SerializeField] public GameObject PickupPrefab { get; private set; }
 }
 
 [System.Serializable]

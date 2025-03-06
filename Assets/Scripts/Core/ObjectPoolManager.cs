@@ -8,6 +8,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> attackPools;
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
+    private MonoBehaviourPool<CurrencyPickup> pickupPool;
 
     public void InitializePools() 
     {
@@ -23,6 +24,8 @@ public class ObjectPoolManager : MonoBehaviour
         {
             enemyPools.Add(database.EnemyPrefabs[i].ID, new MonoBehaviourPool<EnemyEntity>(database.EnemyPrefabs[i].Data, transform));
         }
+        // Pickups
+        pickupPool = new MonoBehaviourPool<CurrencyPickup>(database.PickupPrefab, transform);
     }
 
     public PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -37,6 +40,10 @@ public class ObjectPoolManager : MonoBehaviour
         if (!enemyPools.ContainsKey(id)) { return null; }
 
         return enemyPools[id].GetCopyFromPool();
+    }
+    public CurrencyPickup GetCurrencyPickupFromPool() 
+    {
+        return pickupPool.GetCopyFromPool();
     }
 
 }

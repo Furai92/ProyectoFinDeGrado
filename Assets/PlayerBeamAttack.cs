@@ -58,7 +58,7 @@ public class PlayerBeamAttack : PlayerAttackBase
         bool beamInterrupted = false;
         Vector3 beamEnd = terrainHits.collider == null ? transform.position + transform.forward * CAST_LENGHT : terrainHits.point;
         Vector3 currentBeamPos = transform.position;
-        float beamDiameter = CAST_RADIUS * setupData.sizemult;
+        float beamDiameter = CAST_RADIUS * setupData.SizeMultiplier;
         List<Collider> disabledColliders = new List<Collider>();
         while (!beamInterrupted && currentBeamPos != beamEnd) 
         {
@@ -74,30 +74,31 @@ public class PlayerBeamAttack : PlayerAttackBase
                 currentBeamPos = transform.position + transform.forward * entityHits.distance;
 
                 // If the enemy hit is supposed to be ignored, skip this part
-                if (enemyHit.EnemyInstanceID != setupData.enemyIgnored) 
+                if (enemyHit.EnemyInstanceID != setupData.EnemyIgnored) 
                 {
-                    if (setupData.splash > 0) 
+                    if (setupData.Splash > 0) 
                     {
-                        Explode(enemyHit.transform.position); 
+                        Explode(entityHits.point); 
                     }
                     else 
                     {
-                        enemyHit.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                        enemyHit.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                        enemyHit.Knockback(setupData.Knockback, direction);
                     }
                     
                     // Spend pierces to continue
-                    if (setupData.pierces > 0)
+                    if (setupData.Pierces > 0)
                     {
-                        setupData.pierces--;
+                        setupData.Pierces--;
                     }
                     // If there's no pierces left, use bounces AND stop the beam
                     else
                     {
                         beamInterrupted = true;
                         beamEnd = currentBeamPos;
-                        if (setupData.bounces > 0)
+                        if (setupData.Bounces > 0)
                         {
-                            setupData.bounces--;
+                            setupData.Bounces--;
                             CreateBounce(currentBeamPos, GetBounceDirection(enemyHit.transform.position, entityHits.collider), enemyHit.EnemyInstanceID);
                         }
                     }
@@ -113,10 +114,10 @@ public class PlayerBeamAttack : PlayerAttackBase
         // If nothing stopped the entity spherecast and the terrain raycast found something...
         if (!beamInterrupted && terrainHits.collider != null)
         {
-            if (setupData.splash > 0) { Explode(beamEnd); }
-            if (setupData.bounces > 0)
+            if (setupData.Splash > 0) { Explode(beamEnd); }
+            if (setupData.Bounces > 0)
             {
-                setupData.bounces--;
+                setupData.Bounces--;
                 CreateBounce(beamEnd, GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainHits.normal) + 90), -1);
             }
         }
@@ -131,20 +132,8 @@ public class PlayerBeamAttack : PlayerAttackBase
     }
     private void CreateBounce(Vector3 startPos, float bdir, int lastHitEnemyID) 
     {
-        WeaponAttackSetupData bounceSd = new WeaponAttackSetupData()
-        {
-            magnitude = setupData.magnitude,
-            critchance = setupData.critchance,
-            critdamage = setupData.critdamage,
-            sizemult = setupData.sizemult,
-            splash = setupData.splash,
-            timescale = setupData.timescale,
-            bounces = setupData.bounces,
-            builduprate = setupData.builduprate,
-            pierces = setupData.pierces,
-            element = setupData.element,
-            enemyIgnored = lastHitEnemyID
-        };
+        WeaponAttackSetupData bounceSd = new WeaponAttackSetupData(setupData);
+        bounceSd.EnemyIgnored = lastHitEnemyID;
         StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("BEAM").SetUp(Vector3.MoveTowards(startPos, transform.position, BOUNCE_END_SEPARATION), bdir, bounceSd, this);
     }
 }

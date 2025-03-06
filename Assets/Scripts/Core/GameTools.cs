@@ -70,7 +70,7 @@ public class GameTools
     public static Vector3 AngleToVector(float angle)
     {
         angle *= Mathf.Deg2Rad;
-        return new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
+        return new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
     }
     /// <summary> Reflects the provided angle over the provided normal (in euler). </summary>
     public static float AngleReflection(float angle, float surfaceNormal)

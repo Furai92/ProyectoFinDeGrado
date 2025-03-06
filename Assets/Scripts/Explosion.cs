@@ -11,7 +11,7 @@ public class Explosion : PlayerAttackBase
         setupData = sd;
         gameObject.SetActive(true);
         transform.position = pos;
-        transform.localScale = Vector3.one * sd.sizemult;
+        transform.localScale = Vector3.one * sd.SizeMultiplier;
         animT = 0f;
         UpdateAnimation();
     }
@@ -33,7 +33,8 @@ public class Explosion : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                e.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                e.Knockback(setupData.Knockback, e.transform.position - transform.position);
             }
         }
     }

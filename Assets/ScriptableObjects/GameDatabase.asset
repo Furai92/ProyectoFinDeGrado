@@ -24,3 +24,4 @@ MonoBehaviour:
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: DEBUG_WALKING
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
+  <PickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}

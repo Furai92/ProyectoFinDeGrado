@@ -23,8 +23,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     {
         setupData = sd;
         transform.position = pos;
-        bouncesRemaining = sd.bounces;
-        piercesRemaining = sd.pierces;
+        bouncesRemaining = sd.Bounces;
+        piercesRemaining = sd.Pierces;
         SetNewDirection(dir);
         normalCheckRaycastMask = LayerMask.GetMask("Walls");
         OnSpawn();
@@ -42,8 +42,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     }
     private void FixedUpdate()
     {
-        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.timescale * Vector3.forward);
-        lifetimeRemaining -= Time.fixedDeltaTime * setupData.timescale;
+        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.Timescale * Vector3.forward);
+        lifetimeRemaining -= Time.fixedDeltaTime * setupData.Timescale;
         if (lifetimeRemaining < 0) 
         {
             OnLifetimeExpired();
@@ -57,13 +57,14 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                if (setupData.splash > 0)
+                if (setupData.Splash > 0)
                 {
                     Explode(transform.position);
                 }
                 else 
                 {
-                    e.DealDamage(setupData.magnitude, setupData.critchance, setupData.critdamage, setupData.builduprate, setupData.element);
+                    e.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                    e.Knockback(setupData.Knockback, currentDirection);
                 }
                 if (bouncesRemaining > 0)
                 {
@@ -91,7 +92,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
             if (h.collider != null)
             {
-                if (setupData.splash > 0) 
+                if (setupData.Splash > 0) 
                 {
                     Explode(transform.position);
                 }
