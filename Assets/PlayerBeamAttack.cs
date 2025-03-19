@@ -134,6 +134,6 @@ public class PlayerBeamAttack : PlayerAttackBase
     {
         WeaponAttackSetupData bounceSd = new WeaponAttackSetupData(setupData);
         bounceSd.EnemyIgnored = lastHitEnemyID;
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("BEAM").SetUp(Vector3.MoveTowards(startPos, transform.position, BOUNCE_END_SEPARATION), bdir, bounceSd, this);
+        ObjectPoolManager.GetPlayerAttackFromPool("BEAM").SetUp(Vector3.MoveTowards(startPos, transform.position, BOUNCE_END_SEPARATION), bdir, bounceSd, this);
     }
 }

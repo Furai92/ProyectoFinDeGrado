@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "NewEnemyAI", menuName = "ScriptableObjects/EnemyAi", order = 1)]
+[CreateAssetMenu(fileName = "NewEnemyAI", menuName = "Scriptable Objects/EnemyAi", order = 1)]
 public class EnemyAiSO : ScriptableObject
 {
     [field: SerializeField] public string Entry { get; private set; }

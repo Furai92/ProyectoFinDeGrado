@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponAttackSetupData
 {
-    public PlayerController User { get; set; }
+    public PlayerEntity User { get; set; }
     public GameEnums.DamageElement Element { get; set; }
     public float Magnitude { get; set; }
     public float CritChance { get; set; }

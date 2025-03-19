@@ -2,6 +2,6 @@ using UnityEngine;
 
 public abstract class PlayerState
 {
-    public abstract void UpdateState(PlayerController player);
-    public abstract PlayerState GetNextState(PlayerController player);
+    public abstract void UpdateState(PlayerEntity player);
+    public abstract PlayerState GetNextState(PlayerEntity player);
 }

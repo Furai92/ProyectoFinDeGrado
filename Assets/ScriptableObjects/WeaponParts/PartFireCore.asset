@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
+  m_Name: PartFireCore
+  m_EditorClassIdentifier: 
+  <RangedAttackOverrideID>k__BackingField: 
+  <MeleeAttackOverrideID>k__BackingField: 
+  <ElementOverride>k__BackingField: 1
+  <DamageMultiplier>k__BackingField: 1
+  <MultishootModifier>k__BackingField: 0
+  <ArcModifier>k__BackingField: 0
+  <FirerateMultiplier>k__BackingField: 1
+  <BuildupMultiplier>k__BackingField: 1
+  <CriticalDamageMultiplier>k__BackingField: 1
+  <SizeMultiplier>k__BackingField: 1
+  <HeatGenerationMultiplier>k__BackingField: 1
+  <SplashModifier>k__BackingField: 0
+  <BouncesModifier>k__BackingField: 0
+  <PiercesModifier>k__BackingField: 0
+  <TimescaleMultiplier>k__BackingField: 1
+  <KnockbackMultiplier>k__BackingField: 1

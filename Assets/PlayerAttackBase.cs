@@ -12,7 +12,7 @@ public abstract class PlayerAttackBase : MonoBehaviour
         WeaponAttackSetupData explosionsd = new WeaponAttackSetupData(setupData);
         explosionsd.SizeMultiplier = setupData.Splash;
 
-        StageManagerBase.GetObjectPool().GetPlayerAttackFromPool("EXPLOSION").SetUp(center, 0, explosionsd, this);
+        ObjectPoolManager.GetPlayerAttackFromPool("EXPLOSION").SetUp(center, 0, explosionsd, this);
     }
     public float GetBounceDirection(Vector3 pos, Collider hitboxIgnored = null)
     {

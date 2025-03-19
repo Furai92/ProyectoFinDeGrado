@@ -9,10 +9,13 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> playerAttackPools;
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
     private Dictionary<string, MonoBehaviourPool<EnemyAttackBase>> enemyAttackPools;
-    private MonoBehaviourPool<CurrencyPickup> pickupPool;
+    private MonoBehaviourPool<AutoPickup> pickupPool;
+
+    private static ObjectPoolManager instance;
 
     public void InitializePools() 
     {
+        instance = this;
         // Player Attacks
         playerAttackPools = new Dictionary<string, MonoBehaviourPool<PlayerAttackBase>>();
         for (int i = 0; i < database.PlayerAttackPrefabs.Count; i++) 
@@ -32,31 +35,36 @@ public class ObjectPoolManager : MonoBehaviour
             enemyAttackPools.Add(database.EnemyAttackPrefabs[i].ID, new MonoBehaviourPool<EnemyAttackBase>(database.EnemyAttackPrefabs[i].Data, transform));
         }
         // Pickups
-        pickupPool = new MonoBehaviourPool<CurrencyPickup>(database.PickupPrefab, transform);
+        pickupPool = new MonoBehaviourPool<AutoPickup>(database.PickupPrefab, transform);
     }
 
-    public PlayerAttackBase GetPlayerAttackFromPool(string id)
+    public static PlayerAttackBase GetPlayerAttackFromPool(string id)
     {
-        if (!playerAttackPools.ContainsKey(id)) { return null; }
+        if (instance == null) { return null; }
+        if (!instance.playerAttackPools.ContainsKey(id)) { return null; }
 
-        return playerAttackPools[id].GetCopyFromPool();
+        return instance.playerAttackPools[id].GetCopyFromPool();
     }
 
-    public EnemyEntity GetEnemyFromPool(string id)
+    public static EnemyEntity GetEnemyFromPool(string id)
     {
-        if (!enemyPools.ContainsKey(id)) { return null; }
+        if (instance == null) { return null; }
+        if (!instance.enemyPools.ContainsKey(id)) { return null; }
 
-        return enemyPools[id].GetCopyFromPool();
+        return instance.enemyPools[id].GetCopyFromPool();
     }
-    public EnemyAttackBase GetEnemyAttackFromPool(string id)
+    public static EnemyAttackBase GetEnemyAttackFromPool(string id)
     {
-        if (!enemyAttackPools.ContainsKey(id)) { return null; }
+        if (instance == null) { return null; }
+        if (!instance.enemyAttackPools.ContainsKey(id)) { return null; }
 
-        return enemyAttackPools[id].GetCopyFromPool();
+        return instance.enemyAttackPools[id].GetCopyFromPool();
     }
-    public CurrencyPickup GetCurrencyPickupFromPool() 
+    public static AutoPickup GetCurrencyPickupFromPool() 
     {
-        return pickupPool.GetCopyFromPool();
+        if (instance == null) { return null; }
+
+        return instance.pickupPool.GetCopyFromPool();
     }
 
 }

@@ -10,9 +10,9 @@ public class HudPlayerStatusManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heatWarningRanged;
     [SerializeField] private TextMeshProUGUI overheatRanged;
 
-    private PlayerController playerReference;
+    private PlayerEntity playerReference;
 
-    public void SetUp(PlayerController p) 
+    public void SetUp(PlayerEntity p) 
     {
         playerReference = p;
         gameObject.SetActive(true);

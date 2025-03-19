@@ -138,6 +138,8 @@ public class EnemyEntity : MonoBehaviour
     }
     public void Knockback(float magnitude, Vector3 direction)
     {
+        if (direction == Vector3.zero) { direction = GameTools.AngleToVector(Random.Range(0, 361)); }
+
         rb.linearVelocity += direction.normalized * magnitude;
     }
     public void DealDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
@@ -161,9 +163,9 @@ public class EnemyEntity : MonoBehaviour
         if (currentHealth < 0) 
         {
             gameObject.SetActive(false);
-            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1); 
-            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-            StageManagerBase.GetObjectPool().GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
         }
 
     }

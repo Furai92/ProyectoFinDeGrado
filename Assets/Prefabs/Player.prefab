@@ -1,5 +1,71 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2942550415117294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2660535680301186538}
+  - component: {fileID: 5183472907772753375}
+  - component: {fileID: 6075483658278744889}
+  m_Layer: 15
+  m_Name: InteractabionRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2660535680301186538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2942550415117294}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1892808105939200760}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5183472907772753375
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2942550415117294}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6075483658278744889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2942550415117294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac874d8e38cdf04c88108513d906675, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1054689199229883879
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7280116910719744703}
   - component: {fileID: 3169452193134726794}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: AutoPickupRadius
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -379,6 +445,7 @@ Transform:
   m_Children:
   - {fileID: 7811943070042775098}
   - {fileID: 8413339992972725306}
+  - {fileID: 2660535680301186538}
   m_Father: {fileID: 6044688241897104939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6224524597292691168
@@ -457,7 +524,7 @@ GameObject:
   - component: {fileID: 1517066478532184196}
   - component: {fileID: 5315466479892381301}
   - component: {fileID: 6708218200002199751}
-  - component: {fileID: 7090805617208871162}
+  - component: {fileID: 8572017549252682623}
   - component: {fileID: 6564613708941309522}
   m_Layer: 8
   m_Name: Player
@@ -559,7 +626,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &7090805617208871162
+--- !u!114 &8572017549252682623
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -568,7 +635,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7124537718408826897}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07afdfa6a351c54cb94578d41be865a, type: 3}
+  m_Script: {fileID: 11500000, guid: 52ff54c385d903d4fb3926679e647c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
@@ -578,31 +645,16 @@ MonoBehaviour:
   _cube: {fileID: 8539914130103832518}
   _capsule: {fileID: 1054689199229883879}
   m_rb: {fileID: 5315466479892381301}
+  debugweaponso: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   <StatusHeatRanged>k__BackingField: 0
   <StatusHeatMelee>k__BackingField: 0
   <StatusOverheatRanged>k__BackingField: 0
   <StatusOverheatMelee>k__BackingField: 0
-  <StatMight>k__BackingField: 1
-  <StatDexterity>k__BackingField: 1
-  <StatEndurance>k__BackingField: 1
-  <StatIntellect>k__BackingField: 1
+  <StatMight>k__BackingField: 0
+  <StatDexterity>k__BackingField: 0
+  <StatEndurance>k__BackingField: 0
+  <StatIntellect>k__BackingField: 0
   <StatSpeed>k__BackingField: 1
-  <RWElement>k__BackingField: 0
-  <RWAttackID>k__BackingField: BEAM
-  <RWMagnitude>k__BackingField: 1
-  <RWFirerate>k__BackingField: 8
-  <RWMultishoot>k__BackingField: 3
-  <RWArc>k__BackingField: 40
-  <RWBounces>k__BackingField: 0
-  <RWPierces>k__BackingField: 0
-  <RWSplash>k__BackingField: 10
-  <RWCritMultiplier>k__BackingField: 1
-  <RWBuildupRate>k__BackingField: 1
-  <RWReloadSpeed>k__BackingField: 1
-  <RWKnockback>k__BackingField: 0
-  <RWHeatGen>k__BackingField: 0.015
-  <RWTimescale>k__BackingField: 1
-  <RWSizeMultiplier>k__BackingField: 1
 --- !u!114 &6564613708941309522
 MonoBehaviour:
   m_ObjectHideFlags: 0

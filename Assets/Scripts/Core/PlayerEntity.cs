@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerEntity : NetworkBehaviour
 {
     [SerializeField] private Transform m_camVerticalRotationAxis;
     [SerializeField] private Transform m_rotationParent;
@@ -9,6 +9,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _cube;
     [SerializeField] private GameObject _capsule;
     [SerializeField] private Rigidbody m_rb;
+
+    [SerializeField] private WeaponSO debugweaponso;
 
     [field: SerializeField] public float StatusHeatRanged { get; private set; }
     [field: SerializeField] public float StatusHeatMelee { get; private set; }
@@ -21,23 +23,11 @@ public class PlayerController : NetworkBehaviour
     [field: SerializeField] public float StatIntellect { get; private set; }
     [field: SerializeField] public float StatSpeed { get; private set; }
 
-    [field: SerializeField] public GameEnums.DamageElement RWElement { get; private set; }
-    [field: SerializeField] public string RWAttackID { get; private set; }
-    [field: SerializeField] public float RWMagnitude { get; private set; }
-    [field: SerializeField] public float RWFirerate { get; private set; }
-    [field: SerializeField] public int RWMultishoot { get; private set; }
-    [field: SerializeField] public int RWArc { get; private set; }
-    [field: SerializeField] public int RWBounces { get; private set; }
-    [field: SerializeField] public int RWPierces { get; private set; }
-    [field: SerializeField] public float RWSplash { get; private set; }
-    [field: SerializeField] public float RWCritMultiplier { get; private set; }
-    [field: SerializeField] public float RWBuildupRate { get; private set; }
-    [field: SerializeField] public float RWReloadSpeed { get; private set; }
-    [field: SerializeField] public float RWKnockback { get; private set; }
-    [field: SerializeField] public float RWHeatGen { get; private set; }
-    [field: SerializeField] public float RWTimescale { get; private set; }
-    [field: SerializeField] public float RWSizeMultiplier { get; private set; }
+    private WeaponData meleeWeapon;
+    private WeaponData rangedWeapon;
 
+    private WeaponData.WeaponStats rangedWeaponStats;
+    private WeaponData.WeaponStats meleeWeaponStats;
 
     private float rangedAttackReady;
     private float meleeAttackReady;
@@ -50,6 +40,7 @@ public class PlayerController : NetworkBehaviour
     float rotationInputH;
     float rotationInputV;
 
+    private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
     private const float HEAT_DECAY_GROWTH = 0.05f;
     private const float BASE_MOVEMENT_SPEED = 10f;
     private const float ROTATION_SPEED = 60f;
@@ -61,6 +52,12 @@ public class PlayerController : NetworkBehaviour
 
     private void OnEnable()
     {
+        meleeWeapon = debugweaponso.GetWeaponInstance();
+        meleeWeaponStats = meleeWeapon.GetStats();
+
+        rangedWeapon = debugweaponso.GetWeaponInstance();
+        rangedWeaponStats = rangedWeapon.GetStats();
+
         currentDirection = 0;
         rangedAttackReady = meleeAttackReady = 1;
         UpdateRotation();
@@ -110,7 +107,7 @@ public class PlayerController : NetworkBehaviour
         m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
 
-        rangedAttackReady += Time.deltaTime * RWFirerate;
+        rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate;
         heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
         StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
         if (StatusOverheatRanged && StatusHeatRanged == 0) { StatusOverheatRanged = false; }
@@ -119,30 +116,30 @@ public class PlayerController : NetworkBehaviour
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
-            StatusHeatRanged += RWHeatGen;
+            StatusHeatRanged += rangedWeaponStats.HeatGen;
             if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
 
-            float currentMultishootAngle = -RWArc / 2;
-            for (int i = 0; i < RWMultishoot; i++) 
+            float currentMultishootAngle = -rangedWeaponStats.Arc / 2;
+            for (int i = 0; i < rangedWeaponStats.Multishoot; i++) 
             {
                 WeaponAttackSetupData sd = new WeaponAttackSetupData()
                 {
                     User = this,
-                    Magnitude = RWMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
-                    Bounces = RWBounces,
-                    BuildupRate = RWBuildupRate,
-                    CritDamage = RWCritMultiplier,
+                    Magnitude = rangedWeaponStats.RangedMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
+                    Bounces = rangedWeaponStats.Bounces,
+                    BuildupRate = rangedWeaponStats.BuildupRate,
+                    CritDamage = rangedWeaponStats.CritMultiplier,
                     CritChance = 0,
-                    Pierces = RWPierces,
-                    SizeMultiplier = RWSizeMultiplier,
-                    Splash = RWSplash,
-                    Timescale = RWTimescale,
+                    Pierces = rangedWeaponStats.Pierces,
+                    SizeMultiplier = rangedWeaponStats.SizeMultiplier,
+                    Splash = rangedWeaponStats.Splash,
+                    Timescale = rangedWeaponStats.Timescale,
                     EnemyIgnored = -1,
-                    Knockback = RWKnockback,
-                    Element = RWElement
+                    Knockback = rangedWeaponStats.Knockback,
+                    Element = rangedWeaponStats.Element
                 };
-                StageManagerBase.GetObjectPool().GetPlayerAttackFromPool(RWAttackID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
-                currentMultishootAngle += RWArc / (RWMultishoot - 1);
+                ObjectPoolManager.GetPlayerAttackFromPool(rangedWeaponStats.RangedAttackID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
+                currentMultishootAngle += rangedWeaponStats.Multishoot < 2 ? 0 : rangedWeaponStats.Arc / (rangedWeaponStats.Multishoot - 1);
             }
         }
     }

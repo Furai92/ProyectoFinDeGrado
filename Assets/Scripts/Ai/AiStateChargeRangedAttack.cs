@@ -3,7 +3,7 @@ using UnityEngine;
 public class AiStateChargeRangedAttack : AiStateBase
 {
     private float stateEndTime;
-    private PlayerController target;
+    private PlayerEntity target;
     private bool shootPerformed;
 
     private const float CHARGE_DURATION = 1f;
@@ -25,7 +25,7 @@ public class AiStateChargeRangedAttack : AiStateBase
         if (Time.time > stateEndTime && !shootPerformed) 
         {
             shootPerformed = true;
-            StageManagerBase.GetObjectPool().GetEnemyAttackFromPool("SLOW_ORB").SetUp(EnemyControlled.transform.position, GameTools.AngleBetween(EnemyControlled.transform.position, target.transform.position));
+            ObjectPoolManager.GetEnemyAttackFromPool("SLOW_ORB").SetUp(EnemyControlled.transform.position, GameTools.AngleBetween(EnemyControlled.transform.position, target.transform.position));
         }
     }
 

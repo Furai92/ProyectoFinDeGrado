@@ -11,10 +11,12 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
-    private List<PlayerController> players;
+    protected StageStateBase currentState;
+    private List<PlayerEntity> players;
     private List<float> playerCurrencies;
     protected IMapData stageMapData;
     private int enemyIDCounter;
+    private bool initializationFinished;
 
     private static StageManagerBase _instance;
 
@@ -23,6 +25,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private void OnEnable()
     {
+        initializationFinished = false;
         StartCoroutine(Startcr());
     }
     private IEnumerator Startcr() 
@@ -36,15 +39,29 @@ public abstract class StageManagerBase : MonoBehaviour
         SetupPlayers(stageMapData.GetPlayerSpawnPosition());
         hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
+        initializationFinished = true;
+        currentState.StateStart();
+    }
+    private void Update()
+    {
+        if (!initializationFinished) { return; }
+
+        currentState.UpdateState();
+        if (currentState.IsFinished()) 
+        {
+            currentState.StateEnd();
+            currentState = currentState.GetNextState();
+            currentState.StateStart();
+        }
     }
 
     private void SetupPlayers(Vector3 pos) 
     {
-        players = new List<PlayerController>();
+        players = new List<PlayerEntity>();
         playerCurrencies = new List<float>();
         GameObject p = Instantiate(playerPrefab);
         p.transform.position = pos;
-        players.Add(p.GetComponent<PlayerController>());
+        players.Add(p.GetComponent<PlayerEntity>());
         playerCurrencies.Add(0);
     }
 
@@ -58,6 +75,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return -1;
     }
+    public static float GetTimerDisplay() 
+    {
+        if (_instance == null) { return -1; }
+
+        return _instance.currentState.GetTimerDisplay();
+    }
     public static void AddCurrency(float amount) 
     {
         if (_instance == null) { return; }
@@ -70,6 +93,23 @@ public abstract class StageManagerBase : MonoBehaviour
         if (_instance == null) { return 0; }
 
         return _instance.playerCurrencies[0];
+    }
+    public static List<Vector3> GetEnemySpawnPositions() 
+    {
+        return _instance == null ? new List<Vector3>() : _instance.stageMapData.GetEnemySpawnPositions();
+    }
+    public static int GetEnemyCount() 
+    {
+        return _instance == null ? 0 : _instance.enemiesInStage.Count;
+    }
+    public static void DisableAllEnemies() 
+    {
+        if (_instance == null) { return; }
+
+        for (int i = _instance.enemiesInStage.Count-1; i >= 0; i--) 
+        {
+            _instance.enemiesInStage[i].gameObject.SetActive(false);
+        }
     }
     public static void UnregisterEnemy(EnemyEntity e)
     {
@@ -91,19 +131,12 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         return _instance == null ? Vector3.zero : _instance.playerPosition;
     }
-    public static PlayerController GetClosestPlayer(Vector3 pos) 
+    public static PlayerEntity GetClosestPlayer(Vector3 pos) 
     {
         if (_instance == null) { return null; }
 
         return _instance.players[0];
     }
-    public static ObjectPoolManager GetObjectPool() 
-    {
-        if (_instance == null) { return null; }
-
-        return _instance.objectPoolMng;
-    }
-
     public abstract IMapData GenerateMap(int seed);
     public abstract void InitializeStage();
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class AiStateWalkStraightToTarget : AiStateBase
 {
     private float stateEndTime;
-    private PlayerController target;
+    private PlayerEntity target;
 
     private const float STATE_DURATION = 1f;
 

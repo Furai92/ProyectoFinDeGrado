@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390203488a0b5d04a8bad07f628155b7, type: 3}
+  m_Name: StarterRifle
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: RIFLE
+  <RangedComponentID>k__BackingField: PROJ_STANDARD
+  <MeleeComponentID>k__BackingField: 
+  <Element>k__BackingField: 0
+  <RangedComponentDamage>k__BackingField: 100
+  <MeleeComponentDamage>k__BackingField: 0
+  <Multishoot>k__BackingField: 1
+  <MultishootArc>k__BackingField: 0
+  <Firerate>k__BackingField: 2
+  <BuildupRate>k__BackingField: 1
+  <CriticalDamage>k__BackingField: 2
+  <SizeMultiplier>k__BackingField: 1
+  <HeatGeneration>k__BackingField: 0.05
+  <Splash>k__BackingField: 0
+  <Bounces>k__BackingField: 0
+  <Pierces>k__BackingField: 1
+  <Timescale>k__BackingField: 1
+  <Knockback>k__BackingField: 0.1
+  <PartSlots>k__BackingField:
+  - <SlotName>k__BackingField: Core
+    <CompatibleParts>k__BackingField:
+    - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
+    - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
+    - {fileID: 11400000, guid: e8e7393f798176840a57f68b7f738f53, type: 2}
+    - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
+  - <SlotName>k__BackingField: Barrel
+    <CompatibleParts>k__BackingField:
+    - {fileID: 11400000, guid: f748286807947e24aa8bd222f30cb2fc, type: 2}
+    - {fileID: 11400000, guid: c0ff11bedf0d3f04f910f2620bd9065e, type: 2}

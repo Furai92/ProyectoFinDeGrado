@@ -21,8 +21,8 @@ TagManager:
   - EnemyHitboxes
   - EnemyAttacks
   - Pickups
-  - 
-  - 
+  - PlayerAutoPickup
+  - Interactables
   - 
   - 
   - 

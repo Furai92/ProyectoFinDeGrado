@@ -65,9 +65,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6855494610108432616}
   - component: {fileID: 7059649633494148773}
+  - component: {fileID: 7675831950534128386}
   - component: {fileID: 6963353834150877335}
   m_Layer: 13
-  m_Name: Pickup
+  m_Name: AutoPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,6 +103,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb07ed8fbcb029744aaceace54a92b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 6963353834150877335}
+  bsc: {fileID: 7675831950534128386}
+--- !u!114 &7675831950534128386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246623293500637985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f964b1e95f78f4d488c0a8f4b403e78f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   visualParent: {fileID: 1377109925530181175}
   rb: {fileID: 6963353834150877335}
 --- !u!54 &6963353834150877335
@@ -113,7 +128,7 @@ Rigidbody:
   m_GameObject: {fileID: 4246623293500637985}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 1
+  m_Drag: 0.5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
