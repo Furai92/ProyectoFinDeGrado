@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390203488a0b5d04a8bad07f628155b7, type: 3}
   m_Name: StarterRifle
   m_EditorClassIdentifier: 
+  <Slot>k__BackingField: 1
   <ID>k__BackingField: RIFLE
+  <Pools>k__BackingField:
+  - STANDARD
   <RangedComponentID>k__BackingField: PROJ_STANDARD
   <MeleeComponentID>k__BackingField: 
   <Element>k__BackingField: 0

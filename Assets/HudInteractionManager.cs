@@ -33,6 +33,7 @@ public class HudInteractionManager : MonoBehaviour
     void Update()
     {
         UpdatePanelPosition();
+        if (InputManager.Instance.GetInteractInput() && targetInteractable != null) { targetInteractable.OnInteract(0); }
     }
     private void UpdatePanelVisuals() 
     {

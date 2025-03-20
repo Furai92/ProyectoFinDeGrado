@@ -8,6 +8,7 @@ public abstract class StageManagerBase : MonoBehaviour
     [SerializeField] protected ObjectPoolManager objectPoolMng;
     [SerializeField] protected IngameHudManager hudMng;
     [SerializeField] protected GameObject playerPrefab;
+    [SerializeField] protected GameDatabase database;
 
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
@@ -17,8 +18,12 @@ public abstract class StageManagerBase : MonoBehaviour
     protected IMapData stageMapData;
     private int enemyIDCounter;
     private bool initializationFinished;
+    private Dictionary<string, List<WeaponSO>> weaponPools;
 
     private static StageManagerBase _instance;
+
+    private float nextCurrencyDrop;
+    private float nextWeaponDrop;
 
     public const float MAX_BOUNCE_DISTANCE_MAG = 200f;
     public const int STAGE_SIZE = 100;
@@ -26,11 +31,19 @@ public abstract class StageManagerBase : MonoBehaviour
     private void OnEnable()
     {
         initializationFinished = false;
+        nextCurrencyDrop = Random.Range(0, 1);
+        nextWeaponDrop = Random.Range(0, 1);
+        EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
         StartCoroutine(Startcr());
+    }
+    private void OnDisable()
+    {
+        EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
     }
     private IEnumerator Startcr() 
     {
         _instance = this;
+        SetUpItemPools();
         objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
@@ -64,7 +77,53 @@ public abstract class StageManagerBase : MonoBehaviour
         players.Add(p.GetComponent<PlayerEntity>());
         playerCurrencies.Add(0);
     }
+    private void SetUpItemPools() 
+    {
+        weaponPools = new Dictionary<string, List<WeaponSO>>();
+        for (int i = 0; i < database.Weapons.Count; i++) 
+        {
+            WeaponSO weaponReaded = database.Weapons[i];
+            for (int j = 0; j < weaponReaded.Pools.Count; j++) 
+            {
+                string poolReaded = weaponReaded.Pools[j];
+                if (weaponPools.ContainsKey(poolReaded))
+                {
+                    weaponPools[poolReaded].Add(weaponReaded);
+                }
+                else 
+                {
+                    weaponPools.Add(poolReaded, new List<WeaponSO>() { weaponReaded });
+                }
+            }
+        }
+    }
+    private void OnEnemyDefeated(EnemyEntity e) 
+    {
+        nextWeaponDrop += e.ItemDropRate;
+        nextCurrencyDrop += e.CurrencyDropRate;
 
+        for (int i = 0; i < nextWeaponDrop; i++) 
+        {
+            ObjectPoolManager.GetWeaponPickupFromPool().SetUp(new WeaponData(GetWeaponFromItemPool("STANDARD")), e.transform.position);
+            nextWeaponDrop -= 1;
+        }
+        for (int i = 0; i < nextCurrencyDrop; i++) 
+        {
+            ObjectPoolManager.GetAutoPickupFromPool().SetUp(e.transform.position, 1);
+            nextCurrencyDrop -= 1;
+        }
+    }
+    #region Public Static Methods
+    public static WeaponSO GetWeaponFromItemPool(string pool) 
+    {
+        if (_instance == null) { return null; }
+
+        if (_instance.weaponPools.ContainsKey(pool)) 
+        {
+            return _instance.weaponPools[pool][Random.Range(0, _instance.weaponPools[pool].Count)];
+        }
+        return null;
+    }
     public static int RegisterEnemy(EnemyEntity e)
     {
         if (_instance != null) 
@@ -131,12 +190,18 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         return _instance == null ? Vector3.zero : _instance.playerPosition;
     }
+    public static PlayerEntity GetPlayerReference(int pindex) 
+    {
+        return _instance == null ? null : _instance.players[Mathf.Min(_instance.players.Count-1, pindex)];
+    }
     public static PlayerEntity GetClosestPlayer(Vector3 pos) 
     {
         if (_instance == null) { return null; }
 
         return _instance.players[0];
     }
+    #endregion
+
     public abstract IMapData GenerateMap(int seed);
     public abstract void InitializeStage();
 }

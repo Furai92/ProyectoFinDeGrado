@@ -7,9 +7,12 @@ public class GameDatabase : ScriptableObject
     [field: SerializeField] public List<InspectorPair<GameObject>> PlayerAttackPrefabs { get; private set; }
     [field: SerializeField] public List<InspectorPair<GameObject>> EnemyPrefabs { get; private set; }
     [field: SerializeField] public List<InspectorPair<GameObject>> EnemyAttackPrefabs { get; private set; }
+    [field: SerializeField] public List<WeaponSO> Weapons { get; private set; }
     [Header("Ungrouped prefabs")]
-    [field: SerializeField] public GameObject PickupPrefab { get; private set; }
+    [field: SerializeField] public GameObject AutoPickupPrefab { get; private set; }
+    [field: SerializeField] public GameObject WeaponPickupPrefab { get; private set; }
 }
+
 
 [System.Serializable]
 public class InspectorPair<T>

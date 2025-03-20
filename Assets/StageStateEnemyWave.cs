@@ -24,12 +24,14 @@ public class StageStateEnemyWave : StageStateBase
     public override void StateEnd()
     {
         StageManagerBase.DisableAllEnemies();
+        EventManager.OnCombatWaveEnded();
     }
 
     public override void StateStart()
     {
         nextEnemySpawn = Time.time + ENEMY_SPAWN_INTERVAL;
         durationRemaining = waveDuration;
+        EventManager.OnCombatWaveStarted();
     }
 
     public override void UpdateState()

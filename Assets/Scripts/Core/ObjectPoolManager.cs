@@ -9,7 +9,8 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> playerAttackPools;
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
     private Dictionary<string, MonoBehaviourPool<EnemyAttackBase>> enemyAttackPools;
-    private MonoBehaviourPool<AutoPickup> pickupPool;
+    private MonoBehaviourPool<AutoPickup> autoPickupPool;
+    private MonoBehaviourPool<WeaponPickup> weaponPickupPool;
 
     private static ObjectPoolManager instance;
 
@@ -34,8 +35,10 @@ public class ObjectPoolManager : MonoBehaviour
         {
             enemyAttackPools.Add(database.EnemyAttackPrefabs[i].ID, new MonoBehaviourPool<EnemyAttackBase>(database.EnemyAttackPrefabs[i].Data, transform));
         }
-        // Pickups
-        pickupPool = new MonoBehaviourPool<AutoPickup>(database.PickupPrefab, transform);
+        // Auto Pickups
+        autoPickupPool = new MonoBehaviourPool<AutoPickup>(database.AutoPickupPrefab, transform);
+        // Weapon Pickups
+        weaponPickupPool = new MonoBehaviourPool<WeaponPickup>(database.WeaponPickupPrefab, transform);
     }
 
     public static PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -60,11 +63,17 @@ public class ObjectPoolManager : MonoBehaviour
 
         return instance.enemyAttackPools[id].GetCopyFromPool();
     }
-    public static AutoPickup GetCurrencyPickupFromPool() 
+    public static AutoPickup GetAutoPickupFromPool() 
     {
         if (instance == null) { return null; }
 
-        return instance.pickupPool.GetCopyFromPool();
+        return instance.autoPickupPool.GetCopyFromPool();
+    }
+    public static WeaponPickup GetWeaponPickupFromPool()
+    {
+        if (instance == null) { return null; }
+
+        return instance.weaponPickupPool.GetCopyFromPool();
     }
 
 }

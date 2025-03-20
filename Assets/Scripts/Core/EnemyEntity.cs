@@ -9,6 +9,11 @@ public class EnemyEntity : MonoBehaviour
     [field: SerializeField] public float MovementSpeed { get; private set; }
     [field: SerializeField] public float MaxHealth { get; private set; }
 
+    // Rewards =================================================
+
+    [field: SerializeField] public float ItemDropRate { get; private set; }
+    [field: SerializeField] public float CurrencyDropRate { get; private set; }
+
     // Status ==================================================
 
     private float currentHealth;
@@ -162,10 +167,8 @@ public class EnemyEntity : MonoBehaviour
 
         if (currentHealth < 0) 
         {
+            EventManager.OnEnemyDefeated(this);
             gameObject.SetActive(false);
-            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
         }
 
     }

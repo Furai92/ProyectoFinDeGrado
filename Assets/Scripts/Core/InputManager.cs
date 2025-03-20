@@ -48,6 +48,10 @@ public class InputManager : MonoBehaviour
     {
         return _inputActions.Player.MeleeAttack.ReadValue<float>() > 0;
     }
+    public bool GetInteractInput() 
+    {
+        return _inputActions.Player.Interact.WasPressedThisFrame();
+    }
 
     private void OnUiFocusChanged(bool status)
     {

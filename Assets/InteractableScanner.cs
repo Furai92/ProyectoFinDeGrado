@@ -13,6 +13,16 @@ public class InteractableScanner : MonoBehaviour
     {
         interactablesInRange = new List<Interactable>();
         nextInteractableUpdate = Time.time + INTERACTABLE_UPDATE_RATE;
+        EventManager.InteractableDisabledEvent += OnInteractableDisabled;
+    }
+    private void OnDisable()
+    {
+        EventManager.InteractableDisabledEvent -= OnInteractableDisabled;
+    }
+    private void OnInteractableDisabled(Interactable inter) 
+    {
+        interactablesInRange.Remove(inter);
+        UpdateClosestInteractable();
     }
     private void Update()
     {
@@ -22,7 +32,6 @@ public class InteractableScanner : MonoBehaviour
             nextInteractableUpdate = Time.time + INTERACTABLE_UPDATE_RATE;
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         Interactable inter = other.gameObject.GetComponentInParent<Interactable>();
@@ -30,6 +39,7 @@ public class InteractableScanner : MonoBehaviour
         {
             interactablesInRange.Add(inter);
             UpdateClosestInteractable();
+            print("adding, count is now " + interactablesInRange.Count);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -39,6 +49,7 @@ public class InteractableScanner : MonoBehaviour
         {
             interactablesInRange.Remove(inter);
             UpdateClosestInteractable();
+            print("removing, count is now " + interactablesInRange.Count);
         }
     }
 

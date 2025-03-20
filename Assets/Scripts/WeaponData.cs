@@ -6,10 +6,14 @@ public class WeaponData
     public WeaponSO BaseWeapon { get; private set; }
     public List<WeaponPartSO> Parts { get; private set; }
 
-    public WeaponData(WeaponSO baseweapon, List<WeaponPartSO> p) 
+    public WeaponData(WeaponSO baseweapon) 
     {
         BaseWeapon = baseweapon;
-        Parts = p;
+        Parts = new List<WeaponPartSO>();
+        for (int i = 0; i < baseweapon.PartSlots.Count; i++)
+        {
+            Parts.Add(baseweapon.PartSlots[i].CompatibleParts[Random.Range(0, baseweapon.PartSlots[i].CompatibleParts.Count)]);
+        }
     }
     public WeaponStats GetStats() 
     {

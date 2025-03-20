@@ -52,11 +52,10 @@ public class PlayerEntity : NetworkBehaviour
 
     private void OnEnable()
     {
-        meleeWeapon = debugweaponso.GetWeaponInstance();
-        meleeWeaponStats = meleeWeapon.GetStats();
+        EquipWeapon(new WeaponData(debugweaponso));
+        //EquipWeapon(new WeaponData(debugweaponso)); // Equip a default melee weapon
 
-        rangedWeapon = debugweaponso.GetWeaponInstance();
-        rangedWeaponStats = rangedWeapon.GetStats();
+        StatusOverheatRanged = false;
 
         currentDirection = 0;
         rangedAttackReady = meleeAttackReady = 1;
@@ -91,6 +90,34 @@ public class PlayerEntity : NetworkBehaviour
             _capsule.GetComponent<Renderer>().material.color = Color.green;
         }
     }
+    public void EquipWeapon(WeaponData w) 
+    {
+        switch (w.BaseWeapon.Slot) 
+        {
+            case WeaponSO.WeaponSlot.Melee: 
+                {
+                    if (meleeWeapon != null) 
+                    {
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(meleeWeapon, transform.position);
+                    }
+
+                    meleeWeapon = w;
+                    meleeWeaponStats = meleeWeapon.GetStats();
+                    break;
+                }
+            case WeaponSO.WeaponSlot.Ranged: 
+                {
+                    if (rangedWeapon != null)
+                    {
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(rangedWeapon, transform.position);
+                    }
+
+                    rangedWeapon = w;
+                    rangedWeaponStats = rangedWeapon.GetStats();
+                    break;
+                }
+        }
+    }
     private void UpdateRotation() 
     {
         m_rotationParent.transform.rotation = Quaternion.Euler(0, currentDirection, 0);
@@ -110,9 +137,9 @@ public class PlayerEntity : NetworkBehaviour
         rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate;
         heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
         StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
-        if (StatusOverheatRanged && StatusHeatRanged == 0) { StatusOverheatRanged = false; }
+        if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
 
-        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady > 1 && !StatusOverheatRanged) 
+        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged) 
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
