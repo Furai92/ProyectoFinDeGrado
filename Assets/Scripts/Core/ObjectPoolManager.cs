@@ -11,6 +11,7 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<string, MonoBehaviourPool<EnemyAttackBase>> enemyAttackPools;
     private MonoBehaviourPool<AutoPickup> autoPickupPool;
     private MonoBehaviourPool<WeaponPickup> weaponPickupPool;
+    private MonoBehaviourPool<Chest> chestPool;
 
     private static ObjectPoolManager instance;
 
@@ -39,6 +40,8 @@ public class ObjectPoolManager : MonoBehaviour
         autoPickupPool = new MonoBehaviourPool<AutoPickup>(database.AutoPickupPrefab, transform);
         // Weapon Pickups
         weaponPickupPool = new MonoBehaviourPool<WeaponPickup>(database.WeaponPickupPrefab, transform);
+        // Chests
+        chestPool = new MonoBehaviourPool<Chest>(database.ChestPrefab, transform);
     }
 
     public static PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -74,6 +77,12 @@ public class ObjectPoolManager : MonoBehaviour
         if (instance == null) { return null; }
 
         return instance.weaponPickupPool.GetCopyFromPool();
+    }
+    public static Chest GetChestFromPool()
+    {
+        if (instance == null) { return null; }
+
+        return instance.chestPool.GetCopyFromPool();
     }
 
 }

@@ -53,7 +53,9 @@ public abstract class StageManagerBase : MonoBehaviour
         hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
         initializationFinished = true;
+
         currentState.StateStart();
+        EventManager.OnStageStateStarted(currentState);
     }
     private void Update()
     {
@@ -63,8 +65,10 @@ public abstract class StageManagerBase : MonoBehaviour
         if (currentState.IsFinished()) 
         {
             currentState.StateEnd();
+            EventManager.OnStageStateEnded(currentState);
             currentState = currentState.GetNextState();
             currentState.StateStart();
+            EventManager.OnStageStateStarted(currentState);
         }
     }
 
@@ -156,6 +160,10 @@ public abstract class StageManagerBase : MonoBehaviour
     public static List<Vector3> GetEnemySpawnPositions() 
     {
         return _instance == null ? new List<Vector3>() : _instance.stageMapData.GetEnemySpawnPositions();
+    }
+    public static List<Vector3> GetChestSpawnPositions()
+    {
+        return _instance == null ? new List<Vector3>() : _instance.stageMapData.GetChestSpawnPositions();
     }
     public static int GetEnemyCount() 
     {

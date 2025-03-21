@@ -10,6 +10,10 @@ public class TestMapGeneration : IMapData
 
     }
 
+    public List<Vector3> GetChestSpawnPositions()
+    {
+        throw new System.NotImplementedException();
+    }
 
     public List<Vector3> GetEnemySpawnPositions()
     {

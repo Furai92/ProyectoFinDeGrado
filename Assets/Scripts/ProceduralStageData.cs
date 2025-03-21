@@ -7,6 +7,7 @@ public class ProceduralStageData : IMapData
     private MapNode firstRoom;
     private List<MapNode> stageList;
     private List<Vector3> enemySpawnPositions;
+    private List<Vector3> chestSpawnPositions;
     private List<StagePiece> stagePieces;
 
     private const float ROOM_PERCENT = 0.6f;
@@ -234,6 +235,15 @@ public class ProceduralStageData : IMapData
         {
             enemySpawnPositions.Add(stagePieces[i].transform.position);
         }
+        // Setup chest spawn positions
+        chestSpawnPositions = new List<Vector3>();
+        for (int i = 0; i < stagePieces.Count; i++) 
+        {
+            for (int j = 0; j < stagePieces[i].ChestSpawnPoints.Count; j++) 
+            {
+                chestSpawnPositions.Add(stagePieces[i].ChestSpawnPoints[j].position);
+            }
+        }
         Debug.Log("Map finished with a size of " + stageList.Count);
     }
     private List<MapNode> GetAntiDeadEndStrip(MapNode deadEndNode) 
@@ -414,5 +424,10 @@ public class ProceduralStageData : IMapData
     public List<StagePiece> GetStagePieces()
     {
         return stagePieces;
+    }
+
+    public List<Vector3> GetChestSpawnPositions() 
+    {
+        return chestSpawnPositions;
     }
 }

@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class StagePiece : MonoBehaviour
 {
+    [field: SerializeField] public List<Transform> ChestSpawnPoints { get; private set; }
+
     [SerializeField] private Transform _u_blockedParent;
     [SerializeField] private Transform _d_blockedParent;
     [SerializeField] private Transform _l_blockedParent;

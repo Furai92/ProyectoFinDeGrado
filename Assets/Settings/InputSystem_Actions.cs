@@ -71,6 +71,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReadyUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a569ebc-7c12-48a3-9ea5-35f5bdfe92dc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MeleeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1358bfd-f554-43cd-9b38-2771b4860a3d"",
+                    ""path"": ""<Keyboard>/#(R)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReadyUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -745,6 +765,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_RangedAttack = m_Player.FindAction("RangedAttack", throwIfNotFound: true);
         m_Player_MeleeAttack = m_Player.FindAction("MeleeAttack", throwIfNotFound: true);
+        m_Player_ReadyUp = m_Player.FindAction("ReadyUp", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -829,6 +850,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_RangedAttack;
     private readonly InputAction m_Player_MeleeAttack;
+    private readonly InputAction m_Player_ReadyUp;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -838,6 +860,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @RangedAttack => m_Wrapper.m_Player_RangedAttack;
         public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
+        public InputAction @ReadyUp => m_Wrapper.m_Player_ReadyUp;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -862,6 +885,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MeleeAttack.started += instance.OnMeleeAttack;
             @MeleeAttack.performed += instance.OnMeleeAttack;
             @MeleeAttack.canceled += instance.OnMeleeAttack;
+            @ReadyUp.started += instance.OnReadyUp;
+            @ReadyUp.performed += instance.OnReadyUp;
+            @ReadyUp.canceled += instance.OnReadyUp;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -881,6 +907,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MeleeAttack.started -= instance.OnMeleeAttack;
             @MeleeAttack.performed -= instance.OnMeleeAttack;
             @MeleeAttack.canceled -= instance.OnMeleeAttack;
+            @ReadyUp.started -= instance.OnReadyUp;
+            @ReadyUp.performed -= instance.OnReadyUp;
+            @ReadyUp.canceled -= instance.OnReadyUp;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1023,6 +1052,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnRangedAttack(InputAction.CallbackContext context);
         void OnMeleeAttack(InputAction.CallbackContext context);
+        void OnReadyUp(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

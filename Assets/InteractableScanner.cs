@@ -39,7 +39,6 @@ public class InteractableScanner : MonoBehaviour
         {
             interactablesInRange.Add(inter);
             UpdateClosestInteractable();
-            print("adding, count is now " + interactablesInRange.Count);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -49,7 +48,6 @@ public class InteractableScanner : MonoBehaviour
         {
             interactablesInRange.Remove(inter);
             UpdateClosestInteractable();
-            print("removing, count is now " + interactablesInRange.Count);
         }
     }
 
@@ -66,6 +64,7 @@ public class InteractableScanner : MonoBehaviour
                 closest = interactablesInRange[i];
             }
         }
+        print(interactablesInRange.Count);
         HudInteractionManager.UpdateTargetInteractable(closest);
     }
 }

@@ -5,11 +5,15 @@ public class EventManager
 {
     public static event Action<bool> UiFocusChangedEvent;
     public static event Action CurrencyUpdateEvent;
-    public static event Action CombatWaveStartedEvent;
-    public static event Action CombatWaveEndedEvent;
+
     public static event Action<Vector3, float, int, GameEnums.DamageElement> EnemyDirectDamageTakenEvent;
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<Interactable> InteractableDisabledEvent;
+
+    // Stage Waves
+    public static event Action<StageStateBase> StageStateStartedEvent;
+    public static event Action<StageStateBase> StageStateEndedEvent;
+    public static event Action AllPlayersReadyEvent;
 
     public static void OnUiFocusChanged(bool uifocused)
     {
@@ -31,12 +35,16 @@ public class EventManager
     {
         InteractableDisabledEvent?.Invoke(i);
     }
-    public static void OnCombatWaveStarted() 
+    public static void OnStageStateStarted(StageStateBase s) 
     {
-        CombatWaveStartedEvent?.Invoke();
+        StageStateStartedEvent?.Invoke(s);
     }
-    public static void OnCombatWaveEnded()
+    public static void OnStageStateEnded(StageStateBase s)
     {
-        CombatWaveEndedEvent?.Invoke();
+        StageStateEndedEvent?.Invoke(s);
+    }
+    public static void OnAllPlayersReady() 
+    {
+        AllPlayersReadyEvent?.Invoke();
     }
 }

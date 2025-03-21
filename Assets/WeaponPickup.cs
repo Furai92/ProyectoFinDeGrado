@@ -22,16 +22,16 @@ public class WeaponPickup : Interactable
     }
     private void OnEnable()
     {
-        EventManager.CombatWaveStartedEvent += OnCombatWaveStarted;
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
     }
     protected override void OnDisable()
     {
-        EventManager.CombatWaveStartedEvent -= OnCombatWaveStarted;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
         base.OnDisable();
     }
-    private void OnCombatWaveStarted() 
+    private void OnStageStateStarted(StageStateBase s) 
     {
-        gameObject.SetActive(false);
+        if (s.GetStateType() == StageStateBase.StateType.Combat) { gameObject.SetActive(false); }
     }
     public override InteractableInfo GetInfo()
     {

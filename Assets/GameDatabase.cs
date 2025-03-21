@@ -11,6 +11,7 @@ public class GameDatabase : ScriptableObject
     [Header("Ungrouped prefabs")]
     [field: SerializeField] public GameObject AutoPickupPrefab { get; private set; }
     [field: SerializeField] public GameObject WeaponPickupPrefab { get; private set; }
+    [field: SerializeField] public GameObject ChestPrefab { get; private set; }
 }
 
 

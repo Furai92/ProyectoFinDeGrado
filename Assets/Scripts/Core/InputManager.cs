@@ -52,6 +52,10 @@ public class InputManager : MonoBehaviour
     {
         return _inputActions.Player.Interact.WasPressedThisFrame();
     }
+    public bool GetReadyUpInput() 
+    {
+        return _inputActions.Player.ReadyUp.WasPerformedThisFrame();
+    }
 
     private void OnUiFocusChanged(bool status)
     {
