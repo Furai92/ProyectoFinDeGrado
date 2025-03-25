@@ -71,6 +71,7 @@ public class EnemyEntity : MonoBehaviour
     }
     private void OnDisable()
     {
+        EventManager.OnEnemyDisabled(this);
         StageManagerBase.UnregisterEnemy(this);
     }
     private void FixedUpdate()
@@ -137,6 +138,10 @@ public class EnemyEntity : MonoBehaviour
         }
         return false;
     }
+    public float GetHealthPercent() 
+    {
+        return currentHealth / MaxHealth;
+    }
     public void Knockback(float magnitude, float direction)
     {
         Knockback(magnitude, GameTools.AngleToVector(direction));
@@ -160,8 +165,8 @@ public class EnemyEntity : MonoBehaviour
 
         // Reduce health
 
-        EventManager.OnEnemyDirectDamageTaken(transform.position, magnitude, 0, element);
         currentHealth -= magnitude;
+        EventManager.OnEnemyDirectDamageTaken(magnitude, 0, element, this);
 
         // Kill if necessary
 

@@ -9,6 +9,7 @@ public class HudGameStatusManager : MonoBehaviour
 
     public void SetUp() 
     {
+        gameObject.SetActive(true);
         EventManager.CurrencyUpdateEvent += OnCurrencyUpdated;
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.StageStateEndedEvent += OnStageStateEnded;

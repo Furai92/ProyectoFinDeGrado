@@ -46,6 +46,5 @@ public class WeaponPickup : Interactable
     {
         StageManagerBase.GetPlayerReference(playerIndex).EquipWeapon(info.weapon);
         gameObject.SetActive(false);
-        print("equipping");
     }
 }

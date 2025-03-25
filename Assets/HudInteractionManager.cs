@@ -25,9 +25,10 @@ public class HudInteractionManager : MonoBehaviour
         wposOffset = new Vector3(0, WORLD_TO_HUD_VERTICAL_OFFSET, 0);
     }
 
-    public void SetUp() 
+    public void SetUp(Camera c) 
     {
-        mcam = Camera.main;
+        mcam = c;
+        gameObject.SetActive(true);
     }
 
     void Update()

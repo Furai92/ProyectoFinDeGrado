@@ -6,8 +6,9 @@ public class EventManager
     public static event Action<bool> UiFocusChangedEvent;
     public static event Action CurrencyUpdateEvent;
 
-    public static event Action<Vector3, float, int, GameEnums.DamageElement> EnemyDirectDamageTakenEvent;
+    public static event Action<float, int, GameEnums.DamageElement, EnemyEntity> EnemyDirectDamageTakenEvent;
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
+    public static event Action<EnemyEntity> EnemyDisabledEvent;
     public static event Action<Interactable> InteractableDisabledEvent;
 
     // Stage Waves
@@ -15,17 +16,24 @@ public class EventManager
     public static event Action<StageStateBase> StageStateEndedEvent;
     public static event Action AllPlayersReadyEvent;
 
+    // Ui
+    public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
+
     public static void OnUiFocusChanged(bool uifocused)
     {
         UiFocusChangedEvent?.Invoke(uifocused);
     }
-    public static void OnEnemyDirectDamageTaken(Vector3 wpos, float magnitude, int critlevel, GameEnums.DamageElement element) 
+    public static void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement element, EnemyEntity target) 
     {
-        EnemyDirectDamageTakenEvent?.Invoke(wpos, magnitude, critlevel, element);
+        EnemyDirectDamageTakenEvent?.Invoke(magnitude, critlevel, element, target);
     }
     public static void OnEnemyDefeated(EnemyEntity e) 
     {
         EnemyDefeatedEvent?.Invoke(e);
+    }
+    public static void OnEnemyDisabled(EnemyEntity e)
+    {
+        EnemyDisabledEvent?.Invoke(e);
     }
     public static void OnCurrencyUpdated() 
     {
@@ -46,5 +54,9 @@ public class EventManager
     public static void OnAllPlayersReady() 
     {
         AllPlayersReadyEvent?.Invoke();
+    }
+    public static void OnUiEnemyHealthBarDisabled(HudEnemyHealthBarElement hpb) 
+    {
+        UiEnemyHealthBarDisabledEvent.Invoke(hpb);
     }
 }

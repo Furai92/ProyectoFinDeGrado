@@ -19,13 +19,13 @@ public class HudDamageNotificationsElement : MonoBehaviour
     private const float LIFETIME = 1f;
 
 
-    public void SetUp(Vector3 wpos, float magnitude, int critlevel, GameEnums.DamageElement element) 
+    public void SetUp(Camera c, float magnitude, int critlevel, GameEnums.DamageElement element, EnemyEntity target) 
     {
         gameObject.SetActive(true);
         animT = 0;
-        eventWorldPosition = wpos;
+        eventWorldPosition = target.transform.position;
         notificationText.text = magnitude.ToString("F0");
-        cam = Camera.main;
+        cam = c;
         removeTime = Time.time + LIFETIME;
         randomOffsetVector = new Vector3(Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET), Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET), 0);
     }

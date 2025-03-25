@@ -207,6 +207,7 @@ public class ProceduralStageData : IMapData
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();
+                        rp.name = string.Format("stage_piece_{0}_{1}", stageList[i].pos_x, stageList[i].pos_y);
                         break;
                     }
                 case MapNode.RoomType.Corridor:
@@ -216,6 +217,7 @@ public class ProceduralStageData : IMapData
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();
+                        rp.name = string.Format("stage_piece_{0}_{1}", stageList[i].pos_x, stageList[i].pos_y);
                         break;
                     }
                 case MapNode.RoomType.Deco:
@@ -224,6 +226,7 @@ public class ProceduralStageData : IMapData
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();
+                        rp.name = string.Format("deco_{0}_{1}", stageList[i].pos_x, stageList[i].pos_y);
                         break;
                     }
             }

@@ -3,8 +3,14 @@ using UnityEngine;
 public class HudDamageNotificationsManager : MonoBehaviour
 {
     [SerializeField] private GameObject notificationPrefab;
-    private MonoBehaviourPool<HudDamageNotificationsElement> notificationPool;
 
+    private MonoBehaviourPool<HudDamageNotificationsElement> notificationPool;
+    private Camera mcam;
+
+    public void SetUp(Camera c) 
+    {
+        mcam = c;
+    }
     private void OnEnable()
     {
         notificationPool = new MonoBehaviourPool<HudDamageNotificationsElement>(notificationPrefab, transform);
@@ -14,8 +20,8 @@ public class HudDamageNotificationsManager : MonoBehaviour
     {
         EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDamageTaken;
     }
-    private void OnEnemyDamageTaken(Vector3 wpos, float magnitude, int critlevel, GameEnums.DamageElement elem) 
+    private void OnEnemyDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
     {
-        notificationPool.GetCopyFromPool().SetUp(wpos, magnitude, critlevel, elem);
+        notificationPool.GetCopyFromPool().SetUp(mcam, magnitude, critlevel, elem, target);
     }
 }

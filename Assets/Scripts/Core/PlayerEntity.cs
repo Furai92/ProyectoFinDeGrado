@@ -50,8 +50,11 @@ public class PlayerEntity : NetworkBehaviour
 
     private bool _isPlayerControlsEnabled = false;
 
-    private void OnEnable()
+    public void SetUp(Vector3 pos)
     {
+        gameObject.SetActive(true);
+        transform.position = pos;
+        StageManagerBase.UpdatePlayerPosition(transform.position);
         EquipWeapon(new WeaponData(debugweaponso));
         //EquipWeapon(new WeaponData(debugweaponso)); // Equip a default melee weapon
 
@@ -184,5 +187,9 @@ public class PlayerEntity : NetworkBehaviour
         float x = m_camVerticalRotationAxis.localRotation.eulerAngles.x;
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360); 
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
+    }
+    public Camera GetCamera() 
+    {
+        return m_playerCamera;
     }
 }

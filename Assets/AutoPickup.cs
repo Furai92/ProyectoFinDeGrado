@@ -8,12 +8,14 @@ public class AutoPickup : MonoBehaviour
     private float currencyValue;
     private int phase;
     private float phaseT;
-    private float pickupDragStrenght;
+
+    private Vector3 targetPosition;
     private Transform autoPickupColliderTransform;
 
-    
-    private const float PICKUP_DRAG_STRENGHT_GROWTH = 15f;
-    private const float PICKUP_DRAG_STRENGHT_BASE = 5f;
+    private const float PICKUP_ORBIT_ROTATION_SPEED = 15f;
+    private const float PICKUP_ORBIT_DISTANCE = 4f;
+    private const float PICKUP_ORBIT_MOVE_TO_TARGET_SPEED = 50f;
+    private const float PICKUP_ORBIT_DURATION = 1.5f;
     private const float LIFETIME = 20f;
     private const float REMOVE_DELAY = 1f;
 
@@ -25,7 +27,6 @@ public class AutoPickup : MonoBehaviour
         currencyValue = value;
         rb.WakeUp();
         autoPickupColliderTransform = null;
-        pickupDragStrenght = 0;
         phase = 0;
         phaseT = 0;
         transform.localScale = Vector3.one;
@@ -51,10 +52,12 @@ public class AutoPickup : MonoBehaviour
                 }
             case 2: // Being picked up
                 {
-                    pickupDragStrenght += Time.fixedDeltaTime * PICKUP_DRAG_STRENGHT_GROWTH;
-                    transform.position = Vector3.MoveTowards(transform.position, autoPickupColliderTransform.position, Time.fixedDeltaTime * (pickupDragStrenght + PICKUP_DRAG_STRENGHT_BASE));
-                    transform.localScale = Vector3.one / (1 + pickupDragStrenght * 0.1f);
-                    if (transform.position == autoPickupColliderTransform.position)
+                    phaseT += Time.fixedDeltaTime / PICKUP_ORBIT_DURATION;
+                    transform.localScale = Vector3.one * (1 - phaseT);
+                    Vector3 orbitOffset = (1-phaseT) * PICKUP_ORBIT_DISTANCE * new Vector3(Mathf.Sin(phaseT * PICKUP_ORBIT_ROTATION_SPEED), 0, Mathf.Cos(phaseT * PICKUP_ORBIT_ROTATION_SPEED));
+                    targetPosition = autoPickupColliderTransform.position + orbitOffset;
+                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.fixedDeltaTime * PICKUP_ORBIT_MOVE_TO_TARGET_SPEED);
+                    if (phaseT >= 1) 
                     {
                         gameObject.SetActive(false);
                         StageManagerBase.AddCurrency(currencyValue);

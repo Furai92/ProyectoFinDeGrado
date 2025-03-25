@@ -10,6 +10,9 @@ public abstract class StageManagerBase : MonoBehaviour
     [SerializeField] protected GameObject playerPrefab;
     [SerializeField] protected GameDatabase database;
 
+    private int playerRoomX = -1;
+    private int playerRoomY = -1;
+    private List<Vector3> enemySpawnsForCurrentPlayerPosition;
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
     protected StageStateBase currentState;
@@ -17,7 +20,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private List<float> playerCurrencies;
     protected IMapData stageMapData;
     private int enemyIDCounter;
-    private bool initializationFinished;
+    private bool initializationFinished = false;
     private Dictionary<string, List<WeaponSO>> weaponPools;
 
     private static StageManagerBase _instance;
@@ -30,9 +33,6 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private void OnEnable()
     {
-        initializationFinished = false;
-        nextCurrencyDrop = Random.Range(0, 1);
-        nextWeaponDrop = Random.Range(0, 1);
         EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
         StartCoroutine(Startcr());
     }
@@ -46,12 +46,17 @@ public abstract class StageManagerBase : MonoBehaviour
         SetUpItemPools();
         objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
+
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
+
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
         enemiesInStage = new List<EnemyEntity>();
         SetupPlayers(stageMapData.GetPlayerSpawnPosition());
         hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
+        nextCurrencyDrop = Random.Range(0, 1);
+        nextWeaponDrop = Random.Range(0, 1);
+
         initializationFinished = true;
 
         currentState.StateStart();
@@ -77,7 +82,7 @@ public abstract class StageManagerBase : MonoBehaviour
         players = new List<PlayerEntity>();
         playerCurrencies = new List<float>();
         GameObject p = Instantiate(playerPrefab);
-        p.transform.position = pos;
+        p.GetComponent<PlayerEntity>().SetUp(pos);
         players.Add(p.GetComponent<PlayerEntity>());
         playerCurrencies.Add(0);
     }
@@ -117,7 +122,55 @@ public abstract class StageManagerBase : MonoBehaviour
             nextCurrencyDrop -= 1;
         }
     }
+    private void CalculateValidEnemySpawns(int px, int py) 
+    {
+        enemySpawnsForCurrentPlayerPosition = new List<Vector3>();
+
+        MapNode playerPositionNode = _instance.stageMapData.GetLayoutMatrix()[px, py];
+
+        for (int i = -2; i <= 2; i++)
+        {
+            MapNode readed;
+            if (i == 0) { continue; } // Removes straight up, down, left, and right
+
+            if (playerPositionNode.pos_y + i >= 0 && playerPositionNode.pos_y + i < STAGE_SIZE) // Removes Y out of bounds
+            {
+                if (playerPositionNode.pos_x + 2 < STAGE_SIZE) // Removes positive X out of bounds
+                {
+                    readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + 2, playerPositionNode.pos_y + i];
+                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                }
+                if (playerPositionNode.pos_x - 2 >= 0) // Removes negative X out of bounds
+                {
+                    readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x - 2, playerPositionNode.pos_y + i];
+                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                }
+            }
+
+            if (i < 1 || i > 1) { continue; } // Removes double checking corners
+
+            if (playerPositionNode.pos_x + i >= 0 && playerPositionNode.pos_x + i < STAGE_SIZE) // Removes X out of bounds
+            {
+                if (playerPositionNode.pos_x + 2 < STAGE_SIZE) // Removes positive X out of bounds
+                {
+                    readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + i, playerPositionNode.pos_y + 2];
+                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                }
+                if (playerPositionNode.pos_x - 2 >= 0) // Removes negative X out of bounds
+                {
+                    readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + i, playerPositionNode.pos_y - 2];
+                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                } 
+            }
+        }
+    }
     #region Public Static Methods
+    public static Vector3 GetRandomEnemySpawnPosition(int playerindex) 
+    {
+        if (_instance == null) { return Vector3.zero; }
+
+        return _instance.enemySpawnsForCurrentPlayerPosition[Random.Range(0, _instance.enemySpawnsForCurrentPlayerPosition.Count)];
+    }
     public static WeaponSO GetWeaponFromItemPool(string pool) 
     {
         if (_instance == null) { return null; }
@@ -188,7 +241,18 @@ public abstract class StageManagerBase : MonoBehaviour
     }
     public static void UpdatePlayerPosition(Vector3 newpos) 
     {
-        if (_instance != null) { _instance.playerPosition = newpos; }  
+        if (_instance == null) { return; }
+
+        _instance.playerPosition = newpos;
+        int newRoomX = (int)((newpos.x + StagePiece.PIECE_SPACING/2) / StagePiece.PIECE_SPACING);
+        int newRoomY = (int)((newpos.z + StagePiece.PIECE_SPACING/2) / StagePiece.PIECE_SPACING);
+
+        if (newRoomX != _instance.playerRoomX || newRoomY != _instance.playerRoomY) 
+        {
+            _instance.playerRoomX = newRoomX;
+            _instance.playerRoomY = newRoomY;
+            _instance.CalculateValidEnemySpawns(newRoomX, newRoomY);
+        }
     }
     public static Vector3 GetClosestPlayerPosition(Vector3 pos) 
     {

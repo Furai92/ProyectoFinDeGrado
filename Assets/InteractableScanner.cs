@@ -64,7 +64,6 @@ public class InteractableScanner : MonoBehaviour
                 closest = interactablesInRange[i];
             }
         }
-        print(interactablesInRange.Count);
         HudInteractionManager.UpdateTargetInteractable(closest);
     }
 }

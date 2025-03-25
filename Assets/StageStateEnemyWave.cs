@@ -9,6 +9,7 @@ public class StageStateEnemyWave : StageStateBase
     private float nextChestSpawn;
     private const float ENEMY_SPAWN_INTERVAL = 2.5f;
     private const float CHEST_SPAWN_INTERVAL = 10f;
+    private const int INITIAL_SPAWNS = 5;
     private const int MAX_ENEMIES = 20;
     private const float MIN_DIST_TO_SPAWN = 40f;
     private const float MAX_DIST_TO_SPAWN = 75f;
@@ -32,6 +33,7 @@ public class StageStateEnemyWave : StageStateBase
     {
         nextEnemySpawn = Time.time + ENEMY_SPAWN_INTERVAL;
         nextChestSpawn = Time.time; // First one spawns instantly
+        for (int i = 0; i < INITIAL_SPAWNS; i++) { SpawnEnemy(); }
         durationRemaining = waveDuration;
     }
 
@@ -55,18 +57,9 @@ public class StageStateEnemyWave : StageStateBase
     {
         if (StageManagerBase.GetEnemyCount() >= MAX_ENEMIES) { return; }
 
-        List<Vector3> allSpawns = StageManagerBase.GetEnemySpawnPositions();
-        List<Vector3> validSpawns = new List<Vector3>();
-        Vector3 playerPos = StageManagerBase.GetRandomPlayerPosition();
+        Vector3 randomPos = StageManagerBase.GetRandomEnemySpawnPosition(0);
 
-        for (int i = 0; i < allSpawns.Count; i++)
-        {
-            float dist = Vector3.Distance(allSpawns[i], playerPos);
-            if (dist < MIN_DIST_TO_SPAWN || dist > MAX_DIST_TO_SPAWN) { continue; }
-            validSpawns.Add(allSpawns[i]);
-        }
-
-        ObjectPoolManager.GetEnemyFromPool("DEBUG_WALKING").SetUp(validSpawns[Random.Range(0, validSpawns.Count)]);
+        ObjectPoolManager.GetEnemyFromPool("DEBUG_WALKING").SetUp(randomPos);
     }
 
     public override StateType GetStateType()

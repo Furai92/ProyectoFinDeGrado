@@ -247,7 +247,7 @@ MonoBehaviour:
   <MovementSpeed>k__BackingField: 5
   <MaxHealth>k__BackingField: 500
   <ItemDropRate>k__BackingField: 0.1
-  <CurrencyDropRate>k__BackingField: 1.1
+  <CurrencyDropRate>k__BackingField: 5
   AiFile: {fileID: 0}
   <MaxCombatDistance>k__BackingField: 20
   <RequiresLosForCombat>k__BackingField: 1

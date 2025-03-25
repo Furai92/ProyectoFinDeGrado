@@ -918,12 +918,12 @@ GameObject:
   - component: {fileID: 618982368}
   - component: {fileID: 618982371}
   m_Layer: 5
-  m_Name: DamageNotifications
+  m_Name: '[Canvas]DamageNotifications'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &618982367
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1169,12 +1169,12 @@ GameObject:
   - component: {fileID: 689444052}
   - component: {fileID: 689444051}
   m_Layer: 5
-  m_Name: GameStatus
+  m_Name: '[Canvas]GameStatus'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &689444051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1387,12 +1387,12 @@ GameObject:
   - component: {fileID: 751208521}
   - component: {fileID: 751208520}
   m_Layer: 5
-  m_Name: InteractionUI
+  m_Name: '[Canvas]Interaction'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &751208519
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1687,7 +1687,7 @@ GameObject:
   - component: {fileID: 1748459820}
   - component: {fileID: 1748459821}
   m_Layer: 0
-  m_Name: IngameUI
+  m_Name: IngameHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1710,6 +1710,7 @@ Transform:
   - {fileID: 751208519}
   - {fileID: 689444055}
   - {fileID: 1854765788}
+  - {fileID: 1886700278}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1748459821
@@ -1727,6 +1728,8 @@ MonoBehaviour:
   playerStatusManager: {fileID: 1854765792}
   gameStatusManager: {fileID: 689444051}
   interactionManager: {fileID: 751208520}
+  enemyHealthBarManager: {fileID: 1886700274}
+  damageNotificationsManager: {fileID: 618982371}
 --- !u!1 &1771476482
 GameObject:
   m_ObjectHideFlags: 0
@@ -2033,12 +2036,12 @@ GameObject:
   - component: {fileID: 1854765789}
   - component: {fileID: 1854765792}
   m_Layer: 5
-  m_Name: PlayerStatusUi
+  m_Name: '[Canvas]PlayerStatus'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1854765788
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2144,6 +2147,121 @@ MonoBehaviour:
   heatPercentRanged: {fileID: 1807497783}
   heatWarningRanged: {fileID: 640927841}
   overheatRanged: {fileID: 1247651726}
+--- !u!1 &1886700273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1886700278}
+  - component: {fileID: 1886700277}
+  - component: {fileID: 1886700276}
+  - component: {fileID: 1886700275}
+  - component: {fileID: 1886700274}
+  m_Layer: 5
+  m_Name: '[Canvas]EnemyHealthBars'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1886700274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886700273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03dc70efd74baa640ab7ae93323d7af2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elementPrefab: {fileID: 6520292151213596214, guid: f8aa0155e0e75314cbe0b7eaeeb92087, type: 3}
+--- !u!114 &1886700275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886700273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1886700276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886700273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &1886700277
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886700273}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &1886700278
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886700273}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1748459820}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1980136637
 GameObject:
   m_ObjectHideFlags: 0
