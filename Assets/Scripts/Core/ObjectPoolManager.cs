@@ -4,7 +4,7 @@ using UnityEngine.Analytics;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    [SerializeField] private GameDatabase database;
+    [SerializeField] private GameDatabaseSO database;
 
     private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> playerAttackPools;
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;

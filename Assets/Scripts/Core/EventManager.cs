@@ -3,25 +3,30 @@ using System;
 
 public class EventManager
 {
-    public static event Action<bool> UiFocusChangedEvent;
-    public static event Action CurrencyUpdateEvent;
-
+    // Combat
     public static event Action<float, int, GameEnums.DamageElement, EnemyEntity> EnemyDirectDamageTakenEvent;
+    public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
-    public static event Action<Interactable> InteractableDisabledEvent;
 
-    // Stage Waves
+    // Stage Status
+    public static event Action CurrencyUpdateEvent;
+    public static event Action<Interactable> InteractableDisabledEvent;
     public static event Action<StageStateBase> StageStateStartedEvent;
     public static event Action<StageStateBase> StageStateEndedEvent;
     public static event Action AllPlayersReadyEvent;
 
-    // Ui
+    // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
+    public static event Action<bool> UiFocusChangedEvent;
 
     public static void OnUiFocusChanged(bool uifocused)
     {
         UiFocusChangedEvent?.Invoke(uifocused);
+    }
+    public static void OnEnemyStatusApplied(GameEnums.DamageElement elem, EnemyEntity target) 
+    {
+        EnemyStatusEffectAppliedEvent?.Invoke(elem, target);
     }
     public static void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement element, EnemyEntity target) 
     {

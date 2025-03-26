@@ -8,7 +8,7 @@ public abstract class StageManagerBase : MonoBehaviour
     [SerializeField] protected ObjectPoolManager objectPoolMng;
     [SerializeField] protected IngameHudManager hudMng;
     [SerializeField] protected GameObject playerPrefab;
-    [SerializeField] protected GameDatabase database;
+    [SerializeField] protected GameDatabaseSO database;
 
     private int playerRoomX = -1;
     private int playerRoomY = -1;

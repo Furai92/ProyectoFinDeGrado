@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
     [SerializeField] private UIDocument _uiDocument;
-    [SerializeField] private GameDatabase _gameDatabase;
+    [SerializeField] private GameDatabaseSO _gameDatabase;
     public VisualElement RootVisualElement => _uiDocument.rootVisualElement;
 
     void Awake()

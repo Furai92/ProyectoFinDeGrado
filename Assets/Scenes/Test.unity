@@ -1015,10 +1015,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 618982366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b89a87e40bd147645b14df0325d1db87, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ee4d0e136d50e3458e1f379cfa36767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationPrefab: {fileID: 8035190056137281615, guid: 2d6113f75f234a049beccd585c93bcf2, type: 3}
+  damageNotificationPrefab: {fileID: 8035190056137281615, guid: 2d6113f75f234a049beccd585c93bcf2, type: 3}
+  statusNotificationPrefab: {fileID: 8035190056137281615, guid: 8f4068a26db9cf94e96e29e758b549f4, type: 3}
 --- !u!1 &640927840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,7 +1730,7 @@ MonoBehaviour:
   gameStatusManager: {fileID: 689444051}
   interactionManager: {fileID: 751208520}
   enemyHealthBarManager: {fileID: 1886700274}
-  damageNotificationsManager: {fileID: 618982371}
+  combatNotificationsManager: {fileID: 618982371}
 --- !u!1 &1771476482
 GameObject:
   m_ObjectHideFlags: 0

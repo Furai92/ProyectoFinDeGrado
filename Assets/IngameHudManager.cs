@@ -6,7 +6,7 @@ public class IngameHudManager : MonoBehaviour
     [SerializeField] private HudGameStatusManager gameStatusManager;
     [SerializeField] private HudInteractionManager interactionManager;
     [SerializeField] private HudEnemyHealthBarManager enemyHealthBarManager;
-    [SerializeField] private HudDamageNotificationsManager damageNotificationsManager;
+    [SerializeField] private HudCombatNotifications combatNotificationsManager;
 
     public void SetUp(PlayerEntity p)
     {
@@ -17,6 +17,6 @@ public class IngameHudManager : MonoBehaviour
         gameStatusManager.SetUp();
         interactionManager.SetUp(p.GetCamera());
         enemyHealthBarManager.SetUp(p.GetCamera());
-        damageNotificationsManager.SetUp(p.GetCamera());
+        combatNotificationsManager.SetUp(p.GetCamera());
     }
 }

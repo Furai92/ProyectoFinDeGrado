@@ -18,7 +18,7 @@ MonoBehaviour:
   - STANDARD
   <RangedComponentID>k__BackingField: PROJ_STANDARD
   <MeleeComponentID>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 1
   <RangedComponentDamage>k__BackingField: 100
   <MeleeComponentDamage>k__BackingField: 0
   <Multishoot>k__BackingField: 1
@@ -38,7 +38,6 @@ MonoBehaviour:
     <CompatibleParts>k__BackingField:
     - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
     - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
-    - {fileID: 11400000, guid: e8e7393f798176840a57f68b7f738f53, type: 2}
     - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
   - <SlotName>k__BackingField: Barrel
     <CompatibleParts>k__BackingField:

@@ -18,8 +18,15 @@ public class EnemyEntity : MonoBehaviour
 
     private float currentHealth;
     private float[] statusBuildups;
+    private float[] statusBuildupResistancesDivider;
+    private float[] statusDurations;
+    private float nextStatusUpdateTime;
 
+    private const float STATUS_DURATION_STANDARD = 10f;
+    private const float STATUS_UPDATE_INTERVAL = 1f;
+    private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
     private const float HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP = 0.2f;
+    private const int BUILDUP_ARRAY_LENGHT = 5;
 
     // AI Management ===========================================
 
@@ -61,13 +68,21 @@ public class EnemyEntity : MonoBehaviour
     }
     private void OnEnable()
     {
+        LoSMask = LayerMask.GetMask("Walls");
+        ResetEntity();
+        SetupAi();
+        EnemyInstanceID = StageManagerBase.RegisterEnemy(this);
+    }
+    private void ResetEntity() 
+    {
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
         currentHealth = MaxHealth;
-        LoSMask = LayerMask.GetMask("Walls");
-        SetupAi();
-        statusBuildups = new float[10];
-        EnemyInstanceID = StageManagerBase.RegisterEnemy(this);
+        statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
+        statusDurations = new float[BUILDUP_ARRAY_LENGHT];
+        statusBuildupResistancesDivider = new float[BUILDUP_ARRAY_LENGHT];
+        for (int i = 0; i < statusBuildupResistancesDivider.Length; i++) { statusBuildupResistancesDivider[i] = 1; }
+        nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
     }
     private void OnDisable()
     {
@@ -79,6 +94,7 @@ public class EnemyEntity : MonoBehaviour
         UpdateAI();
         UpdateRotation();
         UpdateMovement();
+        UpdateStatusEffects();
     }
     private void SetupAi() 
     {
@@ -116,6 +132,18 @@ public class EnemyEntity : MonoBehaviour
             currentState.StartState();
         }
     }
+    private void UpdateStatusEffects() 
+    {
+        if (Time.time < nextStatusUpdateTime) { return; }
+
+        nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
+
+        for (int i = 0; i < statusDurations.Length; i++) 
+        {
+            statusDurations[i] = Mathf.MoveTowards(statusDurations[i], 0, STATUS_UPDATE_INTERVAL);
+        }
+
+    }
     private void UpdateMovement()
     {
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetMovementPosition.x, transform.position.y, TargetMovementPosition.z), Time.fixedDeltaTime * MovementSpeed);
@@ -152,16 +180,22 @@ public class EnemyEntity : MonoBehaviour
 
         rb.linearVelocity += direction.normalized * magnitude;
     }
+    public void AddStatus(GameEnums.DamageElement e) 
+    {
+        EventManager.OnEnemyStatusApplied(e, this);
+
+        statusDurations[(int)e] += STATUS_DURATION_STANDARD;
+    }
     public void DealDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
     {
         // Roll for critical hits
         int critLevel = 0;
-        while (Random.Range(0, 101) < critChance) { critChance -= 100; critLevel++; }
-        magnitude *= Mathf.Pow(1 + critDamage, critLevel);
-
-        // Increase stauts buildup
-
-        statusBuildups[(int)element] += ((magnitude/currentHealth) / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) * buildupMultiplier;
+        while (Random.Range(0, 101) < critChance) 
+        {
+            critChance -= 100;
+            critLevel++;
+            magnitude *= critDamage;
+        }
 
         // Reduce health
 
@@ -170,12 +204,33 @@ public class EnemyEntity : MonoBehaviour
 
         // Kill if necessary
 
-        if (currentHealth < 0) 
+        if (currentHealth <= 0)
         {
             EventManager.OnEnemyDefeated(this);
             gameObject.SetActive(false);
         }
-
+        else 
+        {
+            // If the enemy survives the hit, add status buildup based on the damage element.
+            // Increase stauts buildup
+            int statusIndex = (int)element;
+            float buildupStrengtht = (magnitude / MaxHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) * buildupMultiplier / statusBuildupResistancesDivider[statusIndex];
+            while (buildupStrengtht > 0)
+            {
+                statusBuildups[statusIndex] += buildupStrengtht /= statusBuildupResistancesDivider[statusIndex];
+                if (statusBuildups[statusIndex] >= 1)
+                {
+                    buildupStrengtht = statusBuildups[statusIndex] - 1;
+                    statusBuildups[statusIndex] = 0;
+                    statusBuildupResistancesDivider[statusIndex] *= STATUS_RESISTANCE_GROWTH_MULTIPLIER;
+                    AddStatus(element);
+                }
+                else 
+                {
+                    buildupStrengtht = 0; // Or return
+                }
+            }
+        }
     }
 
 }

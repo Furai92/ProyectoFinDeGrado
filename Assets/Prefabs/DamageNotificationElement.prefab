@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 2736371959067567380}
   - component: {fileID: 4990461364948976850}
   m_Layer: 5
-  m_Name: DamageNotification
+  m_Name: DamageNotificationElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,3 +195,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notificationText: {fileID: 739791167814734559}
+  cdb: {fileID: 11400000, guid: 65eecbe3f4e293d40a2157b29b42a957, type: 2}
