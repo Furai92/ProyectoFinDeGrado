@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class HudCombatNotifications : MonoBehaviour
 {
-    [SerializeField] private GameObject damageNotificationPrefab;
+    [SerializeField] private GameObject directDamageNotificationPrefab;
+    [SerializeField] private GameObject statusDamageNotificationPrefab;
     [SerializeField] private GameObject statusNotificationPrefab;
 
-    private MonoBehaviourPool<HudDamageNotificationsElement> damageNotificationPool;
+    private MonoBehaviourPool<HudDirectDamageNotificationElement> directDamageNotificationPool;
+    private MonoBehaviourPool<HudStatusDamageNotificationElement> statusDamageNotificationPool;
     private MonoBehaviourPool<HudStatusNotificationElement> statusNotificationPool;
     private Camera mcam;
 
@@ -16,19 +18,27 @@ public class HudCombatNotifications : MonoBehaviour
     }
     private void OnEnable()
     {
-        damageNotificationPool = new MonoBehaviourPool<HudDamageNotificationsElement>(damageNotificationPrefab, transform);
+        directDamageNotificationPool = new MonoBehaviourPool<HudDirectDamageNotificationElement>(directDamageNotificationPrefab, transform);
+        statusDamageNotificationPool = new MonoBehaviourPool<HudStatusDamageNotificationElement>(statusDamageNotificationPrefab, transform);
         statusNotificationPool = new MonoBehaviourPool<HudStatusNotificationElement>(statusNotificationPrefab, transform);
-        EventManager.EnemyDirectDamageTakenEvent += OnEnemyDamageTaken;
+
+        EventManager.EnemyDirectDamageTakenEvent += OnEnemyDirectDamageTaken;
         EventManager.EnemyStatusEffectAppliedEvent += OnEnemyStatusApplied;
+        EventManager.EnemyStatusDamageTakenEvent += OnEnemyStatusDamageTaken;
     }
     private void OnDisable()
     {
-        EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDamageTaken;
+        EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDirectDamageTaken;
         EventManager.EnemyStatusEffectAppliedEvent -= OnEnemyStatusApplied;
+        EventManager.EnemyStatusDamageTakenEvent -= OnEnemyStatusDamageTaken;
     }
-    private void OnEnemyDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    private void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement elem, EnemyEntity target) 
     {
-        damageNotificationPool.GetCopyFromPool().SetUp(mcam, magnitude, critlevel, elem, target);
+        statusDamageNotificationPool.GetCopyFromPool().SetUp(mcam, magnitude, elem, target);
+    }
+    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    {
+        directDamageNotificationPool.GetCopyFromPool().SetUp(mcam, magnitude, critlevel, elem, target);
     }
     private void OnEnemyStatusApplied(GameEnums.DamageElement elem, EnemyEntity target) 
     {

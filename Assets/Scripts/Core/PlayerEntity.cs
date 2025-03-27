@@ -10,7 +10,8 @@ public class PlayerEntity : NetworkBehaviour
     [SerializeField] private GameObject _capsule;
     [SerializeField] private Rigidbody m_rb;
 
-    [SerializeField] private WeaponSO debugweaponso;
+    [SerializeField] private WeaponSO debugRangedWeaponSO;
+    [SerializeField] private WeaponSO debugMeleeWeaponSO;
 
     [field: SerializeField] public float StatusHeatRanged { get; private set; }
     [field: SerializeField] public float StatusHeatMelee { get; private set; }
@@ -55,8 +56,8 @@ public class PlayerEntity : NetworkBehaviour
         gameObject.SetActive(true);
         transform.position = pos;
         StageManagerBase.UpdatePlayerPosition(transform.position);
-        EquipWeapon(new WeaponData(debugweaponso));
-        //EquipWeapon(new WeaponData(debugweaponso)); // Equip a default melee weapon
+        EquipWeapon(new WeaponData(debugRangedWeaponSO));
+        EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
         StatusOverheatRanged = false;
 
@@ -142,35 +143,79 @@ public class PlayerEntity : NetworkBehaviour
         StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
         if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
 
+        meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate;
+        heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
+        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, Time.deltaTime * heatDecayMelee);
+        if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
+
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged) 
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
             StatusHeatRanged += rangedWeaponStats.HeatGen;
             if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
+            Attack(WeaponSO.WeaponSlot.Ranged);
+        }
+        if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee)
+        {
+            heatDecayMelee = 0;
+            meleeAttackReady = 0;
+            StatusHeatMelee += meleeWeaponStats.HeatGen;
+            if (StatusHeatMelee > 1) { StatusOverheatMelee = true; }
+            Attack(WeaponSO.WeaponSlot.Melee);
+        }
+    }
+    private void Attack(WeaponSO.WeaponSlot s) 
+    {
+        WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
+        float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ? GameTools.DexterityToDamageMultiplier(StatDexterity) : GameTools.MightToDamageMultiplier(StatMight);
 
-            float currentMultishootAngle = -rangedWeaponStats.Arc / 2;
-            for (int i = 0; i < rangedWeaponStats.Multishoot; i++) 
+        // Projectile component
+        if (wpn.ProjectileComponentID != "") 
+        {
+            float currentMultishootAngle = -wpn.Arc / 2;
+            for (int i = 0; i < wpn.Multishoot; i++)
             {
                 WeaponAttackSetupData sd = new WeaponAttackSetupData()
                 {
                     User = this,
-                    Magnitude = rangedWeaponStats.RangedMagnitude * GameTools.DexterityToDamageMultiplier(StatDexterity),
-                    Bounces = rangedWeaponStats.Bounces,
-                    BuildupRate = rangedWeaponStats.BuildupRate,
-                    CritDamage = rangedWeaponStats.CritMultiplier,
+                    Magnitude = wpn.ProjectileComponentMagnitude * attackMagnitudeMultiplier,
+                    Bounces = wpn.Bounces,
+                    BuildupRate = wpn.BuildupRate,
+                    CritDamage = wpn.CritMultiplier,
                     CritChance = 0,
-                    Pierces = rangedWeaponStats.Pierces,
-                    SizeMultiplier = rangedWeaponStats.SizeMultiplier,
-                    Splash = rangedWeaponStats.Splash,
-                    Timescale = rangedWeaponStats.Timescale,
+                    Pierces = wpn.Pierces,
+                    SizeMultiplier = wpn.SizeMultiplier,
+                    Splash = wpn.Splash,
+                    Timescale = wpn.Timescale,
                     EnemyIgnored = -1,
-                    Knockback = rangedWeaponStats.Knockback,
-                    Element = rangedWeaponStats.Element
+                    Knockback = wpn.Knockback,
+                    Element = wpn.Element
                 };
-                ObjectPoolManager.GetPlayerAttackFromPool(rangedWeaponStats.RangedAttackID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
-                currentMultishootAngle += rangedWeaponStats.Multishoot < 2 ? 0 : rangedWeaponStats.Arc / (rangedWeaponStats.Multishoot - 1);
+                ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
+                currentMultishootAngle += wpn.Multishoot < 2 ? 0 : wpn.Arc / (wpn.Multishoot - 1);
             }
+        }
+        // Cleave component
+        if (wpn.CleaveComponentID != "") 
+        {
+            WeaponAttackSetupData sd = new WeaponAttackSetupData()
+            {
+                User = this,
+                Magnitude = wpn.CleaveComponentMagnitude * attackMagnitudeMultiplier,
+                Bounces = wpn.Bounces,
+                BuildupRate = wpn.BuildupRate,
+                CritDamage = wpn.CritMultiplier,
+                CritChance = 0,
+                Pierces = wpn.Pierces,
+                SizeMultiplier = wpn.SizeMultiplier,
+                Splash = wpn.Splash,
+                Timescale = wpn.Timescale,
+                EnemyIgnored = -1,
+                Knockback = wpn.Knockback,
+                Element = wpn.Element
+            };
+            ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, currentDirection, sd, null);
         }
     }
     private void FixedUpdate()

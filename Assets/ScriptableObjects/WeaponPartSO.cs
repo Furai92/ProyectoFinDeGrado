@@ -3,9 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponPartSO", menuName = "Scriptable Objects/WeaponPartSO")]
 public class WeaponPartSO : ScriptableObject
 {
-    [field: SerializeField] public string RangedAttackOverrideID { get; private set; }
-    [field: SerializeField] public string MeleeAttackOverrideID { get; private set; }
-
+    [field: SerializeField] public string ProjectileComponentIDOverride { get; private set; }
+    [field: SerializeField] public string CleaveComponentIDOverride { get; private set; }
+    [field: SerializeField] public float ProjectileComponentDamageOverride { get; private set; }
+    [field: SerializeField] public float CleaveComponentDamageOverride { get; private set; }
     [field: SerializeField] public GameEnums.DamageElement ElementOverride { get; private set; }
     [field: SerializeField] public float DamageMultiplier { get; private set; }
     [field: SerializeField] public int MultishootModifier { get; private set; }

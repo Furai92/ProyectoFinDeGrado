@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 2736371959067567380}
   - component: {fileID: 4990461364948976850}
   m_Layer: 5
-  m_Name: DamageNotificationElement
+  m_Name: DirectDamageNotificationElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

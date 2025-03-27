@@ -22,10 +22,11 @@ public class EnemyEntity : MonoBehaviour
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
+    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.1f;
     private const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
-    private const float HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP = 0.2f;
+    private const float HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP = 0.4f;
     private const int BUILDUP_ARRAY_LENGHT = 5;
 
     // AI Management ===========================================
@@ -114,6 +115,8 @@ public class EnemyEntity : MonoBehaviour
     }
     private void UpdateAI() 
     {
+        if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0) { return; } // Pause if frozen
+
         currentState.FixedUpdateState();
         if (currentState.IsFinished()) 
         {
@@ -137,6 +140,11 @@ public class EnemyEntity : MonoBehaviour
         if (Time.time < nextStatusUpdateTime) { return; }
 
         nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
+
+        if (statusDurations[(int)GameEnums.DamageElement.Fire] > 0) 
+        {
+            DealStatusDamage(MaxHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire); 
+        } 
 
         for (int i = 0; i < statusDurations.Length; i++) 
         {
@@ -186,7 +194,17 @@ public class EnemyEntity : MonoBehaviour
 
         statusDurations[(int)e] += STATUS_DURATION_STANDARD;
     }
-    public void DealDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
+    public void DealStatusDamage(float magnitude, GameEnums.DamageElement element) 
+    {
+        EventManager.OnEnemyStatusDamageTaken(magnitude, element, this);
+        currentHealth -= magnitude;
+        if (currentHealth <= 0)
+        {
+            EventManager.OnEnemyDefeated(this);
+            gameObject.SetActive(false);
+        }
+    }
+    public void DealDirectDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
     {
         // Roll for critical hits
         int critLevel = 0;

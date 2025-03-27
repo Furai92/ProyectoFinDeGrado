@@ -5,7 +5,9 @@ public class EventManager
 {
     // Combat
     public static event Action<float, int, GameEnums.DamageElement, EnemyEntity> EnemyDirectDamageTakenEvent;
+    public static event Action<float, GameEnums.DamageElement, EnemyEntity> EnemyStatusDamageTakenEvent;
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
+
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
 
@@ -27,6 +29,10 @@ public class EventManager
     public static void OnEnemyStatusApplied(GameEnums.DamageElement elem, EnemyEntity target) 
     {
         EnemyStatusEffectAppliedEvent?.Invoke(elem, target);
+    }
+    public static void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement element, EnemyEntity target)
+    {
+        EnemyStatusDamageTakenEvent?.Invoke(magnitude, element, target);
     }
     public static void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement element, EnemyEntity target) 
     {

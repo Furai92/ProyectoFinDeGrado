@@ -25,7 +25,7 @@ public class PlayerMeleeAttack : PlayerAttackBase
             EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
             if (e != null)
             {
-                e.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                e.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
                 Vector3 knockbackDir = (e.transform.position - transform.position).normalized;
                 e.Knockback(setupData.Knockback, knockbackDir);
             }

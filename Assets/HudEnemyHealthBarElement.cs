@@ -12,7 +12,7 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     private Camera mcam;
 
     private const float LIFETIME = 4f;
-    private const float FILLTRAIL_SPEED = 1f;
+    private const float FILLTRAIL_SPEED = 0.5f;
     private const float BAR_WPOS_VERTICAL_OFFSET = 2f;
 
     public void SetUp(EnemyEntity e, Camera c) 
@@ -24,15 +24,21 @@ public class HudEnemyHealthBarElement : MonoBehaviour
         filltrail.fillAmount = fill.fillAmount;
 
         EventManager.EnemyDirectDamageTakenEvent += OnEnemyDirectDamageTaken;
+        EventManager.EnemyStatusDamageTakenEvent += OnEnemyStatusDamageTaken;
         EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
         EventManager.EnemyDisabledEvent += OnEnemyDisabled;
     }
     private void OnDisable()
     {
         EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDirectDamageTaken;
+        EventManager.EnemyStatusDamageTakenEvent -= OnEnemyStatusDamageTaken;
         EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.OnUiEnemyHealthBarDisabled(this);
+    }
+    private void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement elem, EnemyEntity e)
+    {
+        if (e == TrackedEnemy) { UpdateFill(); }
     }
     private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity e) 
     {

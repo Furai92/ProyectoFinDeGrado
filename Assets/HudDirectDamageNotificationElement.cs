@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class HudDamageNotificationsElement : MonoBehaviour
+public class HudDirectDamageNotificationElement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI notificationText;
     [SerializeField] private ColorDatabaseSO cdb;

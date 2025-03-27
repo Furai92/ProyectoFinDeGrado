@@ -9,12 +9,12 @@ public class WeaponSO : ScriptableObject
     [field: SerializeField] public WeaponSlot Slot { get; private set; }
     [field: SerializeField] public string ID { get; private set; }
     [field: SerializeField] public List<string> Pools { get; private set; }
-    [field: SerializeField] public string RangedComponentID { get; private set; }
-    [field: SerializeField] public string MeleeComponentID { get; private set; }
+    [field: SerializeField] public string ProjectileComponentID { get; private set; }
+    [field: SerializeField] public string CleaveComponentID { get; private set; }
 
     [field: SerializeField] public GameEnums.DamageElement Element { get; private set; }
-    [field: SerializeField] public float RangedComponentDamage { get; private set; }
-    [field: SerializeField] public float MeleeComponentDamage { get; private set; }
+    [field: SerializeField] public float ProjectileComponentDamage { get; private set; }
+    [field: SerializeField] public float CleaveComponentDamage { get; private set; }
     [field: SerializeField] public int Multishoot { get; private set; }
     [field: SerializeField] public float MultishootArc { get; private set; }
     [field: SerializeField] public float Firerate { get; private set; }

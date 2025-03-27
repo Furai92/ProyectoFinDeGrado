@@ -63,7 +63,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                 }
                 else 
                 {
-                    e.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                    e.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
                     e.Knockback(setupData.Knockback, currentDirection);
                 }
                 if (bouncesRemaining > 0)

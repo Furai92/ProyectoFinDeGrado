@@ -20,10 +20,10 @@ public class WeaponData
         WeaponStats ws = new WeaponStats()
         {
             Element = BaseWeapon.Element,
-            RangedAttackID = BaseWeapon.RangedComponentID,
-            MeleeAttackID = BaseWeapon.MeleeComponentID,
-            RangedMagnitude = BaseWeapon.RangedComponentDamage,
-            MeleeMagnitude = BaseWeapon.MeleeComponentDamage,
+            ProjectileComponentID = BaseWeapon.ProjectileComponentID,
+            CleaveComponentID = BaseWeapon.CleaveComponentID,
+            ProjectileComponentMagnitude = BaseWeapon.ProjectileComponentDamage,
+            CleaveComponentMagnitude = BaseWeapon.CleaveComponentDamage,
             Firerate = BaseWeapon.Firerate,
             Multishoot = BaseWeapon.Multishoot,
             Arc = BaseWeapon.MultishootArc,
@@ -40,10 +40,13 @@ public class WeaponData
         for (int i = 0; i < Parts.Count; i++) 
         {
             if (Parts[i].ElementOverride != GameEnums.DamageElement.None) { ws.Element = Parts[i].ElementOverride; }
-            if (Parts[i].RangedAttackOverrideID != "") { ws.RangedAttackID = Parts[i].RangedAttackOverrideID; }
-            if (Parts[i].MeleeAttackOverrideID != "") { ws.MeleeAttackID = Parts[i].MeleeAttackOverrideID; }
-            ws.MeleeMagnitude *= Parts[i].DamageMultiplier;
-            ws.RangedMagnitude *= Parts[i].DamageMultiplier;
+            if (Parts[i].ProjectileComponentIDOverride != "") { ws.ProjectileComponentID = Parts[i].ProjectileComponentIDOverride; }
+            if (Parts[i].CleaveComponentIDOverride != "") { ws.CleaveComponentID = Parts[i].CleaveComponentIDOverride; }
+            if (Parts[i].ProjectileComponentDamageOverride != 0) { ws.ProjectileComponentMagnitude = Parts[i].ProjectileComponentDamageOverride; }
+            if (Parts[i].CleaveComponentDamageOverride != 0) { ws.CleaveComponentMagnitude = Parts[i].CleaveComponentDamageOverride; }
+
+            ws.CleaveComponentMagnitude *= Parts[i].DamageMultiplier;
+            ws.ProjectileComponentMagnitude *= Parts[i].DamageMultiplier;
             ws.Firerate *= Parts[i].FirerateMultiplier;
             ws.Multishoot = Mathf.Max(ws.Multishoot + Parts[i].MultishootModifier, 1);
             ws.Pierces = Mathf.Max(ws.Pierces + Parts[i].PiercesModifier, 0);
@@ -64,10 +67,10 @@ public class WeaponData
     public struct WeaponStats 
     {
         public GameEnums.DamageElement Element;
-        public string RangedAttackID;
-        public string MeleeAttackID;
-        public float RangedMagnitude;
-        public float MeleeMagnitude;
+        public string ProjectileComponentID;
+        public string CleaveComponentID;
+        public float ProjectileComponentMagnitude;
+        public float CleaveComponentMagnitude;
         public float Firerate;
         public int Multishoot;
         public float Arc;

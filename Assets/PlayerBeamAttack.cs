@@ -82,7 +82,7 @@ public class PlayerBeamAttack : PlayerAttackBase
                     }
                     else 
                     {
-                        enemyHit.DealDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                        enemyHit.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
                         enemyHit.Knockback(setupData.Knockback, direction);
                     }
                     
