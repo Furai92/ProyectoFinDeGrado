@@ -10,6 +10,7 @@ public class GameDatabaseSO : ScriptableObject
     [field: SerializeField] public List<WeaponSO> Weapons { get; private set; }
 
     [Header("Ungrouped prefabs")]
+    [field: SerializeField] public GameObject DeflectedAttackPrefab { get; private set; }
     [field: SerializeField] public GameObject AutoPickupPrefab { get; private set; }
     [field: SerializeField] public GameObject WeaponPickupPrefab { get; private set; }
     [field: SerializeField] public GameObject ChestPrefab { get; private set; }

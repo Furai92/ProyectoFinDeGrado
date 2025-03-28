@@ -12,6 +12,7 @@ public class ObjectPoolManager : MonoBehaviour
     private MonoBehaviourPool<AutoPickup> autoPickupPool;
     private MonoBehaviourPool<WeaponPickup> weaponPickupPool;
     private MonoBehaviourPool<Chest> chestPool;
+    private MonoBehaviourPool<DeflectedAttack> deflectedAttackPool;
 
     private static ObjectPoolManager instance;
 
@@ -42,6 +43,8 @@ public class ObjectPoolManager : MonoBehaviour
         weaponPickupPool = new MonoBehaviourPool<WeaponPickup>(database.WeaponPickupPrefab, transform);
         // Chests
         chestPool = new MonoBehaviourPool<Chest>(database.ChestPrefab, transform);
+        // Deflected attacks
+        deflectedAttackPool = new MonoBehaviourPool<DeflectedAttack>(database.DeflectedAttackPrefab, transform);
     }
 
     public static PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -83,6 +86,12 @@ public class ObjectPoolManager : MonoBehaviour
         if (instance == null) { return null; }
 
         return instance.chestPool.GetCopyFromPool();
+    }
+    public static DeflectedAttack GetDeflectedAttackPool()
+    {
+        if (instance == null) { return null; }
+
+        return instance.deflectedAttackPool.GetCopyFromPool();
     }
 
 }

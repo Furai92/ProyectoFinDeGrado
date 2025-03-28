@@ -272,6 +272,55 @@ public abstract class StageManagerBase : MonoBehaviour
 
         return _instance.players[0];
     }
+    public static EnemyEntity GetClosestEnemyInRange(EnemyEntity ignored, Vector3 pos, float range)
+    {
+        if (_instance == null) { return null; }
+
+        LayerMask mask = LayerMask.GetMask("EnemyHitboxes");
+        Collider[] hitboxesFound = Physics.OverlapSphere(pos, range, mask);
+
+        EnemyEntity closest = null;
+        float closestMag = Mathf.Infinity;
+
+        for (int i = 0; i < hitboxesFound.Length; i++) 
+        {
+            float mag = (pos - hitboxesFound[i].transform.position).sqrMagnitude;
+            if (mag >= closestMag) { continue; }
+            EnemyEntity readedEnemy = hitboxesFound[i].GetComponentInParent<EnemyEntity>();
+            if (readedEnemy == ignored) { continue; }
+            closest = readedEnemy;
+            closestMag = mag;
+        }
+        return closest;
+    }
+    public static EnemyEntity GetRandomEnemyInRange(EnemyEntity ignored, Vector3 pos, float range) 
+    {
+        LayerMask mask = LayerMask.GetMask("EnemyHitboxes");
+        Collider[] hitboxesFound = Physics.OverlapSphere(pos, range, mask);
+
+        EnemyEntity enemySelected;
+
+        if (hitboxesFound.Length == 0)
+        {
+            return null;
+        }
+        else
+        {
+            int randomIndexSelected = Random.Range(0, hitboxesFound.Length);
+            enemySelected = hitboxesFound[Random.Range(0, hitboxesFound.Length)].GetComponentInParent<EnemyEntity>();
+            if (enemySelected == ignored)
+            {
+                randomIndexSelected++;
+                if (randomIndexSelected >= hitboxesFound.Length) { randomIndexSelected = 0; }
+                enemySelected = hitboxesFound[randomIndexSelected].GetComponentInParent<EnemyEntity>();
+                if (enemySelected == ignored)
+                {
+                    return null;
+                }
+            }
+        }
+        return enemySelected;
+    }
     #endregion
 
     public abstract IMapData GenerateMap(int seed);

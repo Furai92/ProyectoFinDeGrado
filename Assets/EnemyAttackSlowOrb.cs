@@ -34,9 +34,19 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        switch (collision.collider.gameObject.tag) 
         {
-            gameObject.SetActive(false);
+            case "Player": 
+                {
+                    gameObject.SetActive(false);
+                    break;
+                }
+            case "Deflect": 
+                {
+                    gameObject.SetActive(false);
+                    ObjectPoolManager.GetDeflectedAttackPool().SetUp(200, transform.position);
+                    break;
+                }
         }
     }
 }

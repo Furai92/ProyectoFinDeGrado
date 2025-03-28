@@ -11,6 +11,8 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     private float removeTime;
     private Camera mcam;
 
+    private const float MAXIMUM_SIZE = 1f;
+    private const float DISTANCE_TO_SIZE_REDUCTION = 0.2f;
     private const float LIFETIME = 4f;
     private const float FILLTRAIL_SPEED = 0.5f;
     private const float BAR_WPOS_VERTICAL_OFFSET = 2f;
@@ -56,7 +58,8 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     {
         filltrail.fillAmount = Mathf.MoveTowards(filltrail.fillAmount, fill.fillAmount, Time.deltaTime * FILLTRAIL_SPEED);
         transform.position = mcam.WorldToScreenPoint(TrackedEnemy.transform.position + Vector3.up * BAR_WPOS_VERTICAL_OFFSET);
-        if (transform.position.z < 0) { gameObject.SetActive(false); }
+        if (transform.position.z <= 0) { gameObject.SetActive(false); }
+        transform.localScale = Mathf.Min(1/(transform.position.z * DISTANCE_TO_SIZE_REDUCTION), MAXIMUM_SIZE) * Vector3.one;
         if (Time.time > removeTime) { gameObject.SetActive(false); }
     }
     private void UpdateFill() 
