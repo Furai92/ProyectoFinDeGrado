@@ -14,8 +14,7 @@ public class AutoPickup : MonoBehaviour
 
     private const float PICKUP_ORBIT_ROTATION_SPEED = 15f;
     private const float PICKUP_ORBIT_DISTANCE = 4f;
-    private const float PICKUP_ORBIT_MOVE_TO_TARGET_SPEED = 50f;
-    private const float PICKUP_ORBIT_DURATION = 1.5f;
+    private const float PICKUP_ORBIT_DURATION = 1f;
     private const float LIFETIME = 20f;
     private const float REMOVE_DELAY = 1f;
 
@@ -56,7 +55,7 @@ public class AutoPickup : MonoBehaviour
                     transform.localScale = Vector3.one * (1 - phaseT);
                     Vector3 orbitOffset = (1-phaseT) * PICKUP_ORBIT_DISTANCE * new Vector3(Mathf.Sin(phaseT * PICKUP_ORBIT_ROTATION_SPEED), 0, Mathf.Cos(phaseT * PICKUP_ORBIT_ROTATION_SPEED));
                     targetPosition = autoPickupColliderTransform.position + orbitOffset;
-                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.fixedDeltaTime * PICKUP_ORBIT_MOVE_TO_TARGET_SPEED);
+                    transform.position = Vector3.Lerp(transform.position, targetPosition, phaseT);
                     if (phaseT >= 1) 
                     {
                         gameObject.SetActive(false);

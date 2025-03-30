@@ -12,7 +12,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private int playerRoomX = -1;
     private int playerRoomY = -1;
-    private List<Vector3> enemySpawnsForCurrentPlayerPosition;
+    private List<MapNode> validEnemySpawnNodes;
     private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
     protected StageStateBase currentState;
@@ -124,7 +124,7 @@ public abstract class StageManagerBase : MonoBehaviour
     }
     private void CalculateValidEnemySpawns(int px, int py) 
     {
-        enemySpawnsForCurrentPlayerPosition = new List<Vector3>();
+        validEnemySpawnNodes = new List<MapNode>();
 
         MapNode playerPositionNode = _instance.stageMapData.GetLayoutMatrix()[px, py];
 
@@ -138,12 +138,12 @@ public abstract class StageManagerBase : MonoBehaviour
                 if (playerPositionNode.pos_x + 2 < STAGE_SIZE) // Removes positive X out of bounds
                 {
                     readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + 2, playerPositionNode.pos_y + i];
-                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                    if (readed.piece != null) { validEnemySpawnNodes.Add(readed); }
                 }
                 if (playerPositionNode.pos_x - 2 >= 0) // Removes negative X out of bounds
                 {
                     readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x - 2, playerPositionNode.pos_y + i];
-                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                    if (readed.piece != null) { validEnemySpawnNodes.Add(readed); }
                 }
             }
 
@@ -154,14 +154,39 @@ public abstract class StageManagerBase : MonoBehaviour
                 if (playerPositionNode.pos_x + 2 < STAGE_SIZE) // Removes positive X out of bounds
                 {
                     readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + i, playerPositionNode.pos_y + 2];
-                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                    if (readed.piece != null) { validEnemySpawnNodes.Add(readed); }
                 }
                 if (playerPositionNode.pos_x - 2 >= 0) // Removes negative X out of bounds
                 {
                     readed = _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + i, playerPositionNode.pos_y - 2];
-                    if (readed.piece != null) { enemySpawnsForCurrentPlayerPosition.Add(readed.piece.transform.position); }
+                    if (readed.piece != null) { validEnemySpawnNodes.Add(readed); }
                 } 
             }
+        }
+        // For rare cases where enemies cannot be spawned following the previous logic
+        if (validEnemySpawnNodes.Count == 0) 
+        {
+            if (playerPositionNode.pos_x + 2 < STAGE_SIZE && _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + 2, playerPositionNode.pos_y].piece != null) 
+            {
+                validEnemySpawnNodes.Add(_instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x + 2, playerPositionNode.pos_y]);
+            }
+            if (playerPositionNode.pos_x - 2 >= 0 && _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x - 2, playerPositionNode.pos_y].piece != null)
+            {
+                validEnemySpawnNodes.Add(_instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x - 2, playerPositionNode.pos_y]);
+            }
+            if (playerPositionNode.pos_y + 2 < STAGE_SIZE && _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x, playerPositionNode.pos_y + 2].piece != null)
+            {
+                validEnemySpawnNodes.Add(_instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x, playerPositionNode.pos_y + 2]);
+            }
+            if (playerPositionNode.pos_y - 2 >= 0 && _instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x, playerPositionNode.pos_y - 2].piece != null)
+            {
+                validEnemySpawnNodes.Add(_instance.stageMapData.GetLayoutMatrix()[playerPositionNode.pos_x, playerPositionNode.pos_y - 2]);
+            }
+        }
+        // For extreme cases, debug only
+        if (validEnemySpawnNodes.Count == 0) 
+        {
+            validEnemySpawnNodes.Add(_instance.stageMapData.GetLayoutList()[Random.Range(0, _instance.stageMapData.GetLayoutList().Count)]);
         }
     }
     #region Public Static Methods
@@ -169,7 +194,7 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         if (_instance == null) { return Vector3.zero; }
 
-        return _instance.enemySpawnsForCurrentPlayerPosition[Random.Range(0, _instance.enemySpawnsForCurrentPlayerPosition.Count)];
+        return _instance.validEnemySpawnNodes[Random.Range(0, _instance.validEnemySpawnNodes.Count)].piece.GetRandomEnemySpawnPosition();
     }
     public static WeaponSO GetWeaponFromItemPool(string pool) 
     {

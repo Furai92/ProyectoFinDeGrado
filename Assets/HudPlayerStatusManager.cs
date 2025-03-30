@@ -16,6 +16,10 @@ public class HudPlayerStatusManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heatWarningMelee;
     [SerializeField] private TextMeshProUGUI overheatMelee;
 
+    [Header("Health Bar")]
+    [SerializeField] private Image healthFill;
+    [SerializeField] private Image healthFillTrail;
+
     private PlayerEntity playerReference;
 
     public void SetUp(PlayerEntity p) 

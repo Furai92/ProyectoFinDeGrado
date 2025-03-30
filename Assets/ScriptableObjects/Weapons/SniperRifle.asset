@@ -23,7 +23,7 @@ MonoBehaviour:
   <CleaveComponentDamage>k__BackingField: 0
   <Multishoot>k__BackingField: 1
   <MultishootArc>k__BackingField: 0
-  <Firerate>k__BackingField: 0.5
+  <Firerate>k__BackingField: 0.9
   <BuildupRate>k__BackingField: 1
   <CriticalDamage>k__BackingField: 3
   <SizeMultiplier>k__BackingField: 2

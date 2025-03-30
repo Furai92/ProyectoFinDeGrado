@@ -3,20 +3,29 @@ using UnityEngine;
 
 public class PlayerEntity : NetworkBehaviour
 {
-    [SerializeField] private Transform m_camVerticalRotationAxis;
-    [SerializeField] private Transform m_rotationParent;
-    [SerializeField] private Camera m_playerCamera;
-    [SerializeField] private GameObject _cube;
-    [SerializeField] private GameObject _capsule;
-    [SerializeField] private Rigidbody m_rb;
+    // Status ========================================================================================
 
-    [SerializeField] private WeaponSO debugRangedWeaponSO;
-    [SerializeField] private WeaponSO debugMeleeWeaponSO;
+    float currentHealth;
+
+    // Weapon status =================================================================================
 
     [field: SerializeField] public float StatusHeatRanged { get; private set; }
     [field: SerializeField] public float StatusHeatMelee { get; private set; }
     [field: SerializeField] public bool StatusOverheatRanged { get; private set; }
     [field: SerializeField] public bool StatusOverheatMelee { get; private set; }
+
+    [SerializeField] private WeaponSO debugRangedWeaponSO;
+    [SerializeField] private WeaponSO debugMeleeWeaponSO;
+
+    private float rangedAttackReady;
+    private float meleeAttackReady;
+    private float currentDirection;
+    private float heatDecayMelee;
+    private float heatDecayRanged;
+
+    private const float HEAT_DECAY_GROWTH = 0.05f;
+
+    // Stats and equipment =================================================================================
 
     [field: SerializeField] public float StatMight { get; private set; }
     [field: SerializeField] public float StatDexterity { get; private set; }
@@ -30,26 +39,31 @@ public class PlayerEntity : NetworkBehaviour
     private WeaponData.WeaponStats rangedWeaponStats;
     private WeaponData.WeaponStats meleeWeaponStats;
 
-    private float rangedAttackReady;
-    private float meleeAttackReady;
-    private float currentDirection;
-    private float heatDecayMelee;
-    private float heatDecayRanged;
+    // Movement and camera =================================================================================
 
-    float movementInputH;
-    float movementInputV;
-    float rotationInputH;
-    float rotationInputV;
+    [SerializeField] private Transform m_camVerticalRotationAxis;
+    [SerializeField] private Transform m_rotationParent;
+    [SerializeField] private Camera m_playerCamera;
+    [SerializeField] private Rigidbody m_rb;
 
-    private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
-    private const float HEAT_DECAY_GROWTH = 0.05f;
+    private float movementInputH;
+    private float movementInputV;
+    private float rotationInputH;
+    private float rotationInputV;
+    private bool _isPlayerControlsEnabled = false;
+
+    private const float LOCK_Y = 1.0f;
     private const float BASE_MOVEMENT_SPEED = 10f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
-    private const float LOCK_Y = 1.0f;
+    private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
 
-    private bool _isPlayerControlsEnabled = false;
+    // Debug ========================================================================================
+
+    [SerializeField] private GameObject _cube;
+    [SerializeField] private GameObject _capsule;
+
 
     public void SetUp(Vector3 pos)
     {
@@ -236,5 +250,18 @@ public class PlayerEntity : NetworkBehaviour
     public Camera GetCamera() 
     {
         return m_playerCamera;
+    }
+    public void DealDamage(float magnitude) 
+    {
+        currentHealth -= magnitude;
+        if (currentHealth <= 0) 
+        {
+            // Kill?
+
+        }
+    }
+    public float GetHealthPercent() 
+    {
+        return 0f;
     }
 }

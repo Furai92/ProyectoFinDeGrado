@@ -16,7 +16,7 @@ MonoBehaviour:
   <ID>k__BackingField: RIFLE
   <Pools>k__BackingField:
   - STANDARD
-  <ProjectileComponentID>k__BackingField: PROJ_STANDARD
+  <ProjectileComponentID>k__BackingField: PROJ_FAST
   <CleaveComponentID>k__BackingField: 
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 100
@@ -28,10 +28,10 @@ MonoBehaviour:
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 0.05
-  <Splash>k__BackingField: 0
-  <Bounces>k__BackingField: 0
-  <Pierces>k__BackingField: 1
-  <Timescale>k__BackingField: 1
+  <Splash>k__BackingField: 5
+  <Bounces>k__BackingField: 4
+  <Pierces>k__BackingField: 0
+  <Timescale>k__BackingField: 0.1
   <Knockback>k__BackingField: 0.1
   <PartSlots>k__BackingField:
   - <SlotName>k__BackingField: Core
@@ -42,4 +42,3 @@ MonoBehaviour:
   - <SlotName>k__BackingField: Barrel
     <CompatibleParts>k__BackingField:
     - {fileID: 11400000, guid: f748286807947e24aa8bd222f30cb2fc, type: 2}
-    - {fileID: 11400000, guid: c0ff11bedf0d3f04f910f2620bd9065e, type: 2}

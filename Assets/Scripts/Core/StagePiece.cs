@@ -25,4 +25,5 @@ public class StagePiece : MonoBehaviour
         _r_blockedParent.gameObject.SetActive(n.con_right == null);
         _l_blockedParent.gameObject.SetActive(n.con_left == null);
     }
+    public Vector3 GetRandomEnemySpawnPosition() { return transform.position; }
 }

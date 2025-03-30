@@ -23,6 +23,8 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 2514393828548108971, guid: 2b44b41b8c4dc5a488eec7ea24c60ec9, type: 3}
   - <ID>k__BackingField: MELEE
     <Data>k__BackingField: {fileID: 6703104240699776055, guid: bdbf471108c852e4a921b84aa38f46f1, type: 3}
+  - <ID>k__BackingField: PROJ_FAST
+    <Data>k__BackingField: {fileID: 5508074904858161231, guid: 9bbc97a8b25219c4aab9f95ddc1874ad, type: 3}
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: DEBUG_WALKING
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
