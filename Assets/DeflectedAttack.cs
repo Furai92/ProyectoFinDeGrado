@@ -43,7 +43,9 @@ public class DeflectedAttack : MonoBehaviour
         {
             case "EnemyHitbox":
                 {
-                    collision.gameObject.GetComponentInParent<EnemyEntity>().DealDirectDamage(magnitude, 0, 2, 0, GameEnums.DamageElement.Physical);
+                    EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
+                    if (e != null) { e.DealDirectDamage(magnitude, 0, 2, 0, GameEnums.DamageElement.Physical); }
+                    
                     gameObject.SetActive(false);
                     break;
                 }

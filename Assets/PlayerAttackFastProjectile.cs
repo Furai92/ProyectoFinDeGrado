@@ -4,27 +4,35 @@ using System.Collections.Generic;
 public class PlayerAttackFastProjectile : PlayerAttackBase
 {
     [SerializeField] private Transform visual;
+    [SerializeField] private TrailRenderer tr;
+    [SerializeField] private ColorDatabaseSO cdb;
 
     private List<int> enemyHits;
     private int phase;
-    private float phaseT;
+    private float distanceCovered;
+    private float removeTime;
     private float direction;
 
-    private const float BASE_STEP_DISTANCE = 10f;
+    private const float MINIMUM_STEP_LENGHT = 0.2f; // This prevents an error where decimal rounding gets the bullet stuck with near zero distance steps 
+    private const float BASE_SPEED = 10f;
     private const float BOUNCE_END_SEPARATION = 0.1f; // Helps improve bounces with walls
     private const float CAST_RADIUS = 0.25f;
     private const float REMOVE_DELAY = 0.3f;
-    private const float TRAVEL_DISTANCE = 50f;
+    private const float MAX_TRAVEL_DISTANCE = 50f;
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
+
         enemyHits = new List<int>();
         setupData = sd;
         direction = dir;
         transform.position = pos;
         transform.rotation = Quaternion.Euler(0, direction, 0);
         phase = 0;
-        phaseT = 0;
+        distanceCovered = 0;
+        tr.Clear();
+        tr.startColor = tr.endColor = cdb.ElementToColor(setupData.Element);
+        tr.AddPosition(transform.position);
         visual.gameObject.SetActive(true);
         gameObject.SetActive(true);
     }
@@ -34,48 +42,52 @@ public class PlayerAttackFastProjectile : PlayerAttackBase
         {
             case 0: 
                 {
-                    CastBeam();
-                    phaseT += TRAVEL_DISTANCE * setupData.Timescale / BASE_STEP_DISTANCE / 200;
-                    if (phaseT > 1) { phaseT = 0; phase = 1; }
+                    if (MAX_TRAVEL_DISTANCE - distanceCovered > MINIMUM_STEP_LENGHT) 
+                    {
+                        CastBeam();
+                    }
+                    else
+                    {
+                        phase = 1; removeTime = Time.time + REMOVE_DELAY;
+                    }
                     break;
                 }
             case 1: // Remove delay
                 {
-                    phaseT += Time.fixedDeltaTime / REMOVE_DELAY;
-                    if (phaseT > 1) { gameObject.SetActive(false); }
+                    if (Time.time > removeTime) { gameObject.SetActive(false); }
                     break;
                 }
         }
     }
     private void CastBeam()
     {
-        float currentBeamStep = BASE_STEP_DISTANCE * setupData.Timescale;
+        float stepMaximumLenght = Mathf.Min(BASE_SPEED * setupData.Timescale, MAX_TRAVEL_DISTANCE - distanceCovered);
         // Setup masks and hit buffers
         LayerMask terrainMask = LayerMask.GetMask("Walls");
         LayerMask hitboxMask = LayerMask.GetMask("EnemyHitboxes");
-        RaycastHit terrainHits;
-        RaycastHit entityHits;
+        RaycastHit terrainCastResults;
+        RaycastHit entityCastResults;
         // Raycast ONLY WITH TERRAIN to create a path for the beam
-        Physics.Raycast(transform.position, transform.forward, out terrainHits, currentBeamStep, terrainMask);
+        Physics.Raycast(transform.position, transform.forward, out terrainCastResults, stepMaximumLenght, terrainMask);
 
         // Spherecast ONLY WITH ENTITIES to check for damage
         bool beamInterruptedByEntity = false;
-        Vector3 beamEnd = terrainHits.collider == null ? transform.position + transform.forward * currentBeamStep : terrainHits.point;
+        Vector3 beamEnd = terrainCastResults.collider == null ? transform.position + transform.forward * stepMaximumLenght : terrainCastResults.point;
         Vector3 currentBeamPos = transform.position;
         float beamDiameter = CAST_RADIUS * setupData.SizeMultiplier;
         List<Collider> disabledColliders = new List<Collider>();
         while (!beamInterruptedByEntity && currentBeamPos != beamEnd)
         {
-            Physics.SphereCast(currentBeamPos - (beamDiameter * 2 * transform.forward), beamDiameter * 0.5f, transform.forward, out entityHits, Vector3.Distance(currentBeamPos, beamEnd), hitboxMask);
-            if (entityHits.collider != null)
+            Physics.SphereCast(currentBeamPos - (beamDiameter * 2 * transform.forward), beamDiameter * 0.5f, transform.forward, out entityCastResults, Vector3.Distance(currentBeamPos, beamEnd), hitboxMask);
+            if (entityCastResults.collider != null)
             {
                 // The spherecast found a hitbox on the way
                 // Damage the entity hit by the beam
-                EnemyEntity enemyHit = entityHits.collider.GetComponentInParent<EnemyEntity>();
+                EnemyEntity enemyHit = entityCastResults.collider.GetComponentInParent<EnemyEntity>();
                 // Change the layer of the collider to ignore it on the next cast
-                entityHits.collider.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-                disabledColliders.Add(entityHits.collider);
-                currentBeamPos = transform.position + transform.forward * entityHits.distance;
+                entityCastResults.collider.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                disabledColliders.Add(entityCastResults.collider);
+                currentBeamPos = transform.position + transform.forward * entityCastResults.distance;
 
                 // If the enemy hit is supposed to be ignored, skip this part
                 if (enemyHit.EnemyInstanceID != setupData.EnemyIgnored && !enemyHits.Contains(enemyHit.EnemyInstanceID))
@@ -84,7 +96,7 @@ public class PlayerAttackFastProjectile : PlayerAttackBase
                     enemyHits.Add(enemyHit.EnemyInstanceID);
                     if (setupData.Splash > 0)
                     {
-                        Explode(entityHits.point);
+                        Explode(entityCastResults.point);
                     }
                     else
                     {
@@ -105,7 +117,8 @@ public class PlayerAttackFastProjectile : PlayerAttackBase
                         if (setupData.Bounces > 0)
                         {
                             setupData.Bounces--;
-                            direction = GetBounceDirection(beamEnd, entityHits.collider);
+                            tr.AddPosition(currentBeamPos);
+                            direction = GetBounceDirection(beamEnd, true, entityCastResults.collider);
                             transform.rotation = Quaternion.Euler(0, direction, 0);
                             enemyHits.Clear();
                         }
@@ -114,9 +127,8 @@ public class PlayerAttackFastProjectile : PlayerAttackBase
                     {
                         beamInterruptedByEntity = true;
                         beamEnd = currentBeamPos;
-                        // No bounces/pierces left
-                        phase = 1;
-                        phaseT = 0;
+                        // No bounces and pierces left
+                        distanceCovered = MAX_TRAVEL_DISTANCE; // This marks the attack as finished
                     }
                 }
 
@@ -127,24 +139,26 @@ public class PlayerAttackFastProjectile : PlayerAttackBase
             }
 
         }
-        // If nothing stopped the entity spherecast and the terrain raycast found something... (the bullet hit a wall)
-        if (!beamInterruptedByEntity && terrainHits.collider != null)
+        // If nothing stopped the entity spherecast and the terrain raycast found something... (the bullet hit a wall and nothing else)
+        if (!beamInterruptedByEntity && terrainCastResults.collider != null)
         {
             if (setupData.Splash > 0) { Explode(beamEnd); }
             if (setupData.Bounces > 0)
             {
                 setupData.Bounces--;
-                direction = GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainHits.normal) + 90);
+                tr.AddPosition(currentBeamPos);
+                direction = GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainCastResults.normal) + 90);
                 transform.rotation = Quaternion.Euler(0, direction, 0);
                 enemyHits.Clear();
             }
             else 
             {
-                phase = 1;
-                phaseT = 0;
+                distanceCovered = MAX_TRAVEL_DISTANCE; // This marks the attack as finished
             }
         }
-        beamEnd = Vector3.MoveTowards(beamEnd, transform.position, BOUNCE_END_SEPARATION);
+        
+        distanceCovered += Vector3.Distance(transform.position, beamEnd);
+        beamEnd = Vector3.MoveTowards(beamEnd, transform.position, BOUNCE_END_SEPARATION); // Move the end of the beam a small amount towards the start, this improves the bounces against straight walls
         transform.position = beamEnd;
 
         // Return the colliders to their layer

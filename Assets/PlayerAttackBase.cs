@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public abstract class PlayerAttackBase : MonoBehaviour
 {
@@ -14,34 +15,30 @@ public abstract class PlayerAttackBase : MonoBehaviour
 
         ObjectPoolManager.GetPlayerAttackFromPool("EXPLOSION").SetUp(center, 0, explosionsd, this);
     }
-    public float GetBounceDirection(Vector3 pos, Collider hitboxIgnored = null)
+    public float GetBounceDirection(Vector3 pos, bool losCheck, Collider hitboxIgnored = null)
     {
-        LayerMask mask = LayerMask.GetMask("EnemyHitboxes");
-        Collider[] hitboxesFound = Physics.OverlapSphere(pos, BOUNCE_TARGET_SEARCH_RADIUS, mask);
+        LayerMask hitboxMask = LayerMask.GetMask("EnemyHitboxes");
+        Collider[] hitboxesFound = Physics.OverlapSphere(pos, BOUNCE_TARGET_SEARCH_RADIUS, hitboxMask);
 
-        Collider hitboxSelected;
 
-        if (hitboxesFound.Length == 0)
+        List<Vector3> validBounceTargetPositions = new List<Vector3>();
+        for (int i = 0; i < hitboxesFound.Length; i++)
         {
-            // Nothing found, return a random direction
-            return Random.Range(0, 361);
+            if (hitboxesFound[i] == hitboxIgnored) { continue; }
+            if (losCheck)
+            {
+                LayerMask wallMask = LayerMask.GetMask("Walls");
+                if (Physics.Raycast(pos, pos - hitboxesFound[i].transform.position, Vector3.Distance(pos, hitboxesFound[i].transform.position), wallMask)) { continue; }
+            }
+            validBounceTargetPositions.Add(hitboxesFound[i].transform.position);
         }
+        if (validBounceTargetPositions.Count == 0)
+        {
+            return Random.Range(0, 361); // Nothing found, return a random direction
+        } 
         else 
         {
-            int randomIndexSelected = Random.Range(0, hitboxesFound.Length);
-            hitboxSelected = hitboxesFound[randomIndexSelected];
-            if (hitboxSelected == hitboxIgnored) 
-            {
-                randomIndexSelected++;
-                if (randomIndexSelected >= hitboxesFound.Length) { randomIndexSelected = 0; }
-                hitboxSelected = hitboxesFound[randomIndexSelected];
-                if (hitboxSelected == hitboxIgnored) 
-                {
-                    // Only one hitbox found, and it's the one that should be ignored
-                    return Random.Range(0, 361);
-                }
-            }
+            return GameTools.AngleBetween(pos, validBounceTargetPositions[Random.Range(0, validBounceTargetPositions.Count)]);
         }
-        return GameTools.AngleBetween(pos, hitboxSelected.transform.position);
     }
 }

@@ -99,7 +99,7 @@ public class PlayerBeamAttack : PlayerAttackBase
                         if (setupData.Bounces > 0)
                         {
                             setupData.Bounces--;
-                            CreateBounce(currentBeamPos, GetBounceDirection(enemyHit.transform.position, entityHits.collider), enemyHit.EnemyInstanceID);
+                            CreateBounce(currentBeamPos, GetBounceDirection(enemyHit.transform.position, true, entityHits.collider), enemyHit.EnemyInstanceID);
                         }
                     }
                 }

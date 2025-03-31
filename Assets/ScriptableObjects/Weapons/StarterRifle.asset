@@ -21,17 +21,17 @@ MonoBehaviour:
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 100
   <CleaveComponentDamage>k__BackingField: 0
-  <Multishoot>k__BackingField: 1
-  <MultishootArc>k__BackingField: 0
+  <Multishoot>k__BackingField: 3
+  <MultishootArc>k__BackingField: 20
   <Firerate>k__BackingField: 2
   <BuildupRate>k__BackingField: 1
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 0.05
-  <Splash>k__BackingField: 5
+  <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 4
   <Pierces>k__BackingField: 0
-  <Timescale>k__BackingField: 0.1
+  <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 0.1
   <PartSlots>k__BackingField:
   - <SlotName>k__BackingField: Core

@@ -70,7 +70,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                 {
                     bouncesRemaining--;
                     lifetimeRemaining = LIFETIME;
-                    SetNewDirection(GetBounceDirection(transform.position, collision.collider));
+                    SetNewDirection(GetBounceDirection(transform.position, true, collision.collider));
                 }
                 else 
                 {
