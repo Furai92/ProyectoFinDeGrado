@@ -11,7 +11,22 @@ public class GameTools
     private const float ENDURANCE_TO_DR_DIV = 0.01f;
     private const float NEGATIVE_ENDURANCE_TO_DAMAGE = 0.01f;
 
+    private const float DIF_TO_DMG_MAX = 3f;
+    private const float DIF_TO_DMG_SCALING = 0.1f;
+    private const float DIF_TO_HP_MAX = 100f;
+    private const float DIF_TO_HP_SCALING = 0.5f;
 
+
+    #region Scaling
+    public static float DifficultyToHealthMultiplier(float d) 
+    {
+        return Mathf.Min(1 + d * DIF_TO_HP_SCALING, DIF_TO_HP_MAX);
+    }
+    public static float DifficultyToDamageMultiplier(float d) 
+    {
+        return Mathf.Min(1 + d * DIF_TO_DMG_SCALING, DIF_TO_DMG_MAX);
+    }
+    #endregion
     #region Stats
     public static float MightToDamageMultiplier(float m)
     {

@@ -27,11 +27,7 @@ public class PlayerEntity : NetworkBehaviour
 
     // Stats and equipment =================================================================================
 
-    [field: SerializeField] public float StatMight { get; private set; }
-    [field: SerializeField] public float StatDexterity { get; private set; }
-    [field: SerializeField] public float StatEndurance { get; private set; }
-    [field: SerializeField] public float StatIntellect { get; private set; }
-    [field: SerializeField] public float StatSpeed { get; private set; }
+    private StatGroup stats;
 
     private WeaponData meleeWeapon;
     private WeaponData rangedWeapon;
@@ -59,6 +55,14 @@ public class PlayerEntity : NetworkBehaviour
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
     private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
 
+    // Buffs
+
+
+
+    // Techs ========================================================================================
+
+
+
     // Debug ========================================================================================
 
     [SerializeField] private GameObject _cube;
@@ -70,6 +74,10 @@ public class PlayerEntity : NetworkBehaviour
         gameObject.SetActive(true);
         transform.position = pos;
         StageManagerBase.UpdatePlayerPosition(transform.position);
+        stats = new StatGroup();
+        stats.ChangeStat(StatGroup.Stat.Speed, 1f);
+        stats.ChangeStat(StatGroup.Stat.MaxHealth, 500f);
+        currentHealth = stats.GetStat(StatGroup.Stat.MaxHealth);
         EquipWeapon(new WeaponData(debugRangedWeaponSO));
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
@@ -182,7 +190,8 @@ public class PlayerEntity : NetworkBehaviour
     private void Attack(WeaponSO.WeaponSlot s) 
     {
         WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
-        float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ? GameTools.DexterityToDamageMultiplier(StatDexterity) : GameTools.MightToDamageMultiplier(StatMight);
+        float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ? 
+            GameTools.DexterityToDamageMultiplier(stats.GetStat(StatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(StatGroup.Stat.Might));
 
         // Projectile component
         if (wpn.ProjectileComponentID != "") 
@@ -236,8 +245,8 @@ public class PlayerEntity : NetworkBehaviour
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * StatSpeed * m_rotationParent.right;
+        m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.forward;
+        m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.right;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
@@ -260,8 +269,12 @@ public class PlayerEntity : NetworkBehaviour
 
         }
     }
+    public void Heal(float amount) 
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, stats.GetStat(StatGroup.Stat.MaxHealth));
+    }
     public float GetHealthPercent() 
     {
-        return 0f;
+        return currentHealth / stats.GetStat(StatGroup.Stat.MaxHealth);
     }
 }

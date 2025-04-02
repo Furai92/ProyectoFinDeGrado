@@ -13,6 +13,7 @@ public class EnemyEntity : MonoBehaviour
 
     [field: SerializeField] public float ItemDropRate { get; private set; }
     [field: SerializeField] public float CurrencyDropRate { get; private set; }
+    [field: SerializeField] public float HealthDroprate { get; private set; }
 
     // Status ==================================================
 
@@ -22,7 +23,7 @@ public class EnemyEntity : MonoBehaviour
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
-    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.1f;
+    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.25f;
     private const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;

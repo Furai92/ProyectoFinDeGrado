@@ -245,9 +245,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MovementSpeed>k__BackingField: 5
-  <MaxHealth>k__BackingField: 500
+  <MaxHealth>k__BackingField: 2000
   <ItemDropRate>k__BackingField: 0.1
   <CurrencyDropRate>k__BackingField: 5
+  <HealthDroprate>k__BackingField: 1
   AiFile: {fileID: 0}
   <MaxCombatDistance>k__BackingField: 20
   <RequiresLosForCombat>k__BackingField: 1

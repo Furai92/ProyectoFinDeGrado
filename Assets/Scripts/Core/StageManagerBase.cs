@@ -27,6 +27,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private float nextCurrencyDrop;
     private float nextWeaponDrop;
+    private float nextHealthDrop;
 
     public const float MAX_BOUNCE_DISTANCE_MAG = 200f;
     public const int STAGE_SIZE = 100;
@@ -110,6 +111,7 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         nextWeaponDrop += e.ItemDropRate;
         nextCurrencyDrop += e.CurrencyDropRate;
+        nextHealthDrop += e.HealthDroprate;
 
         for (int i = 0; i < nextWeaponDrop; i++) 
         {
@@ -118,8 +120,13 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         for (int i = 0; i < nextCurrencyDrop; i++) 
         {
-            ObjectPoolManager.GetAutoPickupFromPool().SetUp(e.transform.position, 1);
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(e.transform.position, 1);
             nextCurrencyDrop -= 1;
+        }
+        for (int i = 0; i < nextHealthDrop; i++) 
+        {
+            ObjectPoolManager.GetHealthPickupFromPool().SetUp(e.transform.position, 1);
+            nextHealthDrop -= 1;
         }
     }
     private void CalculateValidEnemySpawns(int px, int py) 

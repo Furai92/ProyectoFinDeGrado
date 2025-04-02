@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
+  m_Name: TestTech
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: TEST
+  <Script>k__BackingField: 
+  <BonusStats>k__BackingField:
+  - <First>k__BackingField: 0
+    <Second>k__BackingField: 10
+  - <First>k__BackingField: 4
+    <Second>k__BackingField: 10
+  <BonusFlags>k__BackingField: 

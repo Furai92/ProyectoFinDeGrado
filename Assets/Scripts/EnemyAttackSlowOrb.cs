@@ -38,6 +38,11 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
         {
             case "Player": 
                 {
+                    PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
+                    if (pe != null) 
+                    {
+                        pe.DealDamage(50); 
+                    }
                     gameObject.SetActive(false);
                     break;
                 }

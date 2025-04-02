@@ -21,15 +21,15 @@ MonoBehaviour:
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 100
   <CleaveComponentDamage>k__BackingField: 0
-  <Multishoot>k__BackingField: 3
-  <MultishootArc>k__BackingField: 20
-  <Firerate>k__BackingField: 2
+  <Multishoot>k__BackingField: 1
+  <MultishootArc>k__BackingField: 0
+  <Firerate>k__BackingField: 5
   <BuildupRate>k__BackingField: 1
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
-  <HeatGeneration>k__BackingField: 0.05
-  <Splash>k__BackingField: 0
-  <Bounces>k__BackingField: 4
+  <HeatGeneration>k__BackingField: 0.01
+  <Splash>k__BackingField: 10
+  <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 0
   <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 0.1
@@ -37,8 +37,6 @@ MonoBehaviour:
   - <SlotName>k__BackingField: Core
     <CompatibleParts>k__BackingField:
     - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
-    - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
-    - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
   - <SlotName>k__BackingField: Barrel
     <CompatibleParts>k__BackingField:
     - {fileID: 11400000, guid: f748286807947e24aa8bd222f30cb2fc, type: 2}

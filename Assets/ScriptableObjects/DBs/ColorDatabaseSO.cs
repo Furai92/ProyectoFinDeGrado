@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "ColorDatabase", menuName = "Scriptable Objects/ColorDatabase")]
 public class ColorDatabaseSO : ScriptableObject
 {
-    [field: SerializeField] public List<InspectorPair<Color>> ColorPresets { get; private set; }
+    [field: SerializeField] public List<SerializedIdentifiedPair<Color>> ColorPresets { get; private set; }
 
     private Dictionary<string, Color> m_colorDictionary;
 

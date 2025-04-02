@@ -20,18 +20,28 @@ public class HudEnemyHealthBarManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.UiEnemyHealthBarDisabledEvent += OnUiEnemyHealthBarDisabled;
-        EventManager.EnemyDirectDamageTakenEvent += OnEnemyDamageTaken;
+        EventManager.EnemyDirectDamageTakenEvent += OnEnemyDirectDamageTaken;
+        EventManager.EnemyStatusDamageTakenEvent += OnEnemyStatusDamageTaken;
     }
     private void OnDisable()
     {
         EventManager.UiEnemyHealthBarDisabledEvent -= OnUiEnemyHealthBarDisabled;
-        EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDamageTaken;
+        EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDirectDamageTaken;
+        EventManager.EnemyStatusDamageTakenEvent -= OnEnemyStatusDamageTaken;
     }
     private void OnUiEnemyHealthBarDisabled(HudEnemyHealthBarElement e) 
     {
         if (activeElements.ContainsKey(e.TrackedEnemy.EnemyInstanceID)) { activeElements.Remove(e.TrackedEnemy.EnemyInstanceID); }
     }
-    private void OnEnemyDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    {
+        if (activeElements.ContainsKey(target.EnemyInstanceID)) { return; }
+
+        HudEnemyHealthBarElement hpbar = elementPool.GetCopyFromPool();
+        hpbar.SetUp(target, mcam);
+        activeElements.Add(target.EnemyInstanceID, hpbar);
+    }
+    private void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement elem, EnemyEntity target)
     {
         if (activeElements.ContainsKey(target.EnemyInstanceID)) { return; }
 
@@ -40,3 +50,4 @@ public class HudEnemyHealthBarManager : MonoBehaviour
         activeElements.Add(target.EnemyInstanceID, hpbar);
     }
 }
+

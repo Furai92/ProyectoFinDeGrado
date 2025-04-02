@@ -22,6 +22,8 @@ public class HudPlayerStatusManager : MonoBehaviour
 
     private PlayerEntity playerReference;
 
+    private const float HEALTH_FILL_TRAIL_SPEED = 2f;
+
     public void SetUp(PlayerEntity p) 
     {
         playerReference = p;
@@ -30,6 +32,7 @@ public class HudPlayerStatusManager : MonoBehaviour
     private void Update()
     {
         UpdateHeat();
+        UpdateHealth();
     }
     private void UpdateHeat() 
     {
@@ -46,5 +49,10 @@ public class HudPlayerStatusManager : MonoBehaviour
         heatPercentMelee.text = string.Format("{0}%", (playerReference.StatusHeatMelee * 100).ToString("F1"));
         heatWarningMelee.gameObject.SetActive(playerReference.StatusHeatMelee > 0.8f);
         overheatMelee.gameObject.SetActive(playerReference.StatusOverheatMelee);
+    }
+    private void UpdateHealth() 
+    {
+        healthFill.fillAmount = playerReference.GetHealthPercent();
+        healthFillTrail.fillAmount = Mathf.MoveTowards(healthFillTrail.fillAmount, healthFill.fillAmount, Time.deltaTime * HEALTH_FILL_TRAIL_SPEED);
     }
 }

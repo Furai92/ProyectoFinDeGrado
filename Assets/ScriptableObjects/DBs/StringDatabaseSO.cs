@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "StringDatabase", menuName = "Scriptable Objects/StringDatabase")]
 public class StringDatabaseSO : ScriptableObject
 {
-    [field: SerializeField] public List<InspectorPair<string>> StringElements { get; private set; }
+    [field: SerializeField] public List<SerializedIdentifiedPair<string>> StringElements { get; private set; }
 
     private Dictionary<string, string> m_stringDictionary;
 

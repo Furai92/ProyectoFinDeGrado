@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AutoPickup : MonoBehaviour
+public abstract class AutoPickup : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private BouncySpawnController bsc;
@@ -10,6 +10,7 @@ public class AutoPickup : MonoBehaviour
     private float phaseT;
 
     private Vector3 targetPosition;
+    private PlayerEntity playerCollidedWith;
     private Transform autoPickupColliderTransform;
 
     private const float PICKUP_ORBIT_ROTATION_SPEED = 15f;
@@ -59,7 +60,7 @@ public class AutoPickup : MonoBehaviour
                     if (phaseT >= 1) 
                     {
                         gameObject.SetActive(false);
-                        StageManagerBase.AddCurrency(currencyValue);
+                        OnPickup(playerCollidedWith);
                     }
                     break;
                 }
@@ -68,8 +69,13 @@ public class AutoPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) { return; }
+        PlayerEntity p = other.gameObject.GetComponentInParent<PlayerEntity>();
+        if (p == null) { return; }
 
+        playerCollidedWith = p;
         autoPickupColliderTransform = other.transform;
         rb.Sleep();
     }
+
+    public abstract void OnPickup(PlayerEntity p);
 }

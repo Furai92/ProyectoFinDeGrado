@@ -9,7 +9,8 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<string, MonoBehaviourPool<PlayerAttackBase>> playerAttackPools;
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
     private Dictionary<string, MonoBehaviourPool<EnemyAttackBase>> enemyAttackPools;
-    private MonoBehaviourPool<AutoPickup> autoPickupPool;
+    private MonoBehaviourPool<CurrencyPickup> currencyPickupPool;
+    private MonoBehaviourPool<HealthPickup> healthPickupPool;
     private MonoBehaviourPool<WeaponPickup> weaponPickupPool;
     private MonoBehaviourPool<Chest> chestPool;
     private MonoBehaviourPool<DeflectedAttack> deflectedAttackPool;
@@ -37,8 +38,10 @@ public class ObjectPoolManager : MonoBehaviour
         {
             enemyAttackPools.Add(database.EnemyAttackPrefabs[i].ID, new MonoBehaviourPool<EnemyAttackBase>(database.EnemyAttackPrefabs[i].Data, transform));
         }
-        // Auto Pickups
-        autoPickupPool = new MonoBehaviourPool<AutoPickup>(database.AutoPickupPrefab, transform);
+        // Currency Pickups
+        currencyPickupPool = new MonoBehaviourPool<CurrencyPickup>(database.CurrencyPickupPrefab, transform);
+        // Currency Pickups
+        healthPickupPool = new MonoBehaviourPool<HealthPickup>(database.HealthPickupPrefab, transform);
         // Weapon Pickups
         weaponPickupPool = new MonoBehaviourPool<WeaponPickup>(database.WeaponPickupPrefab, transform);
         // Chests
@@ -69,11 +72,17 @@ public class ObjectPoolManager : MonoBehaviour
 
         return instance.enemyAttackPools[id].GetCopyFromPool();
     }
-    public static AutoPickup GetAutoPickupFromPool() 
+    public static CurrencyPickup GetCurrencyPickupFromPool()
     {
         if (instance == null) { return null; }
 
-        return instance.autoPickupPool.GetCopyFromPool();
+        return instance.currencyPickupPool.GetCopyFromPool();
+    }
+    public static HealthPickup GetHealthPickupFromPool() 
+    {
+        if (instance == null) { return null; }
+
+        return instance.healthPickupPool.GetCopyFromPool();
     }
     public static WeaponPickup GetWeaponPickupFromPool()
     {

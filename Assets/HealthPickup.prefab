@@ -64,11 +64,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6855494610108432616}
-  - component: {fileID: 7059649633494148773}
   - component: {fileID: 7675831950534128386}
+  - component: {fileID: 1827793033336226977}
   - component: {fileID: 6963353834150877335}
   m_Layer: 13
-  m_Name: AutoPickup
+  m_Name: HealthPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,20 +91,6 @@ Transform:
   - {fileID: 1377109925530181175}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7059649633494148773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4246623293500637985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb07ed8fbcb029744aaceace54a92b4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 6963353834150877335}
-  bsc: {fileID: 7675831950534128386}
 --- !u!114 &7675831950534128386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +105,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualParent: {fileID: 1377109925530181175}
   rb: {fileID: 6963353834150877335}
+--- !u!114 &1827793033336226977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246623293500637985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b052def7093760b40b041471afec550b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 6963353834150877335}
+  bsc: {fileID: 7675831950534128386}
 --- !u!54 &6963353834150877335
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -211,7 +211,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 490d918d44c55a440a0757270c550515, type: 2}
+  - {fileID: 2100000, guid: 78440324de5163f45a66e639fa9fb5ca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
