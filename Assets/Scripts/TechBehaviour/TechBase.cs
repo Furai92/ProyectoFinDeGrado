@@ -1,7 +1,8 @@
 
 public abstract class TechBase
 {
-    public int Level { get; protected set; }
+    public PlayerEntity.TechGroup Group { get; set; }
+    public PlayerEntity PlayerRef { get; set; }
 
     public abstract void OnTechAdded();
     public abstract void OnTechUpgraded();

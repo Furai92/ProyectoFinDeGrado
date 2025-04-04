@@ -15,8 +15,6 @@ MonoBehaviour:
   <ID>k__BackingField: TEST
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 0
-    <Second>k__BackingField: 10
-  - <First>k__BackingField: 4
-    <Second>k__BackingField: 10
+  - <First>k__BackingField: 1
+    <Second>k__BackingField: 999
   <BonusFlags>k__BackingField: 

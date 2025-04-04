@@ -5,7 +5,6 @@ public abstract class AutoPickup : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private BouncySpawnController bsc;
 
-    private float currencyValue;
     private int phase;
     private float phaseT;
 
@@ -20,11 +19,10 @@ public abstract class AutoPickup : MonoBehaviour
     private const float REMOVE_DELAY = 1f;
 
 
-    public void SetUp(Vector3 pos, float value) 
+    public void SetUp(Vector3 pos) 
     {
         transform.position = pos;
         gameObject.SetActive(true);
-        currencyValue = value;
         rb.WakeUp();
         autoPickupColliderTransform = null;
         phase = 0;

@@ -120,12 +120,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         for (int i = 0; i < nextCurrencyDrop; i++) 
         {
-            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(e.transform.position, 1);
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(e.transform.position);
             nextCurrencyDrop -= 1;
         }
         for (int i = 0; i < nextHealthDrop; i++) 
         {
-            ObjectPoolManager.GetHealthPickupFromPool().SetUp(e.transform.position, 1);
+            ObjectPoolManager.GetHealthPickupFromPool().SetUp(e.transform.position);
             nextHealthDrop -= 1;
         }
     }

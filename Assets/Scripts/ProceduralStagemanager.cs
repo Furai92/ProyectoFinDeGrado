@@ -6,13 +6,11 @@ public class ProceduralStagemanager : StageManagerBase
 {
     [SerializeField] private Transform stagePartsInstParent;
 
-    [SerializeField] private List<GameObject> roomPrefabs;
-    [SerializeField] private List<GameObject> corridorPrefabs;
-    [SerializeField] private List<GameObject> decoPrefabs;
+    [SerializeField] private ProceduralStagePropertiesSO debugStageProperties;
 
     public override IMapData GenerateMap(int seed)
     {
-        return new ProceduralStageData(seed, 30, roomPrefabs, corridorPrefabs, decoPrefabs, stagePartsInstParent);
+        return new ProceduralStageData(seed, 30, debugStageProperties, stagePartsInstParent);
     }
 
     public override void InitializeStage()

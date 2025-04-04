@@ -14,9 +14,10 @@ public class HudStatusNotificationElement : MonoBehaviour
     private float animT;
     private Vector3 randomOffsetVector;
 
-    private const float RANDOM_OFFSET = 20f;
+    private const float VERTICAL_OFFSET = 1.5f;
+    private const float RANDOM_OFFSET = 0.5f;
     private const float ANIMATION_MAX_SCALE = 20f;
-    private const float ANIMATION_MIN_SCALE = 1f;
+    private const float ANIMATION_MIN_SCALE = 1.5f;
     private const float ANIMATION_DURATION = 0.33f;
     private const float LIFETIME = 1.5f;
 
@@ -30,7 +31,7 @@ public class HudStatusNotificationElement : MonoBehaviour
         notificationText.color = cdb.ElementToColor(element);
         cam = c;
         removeTime = Time.time + LIFETIME;
-        randomOffsetVector = new Vector3(Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET), Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET), 0);
+        randomOffsetVector = new Vector3(Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET), Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET) + VERTICAL_OFFSET, Random.Range(-RANDOM_OFFSET, RANDOM_OFFSET));
     }
     private void Update()
     {
@@ -38,7 +39,7 @@ public class HudStatusNotificationElement : MonoBehaviour
         float colorAlpha = animT < 1 ? Mathf.Lerp(0, 1, animT) : 1;
         notificationText.color = new Color(notificationText.color.r, notificationText.color.g, notificationText.color.b, colorAlpha);
         transform.localScale = animT < 1 ? Mathf.Lerp(ANIMATION_MAX_SCALE, ANIMATION_MIN_SCALE, animT) * Vector3.one : Vector3.one;
-        transform.position = cam.WorldToScreenPoint(eventWorldPosition) + randomOffsetVector;
+        transform.position = cam.WorldToScreenPoint(eventWorldPosition + randomOffsetVector);
         if (transform.position.z < 0) { gameObject.SetActive(false); }
         if (Time.time > removeTime) { gameObject.SetActive(false); }
     }

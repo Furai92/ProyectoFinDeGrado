@@ -41,9 +41,9 @@ public class Chest : Interactable
     public override void OnInteract(int playerIndex)
     {
         gameObject.SetActive(false);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position, 1);
+        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
+        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
+        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
+        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
     }
 }

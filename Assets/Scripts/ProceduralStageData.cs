@@ -16,7 +16,7 @@ public class ProceduralStageData : IMapData
     private const float CHANCE_TO_4 = 0.05f;
     private const float CHANCE_TO_ROOM_PER_CONNECTION = 20f;
 
-    public ProceduralStageData(int seed, int size, List<GameObject> roomPrefabs, List<GameObject> corridorPrefabs, List<GameObject> decoPrefabs, Transform instParent) 
+    public ProceduralStageData(int seed, int size, ProceduralStagePropertiesSO stageProperties, Transform instParent) 
     {
         Random.InitState(seed);
         // Initialize the map matrix
@@ -202,8 +202,8 @@ public class ProceduralStageData : IMapData
             {
                 case MapNode.RoomType.Room:
                     {
-                        int index = Mathf.Min(roomPrefabs.Count - 1, stageList[i].variation);
-                        GameObject rp = GameObject.Instantiate(roomPrefabs[index], instParent) as GameObject;
+                        int index = Mathf.Min(stageProperties.RoomPrefabs.Count - 1, stageList[i].variation);
+                        GameObject rp = GameObject.Instantiate(stageProperties.RoomPrefabs[index], instParent) as GameObject;
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();
@@ -212,8 +212,8 @@ public class ProceduralStageData : IMapData
                     }
                 case MapNode.RoomType.Corridor:
                     {
-                        int index = Mathf.Min(corridorPrefabs.Count - 1, stageList[i].variation);
-                        GameObject rp = GameObject.Instantiate(corridorPrefabs[index], instParent) as GameObject;
+                        int index = Mathf.Min(stageProperties.CorridorPrefabs.Count - 1, stageList[i].variation);
+                        GameObject rp = GameObject.Instantiate(stageProperties.CorridorPrefabs[index], instParent) as GameObject;
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();
@@ -222,7 +222,7 @@ public class ProceduralStageData : IMapData
                     }
                 case MapNode.RoomType.Deco:
                     {
-                        GameObject rp = GameObject.Instantiate(decoPrefabs[Random.Range(0, decoPrefabs.Count)], instParent) as GameObject;
+                        GameObject rp = GameObject.Instantiate(stageProperties.DecoPrefabs[Random.Range(0, stageProperties.DecoPrefabs.Count)], instParent) as GameObject;
                         rp.GetComponent<StagePiece>().SetUp(stageList[i]);
                         stagePieces.Add(rp.GetComponent<StagePiece>());
                         stageList[i].piece = rp.GetComponent<StagePiece>();

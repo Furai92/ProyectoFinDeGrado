@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerEntity : NetworkBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerEntity : NetworkBehaviour
 
     [SerializeField] private WeaponSO debugRangedWeaponSO;
     [SerializeField] private WeaponSO debugMeleeWeaponSO;
+    [SerializeField] private List<TechSO> debugTechSO;
 
     private float rangedAttackReady;
     private float meleeAttackReady;
@@ -61,7 +63,7 @@ public class PlayerEntity : NetworkBehaviour
 
     // Techs ========================================================================================
 
-
+    private Dictionary<string, TechGroup> ActiveTechDictionary;
 
     // Debug ========================================================================================
 
@@ -78,6 +80,9 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(StatGroup.Stat.Speed, 1f);
         stats.ChangeStat(StatGroup.Stat.MaxHealth, 500f);
         currentHealth = stats.GetStat(StatGroup.Stat.MaxHealth);
+        ActiveTechDictionary = new Dictionary<string, TechGroup>();
+
+        for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); }
         EquipWeapon(new WeaponData(debugRangedWeaponSO));
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
@@ -87,7 +92,7 @@ public class PlayerEntity : NetworkBehaviour
         rangedAttackReady = meleeAttackReady = 1;
         UpdateRotation();
     }
-    private void Start () 
+    private void Start()
     {
         if (IsOwner || NetworkManager.Singleton == null)
         {
@@ -95,7 +100,7 @@ public class PlayerEntity : NetworkBehaviour
             m_playerCamera.gameObject.SetActive(true);
         }
 
-        if(IsHost && IsOwner)
+        if (IsHost && IsOwner)
         {
             _cube.GetComponent<Renderer>().material.color = Color.green;
             _capsule.GetComponent<Renderer>().material.color = Color.green;
@@ -116,13 +121,54 @@ public class PlayerEntity : NetworkBehaviour
             _capsule.GetComponent<Renderer>().material.color = Color.green;
         }
     }
-    public void EquipWeapon(WeaponData w) 
+    public void EquipTech(TechSO t)
     {
-        switch (w.BaseWeapon.Slot) 
+        TechGroup tg;
+        if (ActiveTechDictionary.ContainsKey(t.ID))
         {
-            case WeaponSO.WeaponSlot.Melee: 
+            tg = ActiveTechDictionary[t.ID];
+            tg.Upgrade();
+        }
+        else 
+        {
+            tg = new TechGroup(t);
+            if (tg.Script != null) { tg.Script.PlayerRef = this; }
+            ActiveTechDictionary.Add(tg.SO.ID, tg);
+        }
+        // Add stat and flag bonuses
+        for (int i = 0; i < tg.SO.BonusStats.Count; i++)
+        {
+            stats.ChangeStat(tg.SO.BonusStats[i].First, tg.SO.BonusStats[i].Second);
+        }
+        for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
+        {
+            stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
+        }
+    }
+    public void UnequipTech(TechSO t)
+    {
+        if (ActiveTechDictionary.ContainsKey(t.ID)) 
+        {
+            TechGroup tg = ActiveTechDictionary[t.ID];
+            for (int i = 0; i < tg.SO.BonusStats.Count; i++) 
+            {
+                stats.ChangeStat(tg.SO.BonusStats[i].First, -tg.SO.BonusStats[i].Second * tg.Level);
+            }
+            for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
+            {
+                stats.ChangeFlag(tg.SO.BonusFlags[i], -tg.Level);
+            }
+            ActiveTechDictionary[t.ID].Script.OnTechRemoved();
+            ActiveTechDictionary.Remove(t.ID);
+        }
+    }
+    public void EquipWeapon(WeaponData w)
+    {
+        switch (w.BaseWeapon.Slot)
+        {
+            case WeaponSO.WeaponSlot.Melee:
                 {
-                    if (meleeWeapon != null) 
+                    if (meleeWeapon != null)
                     {
                         ObjectPoolManager.GetWeaponPickupFromPool().SetUp(meleeWeapon, transform.position);
                     }
@@ -131,7 +177,7 @@ public class PlayerEntity : NetworkBehaviour
                     meleeWeaponStats = meleeWeapon.GetStats();
                     break;
                 }
-            case WeaponSO.WeaponSlot.Ranged: 
+            case WeaponSO.WeaponSlot.Ranged:
                 {
                     if (rangedWeapon != null)
                     {
@@ -144,7 +190,7 @@ public class PlayerEntity : NetworkBehaviour
                 }
         }
     }
-    private void UpdateRotation() 
+    private void UpdateRotation()
     {
         m_rotationParent.transform.rotation = Quaternion.Euler(0, currentDirection, 0);
     }
@@ -170,7 +216,7 @@ public class PlayerEntity : NetworkBehaviour
         StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, Time.deltaTime * heatDecayMelee);
         if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
 
-        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged) 
+        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged)
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
@@ -187,14 +233,14 @@ public class PlayerEntity : NetworkBehaviour
             Attack(WeaponSO.WeaponSlot.Melee);
         }
     }
-    private void Attack(WeaponSO.WeaponSlot s) 
+    private void Attack(WeaponSO.WeaponSlot s)
     {
         WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
-        float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ? 
+        float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ?
             GameTools.DexterityToDamageMultiplier(stats.GetStat(StatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(StatGroup.Stat.Might));
 
         // Projectile component
-        if (wpn.ProjectileComponentID != "") 
+        if (wpn.ProjectileComponentID != "")
         {
             float currentMultishootAngle = -wpn.Arc / 2;
             for (int i = 0; i < wpn.Multishoot; i++)
@@ -220,7 +266,7 @@ public class PlayerEntity : NetworkBehaviour
             }
         }
         // Cleave component
-        if (wpn.CleaveComponentID != "") 
+        if (wpn.CleaveComponentID != "")
         {
             WeaponAttackSetupData sd = new WeaponAttackSetupData()
             {
@@ -250,31 +296,56 @@ public class PlayerEntity : NetworkBehaviour
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
-    private void ClampCamVerticalRotation() 
+    private void ClampCamVerticalRotation()
     {
         float x = m_camVerticalRotationAxis.localRotation.eulerAngles.x;
-        x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360); 
+        x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360);
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
     }
-    public Camera GetCamera() 
+    public Camera GetCamera()
     {
         return m_playerCamera;
     }
-    public void DealDamage(float magnitude) 
+    public void DealDamage(float magnitude)
     {
         currentHealth -= magnitude;
-        if (currentHealth <= 0) 
+        if (currentHealth <= 0)
         {
             // Kill?
 
         }
     }
-    public void Heal(float amount) 
+    public void Heal(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, stats.GetStat(StatGroup.Stat.MaxHealth));
     }
-    public float GetHealthPercent() 
+    public float GetHealthPercent()
     {
         return currentHealth / stats.GetStat(StatGroup.Stat.MaxHealth);
+    }
+
+
+    public class TechGroup
+    {
+        public int Level { get; private set; }
+        public TechSO SO { get; private set; }
+        public TechBase Script { get; private set; }
+
+        public TechGroup(TechSO t) 
+        {
+            Level = 1;
+            SO = t;
+            if (SO.Script != "") 
+            {
+                Script = System.Activator.CreateInstance(System.Type.GetType(SO.Script)) as TechBase;
+                Script.Group = this;
+            }
+            
+        }
+        public void Upgrade() 
+        {
+            Level++;
+            Script.OnTechUpgraded();
+        }
     }
 }
