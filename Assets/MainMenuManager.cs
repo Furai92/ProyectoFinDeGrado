@@ -11,7 +11,7 @@ public class MainMenuManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        backgroundStage = new ProceduralStageData(0, 30, backgroundStageProperties, backgroundStageParent);
+        backgroundStage = new ProceduralStageData(Random.Range(0, 9999999), 30, backgroundStageProperties, backgroundStageParent);
         travellingCam.SetUp(backgroundStage);
     }
 

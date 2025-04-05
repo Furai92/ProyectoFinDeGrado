@@ -55,7 +55,7 @@ public class WeaponData
             ws.Arc = Mathf.Max(ws.Arc + Parts[i].ArcModifier, 0);
             ws.CritMultiplier *= Parts[i].CriticalDamageMultiplier;
             ws.BuildupRate *= Parts[i].BuildupMultiplier;
-            ws.Knockback += Mathf.Max(ws.Knockback + Parts[i].KnockbackMultiplier, 0);
+            ws.Knockback += Mathf.Max(ws.Knockback + Parts[i].KnockbackModifier, 0);
             ws.HeatGen *= Parts[i].HeatGenerationMultiplier;
             ws.Timescale *= Parts[i].TimescaleMultiplier;
             ws.SizeMultiplier = Parts[i].SizeMultiplier;

@@ -7,6 +7,7 @@ public class EventManager
     public static event Action<float, int, GameEnums.DamageElement, EnemyEntity> EnemyDirectDamageTakenEvent;
     public static event Action<float, GameEnums.DamageElement, EnemyEntity> EnemyStatusDamageTakenEvent;
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
+    public static event Action<HudCombatWarningElement.WarningType, Vector3> CombatWarningDisplayedEvent;
 
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
@@ -69,5 +70,9 @@ public class EventManager
     public static void OnUiEnemyHealthBarDisabled(HudEnemyHealthBarElement hpb) 
     {
         UiEnemyHealthBarDisabledEvent.Invoke(hpb);
+    }
+    public static void OnCombatWarningDisplayed(HudCombatWarningElement.WarningType wt, Vector3 pos) 
+    {
+        CombatWarningDisplayedEvent?.Invoke(wt, pos);
     }
 }

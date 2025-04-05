@@ -32,7 +32,7 @@ MonoBehaviour:
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 0
   <Timescale>k__BackingField: 1
-  <Knockback>k__BackingField: 0.1
+  <Knockback>k__BackingField: 0
   <PartSlots>k__BackingField:
   - <SlotName>k__BackingField: Core
     <CompatibleParts>k__BackingField:

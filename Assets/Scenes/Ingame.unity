@@ -1032,7 +1032,7 @@ GameObject:
   - component: {fileID: 618982368}
   - component: {fileID: 618982371}
   m_Layer: 5
-  m_Name: '[Canvas]DamageNotifications'
+  m_Name: '[Canvas]CombatNotifications'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1135,6 +1135,7 @@ MonoBehaviour:
   directDamageNotificationPrefab: {fileID: 8035190056137281615, guid: 2d6113f75f234a049beccd585c93bcf2, type: 3}
   statusDamageNotificationPrefab: {fileID: 8035190056137281615, guid: 1385a99dc15587c4c8073b7634d70bcd, type: 3}
   statusNotificationPrefab: {fileID: 8035190056137281615, guid: 8f4068a26db9cf94e96e29e758b549f4, type: 3}
+  combatWarningPrefab: {fileID: 8035190056137281615, guid: a8bd7742de45c77469fd6d02ed4806ba, type: 3}
 --- !u!1 &640927840
 GameObject:
   m_ObjectHideFlags: 0

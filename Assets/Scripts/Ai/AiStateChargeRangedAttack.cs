@@ -24,8 +24,9 @@ public class AiStateChargeRangedAttack : AiStateBase
         EnemyControlled.TargetLookPosition = target.transform.position;
         if (Time.time > stateEndTime && !shootPerformed) 
         {
+            EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, EnemyControlled.transform.position);
             shootPerformed = true;
-            ObjectPoolManager.GetEnemyAttackFromPool("SLOW_ORB").SetUp(EnemyControlled.transform.position, GameTools.AngleBetween(EnemyControlled.transform.position, target.transform.position));
+            ObjectPoolManager.GetEnemyAttackFromPool("SLOW_ORB").SetUp(EnemyControlled, EnemyControlled.transform.position, GameTools.AngleBetween(EnemyControlled.transform.position, target.transform.position));
         }
     }
 

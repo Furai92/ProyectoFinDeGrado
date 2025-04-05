@@ -20,5 +20,5 @@ public class WeaponPartSO : ScriptableObject
     [field: SerializeField] public int BouncesModifier { get; private set; }
     [field: SerializeField] public int PiercesModifier { get; private set; }
     [field: SerializeField] public float TimescaleMultiplier { get; private set; }
-    [field: SerializeField] public float KnockbackMultiplier { get; private set; }
+    [field: SerializeField] public float KnockbackModifier { get; private set; }
 }

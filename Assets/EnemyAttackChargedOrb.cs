@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyAttackSlowOrb : EnemyAttackBase
+public class EnemyAttackChargedOrb : EnemyAttackBase
 {
     private float removeTime;
     private LayerMask terrainCollisionMask;
@@ -25,9 +25,9 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     }
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Wall")) 
+        if (collision.gameObject.CompareTag("Wall"))
         {
-            if (Physics.Raycast(transform.position, transform.forward, TERRAIN_COLLISION_RAYCAST_LENGHT, terrainCollisionMask)) 
+            if (Physics.Raycast(transform.position, transform.forward, TERRAIN_COLLISION_RAYCAST_LENGHT, terrainCollisionMask))
             {
                 gameObject.SetActive(false);
             }
@@ -35,19 +35,19 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     }
     private void OnCollisionEnter(Collision collision)
     {
-        switch (collision.collider.gameObject.tag) 
+        switch (collision.collider.gameObject.tag)
         {
-            case "Player": 
+            case "Player":
                 {
                     PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
-                    if (pe != null) 
+                    if (pe != null)
                     {
-                        pe.DealDamage(BASE_DAMAGE); 
+                        pe.DealDamage(BASE_DAMAGE);
                     }
                     gameObject.SetActive(false);
                     break;
                 }
-            case "Deflect": 
+            case "Deflect":
                 {
                     gameObject.SetActive(false);
                     ObjectPoolManager.GetDeflectedAttackPool().SetUp(200, transform.position);
