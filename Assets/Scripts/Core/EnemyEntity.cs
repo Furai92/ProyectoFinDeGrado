@@ -205,6 +205,26 @@ public class EnemyEntity : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+    public void AddStatusBuildup(float magnitude, GameEnums.DamageElement element) 
+    {
+        int statusIndex = (int)element;
+        float buildupStrengtht = (magnitude / MaxHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
+        while (buildupStrengtht > 0)
+        {
+            statusBuildups[statusIndex] += buildupStrengtht /= statusBuildupResistancesDivider[statusIndex];
+            if (statusBuildups[statusIndex] >= 1)
+            {
+                buildupStrengtht = statusBuildups[statusIndex] - 1;
+                statusBuildups[statusIndex] = 0;
+                statusBuildupResistancesDivider[statusIndex] *= STATUS_RESISTANCE_GROWTH_MULTIPLIER;
+                AddStatus(element);
+            }
+            else
+            {
+                buildupStrengtht = 0; // Or return
+            }
+        }
+    }
     public void DealDirectDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
     {
         // Roll for critical hits
@@ -231,24 +251,7 @@ public class EnemyEntity : MonoBehaviour
         else 
         {
             // If the enemy survives the hit, add status buildup based on the damage element.
-            // Increase stauts buildup
-            int statusIndex = (int)element;
-            float buildupStrengtht = (magnitude / MaxHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) * buildupMultiplier / statusBuildupResistancesDivider[statusIndex];
-            while (buildupStrengtht > 0)
-            {
-                statusBuildups[statusIndex] += buildupStrengtht /= statusBuildupResistancesDivider[statusIndex];
-                if (statusBuildups[statusIndex] >= 1)
-                {
-                    buildupStrengtht = statusBuildups[statusIndex] - 1;
-                    statusBuildups[statusIndex] = 0;
-                    statusBuildupResistancesDivider[statusIndex] *= STATUS_RESISTANCE_GROWTH_MULTIPLIER;
-                    AddStatus(element);
-                }
-                else 
-                {
-                    buildupStrengtht = 0; // Or return
-                }
-            }
+            AddStatusBuildup(magnitude * buildupMultiplier, element);
         }
     }
 

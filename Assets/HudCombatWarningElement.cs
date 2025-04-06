@@ -13,7 +13,8 @@ public class HudCombatWarningElement : MonoBehaviour
     private float removeTime;
     private float animT;
 
-
+    private const float MAXIMUM_WORLD_TO_SCREEN_Z = 0f;
+    private const float RADAR_RADIUS_SIZE = 400f;
     private const float ANIMATION_MAX_SCALE = 20f;
     private const float ANIMATION_MIN_SCALE = 3f;
     private const float ANIMATION_DURATION = 0.33f;
@@ -37,11 +38,11 @@ public class HudCombatWarningElement : MonoBehaviour
         transform.position = cam.WorldToScreenPoint(eventWorldPosition);
 
 
-        if (transform.position.z > 0) { gameObject.SetActive(false); }
+        if (transform.position.z > MAXIMUM_WORLD_TO_SCREEN_Z) { gameObject.SetActive(false); }
 
         transform.localPosition = -transform.localPosition;
         transform.localPosition = Vector3.Normalize(transform.localPosition);
-        transform.localPosition *= 400f;
+        transform.localPosition *= RADAR_RADIUS_SIZE;
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(transform.localPosition.y, transform.localPosition.x) * Mathf.Rad2Deg);
 
         if (Time.time > removeTime) { gameObject.SetActive(false); }

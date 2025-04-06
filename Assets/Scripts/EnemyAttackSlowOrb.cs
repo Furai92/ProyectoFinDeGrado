@@ -10,7 +10,7 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     private const float ORB_SPEED = 7.5f;
     private const float LIFETIME = 10f;
 
-    public override void SetUp(EnemyEntity user, Vector3 pos, float direction)
+    public override void Initialize(Vector3 pos, float direction)
     {
         gameObject.SetActive(true);
         terrainCollisionMask = LayerMask.GetMask("Walls");
@@ -54,5 +54,15 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
                     break;
                 }
         }
+    }
+
+    public override void OnUserStunned()
+    {
+        // No actions
+    }
+
+    public override void OnUserDefeated()
+    {
+        // No actions
     }
 }

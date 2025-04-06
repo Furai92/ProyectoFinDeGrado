@@ -10,7 +10,7 @@ public class EnemyAttackChargedOrb : EnemyAttackBase
     private const float ORB_SPEED = 7.5f;
     private const float LIFETIME = 10f;
 
-    public override void SetUp(EnemyEntity user, Vector3 pos, float direction)
+    public override void Initialize(Vector3 pos, float direction)
     {
         gameObject.SetActive(true);
         terrainCollisionMask = LayerMask.GetMask("Walls");
@@ -50,9 +50,20 @@ public class EnemyAttackChargedOrb : EnemyAttackBase
             case "Deflect":
                 {
                     gameObject.SetActive(false);
-                    ObjectPoolManager.GetDeflectedAttackPool().SetUp(200, transform.position);
+
+                    ObjectPoolManager.GetDeflectedAttackPool().SetUp(BASE_DAMAGE, transform.position);
                     break;
                 }
         }
+    }
+
+    public override void OnUserStunned()
+    {
+        
+    }
+
+    public override void OnUserDefeated()
+    {
+        
     }
 }
