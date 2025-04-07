@@ -5,32 +5,32 @@ public class AiStateWalkStraightToTarget : AiStateBase
     private float stateEndTime;
     private PlayerEntity target;
 
-    private const float STATE_DURATION = 1f;
+    private const float STATE_DURATION = 0.5f;
 
-    public AiStateWalkStraightToTarget(EnemyEntity e) 
-    {
-        EnemyControlled = e;
-    }
-
-    public override void EndState()
+    public AiStateWalkStraightToTarget() 
     {
 
     }
 
-    public override void FixedUpdateState()
+    public override void EndState(EnemyEntity e)
     {
-        EnemyControlled.TargetMovementPosition = target.transform.position;
-        EnemyControlled.TargetLookPosition = target.transform.position;
+
     }
 
-    public override bool IsFinished()
+    public override void FixedUpdateState(EnemyEntity e)
+    {
+        e.TargetMovementPosition = target.transform.position;
+        e.TargetLookPosition = target.transform.position;
+    }
+
+    public override bool IsFinished(EnemyEntity e)
     {
         return Time.time > stateEndTime;
     }
 
-    public override void StartState()
+    public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + STATE_DURATION;
-        target = StageManagerBase.GetClosestPlayer(EnemyControlled.transform.position);
+        target = StageManagerBase.GetClosestPlayer(e.transform.position);
     }
 }

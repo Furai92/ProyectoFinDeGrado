@@ -32,7 +32,7 @@ public class EnemyEntity : MonoBehaviour
 
     // AI Management ===========================================
 
-    [SerializeField] private ScriptableObject AiFile;
+    [SerializeField] private EnemyAiSO AiFile;
     [field: SerializeField] public float MaxCombatDistance { get; private set; }
     [field: SerializeField] public bool RequiresLosForCombat { get; private set; }
 
@@ -100,8 +100,8 @@ public class EnemyEntity : MonoBehaviour
     }
     private void SetupAi() 
     {
-        pathfindingSearchState = new AiStatePathfindingSearch(this);
-        combatRootState = new AiStateChargeRangedAttack(this);
+        pathfindingSearchState = new AiStatePathfindingSearch();
+        combatRootState = AiFile.GenerateAiTree();
         if (IsInCombatRange()) 
         {
             currentState = combatRootState;
@@ -112,20 +112,20 @@ public class EnemyEntity : MonoBehaviour
             currentState = pathfindingSearchState;
             inCombat = false;
         }
-        currentState.StartState();
+        currentState.StartState(this);
     }
     private void UpdateAI() 
     {
         if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0) { return; } // Pause if frozen
 
-        currentState.FixedUpdateState();
-        if (currentState.IsFinished()) 
+        currentState.FixedUpdateState(this);
+        if (currentState.IsFinished(this)) 
         {
-            currentState.EndState();
+            currentState.EndState(this);
 
             if (IsInCombatRange())
             {
-                currentState = inCombat ? currentState.GetNextState() : combatRootState;
+                currentState = inCombat ? currentState.GetNextState(this) : combatRootState;
                 inCombat = true;
             }
             else
@@ -133,7 +133,7 @@ public class EnemyEntity : MonoBehaviour
                 currentState = pathfindingSearchState;
                 inCombat = false;
             }
-            currentState.StartState();
+            currentState.StartState(this);
         }
     }
     private void UpdateStatusEffects() 

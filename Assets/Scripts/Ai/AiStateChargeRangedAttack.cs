@@ -8,37 +8,37 @@ public class AiStateChargeRangedAttack : AiStateBase
 
     private const float CHARGE_DURATION = 1f;
 
-    public AiStateChargeRangedAttack(EnemyEntity e) 
-    {
-        EnemyControlled = e;
-    }
-
-    public override void EndState()
+    public AiStateChargeRangedAttack() 
     {
 
     }
 
-    public override void FixedUpdateState()
+    public override void EndState(EnemyEntity e)
     {
-        EnemyControlled.TargetMovementPosition = EnemyControlled.transform.position;
-        EnemyControlled.TargetLookPosition = target.transform.position;
+
+    }
+
+    public override void FixedUpdateState(EnemyEntity e)
+    {
+        e.TargetMovementPosition = e.transform.position;
+        e.TargetLookPosition = target.transform.position;
         if (Time.time > stateEndTime && !shootPerformed) 
         {
-            EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, EnemyControlled.transform.position);
+            EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, e.transform.position);
             shootPerformed = true;
-            ObjectPoolManager.GetEnemyAttackFromPool("SLOW_ORB").SetUp(EnemyControlled, EnemyControlled.transform.position, GameTools.AngleBetween(EnemyControlled.transform.position, target.transform.position));
+            ObjectPoolManager.GetEnemyAttackFromPool("SLOW_ORB").SetUp(e, e.transform.position, GameTools.AngleBetween(e.transform.position, target.transform.position));
         }
     }
 
-    public override bool IsFinished()
+    public override bool IsFinished(EnemyEntity e)
     {
         return shootPerformed;
     }
 
-    public override void StartState()
+    public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + CHARGE_DURATION;
-        target = StageManagerBase.GetClosestPlayer(EnemyControlled.transform.position);
+        target = StageManagerBase.GetClosestPlayer(e.transform.position);
         shootPerformed = false;
     }
 }

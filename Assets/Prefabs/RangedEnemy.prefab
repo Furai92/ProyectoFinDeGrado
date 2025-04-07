@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 8733903310432010687}
   - component: {fileID: 8541803131240433328}
   m_Layer: 8
-  m_Name: WalkingAgent
+  m_Name: RangedEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -244,12 +244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5dc81644a1cd449071f2b111cfbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MovementSpeed>k__BackingField: 10
+  <MovementSpeed>k__BackingField: 8
   <MaxHealth>k__BackingField: 2000
   <ItemDropRate>k__BackingField: 0.1
   <CurrencyDropRate>k__BackingField: 5
   <HealthDroprate>k__BackingField: 1
-  AiFile: {fileID: 0}
+  AiFile: {fileID: 11400000, guid: c864d3e549432df40af4f7f10c5f715c, type: 2}
   <MaxCombatDistance>k__BackingField: 20
   <RequiresLosForCombat>k__BackingField: 1
   rb: {fileID: 8733903310432010687}

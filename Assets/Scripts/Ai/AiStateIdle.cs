@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class AiStateRetreatFromTarget : AiStateBase
+public class AiStateIdle : AiStateBase
 {
     private float stateEndTime;
     private PlayerEntity target;
 
-    private const float STATE_DURATION = 1f;
+    private const float STATE_DURATION = 0.5f;
 
-    public AiStateRetreatFromTarget() 
+    public AiStateIdle() 
     {
     }
 
@@ -18,7 +18,7 @@ public class AiStateRetreatFromTarget : AiStateBase
 
     public override void FixedUpdateState(EnemyEntity e)
     {
-        e.TargetMovementPosition = e.transform.position + (e.transform.position - target.transform.position);
+        e.TargetMovementPosition = e.transform.position;
         e.TargetLookPosition = target.transform.position;
     }
 
