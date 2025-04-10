@@ -30,7 +30,7 @@ MonoBehaviour:
   <HeatGeneration>k__BackingField: 0.01
   <Splash>k__BackingField: 10
   <Bounces>k__BackingField: 0
-  <Pierces>k__BackingField: 0
+  <Pierces>k__BackingField: 1
   <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 0
   <PartSlots>k__BackingField:

@@ -4,7 +4,7 @@ public class DeflectedAttack : MonoBehaviour
 {
     [SerializeField] private ParticleSystem ps;
     [SerializeField] private TrailRenderer tr;
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] private Collider col;
     [SerializeField] private Transform visualParent;
 
     private float phaseT;
@@ -33,7 +33,7 @@ public class DeflectedAttack : MonoBehaviour
         tr.Clear();
         gameObject.SetActive(true);
         visualParent.gameObject.SetActive(true);
-        rb.WakeUp();
+        col.enabled = true;
         ps.Stop();
         ps.Play();
     }
@@ -61,7 +61,7 @@ public class DeflectedAttack : MonoBehaviour
     {
         phase = 1;
         phaseT = 0;
-        rb.Sleep();
+        col.enabled = false;
         visualParent.gameObject.SetActive(false);
     }
     private void OnCollisionStay(Collision collision)

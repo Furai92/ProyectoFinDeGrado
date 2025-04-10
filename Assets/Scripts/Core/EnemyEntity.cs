@@ -8,6 +8,7 @@ public class EnemyEntity : MonoBehaviour
 
     [field: SerializeField] public float MovementSpeed { get; private set; }
     [field: SerializeField] public float MaxHealth { get; private set; }
+    [field: SerializeField] public float KnockbackResistance { get; private set; }
 
     // Rewards =================================================
 
@@ -46,10 +47,15 @@ public class EnemyEntity : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     public Vector3 TargetMovementPosition { get; set; }
     public Vector3 TargetLookPosition { get; set; }
- 
 
+
+    private Vector3 currentKnockbackForce;
     private float currentLookRotation;
 
+    private const float MIN_MOVEMENT_DISTANCE = 0.15f;
+    private const float KNOCKBACK_FORCE_DECAY_LINEAR = 0.2f;
+    private const float KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE = 0.98f;
+    private const float KNOCKBACK_FORCE_MAG_CLAMP = 50f;
     private const float VISUAL_ROTATION_SPEED = 300f;
     private const float HEIGHT_LOCK = 0.5f;
 
@@ -79,6 +85,7 @@ public class EnemyEntity : MonoBehaviour
     {
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
+        currentKnockbackForce = Vector3.zero;
         currentHealth = MaxHealth;
         statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
         statusDurations = new float[BUILDUP_ARRAY_LENGHT];
@@ -155,12 +162,21 @@ public class EnemyEntity : MonoBehaviour
     }
     private void UpdateMovement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetMovementPosition.x, transform.position.y, TargetMovementPosition.z), Time.fixedDeltaTime * MovementSpeed);
+        rb.linearVelocity = currentKnockbackForce;
+        currentKnockbackForce *= KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE;
+        currentKnockbackForce = Vector3.MoveTowards(currentKnockbackForce, Vector3.zero, Time.fixedDeltaTime * KNOCKBACK_FORCE_DECAY_LINEAR);
+
+        if (statusDurations[(int)GameEnums.DamageElement.Frost] <= 0)
+        {
+            Vector3 movementDir = (new Vector3(TargetMovementPosition.x, 0, TargetMovementPosition.z) - new Vector3(transform.position.x, 0, transform.position.z));
+            if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += movementDir.normalized * MovementSpeed; }
+
+        }
         transform.position = new Vector3(transform.position.x, HEIGHT_LOCK, transform.position.z);
     }
     private void UpdateRotation() 
     {
-        float targetAngle = GameTools.AngleBetween(transform.position, TargetLookPosition); // TO DO: Negative???
+        float targetAngle = GameTools.AngleBetween(transform.position, TargetLookPosition);
         currentLookRotation = Mathf.MoveTowardsAngle(currentLookRotation, targetAngle, Time.fixedDeltaTime * VISUAL_ROTATION_SPEED);
         rotationParent.rotation = Quaternion.Euler(0, currentLookRotation, 0);
     }
@@ -187,7 +203,8 @@ public class EnemyEntity : MonoBehaviour
     {
         if (direction == Vector3.zero) { direction = GameTools.AngleToVector(Random.Range(0, 361)); }
 
-        rb.linearVelocity += direction.normalized * magnitude;
+        currentKnockbackForce += magnitude * (1-KnockbackResistance) * direction.normalized;
+        currentKnockbackForce = Vector3.ClampMagnitude(currentKnockbackForce, KNOCKBACK_FORCE_MAG_CLAMP);
     }
     public void AddStatus(GameEnums.DamageElement e) 
     {
@@ -237,12 +254,10 @@ public class EnemyEntity : MonoBehaviour
         }
 
         // Reduce health
-
         currentHealth -= magnitude;
         EventManager.OnEnemyDirectDamageTaken(magnitude, 0, element, this);
 
         // Kill if necessary
-
         if (currentHealth <= 0)
         {
             EventManager.OnEnemyDefeated(this);
@@ -250,7 +265,8 @@ public class EnemyEntity : MonoBehaviour
         }
         else 
         {
-            // If the enemy survives the hit, add status buildup based on the damage element.
+            // ONLY If the enemy survives the hit (prevents unnecesary overkill situations)
+            // Add status buildup based on the damage element.
             AddStatusBuildup(magnitude * buildupMultiplier, element);
         }
     }

@@ -26,11 +26,15 @@ MonoBehaviour:
   - <ID>k__BackingField: PROJ_FAST
     <Data>k__BackingField: {fileID: 5508074904858161231, guid: 9bbc97a8b25219c4aab9f95ddc1874ad, type: 3}
   <EnemyPrefabs>k__BackingField:
-  - <ID>k__BackingField: DEBUG_WALKING
+  - <ID>k__BackingField: RANGED
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
+  - <ID>k__BackingField: MELEE
+    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 9303f9ebf9a30334895355d32298f2fa, type: 3}
   <EnemyAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: SLOW_ORB
     <Data>k__BackingField: {fileID: 7397320916023109853, guid: b265df20be3bd27439f28b35618dc7e8, type: 3}
+  - <ID>k__BackingField: MELEE_SMALL
+    <Data>k__BackingField: {fileID: 3746625057581498513, guid: b9224d28f7e282d44a93baad738eed88, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}

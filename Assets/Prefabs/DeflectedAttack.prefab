@@ -104,7 +104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4282309278776396306
 Transform:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps: {fileID: 4717573499013693877}
   tr: {fileID: 3401402553561786350}
-  rb: {fileID: 5191448101229378179}
+  col: {fileID: 356020277599395220}
   visualParent: {fileID: 434309033647696419}
 --- !u!54 &5191448101229378179
 Rigidbody:

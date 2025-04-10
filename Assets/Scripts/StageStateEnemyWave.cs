@@ -7,7 +7,7 @@ public class StageStateEnemyWave : StageStateBase
     private float durationRemaining;
     private float nextEnemySpawn;
     private float nextChestSpawn;
-    private const float ENEMY_SPAWN_INTERVAL = 2.5f;
+    private const float ENEMY_SPAWN_INTERVAL = 2f;
     private const float CHEST_SPAWN_INTERVAL = 10f;
     private const int INITIAL_SPAWNS = 5;
     private const int MAX_ENEMIES = 20;
@@ -59,7 +59,15 @@ public class StageStateEnemyWave : StageStateBase
 
         Vector3 randomPos = StageManagerBase.GetRandomEnemySpawnPosition(0);
 
-        ObjectPoolManager.GetEnemyFromPool("DEBUG_WALKING").SetUp(randomPos);
+        if (Random.Range(0, 2) == 0)
+        {
+            ObjectPoolManager.GetEnemyFromPool("MELEE").SetUp(randomPos);
+        }
+        else 
+        {
+            ObjectPoolManager.GetEnemyFromPool("RANGED").SetUp(randomPos);
+        }
+
     }
 
     public override StateType GetStateType()
