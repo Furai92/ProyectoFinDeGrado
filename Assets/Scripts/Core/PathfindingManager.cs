@@ -42,6 +42,8 @@ public class PathfindingManager : MonoBehaviour
     {
         if (src.x < 0 || src.y < 0 || dst.x < 0 || dst.y < 0) { return new Stack<Vector3>(); } // Out of bounds.
         if (src.x >= GetGridSize() || src.y >= GetGridSize() || dst.x >= GetGridSize() || dst.y >= GetGridSize()) { return new Stack<Vector3>(); } // Out of bounds
+        if (_terrainGrid[src.x, src.y] == TerrainType.Wall) { return new Stack<Vector3>(); } // Source is unreachable.
+        if (_terrainGrid[dst.x, dst.y] == TerrainType.Wall) { return new Stack<Vector3>(); } // Destination is unreachable.
 
         _currentIteration++;
         PriorityQueue<Vector2Int, float> openQueue = new PriorityQueue<Vector2Int, float>();

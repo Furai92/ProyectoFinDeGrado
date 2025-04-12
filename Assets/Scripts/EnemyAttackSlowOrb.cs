@@ -40,11 +40,16 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
             case "Player": 
                 {
                     PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
-                    if (pe != null) 
+                    if (pe == null) { return; }
+                    if (!pe.IsEvading())
                     {
-                        pe.DealDamage(BASE_DAMAGE); 
+                        pe.DealDamage(BASE_DAMAGE);
+                        gameObject.SetActive(false);
                     }
-                    gameObject.SetActive(false);
+                    else
+                    {
+                        EventManager.OnPlayerEvasion(transform.position);
+                    }
                     break;
                 }
             case "Deflect": 

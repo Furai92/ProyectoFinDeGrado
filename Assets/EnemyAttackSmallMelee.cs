@@ -27,9 +27,14 @@ public class EnemyAttackSmallMelee : EnemyAttackBase
         if (collision.gameObject.CompareTag("Player")) 
         {
             PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
-            if (pe != null)
+            if (pe == null) { return; }
+            if (!pe.IsEvading())
             {
                 pe.DealDamage(BASE_DAMAGE);
+            }
+            else
+            {
+                EventManager.OnPlayerEvasion(transform.position);
             }
         }
     }

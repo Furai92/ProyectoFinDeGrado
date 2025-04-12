@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3019813348610433813}
   - component: {fileID: 739791167814734559}
   m_Layer: 5
-  m_Name: statusText
+  m_Name: damageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: status
+  m_text: dmg
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -146,9 +146,9 @@ GameObject:
   m_Component:
   - component: {fileID: 722880806113455636}
   - component: {fileID: 2736371959067567380}
-  - component: {fileID: 7411748102960549837}
+  - component: {fileID: 8278892736759528198}
   m_Layer: 5
-  m_Name: StatusNotificationElement
+  m_Name: ColoredTextNotificationElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,7 +182,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8035190056137281615}
   m_CullTransparentMesh: 1
---- !u!114 &7411748102960549837
+--- !u!114 &8278892736759528198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,9 +191,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8035190056137281615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea85861bf0388244b946e8e4c7f646b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f50832b99deea843a9b01702592087c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   notificationText: {fileID: 739791167814734559}
-  cdb: {fileID: 11400000, guid: 65eecbe3f4e293d40a2157b29b42a957, type: 2}
-  sdb: {fileID: 11400000, guid: f07a964cac8c6274c86fb0227149f0ef, type: 2}

@@ -42,11 +42,11 @@ public class InputManager : MonoBehaviour
     }
     public bool GetRangedAttackInput() 
     {
-        return _inputActions.Player.RangedAttack.ReadValue<float>() > 0;
+        return _inputActions.Player.RangedAttack.IsPressed();
     }
     public bool GetMeleeAttackInput()
     {
-        return _inputActions.Player.MeleeAttack.ReadValue<float>() > 0;
+        return _inputActions.Player.MeleeAttack.IsPressed();
     }
     public bool GetInteractInput() 
     {
@@ -55,6 +55,10 @@ public class InputManager : MonoBehaviour
     public bool GetReadyUpInput() 
     {
         return _inputActions.Player.ReadyUp.WasPerformedThisFrame();
+    }
+    public bool GetDashInput()
+    {
+        return _inputActions.Player.Dash.WasPerformedThisFrame();
     }
 
     private void OnUiFocusChanged(bool status)

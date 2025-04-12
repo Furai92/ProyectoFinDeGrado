@@ -170,7 +170,6 @@ public class EnemyEntity : MonoBehaviour
         {
             Vector3 movementDir = (new Vector3(TargetMovementPosition.x, 0, TargetMovementPosition.z) - new Vector3(transform.position.x, 0, transform.position.z));
             if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += movementDir.normalized * MovementSpeed; }
-
         }
         transform.position = new Vector3(transform.position.x, HEIGHT_LOCK, transform.position.z);
     }

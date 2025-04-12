@@ -6,7 +6,11 @@ public class PlayerEntity : NetworkBehaviour
 {
     // Status ========================================================================================
 
-    float currentHealth;
+    public float CurrentHealth { get; private set; }
+    public int CurrentDashes { get; private set; }
+    public float DashRechargePercent { get; private set; }
+
+    private const float BASE_DASH_RECHARGE_RATE = 0.25f;
 
     // Weapon status =================================================================================
 
@@ -30,7 +34,6 @@ public class PlayerEntity : NetworkBehaviour
     // Stats and equipment =================================================================================
 
     private StatGroup stats;
-
     private WeaponData meleeWeapon;
     private WeaponData rangedWeapon;
 
@@ -48,10 +51,14 @@ public class PlayerEntity : NetworkBehaviour
     private float movementInputV;
     private float rotationInputH;
     private float rotationInputV;
+    private Vector3 dashMovementVector;
+    private float dashDurationRemaining;
     private bool _isPlayerControlsEnabled = false;
 
     private const float LOCK_Y = 1.0f;
     private const float BASE_MOVEMENT_SPEED = 10f;
+    private const float DASH_MOVEMENT_SPEED = 35f;
+    private const float DASH_DURATION = 0.5f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
@@ -79,18 +86,22 @@ public class PlayerEntity : NetworkBehaviour
         stats = new StatGroup();
         stats.ChangeStat(StatGroup.Stat.Speed, 1f);
         stats.ChangeStat(StatGroup.Stat.MaxHealth, 500f);
-        currentHealth = stats.GetStat(StatGroup.Stat.MaxHealth);
+        stats.ChangeStat(StatGroup.Stat.DashCount, 3);
+        stats.ChangeStat(StatGroup.Stat.DashRechargeRate, 1);
+        CurrentHealth = stats.GetStat(StatGroup.Stat.MaxHealth);
+        CurrentDashes = (int)stats.GetStat(StatGroup.Stat.DashCount);
+        DashRechargePercent = 0;
         ActiveTechDictionary = new Dictionary<string, TechGroup>();
+        StatusOverheatRanged = StatusOverheatMelee = false;
+        rangedAttackReady = meleeAttackReady = 1;
 
         for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); }
         EquipWeapon(new WeaponData(debugRangedWeaponSO));
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
-        StatusOverheatRanged = false;
+        currentDirection = 0; UpdateRotation();
 
-        currentDirection = 0;
-        rangedAttackReady = meleeAttackReady = 1;
-        UpdateRotation();
+        EventManager.OnPlayerStatsUpdated(stats);
     }
     private void Start()
     {
@@ -144,6 +155,7 @@ public class PlayerEntity : NetworkBehaviour
         {
             stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
         }
+        EventManager.OnPlayerStatsUpdated(stats);
     }
     public void UnequipTech(TechSO t)
     {
@@ -161,6 +173,7 @@ public class PlayerEntity : NetworkBehaviour
             ActiveTechDictionary[t.ID].Script.OnTechRemoved();
             ActiveTechDictionary.Remove(t.ID);
         }
+        EventManager.OnPlayerStatsUpdated(stats);
     }
     public void EquipWeapon(WeaponData w)
     {
@@ -216,6 +229,17 @@ public class PlayerEntity : NetworkBehaviour
         StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, Time.deltaTime * heatDecayMelee);
         if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
 
+        if (CurrentDashes < (int)stats.GetStat(StatGroup.Stat.DashCount)) 
+        {
+            DashRechargePercent += Time.deltaTime * BASE_DASH_RECHARGE_RATE * stats.GetStat(StatGroup.Stat.DashRechargeRate);
+            if (DashRechargePercent >= 1) 
+            {
+                DashRechargePercent = 0;
+                CurrentDashes++;
+            }
+        }
+        dashDurationRemaining -= Time.deltaTime;
+
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged)
         {
             heatDecayRanged = 0;
@@ -231,6 +255,10 @@ public class PlayerEntity : NetworkBehaviour
             StatusHeatMelee += meleeWeaponStats.HeatGen;
             if (StatusHeatMelee > 1) { StatusOverheatMelee = true; }
             Attack(WeaponSO.WeaponSlot.Melee);
+        }
+        if (InputManager.Instance.GetDashInput()) 
+        {
+            Dash();
         }
     }
     private void Attack(WeaponSO.WeaponSlot s)
@@ -291,8 +319,16 @@ public class PlayerEntity : NetworkBehaviour
     {
         if (!_isPlayerControlsEnabled) return;
 
-        m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.forward;
-        m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.right;
+        if (dashDurationRemaining > 0)
+        {
+            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * dashMovementVector;
+        }
+        else 
+        {
+            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.forward;
+            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.right;
+        }
+
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
@@ -302,28 +338,45 @@ public class PlayerEntity : NetworkBehaviour
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360);
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
     }
+    private void Dash() 
+    {
+        if (CurrentDashes < 1) { return; }
+        if (dashDurationRemaining > 0) { return; }
+
+        CurrentDashes -= 1;
+
+        dashMovementVector = movementInputV * m_rotationParent.forward;
+        dashMovementVector += movementInputH * m_rotationParent.right;
+        dashDurationRemaining = DASH_DURATION;
+    }
     public Camera GetCamera()
     {
         return m_playerCamera;
     }
     public void DealDamage(float magnitude)
     {
-        currentHealth -= magnitude;
-        if (currentHealth <= 0)
+        CurrentHealth -= magnitude;
+        if (CurrentHealth <= 0)
         {
             // Kill?
-
         }
+    }
+    public bool IsEvading() 
+    {
+        return dashDurationRemaining > 0;
     }
     public void Heal(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, stats.GetStat(StatGroup.Stat.MaxHealth));
+        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.GetStat(StatGroup.Stat.MaxHealth));
     }
     public float GetHealthPercent()
     {
-        return currentHealth / stats.GetStat(StatGroup.Stat.MaxHealth);
+        return CurrentHealth / stats.GetStat(StatGroup.Stat.MaxHealth);
     }
-
+    public float GetStat(StatGroup.Stat s) 
+    {
+        return stats.GetStat(s);
+    }
 
     public class TechGroup
     {

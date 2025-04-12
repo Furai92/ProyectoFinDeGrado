@@ -8,6 +8,8 @@ public class EventManager
     public static event Action<float, GameEnums.DamageElement, EnemyEntity> EnemyStatusDamageTakenEvent;
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
     public static event Action<HudCombatWarningElement.WarningType, Vector3> CombatWarningDisplayedEvent;
+    public static event Action<StatGroup> PlayerStatsUpdatedEvent;
+    public static event Action<Vector3> PlayerEvasionEvent;
 
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
@@ -74,5 +76,13 @@ public class EventManager
     public static void OnCombatWarningDisplayed(HudCombatWarningElement.WarningType wt, Vector3 pos) 
     {
         CombatWarningDisplayedEvent?.Invoke(wt, pos);
+    }
+    public static void OnPlayerStatsUpdated(StatGroup s) 
+    {
+        PlayerStatsUpdatedEvent?.Invoke(s);
+    }
+    public static void OnPlayerEvasion(Vector3 wpos) 
+    {
+        PlayerEvasionEvent?.Invoke(wpos);
     }
 }

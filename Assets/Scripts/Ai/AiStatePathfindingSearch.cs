@@ -7,11 +7,13 @@ using System.Collections.Generic;
 /// </summary>
 public class AiStatePathfindingSearch : AiStateBase
 {
+    private float timeoutTime;
     private float stateEndTime;
     private Stack<Vector3> path;
 
     private const float STATE_DURATION = 1f;
     private const float DISTANCE_TO_REACH_CHECKPOINT = 1.5f;
+    private const float TIMEOUT = 5f;
 
     public AiStatePathfindingSearch() 
     {
@@ -45,7 +47,7 @@ public class AiStatePathfindingSearch : AiStateBase
 
     public override bool IsFinished(EnemyEntity e)
     {
-        return path.Count == 0;
+        return path.Count == 0 || Time.time > timeoutTime;
     }
 
     public override void StartState(EnemyEntity e)
@@ -57,5 +59,6 @@ public class AiStatePathfindingSearch : AiStateBase
             e.TargetLookPosition = path.Peek();
         }
         stateEndTime = Time.time + STATE_DURATION;
+        timeoutTime = Time.time + TIMEOUT;
     }
 }

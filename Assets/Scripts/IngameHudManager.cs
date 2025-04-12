@@ -7,6 +7,7 @@ public class IngameHudManager : MonoBehaviour
     [SerializeField] private HudInteractionManager interactionManager;
     [SerializeField] private HudEnemyHealthBarManager enemyHealthBarManager;
     [SerializeField] private HudCombatNotifications combatNotificationsManager;
+    [SerializeField] private HudDashBar dashBarManager;
 
     public void SetUp(PlayerEntity p)
     {
@@ -18,5 +19,6 @@ public class IngameHudManager : MonoBehaviour
         interactionManager.SetUp(p.GetCamera());
         enemyHealthBarManager.SetUp(p.GetCamera());
         combatNotificationsManager.SetUp(p.GetCamera());
+        dashBarManager.SetUp(p);
     }
 }
