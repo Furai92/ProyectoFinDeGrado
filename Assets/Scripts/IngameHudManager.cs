@@ -12,7 +12,6 @@ public class IngameHudManager : MonoBehaviour
     public void SetUp(PlayerEntity p)
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.lockState = CursorLockMode.Confined;
 
         playerStatusManager.SetUp(p);
         gameStatusManager.SetUp();

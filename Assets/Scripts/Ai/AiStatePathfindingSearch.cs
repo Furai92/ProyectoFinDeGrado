@@ -13,7 +13,7 @@ public class AiStatePathfindingSearch : AiStateBase
 
     private const float STATE_DURATION = 1f;
     private const float DISTANCE_TO_REACH_CHECKPOINT = 1.5f;
-    private const float TIMEOUT = 5f;
+    private const float TIMEOUT = 2.5f;
 
     public AiStatePathfindingSearch() 
     {

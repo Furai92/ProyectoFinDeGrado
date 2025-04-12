@@ -46,6 +46,7 @@ public class PlayerEntity : NetworkBehaviour
     [SerializeField] private Transform m_rotationParent;
     [SerializeField] private Camera m_playerCamera;
     [SerializeField] private Rigidbody m_rb;
+    [SerializeField] private Collider m_agentCollisionsCollider;
 
     private float movementInputH;
     private float movementInputV;
@@ -328,7 +329,7 @@ public class PlayerEntity : NetworkBehaviour
             m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.forward;
             m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.right;
         }
-
+        m_agentCollisionsCollider.enabled = dashDurationRemaining <= 0;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
