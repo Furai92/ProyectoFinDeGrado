@@ -4,12 +4,15 @@ using System.Collections;
 
 public abstract class StageManagerBase : MonoBehaviour
 {
+    [field: SerializeField] public StageWaveSetupSO StageWaveData { get; private set; }
+
     [SerializeField] protected PathfindingManager pathfindingMng;
     [SerializeField] protected ObjectPoolManager objectPoolMng;
     [SerializeField] protected IngameHudManager hudMng;
     [SerializeField] protected GameObject playerPrefab;
     [SerializeField] protected GameDatabaseSO database;
 
+    [SerializeField] public int CombatWavesCompleted { get; private set; }
     private int playerRoomX = -1;
     private int playerRoomY = -1;
     private List<MapNode> validEnemySpawnNodes;
@@ -55,6 +58,7 @@ public abstract class StageManagerBase : MonoBehaviour
         SetupPlayers(stageMapData.GetPlayerSpawnPosition());
         hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
+        CombatWavesCompleted = 0;
         nextCurrencyDrop = Random.Range(0, 1);
         nextWeaponDrop = Random.Range(0, 1);
 
@@ -70,6 +74,8 @@ public abstract class StageManagerBase : MonoBehaviour
         currentState.UpdateState();
         if (currentState.IsFinished()) 
         {
+            if (currentState.GetStateType() == StageStateBase.StateType.Combat) { CombatWavesCompleted++; }
+
             currentState.StateEnd();
             EventManager.OnStageStateEnded(currentState);
             currentState = currentState.GetNextState();
@@ -197,6 +203,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
     }
     #region Public Static Methods
+    public static StageWaveSetupSO.EnemyWave GetCurrentWaveData() 
+    {
+        if (_instance == null) { return null; }
+
+        return _instance.StageWaveData.Waves[Mathf.Min(_instance.CombatWavesCompleted, _instance.StageWaveData.Waves.Count-1)];
+    }
     public static Vector3 GetRandomEnemySpawnPosition(int playerindex) 
     {
         if (_instance == null) { return Vector3.zero; }

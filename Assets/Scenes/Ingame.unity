@@ -2129,6 +2129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77476371cb2a154b9955dcaef091e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <StageWaveData>k__BackingField: {fileID: 11400000, guid: cbb4379c3dfe7cb48a13a17b429cd8e3, type: 2}
   pathfindingMng: {fileID: 705383477}
   objectPoolMng: {fileID: 705383482}
   hudMng: {fileID: 1748459821}

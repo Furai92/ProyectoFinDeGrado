@@ -15,7 +15,7 @@ public class ProceduralStagemanager : StageManagerBase
 
     public override void InitializeStage()
     {
-        currentState = new StageStateEnemyWave(40);
+        currentState = new StageStateCombatWave(40);
         StageStateBase rest = new StageStateRest();
         currentState.SetNextState(rest);
         rest.SetNextState(currentState);
