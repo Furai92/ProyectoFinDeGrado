@@ -235,13 +235,19 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return -1;
     }
+    public static StageStateBase.StateType GetCurrentStateType() 
+    {
+        if (_instance == null) { return StageStateBase.StateType.Rest; }
+
+        return _instance.currentState.GetStateType();
+    }
     public static float GetTimerDisplay() 
     {
         if (_instance == null) { return -1; }
 
         return _instance.currentState.GetTimerDisplay();
     }
-    public static void AddCurrency(float amount) 
+    public static void ChangeCurrency(float amount) 
     {
         if (_instance == null) { return; }
 

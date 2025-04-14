@@ -39,6 +39,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
   - {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
+  <Techs>k__BackingField:
+  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}

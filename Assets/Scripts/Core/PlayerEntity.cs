@@ -139,6 +139,7 @@ public class PlayerEntity : NetworkBehaviour
         if (ActiveTechDictionary.ContainsKey(t.ID))
         {
             tg = ActiveTechDictionary[t.ID];
+            UnequipTech(tg.SO);
             tg.Upgrade();
         }
         else 
@@ -399,7 +400,7 @@ public class PlayerEntity : NetworkBehaviour
         public void Upgrade() 
         {
             Level++;
-            Script.OnTechUpgraded();
+            Script?.OnTechUpgraded();
         }
     }
 }

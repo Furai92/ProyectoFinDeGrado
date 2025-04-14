@@ -10,11 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: TestTech
+  m_Name: Tormentor
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: TEST
+  <ID>k__BackingField: TORMENTOR
+  <NameID>k__BackingField: TCH_N_TORMENTOR
+  <DescID>k__BackingField: TCH_D_TORMENTOR
+  <MaxLevel>k__BackingField: -1
+  <Rarity>k__BackingField: 0
+  <TraitRequirement>k__BackingField: 
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 1
+    <Second>k__BackingField: -5
+  - <First>k__BackingField: 3
     <Second>k__BackingField: 10
   <BonusFlags>k__BackingField: 

@@ -19,3 +19,8 @@ MonoBehaviour:
     <Data>k__BackingField: Frozen
   - <ID>k__BackingField: STATUS_NAME_THUNDER
     <Data>k__BackingField: Shocked
+  - <ID>k__BackingField: TCH_N_TORMETOR
+    <Data>k__BackingField: Tormentor
+  - <ID>k__BackingField: TCH_D_TORMETOR
+    <Data>k__BackingField: Your intellect is increased, but your might and dexterity
+      is reduced.

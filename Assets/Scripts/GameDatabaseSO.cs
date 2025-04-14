@@ -8,6 +8,7 @@ public class GameDatabaseSO : ScriptableObject
     [field: SerializeField] public List<SerializedIdentifiedPair<GameObject>> EnemyPrefabs { get; private set; }
     [field: SerializeField] public List<SerializedIdentifiedPair<GameObject>> EnemyAttackPrefabs { get; private set; }
     [field: SerializeField] public List<WeaponSO> Weapons { get; private set; }
+    [field: SerializeField] public List<TechSO> Techs { get; private set; }
 
     [Header("Ungrouped prefabs")]
     [field: SerializeField] public GameObject DeflectedAttackPrefab { get; private set; }

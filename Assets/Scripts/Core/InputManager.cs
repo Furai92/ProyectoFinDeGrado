@@ -40,6 +40,10 @@ public class InputManager : MonoBehaviour
     {
         return _inputActions.Player.Look.ReadValue<Vector2>();
     }
+    public bool GetShopInput() 
+    {
+        return _inputActions.Player.ToggleShop.WasPressedThisFrame();
+    }
     public bool GetRangedAttackInput() 
     {
         return _inputActions.Player.RangedAttack.IsPressed();

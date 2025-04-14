@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleShop",
+                    "type": "Button",
+                    "id": "9301f3ce-540f-4b9a-a3f0-5f38ab2a9df4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -221,6 +230,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ReadyUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5279e85-305c-4657-a130-4e696d7ed1e0",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleShop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
