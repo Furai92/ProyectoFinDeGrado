@@ -25,6 +25,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private int enemyIDCounter;
     private bool initializationFinished = false;
     private Dictionary<string, List<WeaponSO>> weaponPools;
+    protected StageStatGroup stageStats;
 
     private static StageManagerBase _instance;
 
@@ -50,6 +51,7 @@ public abstract class StageManagerBase : MonoBehaviour
         SetUpItemPools();
         objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
+        stageStats = GetInitialStageStats();
 
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
 
@@ -235,6 +237,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return -1;
     }
+    public static StageStatGroup GetStageStats() 
+    {
+        if (_instance == null) { return new StageStatGroup(); }
+
+        return _instance.stageStats;
+    }
     public static StageStateBase.StateType GetCurrentStateType() 
     {
         if (_instance == null) { return StageStateBase.StateType.Rest; }
@@ -373,6 +381,7 @@ public abstract class StageManagerBase : MonoBehaviour
     }
     #endregion
 
-    public abstract IMapData GenerateMap(int seed);
+    protected abstract StageStatGroup GetInitialStageStats();
+    protected abstract IMapData GenerateMap(int seed);
     public abstract void InitializeStage();
 }

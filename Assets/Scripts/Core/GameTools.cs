@@ -30,19 +30,19 @@ public class GameTools
     #region Stats
     public static float MightToDamageMultiplier(float m)
     {
-        return m >= 0 ? 1 + m * MIGHT_TO_DAMAGE : 1 / (1 + NEGATIVE_MIGHT_TO_DAMAGE_DIV);
+        return m >= 0 ? 1 + m * MIGHT_TO_DAMAGE : 1 / (1 + NEGATIVE_MIGHT_TO_DAMAGE_DIV * -m);
     }
     public static float DexterityToDamageMultiplier(float d)
     {
-        return d >= 0 ? 1 + d * DEXTERITY_TO_DAMAGE : 1 / (1 + NEGATIVE_DEXTERITY_TO_DAMAGE_DIV);
+        return d >= 0 ? 1 + d * DEXTERITY_TO_DAMAGE : 1 / (1 + NEGATIVE_DEXTERITY_TO_DAMAGE_DIV * -d);
     }
     public static float IntellectToBuildupMultiplier(float i)
     {
-        return i >= 0 ? 1 + i * INTELLECT_TO_BUILDUP : 1 / (1 + NEGATIVE_INTELLECT_TO_BUILDUP_DIV);
+        return i >= 0 ? 1 + i * INTELLECT_TO_BUILDUP : 1 / (1 + NEGATIVE_INTELLECT_TO_BUILDUP_DIV * -i);
     }
     public static float EnduranceToDamageMultiplier(float e) 
     {
-        return e >= 0 ? 1 / (1 + e * ENDURANCE_TO_DR_DIV) : 1 + e * NEGATIVE_ENDURANCE_TO_DAMAGE;
+        return e >= 0 ? 1 / (1 + ENDURANCE_TO_DR_DIV * -e) : 1 + e * NEGATIVE_ENDURANCE_TO_DAMAGE;
     }
     #endregion
     #region Debug

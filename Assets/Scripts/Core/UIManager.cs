@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
     public void Reset()
     {
         _uiDocument.visualTreeAsset = null;
-        foreach (UIMenu child in _uiDocument.gameObject.GetComponentsInChildren<UIMenu>())
+        foreach (IngameMenuBase child in _uiDocument.gameObject.GetComponentsInChildren<IngameMenuBase>())
         {
             Destroy(child);
         }

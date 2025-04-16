@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
+  m_Name: UselessBarrel
+  m_EditorClassIdentifier: 
+  <ProjectileComponentIDOverride>k__BackingField: 
+  <CleaveComponentIDOverride>k__BackingField: 
+  <ProjectileComponentDamageOverride>k__BackingField: 0
+  <CleaveComponentDamageOverride>k__BackingField: 0
+  <ElementOverride>k__BackingField: 0
+  <DamageMultiplier>k__BackingField: 10
+  <MultishootModifier>k__BackingField: 5
+  <ArcModifier>k__BackingField: 90
+  <FirerateMultiplier>k__BackingField: 2.5
+  <BuildupMultiplier>k__BackingField: 1.5
+  <CriticalDamageMultiplier>k__BackingField: 2.5
+  <SizeMultiplier>k__BackingField: 5
+  <HeatGenerationMultiplier>k__BackingField: 1
+  <SplashModifier>k__BackingField: 10
+  <BouncesModifier>k__BackingField: 2
+  <PiercesModifier>k__BackingField: -99
+  <TimescaleMultiplier>k__BackingField: 0.05
+  <KnockbackModifier>k__BackingField: 0

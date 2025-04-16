@@ -8,7 +8,8 @@ public class EventManager
     public static event Action<float, GameEnums.DamageElement, EnemyEntity> EnemyStatusDamageTakenEvent;
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
     public static event Action<HudCombatWarningElement.WarningType, Vector3> CombatWarningDisplayedEvent;
-    public static event Action<StatGroup> PlayerStatsUpdatedEvent;
+    public static event Action<PlayerEntity> PlayerStatsUpdatedEvent;
+    public static event Action StageStatsUpdatedEvent;
     public static event Action<Vector3> PlayerEvasionEvent;
 
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
@@ -24,7 +25,12 @@ public class EventManager
     // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
     public static event Action<bool> UiFocusChangedEvent;
+    public static event Action<IngameMenuBase> UiMenuChangedEvent;
 
+    public static void OnUiMenuCanged(IngameMenuBase m) 
+    {
+        UiMenuChangedEvent?.Invoke(m);
+    }
     public static void OnUiFocusChanged(bool uifocused)
     {
         UiFocusChangedEvent?.Invoke(uifocused);
@@ -77,12 +83,16 @@ public class EventManager
     {
         CombatWarningDisplayedEvent?.Invoke(wt, pos);
     }
-    public static void OnPlayerStatsUpdated(StatGroup s) 
+    public static void OnPlayerStatsUpdated(PlayerEntity p) 
     {
-        PlayerStatsUpdatedEvent?.Invoke(s);
+        PlayerStatsUpdatedEvent?.Invoke(p);
     }
     public static void OnPlayerEvasion(Vector3 wpos) 
     {
         PlayerEvasionEvent?.Invoke(wpos);
+    }
+    public static void OnStageStatsUpdated() 
+    {
+        StageStatsUpdatedEvent?.Invoke();
     }
 }

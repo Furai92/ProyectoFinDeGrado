@@ -16,15 +16,15 @@ public class HudDashBar : MonoBehaviour
         playerReference = p;
         gameObject.SetActive(true);
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
-        UpdateActiveBars((int)p.GetStat(StatGroup.Stat.DashCount));
+        UpdateActiveBars((int)p.GetStat(PlayerStatGroup.Stat.DashCount));
     }
     private void OnDisable()
     {
         EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
     }
-    private void OnPlayerStatsUpdated(StatGroup s) 
+    private void OnPlayerStatsUpdated(PlayerEntity p) 
     {
-        UpdateActiveBars((int)s.GetStat(StatGroup.Stat.DashCount));
+        UpdateActiveBars((int)p.GetStat(PlayerStatGroup.Stat.DashCount));
     }
     private void UpdateActiveBars(int maxbars) 
     {

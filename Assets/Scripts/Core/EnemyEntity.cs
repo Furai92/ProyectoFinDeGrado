@@ -7,7 +7,7 @@ public class EnemyEntity : MonoBehaviour
     // Stats ===================================================
 
     [field: SerializeField] public float MovementSpeed { get; private set; }
-    [field: SerializeField] public float MaxHealth { get; private set; }
+    [field: SerializeField] public float BaseHealth { get; private set; }
     [field: SerializeField] public float KnockbackResistance { get; private set; }
 
     // Rewards =================================================
@@ -18,13 +18,16 @@ public class EnemyEntity : MonoBehaviour
 
     // Status ==================================================
 
+    private float maxHealth;
     private float currentHealth;
     private float[] statusBuildups;
     private float[] statusBuildupResistancesDivider;
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
-    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.25f;
+    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.3f;
+    private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.15f;
+    private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.1f;
     private const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
@@ -86,7 +89,7 @@ public class EnemyEntity : MonoBehaviour
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
         currentKnockbackForce = Vector3.zero;
-        currentHealth = MaxHealth;
+        currentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemyHealthMult);
         statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
         statusDurations = new float[BUILDUP_ARRAY_LENGHT];
         statusBuildupResistancesDivider = new float[BUILDUP_ARRAY_LENGHT];
@@ -149,10 +152,18 @@ public class EnemyEntity : MonoBehaviour
 
         nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
 
-        if (statusDurations[(int)GameEnums.DamageElement.Fire] > 0) 
+        if (statusDurations[(int)GameEnums.DamageElement.Fire] > 0)
         {
-            DealStatusDamage(MaxHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire); 
-        } 
+            DealStatusDamage(BaseHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire);
+        }
+        if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0)
+        {
+            DealStatusDamage(BaseHealth * FROST_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Frost);
+        }
+        if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0)
+        {
+            DealStatusDamage(BaseHealth * SHOCK_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Thunder);
+        }
 
         for (int i = 0; i < statusDurations.Length; i++) 
         {
@@ -192,7 +203,7 @@ public class EnemyEntity : MonoBehaviour
     }
     public float GetHealthPercent() 
     {
-        return currentHealth / MaxHealth;
+        return currentHealth / maxHealth;
     }
     public void Knockback(float magnitude, float direction)
     {
@@ -224,7 +235,7 @@ public class EnemyEntity : MonoBehaviour
     public void AddStatusBuildup(float magnitude, GameEnums.DamageElement element) 
     {
         int statusIndex = (int)element;
-        float buildupStrengtht = (magnitude / MaxHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
+        float buildupStrengtht = (magnitude / BaseHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
         while (buildupStrengtht > 0)
         {
             statusBuildups[statusIndex] += buildupStrengtht /= statusBuildupResistancesDivider[statusIndex];

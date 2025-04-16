@@ -33,7 +33,7 @@ public class PlayerEntity : NetworkBehaviour
 
     // Stats and equipment =================================================================================
 
-    private StatGroup stats;
+    private PlayerStatGroup stats;
     private WeaponData meleeWeapon;
     private WeaponData rangedWeapon;
 
@@ -48,6 +48,7 @@ public class PlayerEntity : NetworkBehaviour
     [SerializeField] private Rigidbody m_rb;
     [SerializeField] private Collider m_agentCollisionsCollider;
 
+    private bool rotationAllowed;
     private float movementInputH;
     private float movementInputV;
     private float rotationInputH;
@@ -84,13 +85,14 @@ public class PlayerEntity : NetworkBehaviour
         gameObject.SetActive(true);
         transform.position = pos;
         StageManagerBase.UpdatePlayerPosition(transform.position);
-        stats = new StatGroup();
-        stats.ChangeStat(StatGroup.Stat.Speed, 1f);
-        stats.ChangeStat(StatGroup.Stat.MaxHealth, 500f);
-        stats.ChangeStat(StatGroup.Stat.DashCount, 3);
-        stats.ChangeStat(StatGroup.Stat.DashRechargeRate, 1);
-        CurrentHealth = stats.GetStat(StatGroup.Stat.MaxHealth);
-        CurrentDashes = (int)stats.GetStat(StatGroup.Stat.DashCount);
+        stats = new PlayerStatGroup();
+        stats.ChangeStat(PlayerStatGroup.Stat.Speed, 1f);
+        stats.ChangeStat(PlayerStatGroup.Stat.MaxHealth, 500f);
+        stats.ChangeStat(PlayerStatGroup.Stat.DashCount, 3);
+        stats.ChangeStat(PlayerStatGroup.Stat.DashRechargeRate, 1);
+        stats.ChangeStat(PlayerStatGroup.Stat.Firerate, 1);
+        CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+        CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
         ActiveTechDictionary = new Dictionary<string, TechGroup>();
         StatusOverheatRanged = StatusOverheatMelee = false;
@@ -101,8 +103,19 @@ public class PlayerEntity : NetworkBehaviour
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
         currentDirection = 0; UpdateRotation();
+        rotationAllowed = true;
 
-        EventManager.OnPlayerStatsUpdated(stats);
+        EventManager.OnPlayerStatsUpdated(this);
+
+        EventManager.UiMenuChangedEvent += OnUiMenuChanged;
+    }
+    private void OnDisable()
+    {
+        EventManager.UiMenuChangedEvent -= OnUiMenuChanged;
+    }
+    private void OnUiMenuChanged(IngameMenuBase m) 
+    {
+        rotationAllowed = m == null;
     }
     private void Start()
     {
@@ -139,7 +152,6 @@ public class PlayerEntity : NetworkBehaviour
         if (ActiveTechDictionary.ContainsKey(t.ID))
         {
             tg = ActiveTechDictionary[t.ID];
-            UnequipTech(tg.SO);
             tg.Upgrade();
         }
         else 
@@ -157,7 +169,7 @@ public class PlayerEntity : NetworkBehaviour
         {
             stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
         }
-        EventManager.OnPlayerStatsUpdated(stats);
+        EventManager.OnPlayerStatsUpdated(this);
     }
     public void UnequipTech(TechSO t)
     {
@@ -172,10 +184,10 @@ public class PlayerEntity : NetworkBehaviour
             {
                 stats.ChangeFlag(tg.SO.BonusFlags[i], -tg.Level);
             }
-            ActiveTechDictionary[t.ID].Script.OnTechRemoved();
+            ActiveTechDictionary[t.ID].Script?.OnTechRemoved();
             ActiveTechDictionary.Remove(t.ID);
         }
-        EventManager.OnPlayerStatsUpdated(stats);
+        EventManager.OnPlayerStatsUpdated(this);
     }
     public void EquipWeapon(WeaponData w)
     {
@@ -213,27 +225,27 @@ public class PlayerEntity : NetworkBehaviour
     {
         movementInputH = InputManager.Instance.GetMovementInput().x;
         movementInputV = InputManager.Instance.GetMovementInput().y;
-        rotationInputH = InputManager.Instance.GetLookInput().x;
-        rotationInputV = InputManager.Instance.GetLookInput().y;
+        rotationInputH = rotationAllowed ? InputManager.Instance.GetLookInput().x : 0;
+        rotationInputV = rotationAllowed ? InputManager.Instance.GetLookInput().y : 0;
 
         currentDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
         UpdateRotation();
         m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
 
-        rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate;
+        rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
         heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
         StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
         if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
 
-        meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate;
+        meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
         heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
         StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, Time.deltaTime * heatDecayMelee);
         if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
 
-        if (CurrentDashes < (int)stats.GetStat(StatGroup.Stat.DashCount)) 
+        if (CurrentDashes < (int)stats.GetStat(PlayerStatGroup.Stat.DashCount)) 
         {
-            DashRechargePercent += Time.deltaTime * BASE_DASH_RECHARGE_RATE * stats.GetStat(StatGroup.Stat.DashRechargeRate);
+            DashRechargePercent += Time.deltaTime * BASE_DASH_RECHARGE_RATE * stats.GetStat(PlayerStatGroup.Stat.DashRechargeRate);
             if (DashRechargePercent >= 1) 
             {
                 DashRechargePercent = 0;
@@ -263,11 +275,16 @@ public class PlayerEntity : NetworkBehaviour
             Dash();
         }
     }
+    public void CoolDownWeapons(float tempRemoved) 
+    {
+        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, tempRemoved);
+        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, tempRemoved);
+    }
     private void Attack(WeaponSO.WeaponSlot s)
     {
         WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
         float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ?
-            GameTools.DexterityToDamageMultiplier(stats.GetStat(StatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(StatGroup.Stat.Might));
+            GameTools.DexterityToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Might));
 
         // Projectile component
         if (wpn.ProjectileComponentID != "")
@@ -323,12 +340,12 @@ public class PlayerEntity : NetworkBehaviour
 
         if (dashDurationRemaining > 0)
         {
-            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * dashMovementVector;
+            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
         }
         else 
         {
-            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.forward;
-            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(StatGroup.Stat.Speed) * m_rotationParent.right;
+            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.forward;
+            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.right;
         }
         m_agentCollisionsCollider.enabled = dashDurationRemaining <= 0;
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
@@ -369,13 +386,13 @@ public class PlayerEntity : NetworkBehaviour
     }
     public void Heal(float amount)
     {
-        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.GetStat(StatGroup.Stat.MaxHealth));
+        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
     }
     public float GetHealthPercent()
     {
-        return CurrentHealth / stats.GetStat(StatGroup.Stat.MaxHealth);
+        return CurrentHealth / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
     }
-    public float GetStat(StatGroup.Stat s) 
+    public float GetStat(PlayerStatGroup.Stat s) 
     {
         return stats.GetStat(s);
     }
@@ -394,6 +411,7 @@ public class PlayerEntity : NetworkBehaviour
             {
                 Script = System.Activator.CreateInstance(System.Type.GetType(SO.Script)) as TechBase;
                 Script.Group = this;
+                Script.OnTechAdded();
             }
             
         }

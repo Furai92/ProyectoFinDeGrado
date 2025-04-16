@@ -10,6 +10,8 @@ public class IngameHudManager : MonoBehaviour
     [SerializeField] private HudCombatNotifications combatNotificationsManager;
     [SerializeField] private HudDashBar dashBarManager;
     [SerializeField] private HudShop shopManager;
+    [SerializeField] private HudStatsMenu playerStatsMenuManager;
+    [SerializeField] private HudStageStatusMenu stageStatsMenuManager;
 
     private IngameMenuBase currentMenu;
 
@@ -24,12 +26,16 @@ public class IngameHudManager : MonoBehaviour
         combatNotificationsManager.SetUp(p.GetCamera());
         dashBarManager.SetUp(p);
         shopManager.SetUp(p);
+        playerStatsMenuManager.SetUp(p);
+        stageStatsMenuManager.SetUp();
 
         Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
         if (InputManager.Instance.GetShopInput()) { ToggleMenu(shopManager); }
+        if (InputManager.Instance.GetStageStatsInput()) { ToggleMenu(stageStatsMenuManager); }
+        if (InputManager.Instance.GetPlayerStatsInput()) { ToggleMenu(playerStatsMenuManager); }
     }
     private void ToggleMenu(IngameMenuBase newmenu) 
     {
@@ -46,5 +52,6 @@ public class IngameHudManager : MonoBehaviour
             newmenu.OpenMenu();
         }
         Cursor.lockState = currentMenu == null ? CursorLockMode.Locked : CursorLockMode.None;
+        EventManager.OnUiMenuCanged(currentMenu);
     }
 }

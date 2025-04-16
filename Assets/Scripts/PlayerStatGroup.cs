@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StatGroup
+public class PlayerStatGroup
 {
     public enum Stat { MaxHealth, Might, Dexterity, Intellect, Endurance,  DashCount, CritChance, Speed, Firerate, DashRechargeRate, PickupRadius, CritBonusDamage }
     public enum PlayerFlags { NoHeal }
@@ -8,10 +8,10 @@ public class StatGroup
     private float[] stats;
     private int[] flags;
 
-    private const int STAT_ARRAY_LENGHT = 10;
+    private const int STAT_ARRAY_LENGHT = 20;
     private const int FLAG_ARRAY_LENGHT = 5;
 
-    public StatGroup() 
+    public PlayerStatGroup() 
     {
         stats = new float[STAT_ARRAY_LENGHT];
         flags = new int[FLAG_ARRAY_LENGHT];

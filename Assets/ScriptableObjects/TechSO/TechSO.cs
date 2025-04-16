@@ -12,8 +12,8 @@ public class TechSO : ScriptableObject
     [field: SerializeField] public List<GameEnums.Trait> TraitRequirement { get; private set; }
 
     [field: SerializeField] public string Script { get; private set; }
-    [field: SerializeField] public List<SerializedPair<StatGroup.Stat, float>> BonusStats { get; private set; }
-    [field: SerializeField] public List<StatGroup.PlayerFlags> BonusFlags { get; private set; }
+    [field: SerializeField] public List<SerializedPair<PlayerStatGroup.Stat, float>> BonusStats { get; private set; }
+    [field: SerializeField] public List<PlayerStatGroup.PlayerFlags> BonusFlags { get; private set; }
 
 
 }

@@ -44,6 +44,14 @@ public class InputManager : MonoBehaviour
     {
         return _inputActions.Player.ToggleShop.WasPressedThisFrame();
     }
+    public bool GetPlayerStatsInput()
+    {
+        return _inputActions.Player.TogglePlayerStats.WasPressedThisFrame();
+    }
+    public bool GetStageStatsInput()
+    {
+        return _inputActions.Player.ToggleStageStats.WasPressedThisFrame();
+    }
     public bool GetRangedAttackInput() 
     {
         return _inputActions.Player.RangedAttack.IsPressed();

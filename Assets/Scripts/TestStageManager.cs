@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TestStageManager : StageManagerBase
 {
-    public override IMapData GenerateMap(int seed)
+    protected override IMapData GenerateMap(int seed)
     {
         return new TestMapGeneration();
     }
@@ -10,5 +10,10 @@ public class TestStageManager : StageManagerBase
     public override void InitializeStage()
     {
 
+    }
+
+    protected override StageStatGroup GetInitialStageStats()
+    {
+        return new StageStatGroup();
     }
 }

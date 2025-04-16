@@ -9,11 +9,15 @@ public class StageStateCombatWave : StageStateBase
     private float waveDurationRemaining;
     private float chestSpawnRate;
     private float chestSpawnPercent;
+    private float nextSpawnCheck;
+
+    private const float SPAWN_CHECK_INTERVAL = 0.5f;
     private const int MAX_ENEMIES = 20;
 
     public StageStateCombatWave(float duration) 
     {
         waveDurationMax = duration;
+        nextSpawnCheck = Time.time + SPAWN_CHECK_INTERVAL;
     }
 
     public override bool IsFinished()
@@ -35,7 +39,7 @@ public class StageStateCombatWave : StageStateBase
             WaveSpawnTimerData wstd = new WaveSpawnTimerData();
             wstd.spawnID = waveData.EnemySpawns[i].ID;
             wstd.nextSpawn = waveData.EnemySpawns[i].Cooldown + waveData.EnemySpawns[i].Delay;
-            wstd.spawnCooldown = waveData.EnemySpawns[i].Cooldown;
+            wstd.spawnCooldown = waveData.EnemySpawns[i].Cooldown / StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemySpawnRate);
             wstd.spawnCount = 0;
             wstd.maxSpawns = waveData.EnemySpawns[i].MaxSpawns;
             spawnTimers.Add(wstd);
@@ -47,10 +51,21 @@ public class StageStateCombatWave : StageStateBase
 
     public override void UpdateState()
     {
-        // Spawn enemies
-        for (int i = spawnTimers.Count - 1; i >= 0; i--) 
+        if (Time.time > nextSpawnCheck) 
         {
-            if (Time.time > spawnTimers[i].nextSpawn) 
+            CheckSpawns();
+            nextSpawnCheck = Time.time + SPAWN_CHECK_INTERVAL;
+        }
+
+        // Count down timer
+        waveDurationRemaining -= Time.deltaTime;
+    }
+    private void CheckSpawns() 
+    {
+        // Spawn enemies
+        for (int i = spawnTimers.Count - 1; i >= 0; i--)
+        {
+            if (Time.time > spawnTimers[i].nextSpawn)
             {
                 SpawnEnemy(spawnTimers[i].spawnID);
                 spawnTimers[i].spawnCount++;
@@ -61,14 +76,11 @@ public class StageStateCombatWave : StageStateBase
 
         // Spawn chests
         chestSpawnPercent += Time.deltaTime * chestSpawnRate;
-        if (chestSpawnPercent >= 1) 
+        if (chestSpawnPercent >= 1)
         {
             SpawnChest();
             chestSpawnPercent = 0;
         }
-
-        // Count down timer
-        waveDurationRemaining -= Time.deltaTime;
     }
     public override float GetTimerDisplay()
     {

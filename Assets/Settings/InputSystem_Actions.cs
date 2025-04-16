@@ -98,6 +98,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TogglePlayerStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""c5404f65-788a-4cca-84c8-c4164199c27f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleStageStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0f70177-ec25-489d-8c05-a06ef5d2265b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -263,6 +281,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8854ab92-a8ca-4182-8f67-13fc3c6ea8f1"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TogglePlayerStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8145b587-c99d-462c-b06f-8372129ee0c3"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleStageStats"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -808,6 +848,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_MeleeAttack = m_Player.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Player_ReadyUp = m_Player.FindAction("ReadyUp", throwIfNotFound: true);
         m_Player_ToggleShop = m_Player.FindAction("ToggleShop", throwIfNotFound: true);
+        m_Player_TogglePlayerStats = m_Player.FindAction("TogglePlayerStats", throwIfNotFound: true);
+        m_Player_ToggleStageStats = m_Player.FindAction("ToggleStageStats", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -895,6 +937,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MeleeAttack;
     private readonly InputAction m_Player_ReadyUp;
     private readonly InputAction m_Player_ToggleShop;
+    private readonly InputAction m_Player_TogglePlayerStats;
+    private readonly InputAction m_Player_ToggleStageStats;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -907,6 +951,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
         public InputAction @ReadyUp => m_Wrapper.m_Player_ReadyUp;
         public InputAction @ToggleShop => m_Wrapper.m_Player_ToggleShop;
+        public InputAction @TogglePlayerStats => m_Wrapper.m_Player_TogglePlayerStats;
+        public InputAction @ToggleStageStats => m_Wrapper.m_Player_ToggleStageStats;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -940,6 +986,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleShop.started += instance.OnToggleShop;
             @ToggleShop.performed += instance.OnToggleShop;
             @ToggleShop.canceled += instance.OnToggleShop;
+            @TogglePlayerStats.started += instance.OnTogglePlayerStats;
+            @TogglePlayerStats.performed += instance.OnTogglePlayerStats;
+            @TogglePlayerStats.canceled += instance.OnTogglePlayerStats;
+            @ToggleStageStats.started += instance.OnToggleStageStats;
+            @ToggleStageStats.performed += instance.OnToggleStageStats;
+            @ToggleStageStats.canceled += instance.OnToggleStageStats;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -968,6 +1020,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleShop.started -= instance.OnToggleShop;
             @ToggleShop.performed -= instance.OnToggleShop;
             @ToggleShop.canceled -= instance.OnToggleShop;
+            @TogglePlayerStats.started -= instance.OnTogglePlayerStats;
+            @TogglePlayerStats.performed -= instance.OnTogglePlayerStats;
+            @TogglePlayerStats.canceled -= instance.OnTogglePlayerStats;
+            @ToggleStageStats.started -= instance.OnToggleStageStats;
+            @ToggleStageStats.performed -= instance.OnToggleStageStats;
+            @ToggleStageStats.canceled -= instance.OnToggleStageStats;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1113,6 +1171,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnMeleeAttack(InputAction.CallbackContext context);
         void OnReadyUp(InputAction.CallbackContext context);
         void OnToggleShop(InputAction.CallbackContext context);
+        void OnTogglePlayerStats(InputAction.CallbackContext context);
+        void OnToggleStageStats(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
