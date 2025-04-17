@@ -8,6 +8,7 @@ public class EnemyEntity : MonoBehaviour
 
     [field: SerializeField] public float MovementSpeed { get; private set; }
     [field: SerializeField] public float BaseHealth { get; private set; }
+    [field: SerializeField] public int ExtraBars { get; private set; }
     [field: SerializeField] public float KnockbackResistance { get; private set; }
 
     // Rewards =================================================
@@ -17,6 +18,8 @@ public class EnemyEntity : MonoBehaviour
     [field: SerializeField] public float HealthDroprate { get; private set; }
 
     // Status ==================================================
+
+    public int RemainingExtraBars { get; private set; }
 
     private float maxHealth;
     private float currentHealth;
@@ -90,6 +93,7 @@ public class EnemyEntity : MonoBehaviour
         currentLookRotation = 0;
         currentKnockbackForce = Vector3.zero;
         currentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemyHealthMult);
+        RemainingExtraBars = ExtraBars;
         statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
         statusDurations = new float[BUILDUP_ARRAY_LENGHT];
         statusBuildupResistancesDivider = new float[BUILDUP_ARRAY_LENGHT];
@@ -224,8 +228,14 @@ public class EnemyEntity : MonoBehaviour
     }
     public void DealStatusDamage(float magnitude, GameEnums.DamageElement element) 
     {
-        EventManager.OnEnemyStatusDamageTaken(magnitude, element, this);
         currentHealth -= magnitude;
+        // Use extra health bars
+        while (RemainingExtraBars > 0 && currentHealth <= 0)
+        {
+            RemainingExtraBars--;
+            currentHealth += maxHealth;
+        }
+        EventManager.OnEnemyStatusDamageTaken(magnitude, element, this);
         if (currentHealth <= 0)
         {
             EventManager.OnEnemyDefeated(this);
@@ -265,9 +275,14 @@ public class EnemyEntity : MonoBehaviour
 
         // Reduce health
         currentHealth -= magnitude;
+        // Use extra health bars
+        while (RemainingExtraBars > 0 && currentHealth <= 0)
+        {
+            RemainingExtraBars--;
+            currentHealth += maxHealth;
+        }
         EventManager.OnEnemyDirectDamageTaken(magnitude, 0, element, this);
 
-        // Kill if necessary
         if (currentHealth <= 0)
         {
             EventManager.OnEnemyDefeated(this);

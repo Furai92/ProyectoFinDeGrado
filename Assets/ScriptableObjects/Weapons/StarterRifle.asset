@@ -30,8 +30,8 @@ MonoBehaviour:
   <HeatGeneration>k__BackingField: 0.01
   <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 0
-  <Pierces>k__BackingField: 1
-  <Timescale>k__BackingField: 1
+  <Pierces>k__BackingField: 0
+  <Timescale>k__BackingField: 0.3
   <Knockback>k__BackingField: 0
   <PartSlots>k__BackingField:
   - <SlotName>k__BackingField: Core
@@ -41,4 +41,5 @@ MonoBehaviour:
     - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
   - <SlotName>k__BackingField: Barrel
     <CompatibleParts>k__BackingField:
-    - {fileID: 11400000, guid: e281338f741451646bf8c7cebc444a3a, type: 2}
+    - {fileID: 11400000, guid: f748286807947e24aa8bd222f30cb2fc, type: 2}
+    - {fileID: 11400000, guid: c0ff11bedf0d3f04f910f2620bd9065e, type: 2}

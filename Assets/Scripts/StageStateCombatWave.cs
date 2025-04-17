@@ -14,9 +14,8 @@ public class StageStateCombatWave : StageStateBase
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
     private const int MAX_ENEMIES = 20;
 
-    public StageStateCombatWave(float duration) 
+    public StageStateCombatWave() 
     {
-        waveDurationMax = duration;
         nextSpawnCheck = Time.time + SPAWN_CHECK_INTERVAL;
     }
 
@@ -33,6 +32,7 @@ public class StageStateCombatWave : StageStateBase
     public override void StateStart()
     {
         StageWaveSetupSO.EnemyWave waveData = StageManagerBase.GetCurrentWaveData();
+        waveDurationMax = waveData.Duration;
         spawnTimers = new List<WaveSpawnTimerData>();
         for (int i = 0; i < waveData.EnemySpawns.Count; i++) 
         {

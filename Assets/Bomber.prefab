@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 922802295894889612}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.177, z: 0.15}
+  m_LocalPosition: {x: 0, y: 0.33, z: 0.285}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -169,9 +169,9 @@ Transform:
   m_GameObject: {fileID: 1460518969571793821}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 0.74, y: 0.74, z: 0.74}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6177083335514777297}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -206,7 +206,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: c325771470feabf498417b992b396dd0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5628125138159533317}
   - component: {fileID: 8733903310432010687}
   m_Layer: 8
-  m_Name: RangedEnemy
+  m_Name: Bomber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,13 +355,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5dc81644a1cd449071f2b111cfbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MovementSpeed>k__BackingField: 7
-  <BaseHealth>k__BackingField: 1000
+  <MovementSpeed>k__BackingField: 6
+  <BaseHealth>k__BackingField: 800
   <KnockbackResistance>k__BackingField: 0
   <ItemDropRate>k__BackingField: 0.1
   <CurrencyDropRate>k__BackingField: 5
   <HealthDroprate>k__BackingField: 1
-  AiFile: {fileID: 11400000, guid: 2132cce7e7ac9fd49a4d3a7eda2a34e2, type: 2}
+  AiFile: {fileID: 11400000, guid: b2d424ccd1d8d79488b4a9bc9c8b1733, type: 2}
   <MaxCombatDistance>k__BackingField: 30
   <RequiresLosForCombat>k__BackingField: 1
   rb: {fileID: 8733903310432010687}

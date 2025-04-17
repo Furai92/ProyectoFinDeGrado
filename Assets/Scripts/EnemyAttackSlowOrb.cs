@@ -70,4 +70,9 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     {
         // No actions
     }
+
+    public override void OnWaveEnded()
+    {
+        gameObject.SetActive(false);
+    }
 }

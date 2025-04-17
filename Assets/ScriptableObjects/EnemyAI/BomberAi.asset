@@ -10,25 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fcf014a63b6dc489c298d10bd6fd87, type: 3}
-  m_Name: RangedEnemyAi
+  m_Name: BomberAi
   m_EditorClassIdentifier: 
   <Entry>k__BackingField: MOVE_CLOSER
   <Nodes>k__BackingField:
   - <ID>k__BackingField: MOVE_CLOSER
     <Script>k__BackingField: AiStateWalkStraightToTarget
   - <ID>k__BackingField: ATTACK
-    <Script>k__BackingField: AiStateChargeRangedAttack
+    <Script>k__BackingField: AiStateThrowBomb
   - <ID>k__BackingField: IDLE
     <Script>k__BackingField: AiStateIdle
-  - <ID>k__BackingField: STRAFE
-    <Script>k__BackingField: AiStateStrafe
   <Transitions>k__BackingField:
   - <From>k__BackingField: MOVE_CLOSER
     <To>k__BackingField: ATTACK
     <Priority>k__BackingField: 1
     <Condition>k__BackingField: 1
     <Comparator>k__BackingField: 0
-    <ConditionalValue>k__BackingField: 10
+    <ConditionalValue>k__BackingField: 15
     <ConditionalBool>k__BackingField: 0
   - <From>k__BackingField: ATTACK
     <To>k__BackingField: IDLE
@@ -38,23 +36,16 @@ MonoBehaviour:
     <ConditionalValue>k__BackingField: 0
     <ConditionalBool>k__BackingField: 0
   - <From>k__BackingField: IDLE
-    <To>k__BackingField: STRAFE
-    <Priority>k__BackingField: 1
-    <Condition>k__BackingField: 0
-    <Comparator>k__BackingField: 2
-    <ConditionalValue>k__BackingField: 0
-    <ConditionalBool>k__BackingField: 0
-  - <From>k__BackingField: STRAFE
     <To>k__BackingField: MOVE_CLOSER
-    <Priority>k__BackingField: 2
+    <Priority>k__BackingField: 1
     <Condition>k__BackingField: 1
     <Comparator>k__BackingField: 4
-    <ConditionalValue>k__BackingField: 10
+    <ConditionalValue>k__BackingField: 15
     <ConditionalBool>k__BackingField: 0
-  - <From>k__BackingField: STRAFE
+  - <From>k__BackingField: IDLE
     <To>k__BackingField: ATTACK
     <Priority>k__BackingField: 1
     <Condition>k__BackingField: 0
-    <Comparator>k__BackingField: 0
-    <ConditionalValue>k__BackingField: 0
+    <Comparator>k__BackingField: 4
+    <ConditionalValue>k__BackingField: 6
     <ConditionalBool>k__BackingField: 0

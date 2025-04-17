@@ -17,7 +17,7 @@ MonoBehaviour:
   <ProjectileComponentDamageOverride>k__BackingField: 0
   <CleaveComponentDamageOverride>k__BackingField: 0
   <ElementOverride>k__BackingField: 4
-  <DamageMultiplier>k__BackingField: 0.8
+  <DamageMultiplier>k__BackingField: 0.6
   <MultishootModifier>k__BackingField: 0
   <ArcModifier>k__BackingField: 0
   <FirerateMultiplier>k__BackingField: 1.2
@@ -26,7 +26,7 @@ MonoBehaviour:
   <SizeMultiplier>k__BackingField: 1
   <HeatGenerationMultiplier>k__BackingField: 1
   <SplashModifier>k__BackingField: 0
-  <BouncesModifier>k__BackingField: 0
+  <BouncesModifier>k__BackingField: 3
   <PiercesModifier>k__BackingField: 0
   <TimescaleMultiplier>k__BackingField: 1
-  <KnockbackMultiplier>k__BackingField: 1
+  <KnockbackModifier>k__BackingField: 0

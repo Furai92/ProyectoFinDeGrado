@@ -66,4 +66,9 @@ public class EnemyAttackChargedOrb : EnemyAttackBase
     {
         
     }
+
+    public override void OnWaveEnded()
+    {
+        gameObject.SetActive(false);
+    }
 }

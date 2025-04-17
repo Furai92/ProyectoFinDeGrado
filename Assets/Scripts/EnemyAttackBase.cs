@@ -13,11 +13,13 @@ public abstract class EnemyAttackBase : MonoBehaviour
     {
         EventManager.EnemyStatusEffectAppliedEvent += OnEnemyStatusApplied;
         EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
     }
     private void OnDisable()
     {
         EventManager.EnemyStatusEffectAppliedEvent -= OnEnemyStatusApplied;
         EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
     }
     private void OnEnemyDefeated(EnemyEntity e) 
     {
@@ -25,10 +27,15 @@ public abstract class EnemyAttackBase : MonoBehaviour
     }
     private void OnEnemyStatusApplied(GameEnums.DamageElement elem, EnemyEntity e) 
     {
-        if (e == User) { OnUserStunned(); }
+        if (e == User && elem == GameEnums.DamageElement.Frost) { OnUserStunned(); }
+    }
+    private void OnStageStateStarted(StageStateBase s) 
+    {
+        if (s.GetStateType() == StageStateBase.StateType.Rest) { OnWaveEnded(); }
     }
 
     public abstract void Initialize(Vector3 pos, float dir);
     public abstract void OnUserStunned();
     public abstract void OnUserDefeated();
+    public abstract void OnWaveEnded();
 }

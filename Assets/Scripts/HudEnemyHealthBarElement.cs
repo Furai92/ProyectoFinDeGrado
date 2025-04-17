@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HudEnemyHealthBarElement : MonoBehaviour
 {
     [SerializeField] private Image fill;
     [SerializeField] private Image filltrail;
+    [SerializeField] private List<GameObject> extraBarIcons;
 
     public EnemyEntity TrackedEnemy { get; private set; }
 
@@ -56,6 +58,10 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     }
     private void Update()
     {
+        for (int i = 0; i < extraBarIcons.Count; i++) 
+        {
+            extraBarIcons[i].gameObject.SetActive(TrackedEnemy.RemainingExtraBars > i);
+        }
         filltrail.fillAmount = Mathf.MoveTowards(filltrail.fillAmount, fill.fillAmount, Time.deltaTime * FILLTRAIL_SPEED);
         transform.position = mcam.WorldToScreenPoint(TrackedEnemy.transform.position + Vector3.up * BAR_WPOS_VERTICAL_OFFSET);
         if (transform.position.z <= 0) { gameObject.SetActive(false); }

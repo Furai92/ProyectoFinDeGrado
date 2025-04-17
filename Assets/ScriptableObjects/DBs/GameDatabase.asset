@@ -30,11 +30,19 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
   - <ID>k__BackingField: MELEE
     <Data>k__BackingField: {fileID: 6007917864536491662, guid: 9303f9ebf9a30334895355d32298f2fa, type: 3}
+  - <ID>k__BackingField: BOMBER
+    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 05ec1c7b2fb71bf4db7eaa8eaa0b138f, type: 3}
+  - <ID>k__BackingField: SNIPER
+    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 0764a6030fe26c342a1b817fb65d5d8b, type: 3}
   <EnemyAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: SLOW_ORB
     <Data>k__BackingField: {fileID: 7397320916023109853, guid: b265df20be3bd27439f28b35618dc7e8, type: 3}
   - <ID>k__BackingField: MELEE_SMALL
     <Data>k__BackingField: {fileID: 3746625057581498513, guid: b9224d28f7e282d44a93baad738eed88, type: 3}
+  - <ID>k__BackingField: FIREBOMB
+    <Data>k__BackingField: {fileID: 6445567525718638580, guid: 2aab97147ce126d4da32b5f2b0398748, type: 3}
+  - <ID>k__BackingField: BEAM
+    <Data>k__BackingField: {fileID: 5598505143166327596, guid: e6023eba246022d45b6a8b35a6d53fc5, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}

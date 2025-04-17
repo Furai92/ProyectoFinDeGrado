@@ -48,4 +48,9 @@ public class EnemyAttackSmallMelee : EnemyAttackBase
     {
         gameObject.SetActive(false);
     }
+
+    public override void OnWaveEnded()
+    {
+        gameObject.SetActive(false);
+    }
 }
