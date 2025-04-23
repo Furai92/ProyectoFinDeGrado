@@ -38,7 +38,7 @@ public class AiStateSmallMeleeAttack : AiStateBase
     public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + ATTACK_DURATION;
-        target = StageManagerBase.GetClosestPlayer(e.transform.position);
+        target = PlayerEntity.ActiveInstance;
         attackPerformed = false;
     }
 }

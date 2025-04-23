@@ -28,9 +28,9 @@ public class Chest : Interactable
         base.OnDisable();
     }
 
-    private void OnStageStateEnded(StageStateBase s) 
+    private void OnStageStateEnded(StageStateBase.GameState s) 
     {
-        if (s.GetStateType() == StageStateBase.StateType.Combat) { gameObject.SetActive(false); }
+        gameObject.SetActive(false);
     }
 
     public override InteractableInfo GetInfo()

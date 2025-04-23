@@ -2,42 +2,45 @@ using UnityEngine;
 
 public class IngameHudManager : MonoBehaviour
 {
-
-    [SerializeField] private HudPlayerStatusManager playerStatusManager;
-    [SerializeField] private HudGameStatusManager gameStatusManager;
-    [SerializeField] private HudInteractionManager interactionManager;
-    [SerializeField] private HudEnemyHealthBarManager enemyHealthBarManager;
-    [SerializeField] private HudCombatNotifications combatNotificationsManager;
-    [SerializeField] private HudDashBar dashBarManager;
     [SerializeField] private HudShop shopManager;
     [SerializeField] private HudStatsMenu playerStatsMenuManager;
     [SerializeField] private HudStageStatusMenu stageStatsMenuManager;
+    [SerializeField] private HudSettingsMenu settingsMenuManager;
 
-    private IngameMenuBase currentMenu;
+    private IGameMenu currentMenu;
 
-    public void SetUp(PlayerEntity p)
+    private void OnEnable()
     {
         currentMenu = null;
-
-        playerStatusManager.SetUp(p);
-        gameStatusManager.SetUp();
-        interactionManager.SetUp(p.GetCamera());
-        enemyHealthBarManager.SetUp(p.GetCamera());
-        combatNotificationsManager.SetUp(p.GetCamera());
-        dashBarManager.SetUp(p);
-        shopManager.SetUp(p);
-        playerStatsMenuManager.SetUp(p);
-        stageStatsMenuManager.SetUp();
-
         Cursor.lockState = CursorLockMode.Locked;
+        EventManager.UiMenuClosedEvent += OnMenuClosed;
+    }
+    private void OnDisable()
+    {
+        EventManager.UiMenuClosedEvent -= OnMenuClosed;
+    }
+    private void OnMenuClosed(IGameMenu m) 
+    {
+        if (currentMenu == m) 
+        {
+            currentMenu = null;
+            UpdateFocus();
+        }
     }
     private void Update()
     {
         if (InputManager.Instance.GetShopInput()) { ToggleMenu(shopManager); }
         if (InputManager.Instance.GetStageStatsInput()) { ToggleMenu(stageStatsMenuManager); }
         if (InputManager.Instance.GetPlayerStatsInput()) { ToggleMenu(playerStatsMenuManager); }
+        if (InputManager.Instance.GetSettingsInput()) { ToggleMenu(settingsMenuManager); }
     }
-    private void ToggleMenu(IngameMenuBase newmenu) 
+    private void UpdateFocus() 
+    {
+        Cursor.lockState = currentMenu == null ? CursorLockMode.Locked : CursorLockMode.None;
+        Time.timeScale = currentMenu == null ? 1 : 0;
+        EventManager.OnUiMenuFocusChanged(currentMenu);
+    }
+    private void ToggleMenu(IGameMenu newmenu) 
     {
         if (currentMenu == newmenu)
         {
@@ -51,7 +54,6 @@ public class IngameHudManager : MonoBehaviour
             currentMenu = newmenu;
             newmenu.OpenMenu();
         }
-        Cursor.lockState = currentMenu == null ? CursorLockMode.Locked : CursorLockMode.None;
-        EventManager.OnUiMenuCanged(currentMenu);
+        UpdateFocus();
     }
 }

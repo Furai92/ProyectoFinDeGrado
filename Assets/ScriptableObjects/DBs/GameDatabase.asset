@@ -15,15 +15,11 @@ MonoBehaviour:
   <PlayerAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: EXPLOSION
     <Data>k__BackingField: {fileID: 4017137939848322881, guid: 42aae0c0f5af746418dc662dbde7dce5, type: 3}
-  - <ID>k__BackingField: PROJ_STANDARD
-    <Data>k__BackingField: {fileID: 2524257755043567697, guid: 6f3ddf3ea5a7a7545b8d1ef1154108f4, type: 3}
-  - <ID>k__BackingField: MORTAR
-    <Data>k__BackingField: {fileID: 2524257755043567697, guid: 38782501d24b44042bb9123e0c1cfaef, type: 3}
-  - <ID>k__BackingField: BEAM
-    <Data>k__BackingField: {fileID: 2514393828548108971, guid: 2b44b41b8c4dc5a488eec7ea24c60ec9, type: 3}
   - <ID>k__BackingField: MELEE
     <Data>k__BackingField: {fileID: 6703104240699776055, guid: bdbf471108c852e4a921b84aa38f46f1, type: 3}
-  - <ID>k__BackingField: PROJ_FAST
+  - <ID>k__BackingField: P_STANDARD
+    <Data>k__BackingField: {fileID: 5508074904858161231, guid: bd736df4b0eba9e4b982697170bdeca3, type: 3}
+  - <ID>k__BackingField: P_BOUNCE_ORB
     <Data>k__BackingField: {fileID: 5508074904858161231, guid: 9bbc97a8b25219c4aab9f95ddc1874ad, type: 3}
   <EnemyPrefabs>k__BackingField:
   - <ID>k__BackingField: RANGED
@@ -55,3 +51,4 @@ MonoBehaviour:
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}
   <WeaponPickupPrefab>k__BackingField: {fileID: 4194707245843472174, guid: e8f58634a98d20845952d119f34d0c57, type: 3}
   <ChestPrefab>k__BackingField: {fileID: 9085653830745310390, guid: 2309f81994e79cd4684522e126b1b930, type: 3}
+  <VoidNovaPrefab>k__BackingField: {fileID: 4618890703807584224, guid: 4e594def1e6ce2646896d560be45f363, type: 3}

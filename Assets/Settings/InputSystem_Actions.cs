@@ -116,6 +116,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""6702da68-a178-4004-8c79-6effebca7552"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -303,6 +312,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleStageStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ff67b8e-9a3c-4164-9051-3b1e8291edaf"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleSettings"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -850,6 +870,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_ToggleShop = m_Player.FindAction("ToggleShop", throwIfNotFound: true);
         m_Player_TogglePlayerStats = m_Player.FindAction("TogglePlayerStats", throwIfNotFound: true);
         m_Player_ToggleStageStats = m_Player.FindAction("ToggleStageStats", throwIfNotFound: true);
+        m_Player_ToggleSettings = m_Player.FindAction("ToggleSettings", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -939,6 +960,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToggleShop;
     private readonly InputAction m_Player_TogglePlayerStats;
     private readonly InputAction m_Player_ToggleStageStats;
+    private readonly InputAction m_Player_ToggleSettings;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -953,6 +975,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @ToggleShop => m_Wrapper.m_Player_ToggleShop;
         public InputAction @TogglePlayerStats => m_Wrapper.m_Player_TogglePlayerStats;
         public InputAction @ToggleStageStats => m_Wrapper.m_Player_ToggleStageStats;
+        public InputAction @ToggleSettings => m_Wrapper.m_Player_ToggleSettings;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -992,6 +1015,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleStageStats.started += instance.OnToggleStageStats;
             @ToggleStageStats.performed += instance.OnToggleStageStats;
             @ToggleStageStats.canceled += instance.OnToggleStageStats;
+            @ToggleSettings.started += instance.OnToggleSettings;
+            @ToggleSettings.performed += instance.OnToggleSettings;
+            @ToggleSettings.canceled += instance.OnToggleSettings;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1026,6 +1052,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleStageStats.started -= instance.OnToggleStageStats;
             @ToggleStageStats.performed -= instance.OnToggleStageStats;
             @ToggleStageStats.canceled -= instance.OnToggleStageStats;
+            @ToggleSettings.started -= instance.OnToggleSettings;
+            @ToggleSettings.performed -= instance.OnToggleSettings;
+            @ToggleSettings.canceled -= instance.OnToggleSettings;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1173,6 +1202,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnToggleShop(InputAction.CallbackContext context);
         void OnTogglePlayerStats(InputAction.CallbackContext context);
         void OnToggleStageStats(InputAction.CallbackContext context);
+        void OnToggleSettings(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

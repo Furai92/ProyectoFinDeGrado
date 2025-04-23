@@ -38,7 +38,7 @@ public class AiStateThrowBomb : AiStateBase
     public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + CHARGE_DURATION;
-        target = StageManagerBase.GetClosestPlayer(e.transform.position);
+        target = PlayerEntity.ActiveInstance;
         shootPerformed = false;
     }
 }

@@ -7,6 +7,7 @@ public class ProceduralStagemanager : StageManagerBase
     [SerializeField] private Transform stagePartsInstParent;
 
     [SerializeField] private ProceduralStagePropertiesSO debugStageProperties;
+    [SerializeField] private StageWaveSetupSO enemyWaveData;
 
     protected override IMapData GenerateMap(int seed)
     {
@@ -15,10 +16,23 @@ public class ProceduralStagemanager : StageManagerBase
 
     public override void InitializeStage()
     {
-        currentState = new StageStateCombatWave();
-        StageStateBase rest = new StageStateRest();
-        currentState.SetNextState(rest);
-        rest.SetNextState(currentState);
+        StageStateIntro introState = new StageStateIntro();
+
+        StageStateBase prevState = introState;
+        StageStateBase lastState = introState;
+        foreach (StageWaveSetupSO.EnemyWave ew in enemyWaveData.Waves) 
+        {
+            StageStateBase newCombatWave = new StageStateCombatWave(ew);
+            StageStateBase newRestWave = new StageStateRest();
+            prevState.SetNextState(newCombatWave);
+            newCombatWave.SetNextState(newRestWave);
+            prevState = newRestWave;
+            lastState = newCombatWave;
+        }
+        StageStateVictory victoryState = new StageStateVictory();
+        lastState.SetNextState(victoryState);
+
+        currentState = introState;
     }
 
     protected override StageStatGroup GetInitialStageStats()

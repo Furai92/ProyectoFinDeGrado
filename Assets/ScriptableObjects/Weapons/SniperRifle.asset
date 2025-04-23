@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 1
   <ID>k__BackingField: SNIPER
+  <NameID>k__BackingField: 
   <Pools>k__BackingField:
   - STANDARD
-  <ProjectileComponentID>k__BackingField: BEAM
+  <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 300
@@ -30,7 +31,7 @@ MonoBehaviour:
   <HeatGeneration>k__BackingField: 0.1
   <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 1
-  <Pierces>k__BackingField: 99
+  <Pierces>k__BackingField: 0
   <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 1
   <PartSlots>k__BackingField:

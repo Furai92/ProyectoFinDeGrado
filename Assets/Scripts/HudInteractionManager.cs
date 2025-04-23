@@ -5,10 +5,12 @@ using TMPro;
 public class HudInteractionManager : MonoBehaviour
 {
     [SerializeField] private Transform interactionPanelParent;
-    [SerializeField] private TextMeshProUGUI interactionNameText;
-    [SerializeField] private TextMeshProUGUI interactionActionText;
+    [SerializeField] private HudWeaponCard wpnCard;
+    [SerializeField] private Transform interactableNamePanel;
+    [SerializeField] private TextMeshProUGUI interactableNameText;
+    [SerializeField] private TextMeshProUGUI actionNameText;
+    [SerializeField] private Camera mCamRef;
 
-    private Camera mcam;
     private Interactable targetInteractable;
     private static HudInteractionManager instance;
     private Vector3 wposOffset;
@@ -25,12 +27,6 @@ public class HudInteractionManager : MonoBehaviour
         wposOffset = new Vector3(0, WORLD_TO_HUD_VERTICAL_OFFSET, 0);
     }
 
-    public void SetUp(Camera c) 
-    {
-        mcam = c;
-        gameObject.SetActive(true);
-    }
-
     void Update()
     {
         UpdatePanelPosition();
@@ -45,15 +41,27 @@ public class HudInteractionManager : MonoBehaviour
         else 
         {
             interactionPanelParent.gameObject.SetActive(true);
-            interactionNameText.text = targetInteractable.GetInfo().name;
-            interactionActionText.text = targetInteractable.GetInfo().desc;
+
+            if (targetInteractable.GetInfo().weapon == null)
+            {
+                interactableNameText.text = targetInteractable.GetInfo().name;
+                wpnCard.gameObject.SetActive(false);
+                interactableNamePanel.gameObject.SetActive(true);
+            }
+            else 
+            {
+                wpnCard.gameObject.SetActive(true);
+                wpnCard.SetUp(targetInteractable.GetInfo().weapon);
+                interactableNamePanel.gameObject.SetActive(false);
+            }
+            actionNameText.text = targetInteractable.GetInfo().desc;
         }
     }
     private void UpdatePanelPosition() 
     {
         if (targetInteractable == null) { return; }
 
-        interactionPanelParent.position = mcam.WorldToScreenPoint(targetInteractable.GetInfo().gotransform.position + wposOffset);
+        interactionPanelParent.position = mCamRef.WorldToScreenPoint(targetInteractable.GetInfo().gotransform.position + wposOffset);
     }
     public static void UpdateTargetInteractable(Interactable inter) 
     {

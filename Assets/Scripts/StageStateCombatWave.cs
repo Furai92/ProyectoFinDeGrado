@@ -5,6 +5,7 @@ public class StageStateCombatWave : StageStateBase
 {
     private List<WaveSpawnTimerData> spawnTimers;
 
+    private StageWaveSetupSO.EnemyWave waveData;
     private float waveDurationMax;
     private float waveDurationRemaining;
     private float chestSpawnRate;
@@ -14,8 +15,9 @@ public class StageStateCombatWave : StageStateBase
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
     private const int MAX_ENEMIES = 20;
 
-    public StageStateCombatWave() 
+    public StageStateCombatWave(StageWaveSetupSO.EnemyWave w) 
     {
+        waveData = w;
         nextSpawnCheck = Time.time + SPAWN_CHECK_INTERVAL;
     }
 
@@ -31,7 +33,6 @@ public class StageStateCombatWave : StageStateBase
 
     public override void StateStart()
     {
-        StageWaveSetupSO.EnemyWave waveData = StageManagerBase.GetCurrentWaveData();
         waveDurationMax = waveData.Duration;
         spawnTimers = new List<WaveSpawnTimerData>();
         for (int i = 0; i < waveData.EnemySpawns.Count; i++) 
@@ -100,9 +101,9 @@ public class StageStateCombatWave : StageStateBase
         ObjectPoolManager.GetEnemyFromPool(id).SetUp(randomPos);
     }
 
-    public override StateType GetStateType()
+    public override GameState GetGameStateType()
     {
-        return StateType.Combat;
+        return GameState.EnemyWave;
     }
 
     private class WaveSpawnTimerData 

@@ -21,12 +21,12 @@ MonoBehaviour:
   <MultishootModifier>k__BackingField: 0
   <ArcModifier>k__BackingField: 0
   <FirerateMultiplier>k__BackingField: 1
-  <BuildupMultiplier>k__BackingField: 1.15
+  <BuildupMultiplier>k__BackingField: 1
   <CriticalDamageMultiplier>k__BackingField: 1
   <SizeMultiplier>k__BackingField: 1
   <HeatGenerationMultiplier>k__BackingField: 1.15
   <SplashModifier>k__BackingField: 0
   <BouncesModifier>k__BackingField: 0
-  <PiercesModifier>k__BackingField: 0
+  <PiercesModifier>k__BackingField: 3
   <TimescaleMultiplier>k__BackingField: 1
-  <KnockbackMultiplier>k__BackingField: 1
+  <KnockbackModifier>k__BackingField: 0

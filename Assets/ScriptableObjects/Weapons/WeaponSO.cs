@@ -8,6 +8,7 @@ public class WeaponSO : ScriptableObject
 
     [field: SerializeField] public WeaponSlot Slot { get; private set; }
     [field: SerializeField] public string ID { get; private set; }
+    [field: SerializeField] public string NameID { get; private set; }
     [field: SerializeField] public List<string> Pools { get; private set; }
     [field: SerializeField] public string ProjectileComponentID { get; private set; }
     [field: SerializeField] public string CleaveComponentID { get; private set; }

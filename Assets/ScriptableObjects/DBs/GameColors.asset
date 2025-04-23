@@ -19,5 +19,7 @@ MonoBehaviour:
     <Data>k__BackingField: {r: 0, g: 0.8273995, b: 1, a: 1}
   - <ID>k__BackingField: ELEM_COLOR_FIRE
     <Data>k__BackingField: {r: 1, g: 0.32621866, b: 0, a: 1}
+  - <ID>k__BackingField: ELEM_COLOR_VOID
+    <Data>k__BackingField: {r: 0.58433104, g: 0, b: 1, a: 1}
   - <ID>k__BackingField: ELEM_COLOR_PHYSICAL
     <Data>k__BackingField: {r: 1, g: 1, b: 1, a: 1}

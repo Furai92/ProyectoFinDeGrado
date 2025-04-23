@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
-public class HudShop : IngameMenuBase
+public class HudShop : MonoBehaviour, IGameMenu
 {
     [SerializeField] private GameDatabaseSO dbso;
     [SerializeField] private List<Transform> cardParents;
@@ -13,7 +13,6 @@ public class HudShop : IngameMenuBase
     [SerializeField] private TextMeshProUGUI refreshCostText;
     [SerializeField] private Transform menuParent;
 
-    private PlayerEntity playerRef;
     private int refreshesDone;
     private List<TechSO> techInStock;
 
@@ -24,7 +23,9 @@ public class HudShop : IngameMenuBase
     {
         gameObject.SetActive(true);
         menuParent.gameObject.SetActive(false);
-        playerRef = p;
+    }
+    private void OnEnable()
+    {
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.StageStateEndedEvent += OnStageStateEnded;
     }
@@ -33,10 +34,21 @@ public class HudShop : IngameMenuBase
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
-    private void OnStageStateStarted(StageStateBase s) 
+    private void OnPlayerSpawned(PlayerEntity p) 
+    {
+
+    }
+    private void OnStageStateStarted(StageStateBase.GameState s)
     {
         refreshesDone = 0;
         Refresh();
+    }
+    private void OnStageStateEnded(StageStateBase.GameState s)
+    {
+        if (IsOpen())
+        {
+            CloseMenu();
+        }
     }
     private void Refresh() 
     {
@@ -110,17 +122,10 @@ public class HudShop : IngameMenuBase
         }
         return null;
     }
-    private void OnStageStateEnded(StageStateBase s) 
-    {
-        if (IsOpen()) 
-        {
-            CloseMenu();
-        }
-    }
     public void OnRefreshClicked() 
     {
         if (!menuParent.gameObject.activeInHierarchy) { return; }
-        if (StageManagerBase.GetCurrentStateType() != StageStateBase.StateType.Rest) { return; }
+        if (StageManagerBase.GetCurrentStateType() != StageStateBase.GameState.Rest) { return; }
         if (StageManagerBase.GetPlayerCurrency(0) < GetRefreshPrice()) { return; }
 
         StageManagerBase.ChangeCurrency(-GetRefreshPrice());
@@ -130,33 +135,33 @@ public class HudShop : IngameMenuBase
     public void OnPurchaseClicked(int index) 
     {
         if (!menuParent.gameObject.activeInHierarchy) { return; }
-        if (StageManagerBase.GetCurrentStateType() != StageStateBase.StateType.Rest) { return; }
+        if (StageManagerBase.GetCurrentStateType() != StageStateBase.GameState.Rest) { return; }
         if (index >= techInStock.Count) { return; }
         if (techInStock[index] == null) { return; }
         if (StageManagerBase.GetPlayerCurrency(0) < GetTechPrice(techInStock[index])) { return; }
 
         StageManagerBase.ChangeCurrency(-GetTechPrice(techInStock[index]));
-        playerRef.EquipTech(techInStock[index]);
+        PlayerEntity.ActiveInstance.EquipTech(techInStock[index]);
         techInStock[index] = null;
         UpdateShopVisuals();
     }
-    public override void OpenMenu()
+    public void OpenMenu()
     {
         menuParent.gameObject.SetActive(true);
     }
 
-    public override void CloseMenu()
+    public void CloseMenu()
     {
         menuParent.gameObject.SetActive(false);
     }
 
-    public override bool IsOpen()
+    public bool IsOpen()
     {
         return menuParent.gameObject.activeInHierarchy;
     }
 
-    public override bool CanBeOpened()
+    public bool CanBeOpened()
     {
-        return StageManagerBase.GetCurrentStateType() == StageStateBase.StateType.Rest;
+        return StageManagerBase.GetCurrentStateType() == StageStateBase.GameState.Rest && PlayerEntity.ActiveInstance != null;
     }
 }

@@ -4,23 +4,53 @@ using System.Collections.Generic;
 
 public class HudDashBar : MonoBehaviour
 {
+    [SerializeField] private Transform activeParent;
     [SerializeField] private List<Image> barParents;
     [SerializeField] private List<Image> barFills;
     [SerializeField] private Image fillingDashBar;
 
 
-    private PlayerEntity playerReference;
-
-    public void SetUp(PlayerEntity p)
+    private void OnEnable()
     {
-        playerReference = p;
-        gameObject.SetActive(true);
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
-        UpdateActiveBars((int)p.GetStat(PlayerStatGroup.Stat.DashCount));
+        EventManager.PlayerSpawnedEvent += OnPlayerSpawned;
+        EventManager.StageStateStartedEvent += UpdateVisibility;
+
+        UpdateVisibility(StageManagerBase.GetCurrentStateType());
+        if (PlayerEntity.ActiveInstance != null)
+        {
+            OnPlayerSpawned(PlayerEntity.ActiveInstance);
+            OnPlayerStatsUpdated(PlayerEntity.ActiveInstance);
+        }
     }
     private void OnDisable()
     {
         EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
+        EventManager.PlayerSpawnedEvent -= OnPlayerSpawned;
+        EventManager.StageStateStartedEvent -= UpdateVisibility;
+    }
+
+    private void UpdateVisibility(StageStateBase.GameState s)
+    {
+        switch (s)
+        {
+            case StageStateBase.GameState.EnemyWave:
+            case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.BossFight:
+                {
+                    activeParent.gameObject.SetActive(true);
+                    break;
+                }
+            default:
+                {
+                    activeParent.gameObject.SetActive(false);
+                    break;
+                }
+        }
+    }
+    private void OnPlayerSpawned(PlayerEntity p) 
+    {
+        activeParent.gameObject.SetActive(true);
     }
     private void OnPlayerStatsUpdated(PlayerEntity p) 
     {
@@ -35,13 +65,15 @@ public class HudDashBar : MonoBehaviour
     }
     private void Update()
     {
-        int currentDashes = playerReference.CurrentDashes;
+        if (!activeParent.gameObject.activeInHierarchy) { return; }
+
+        int currentDashes = PlayerEntity.ActiveInstance.CurrentDashes;
 
         for (int i = 0; i < barFills.Count; i++) 
         {
             barFills[i].gameObject.SetActive(i < currentDashes);
         }
-        fillingDashBar.fillAmount = playerReference.DashRechargePercent;
+        fillingDashBar.fillAmount = PlayerEntity.ActiveInstance.DashRechargePercent;
 
         if (currentDashes < barParents.Count)
         {

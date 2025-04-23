@@ -14,6 +14,7 @@ public class ObjectPoolManager : MonoBehaviour
     private MonoBehaviourPool<WeaponPickup> weaponPickupPool;
     private MonoBehaviourPool<Chest> chestPool;
     private MonoBehaviourPool<DeflectedAttack> deflectedAttackPool;
+    private MonoBehaviourPool<VoidNova> voidNovaPool;
 
     private static ObjectPoolManager instance;
 
@@ -48,6 +49,8 @@ public class ObjectPoolManager : MonoBehaviour
         chestPool = new MonoBehaviourPool<Chest>(database.ChestPrefab, transform);
         // Deflected attacks
         deflectedAttackPool = new MonoBehaviourPool<DeflectedAttack>(database.DeflectedAttackPrefab, transform);
+        // Void Nova
+        voidNovaPool = new MonoBehaviourPool<VoidNova>(database.VoidNovaPrefab, transform);
     }
 
     public static PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -101,6 +104,12 @@ public class ObjectPoolManager : MonoBehaviour
         if (instance == null) { return null; }
 
         return instance.deflectedAttackPool.GetCopyFromPool();
+    }
+    public static VoidNova GetVoidNovaFromPool()
+    {
+        if (instance == null) { return null; }
+
+        return instance.voidNovaPool.GetCopyFromPool();
     }
 
 }

@@ -67,7 +67,7 @@ public class EnemyAttackChargedOrb : EnemyAttackBase
         
     }
 
-    public override void OnWaveEnded()
+    public override void OnStageStateEnded()
     {
         gameObject.SetActive(false);
     }

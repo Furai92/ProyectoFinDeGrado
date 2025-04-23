@@ -4,15 +4,14 @@ using System.Collections;
 
 public abstract class StageManagerBase : MonoBehaviour
 {
-    [field: SerializeField] public StageWaveSetupSO StageWaveData { get; private set; }
-
     [SerializeField] protected PathfindingManager pathfindingMng;
     [SerializeField] protected ObjectPoolManager objectPoolMng;
-    [SerializeField] protected IngameHudManager hudMng;
     [SerializeField] protected GameObject playerPrefab;
     [SerializeField] protected GameDatabaseSO database;
 
-    [SerializeField] public int CombatWavesCompleted { get; private set; }
+    [SerializeField] private GameObject ingameHud;
+    [SerializeField] private GameObject ingameCamera;
+
     private int playerRoomX = -1;
     private int playerRoomY = -1;
     private List<MapNode> validEnemySpawnNodes;
@@ -55,19 +54,20 @@ public abstract class StageManagerBase : MonoBehaviour
 
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
 
+        nextCurrencyDrop = Random.Range(0, 1);
+        nextWeaponDrop = Random.Range(0, 1);
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
         enemiesInStage = new List<EnemyEntity>();
         SetupPlayers(stageMapData.GetPlayerSpawnPosition());
-        hudMng.SetUp(players[0]); // TEMP
         InitializeStage();
-        CombatWavesCompleted = 0;
-        nextCurrencyDrop = Random.Range(0, 1);
-        nextWeaponDrop = Random.Range(0, 1);
+
+        ingameHud.SetActive(true);
+        ingameCamera.SetActive(true);
 
         initializationFinished = true;
 
         currentState.StateStart();
-        EventManager.OnStageStateStarted(currentState);
+        EventManager.OnStageStateStarted(currentState.GetGameStateType());
     }
     private void Update()
     {
@@ -76,13 +76,11 @@ public abstract class StageManagerBase : MonoBehaviour
         currentState.UpdateState();
         if (currentState.IsFinished()) 
         {
-            if (currentState.GetStateType() == StageStateBase.StateType.Combat) { CombatWavesCompleted++; }
-
             currentState.StateEnd();
-            EventManager.OnStageStateEnded(currentState);
+            EventManager.OnStageStateEnded(currentState.GetGameStateType());
             currentState = currentState.GetNextState();
             currentState.StateStart();
-            EventManager.OnStageStateStarted(currentState);
+            EventManager.OnStageStateStarted(currentState.GetGameStateType());
         }
     }
 
@@ -205,12 +203,6 @@ public abstract class StageManagerBase : MonoBehaviour
         }
     }
     #region Public Static Methods
-    public static StageWaveSetupSO.EnemyWave GetCurrentWaveData() 
-    {
-        if (_instance == null) { return null; }
-
-        return _instance.StageWaveData.Waves[Mathf.Min(_instance.CombatWavesCompleted, _instance.StageWaveData.Waves.Count-1)];
-    }
     public static Vector3 GetRandomEnemySpawnPosition(int playerindex) 
     {
         if (_instance == null) { return Vector3.zero; }
@@ -243,11 +235,11 @@ public abstract class StageManagerBase : MonoBehaviour
 
         return _instance.stageStats;
     }
-    public static StageStateBase.StateType GetCurrentStateType() 
+    public static StageStateBase.GameState GetCurrentStateType() 
     {
-        if (_instance == null) { return StageStateBase.StateType.Rest; }
+        if (_instance == null) { return StageStateBase.GameState.None; }
 
-        return _instance.currentState.GetStateType();
+        return _instance.currentState.GetGameStateType();
     }
     public static float GetTimerDisplay() 
     {
@@ -311,24 +303,6 @@ public abstract class StageManagerBase : MonoBehaviour
             _instance.playerRoomY = newRoomY;
             _instance.CalculateValidEnemySpawns(newRoomX, newRoomY);
         }
-    }
-    public static Vector3 GetClosestPlayerPosition(Vector3 pos) 
-    {
-        return _instance == null ? Vector3.zero : _instance.playerPosition;
-    }
-    public static Vector3 GetRandomPlayerPosition()
-    {
-        return _instance == null ? Vector3.zero : _instance.playerPosition;
-    }
-    public static PlayerEntity GetPlayerReference(int pindex) 
-    {
-        return _instance == null ? null : _instance.players[Mathf.Min(_instance.players.Count-1, pindex)];
-    }
-    public static PlayerEntity GetClosestPlayer(Vector3 pos) 
-    {
-        if (_instance == null) { return null; }
-
-        return _instance.players[0];
     }
     public static EnemyEntity GetClosestEnemyInRange(EnemyEntity ignored, Vector3 pos, float range)
     {

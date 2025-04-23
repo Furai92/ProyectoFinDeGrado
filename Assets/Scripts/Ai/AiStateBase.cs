@@ -63,7 +63,7 @@ public abstract class AiStateBase
             switch (conditional) 
             {
                 case TransitionConditional.CurrentHealth: { value = enemyControlled.GetHealthPercent(); break; }
-                case TransitionConditional.DistanceToPlayer: { value = Vector3.Distance(enemyControlled.transform.position, StageManagerBase.GetClosestPlayerPosition(enemyControlled.transform.position)); break; }
+                case TransitionConditional.DistanceToPlayer: { value = Vector3.Distance(enemyControlled.transform.position, PlayerEntity.ActiveInstance.transform.position); break; }
                 default: { return true; }
             }
 

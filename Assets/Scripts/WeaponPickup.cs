@@ -22,16 +22,19 @@ public class WeaponPickup : Interactable
     }
     private void OnEnable()
     {
-        EventManager.StageStateStartedEvent += OnStageStateStarted;
+        EventManager.StageStateEndedEvent += OnStageStateEnded;
     }
     protected override void OnDisable()
     {
-        EventManager.StageStateStartedEvent -= OnStageStateStarted;
+        EventManager.StageStateEndedEvent -= OnStageStateEnded;
         base.OnDisable();
     }
-    private void OnStageStateStarted(StageStateBase s) 
+    private void OnStageStateEnded(StageStateBase.GameState s) 
     {
-        if (s.GetStateType() == StageStateBase.StateType.Combat) { gameObject.SetActive(false); }
+        if (s == StageStateBase.GameState.Rest) 
+        {
+            gameObject.SetActive(false); 
+        }
     }
     public override InteractableInfo GetInfo()
     {
@@ -44,7 +47,7 @@ public class WeaponPickup : Interactable
 
     public override void OnInteract(int playerIndex)
     {
-        StageManagerBase.GetPlayerReference(playerIndex).EquipWeapon(info.weapon);
+        PlayerEntity.ActiveInstance.EquipWeapon(info.weapon);
         gameObject.SetActive(false);
     }
 }

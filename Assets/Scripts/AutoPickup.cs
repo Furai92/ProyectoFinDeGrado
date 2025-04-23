@@ -11,6 +11,7 @@ public abstract class AutoPickup : MonoBehaviour
     private Vector3 targetPosition;
     private PlayerEntity playerCollidedWith;
     private Transform autoPickupColliderTransform;
+    private float randomOrbitAngularOffset;
 
     private const float PICKUP_ORBIT_ROTATION_SPEED = 15f;
     private const float PICKUP_ORBIT_DISTANCE = 4f;
@@ -27,6 +28,7 @@ public abstract class AutoPickup : MonoBehaviour
         autoPickupColliderTransform = null;
         phase = 0;
         phaseT = 0;
+        randomOrbitAngularOffset = Random.Range(0, 361);
         transform.localScale = Vector3.one;
     }
 
@@ -52,7 +54,7 @@ public abstract class AutoPickup : MonoBehaviour
                 {
                     phaseT += Time.fixedDeltaTime / PICKUP_ORBIT_DURATION;
                     transform.localScale = Vector3.one * (1 - phaseT);
-                    Vector3 orbitOffset = (1-phaseT) * PICKUP_ORBIT_DISTANCE * new Vector3(Mathf.Sin(phaseT * PICKUP_ORBIT_ROTATION_SPEED), 0, Mathf.Cos(phaseT * PICKUP_ORBIT_ROTATION_SPEED));
+                    Vector3 orbitOffset = (1-phaseT) * PICKUP_ORBIT_DISTANCE * new Vector3(Mathf.Sin(phaseT * PICKUP_ORBIT_ROTATION_SPEED + randomOrbitAngularOffset), 0, Mathf.Cos(phaseT * PICKUP_ORBIT_ROTATION_SPEED + randomOrbitAngularOffset));
                     targetPosition = autoPickupColliderTransform.position + orbitOffset;
                     transform.position = Vector3.Lerp(transform.position, targetPosition, phaseT);
                     if (phaseT >= 1) 

@@ -13,7 +13,7 @@ public class StringDatabaseSO : ScriptableObject
         m_stringDictionary = new Dictionary<string, string>();
         for (int i = 0; i < StringElements.Count; i++) { m_stringDictionary.Add(StringElements[i].ID, StringElements[i].Data); }
     }
-    public string StatusToString(GameEnums.DamageElement e)
+    public string ElementToStatusName(GameEnums.DamageElement e)
     {
         switch (e)
         {
@@ -21,6 +21,31 @@ public class StringDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Fire: { return GetString("STATUS_NAME_FIRE"); }
             case GameEnums.DamageElement.Frost: { return GetString("STATUS_NAME_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetString("STATUS_NAME_THUNDER"); }
+            case GameEnums.DamageElement.Void: { return GetString("STATUS_NAME_VOID"); }
+            default: { return ""; }
+        }
+    }
+    public string ElementToName(GameEnums.DamageElement e)
+    {
+        switch (e)
+        {
+            case GameEnums.DamageElement.Physical: { return GetString("ELEMENT_NAME_PHYSICAL"); }
+            case GameEnums.DamageElement.Fire: { return GetString("ELEMENT_NAME_FIRE"); }
+            case GameEnums.DamageElement.Frost: { return GetString("ELEMENT_NAME_FROST"); }
+            case GameEnums.DamageElement.Thunder: { return GetString("ELEMENT_NAME_THUNDER"); }
+            case GameEnums.DamageElement.Void: { return GetString("ELEMENT_NAME_VOID"); }
+            default: { return ""; }
+        }
+    }
+    public string ElementToDesc(GameEnums.DamageElement e)
+    {
+        switch (e)
+        {
+            case GameEnums.DamageElement.Physical: { return GetString("ELEMENT_DESC_PHYSICAL"); }
+            case GameEnums.DamageElement.Fire: { return GetString("ELEMENT_DESC_FIRE"); }
+            case GameEnums.DamageElement.Frost: { return GetString("ELEMENT_DESC_FROST"); }
+            case GameEnums.DamageElement.Thunder: { return GetString("ELEMENT_DESC_THUNDER"); }
+            case GameEnums.DamageElement.Void: { return GetString("ELEMENT_DESC_VOID"); }
             default: { return ""; }
         }
     }

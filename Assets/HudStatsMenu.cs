@@ -3,19 +3,14 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class HudStatsMenu : IngameMenuBase
+public class HudStatsMenu : MonoBehaviour, IGameMenu
 {
     [SerializeField] private Transform menuParent;
     [SerializeField] private List<TextMeshProUGUI> statLabels;
     [SerializeField] private List<TextMeshProUGUI> statValues;
 
-    private PlayerEntity playerRef;
-
-    public void SetUp(PlayerEntity p)
+    private void OnEnable()
     {
-        gameObject.SetActive(true);
-        playerRef = p;
-        UpdateDisplayedInfo(p);
         EventManager.PlayerStatsUpdatedEvent += UpdateDisplayedInfo;
     }
     private void OnDisable()
@@ -39,24 +34,25 @@ public class HudStatsMenu : IngameMenuBase
     }
 
 
-    public override bool CanBeOpened()
+    public bool CanBeOpened()
     {
-        return true; // Can always be opened, has no wave type or gamestate restrictions
+        return PlayerEntity.ActiveInstance != null;
     }
 
-    public override void CloseMenu()
+    public void CloseMenu()
     {
+        EventManager.OnUiMenuClosed(this);
         menuParent.gameObject.SetActive(false);
     }
 
-    public override bool IsOpen()
+    public bool IsOpen()
     {
         return menuParent.gameObject.activeInHierarchy;
     }
 
-    public override void OpenMenu()
+    public void OpenMenu()
     {
         menuParent.gameObject.SetActive(true);
-        UpdateDisplayedInfo(playerRef);
+        UpdateDisplayedInfo(PlayerEntity.ActiveInstance);
     }
 }

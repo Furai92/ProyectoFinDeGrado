@@ -34,7 +34,7 @@ public class AiStateStrafe : AiStateBase
     public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + STATE_DURATION;
-        target = StageManagerBase.GetClosestPlayer(e.transform.position);
+        target = PlayerEntity.ActiveInstance;
         float angleToTarget = GameTools.AngleBetween(e.transform.position, target.transform.position);
         float angleOffset = Random.Range(ANGLE_OFFSET_MIN, ANGLE_OFFSET_MAX);
         if (Random.Range(0, 2) == 1) { angleOffset *= -1; }

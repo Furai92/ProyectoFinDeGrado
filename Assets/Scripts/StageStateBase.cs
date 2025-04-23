@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class StageStateBase
 {
-    public enum StateType { Combat, Rest }
+    public enum GameState { None, Intro, EnemyWave, Rest, BossFight, GameOver, Victory }
 
     private StageStateBase nextState;
 
@@ -14,5 +14,5 @@ public abstract class StageStateBase
     public abstract void StateEnd();
     public abstract bool IsFinished();
     public abstract float GetTimerDisplay();
-    public abstract StateType GetStateType();
+    public abstract GameState GetGameStateType();
 }

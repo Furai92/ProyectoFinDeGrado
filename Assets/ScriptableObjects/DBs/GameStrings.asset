@@ -19,8 +19,50 @@ MonoBehaviour:
     <Data>k__BackingField: Frozen
   - <ID>k__BackingField: STATUS_NAME_THUNDER
     <Data>k__BackingField: Shocked
+  - <ID>k__BackingField: STATUS_NAME_VOID
+    <Data>k__BackingField: Collapsing
+  - <ID>k__BackingField: ELEMENT_NAME_FIRE
+    <Data>k__BackingField: Fire
+  - <ID>k__BackingField: ELEMENT_NAME_FROST
+    <Data>k__BackingField: Frost
+  - <ID>k__BackingField: ELEMENT_NAME_THUNDER
+    <Data>k__BackingField: Thunder
+  - <ID>k__BackingField: ELEMENT_NAME_VOID
+    <Data>k__BackingField: Void
   - <ID>k__BackingField: TCH_N_TORMETOR
     <Data>k__BackingField: Tormentor
   - <ID>k__BackingField: TCH_D_TORMETOR
     <Data>k__BackingField: Your intellect is increased, but your might and dexterity
       is reduced.
+  - <ID>k__BackingField: ELEMENT_DESC_FIRE
+    <Data>k__BackingField: Applies the burning status. Affected enemies take massive
+      damage over time.
+  - <ID>k__BackingField: ELEMENT_DESC_THUNDER
+    <Data>k__BackingField: Applies the shocked status. Affected enemies take damage
+      over time and are 50% more likely to be critically hit.
+  - <ID>k__BackingField: ELEMENT_DESC_FROST
+    <Data>k__BackingField: Applies the frozen status. Affected enemies take damage
+      over time and are unable to perform any action.
+  - <ID>k__BackingField: ELEMENT_DESC_VOID
+    <Data>k__BackingField: Applies the collapsing status. Affected enemies will release
+      damaging novas that will pull nearby enemies.
+  - <ID>k__BackingField: WEAPON_SLOT_NAME_MELEE
+    <Data>k__BackingField: Melee weapon
+  - <ID>k__BackingField: WEAPON_SLOT_NAME_RANGED
+    <Data>k__BackingField: Ranged weapon
+  - <ID>k__BackingField: WEAPON_CARD_DMG_MELEE_FORMAT
+    <Data>k__BackingField: 'Damage: {0}'
+  - <ID>k__BackingField: WEAPON_CARD_DMG_RANGED_FORMAT
+    <Data>k__BackingField: 'Damage: {0} x {1}'
+  - <ID>k__BackingField: WEAPON_CARD_FIRERATE_FORMAT
+    <Data>k__BackingField: 'Firerate: {0}/sec'
+  - <ID>k__BackingField: WEAPON_CARD_BUILDUP_FORMAT
+    <Data>k__BackingField: 'Buildup Rate: {0}%'
+  - <ID>k__BackingField: WEAPON_CARD_CRITX_FORMAT
+    <Data>k__BackingField: 'Critical Damage: {0}%'
+  - <ID>k__BackingField: WEAPON_CARD_SPLASH_FORMAT
+    <Data>k__BackingField: 'Explosion Radius: {0}m'
+  - <ID>k__BackingField: WEAPON_CARD_BOUNCES_FORMAT
+    <Data>k__BackingField: 'Bounces: {0}'
+  - <ID>k__BackingField: WEAPON_CARD_PIERCES_FORMAT
+    <Data>k__BackingField: 'Pierces: {0}'

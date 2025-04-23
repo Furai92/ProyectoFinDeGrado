@@ -42,13 +42,19 @@ public class PlayerEntity : NetworkBehaviour
 
     // Movement and camera =================================================================================
 
+    public Transform CamTargetTransform { get { return m_camTargetPos; } }
+
+    [SerializeField] private Transform m_camTargetPos;
     [SerializeField] private Transform m_camVerticalRotationAxis;
     [SerializeField] private Transform m_rotationParent;
-    [SerializeField] private Camera m_playerCamera;
     [SerializeField] private Rigidbody m_rb;
     [SerializeField] private Collider m_agentCollisionsCollider;
 
-    private bool rotationAllowed;
+    // Static reference
+
+    public static PlayerEntity ActiveInstance { get; private set; }
+
+    private bool inputsAllowed;
     private float movementInputH;
     private float movementInputV;
     private float rotationInputH;
@@ -85,6 +91,7 @@ public class PlayerEntity : NetworkBehaviour
         gameObject.SetActive(true);
         transform.position = pos;
         StageManagerBase.UpdatePlayerPosition(transform.position);
+        ActiveInstance = this;
         stats = new PlayerStatGroup();
         stats.ChangeStat(PlayerStatGroup.Stat.Speed, 1f);
         stats.ChangeStat(PlayerStatGroup.Stat.MaxHealth, 500f);
@@ -103,26 +110,25 @@ public class PlayerEntity : NetworkBehaviour
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
         currentDirection = 0; UpdateRotation();
-        rotationAllowed = true;
+        inputsAllowed = true;
 
         EventManager.OnPlayerStatsUpdated(this);
 
-        EventManager.UiMenuChangedEvent += OnUiMenuChanged;
+        EventManager.UiMenuFocusChangedEvent += OnUiMenuChanged;
     }
     private void OnDisable()
     {
-        EventManager.UiMenuChangedEvent -= OnUiMenuChanged;
+        EventManager.UiMenuFocusChangedEvent -= OnUiMenuChanged;
     }
-    private void OnUiMenuChanged(IngameMenuBase m) 
+    private void OnUiMenuChanged(IGameMenu m) 
     {
-        rotationAllowed = m == null;
+        inputsAllowed = m == null;
     }
     private void Start()
     {
         if (IsOwner || NetworkManager.Singleton == null)
         {
             _isPlayerControlsEnabled = true;
-            m_playerCamera.gameObject.SetActive(true);
         }
 
         if (IsHost && IsOwner)
@@ -225,8 +231,8 @@ public class PlayerEntity : NetworkBehaviour
     {
         movementInputH = InputManager.Instance.GetMovementInput().x;
         movementInputV = InputManager.Instance.GetMovementInput().y;
-        rotationInputH = rotationAllowed ? InputManager.Instance.GetLookInput().x : 0;
-        rotationInputV = rotationAllowed ? InputManager.Instance.GetLookInput().y : 0;
+        rotationInputH = inputsAllowed ? InputManager.Instance.GetLookInput().x : 0;
+        rotationInputV = inputsAllowed ? InputManager.Instance.GetLookInput().y : 0;
 
         currentDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
         UpdateRotation();
@@ -254,7 +260,7 @@ public class PlayerEntity : NetworkBehaviour
         }
         dashDurationRemaining -= Time.deltaTime;
 
-        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged)
+        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
@@ -262,7 +268,7 @@ public class PlayerEntity : NetworkBehaviour
             if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
             Attack(WeaponSO.WeaponSlot.Ranged);
         }
-        if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee)
+        if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
         {
             heatDecayMelee = 0;
             meleeAttackReady = 0;
@@ -270,7 +276,7 @@ public class PlayerEntity : NetworkBehaviour
             if (StatusHeatMelee > 1) { StatusOverheatMelee = true; }
             Attack(WeaponSO.WeaponSlot.Melee);
         }
-        if (InputManager.Instance.GetDashInput()) 
+        if (InputManager.Instance.GetDashInput() && inputsAllowed) 
         {
             Dash();
         }
@@ -367,10 +373,6 @@ public class PlayerEntity : NetworkBehaviour
         dashMovementVector = movementInputV * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION;
-    }
-    public Camera GetCamera()
-    {
-        return m_playerCamera;
     }
     public void DealDamage(float magnitude)
     {

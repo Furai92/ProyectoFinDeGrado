@@ -52,7 +52,7 @@ public class AiStatePathfindingSearch : AiStateBase
 
     public override void StartState(EnemyEntity e)
     {
-        path = StageManagerBase.GetPath(e.transform.position, StageManagerBase.GetClosestPlayerPosition(e.transform.position));
+        path = StageManagerBase.GetPath(e.transform.position, PlayerEntity.ActiveInstance.transform.position);
         if (path.Count > 0) 
         {
             e.TargetMovementPosition = path.Peek();

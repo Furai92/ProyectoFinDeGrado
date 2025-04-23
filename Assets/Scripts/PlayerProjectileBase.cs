@@ -1,115 +1,199 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public abstract class PlayerProjectileBase : PlayerAttackBase
 {
-    private float lifetimeRemaining;
-    protected int bouncesRemaining;
-    protected int piercesRemaining;
-    protected float currentDirection;
-    private LayerMask normalCheckRaycastMask;
+    [Header("Visual references")]
+    [SerializeField] private Transform visual;
+    [SerializeField] protected TrailRenderer tr;
+    [SerializeField] private ColorDatabaseSO cdb;
+    [SerializeField] private ParticleSystem impactPS;
 
-    private const float NORMAL_CHECK_RAYCAST_LENGHT = 2f;
-    private const float BASE_PROJECTILE_SPEED = 20f;
-    private const float LIFETIME = 5f;
+    [Space]
+    [Header("Params")]
+    [SerializeField] private bool EntityCollisions;
+    [SerializeField] private bool UnlimitedWallBounces;
+    [SerializeField] private bool ExplodeOnWallCollision;
+    [SerializeField] private float MaxTravelDistance;
 
-    protected abstract void UpdateBehaviour();
-    protected abstract void OnWallImpact();
-    protected abstract void OnEntityImpact();
-    protected abstract void OnLifetimeExpired();
-    protected abstract void OnSpawn();
+    private List<int> enemyHits;
+    private int phase;
+    private float distanceCovered;
+    private float removeTime;
+    private float direction;
 
+    private const float MINIMUM_STEP_LENGHT = 0.2f; // This prevents an error where decimal rounding gets the bullet stuck with near zero distance steps 
+    private const float BASE_SPEED = 20f;
+    private const float BOUNCE_END_SEPARATION = 0.1f; // Helps improve bounces with walls
+    private const float BASE_COLLISION_RADIUS = 0.5f;
+    private const float REMOVE_DELAY = 0.5f;
 
-    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack) 
+    public abstract void OnBulletSpawn();
+    public abstract void OnFixedUpdate();
+    public abstract void OnBulletEnd();
+    public abstract void OnTerrainCollision();
+    public abstract void OnEntityCollision();
+
+    public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
+
+        enemyHits = new List<int>();
         setupData = sd;
-        transform.position = pos;
-        bouncesRemaining = sd.Bounces;
-        piercesRemaining = sd.Pierces;
-        SetNewDirection(dir);
-        normalCheckRaycastMask = LayerMask.GetMask("Walls");
-        OnSpawn();
-        lifetimeRemaining = LIFETIME;
-        gameObject.gameObject.SetActive(true);
+        direction = dir;
+        transform.SetPositionAndRotation(pos, Quaternion.Euler(0, direction, 0));
+        phase = 0;
+        distanceCovered = 0;
+        tr.Clear();
+        ParticleSystem.MainModule m = impactPS.main;
+        m.startColor = cdb.ElementToColor(setupData.Element);
+        tr.startColor = tr.endColor = cdb.ElementToColor(setupData.Element);
+        tr.AddPosition(visual.position);
+        visual.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+        OnBulletSpawn();
     }
-    private void SetNewDirection(float newdir) 
+    protected void SetRemoveable() 
     {
-        currentDirection = newdir;
-        transform.rotation = Quaternion.Euler(0, currentDirection, 0);
+        distanceCovered = MaxTravelDistance;
     }
-    private void OnEnable()
+    protected void PlayImpactParticles() 
     {
-
+        impactPS.Stop();
+        impactPS.Play();
     }
     private void FixedUpdate()
     {
-        transform.Translate(BASE_PROJECTILE_SPEED * Time.fixedDeltaTime * setupData.Timescale * Vector3.forward);
-        lifetimeRemaining -= Time.fixedDeltaTime * setupData.Timescale;
-        if (lifetimeRemaining < 0) 
+        switch (phase) 
         {
-            OnLifetimeExpired();
-            gameObject.SetActive(false);
+            case 0: 
+                {
+                    if (MaxTravelDistance - distanceCovered > MINIMUM_STEP_LENGHT) 
+                    {
+                        CastBeam();
+                        OnFixedUpdate();
+                    }
+                    else
+                    {
+                        phase = 1; removeTime = Time.time + REMOVE_DELAY;
+                    }
+                    break;
+                }
+            case 1: // Remove delay
+                {
+                    if (Time.time > removeTime) { OnBulletEnd(); gameObject.SetActive(false); }
+                    break;
+                }
         }
     }
-    private void OnCollisionEnter(Collision collision)
+
+    private void CastBeam()
     {
-        if (collision.gameObject.CompareTag("EnemyHitbox")) 
+        float stepMaximumLenght = Mathf.Min(BASE_SPEED * setupData.Timescale * Time.fixedDeltaTime, MaxTravelDistance - distanceCovered);
+        // Setup masks and hit buffers
+        LayerMask terrainMask = LayerMask.GetMask("Walls");
+        LayerMask hitboxMask = LayerMask.GetMask("EnemyHitboxes");
+        RaycastHit terrainCastResults;
+        RaycastHit entityCastResults;
+        // Raycast ONLY WITH TERRAIN to create a path for the beam
+        Physics.Raycast(transform.position, transform.forward, out terrainCastResults, stepMaximumLenght, terrainMask);
+
+        // Spherecast ONLY WITH ENTITIES to check for damage
+        bool beamInterruptedByEntity = false;
+        Vector3 beamEnd = terrainCastResults.collider == null ? transform.position + transform.forward * stepMaximumLenght : terrainCastResults.point;
+        Vector3 currentBeamPos = transform.position;
+        float beamDiameter = BASE_COLLISION_RADIUS * setupData.SizeMultiplier;
+        List<Collider> disabledColliders = new List<Collider>();
+        while (!beamInterruptedByEntity && currentBeamPos != beamEnd && EntityCollisions)
         {
-            EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
-            if (e != null)
+            Physics.SphereCast(currentBeamPos - (beamDiameter * 2 * transform.forward), beamDiameter * 0.5f, transform.forward, out entityCastResults, Vector3.Distance(currentBeamPos, beamEnd), hitboxMask);
+            if (entityCastResults.collider != null)
             {
-                if (setupData.Splash > 0)
+                // The spherecast found a hitbox on the way
+                // Damage the entity hit by the beam
+                EnemyEntity enemyHit = entityCastResults.collider.GetComponentInParent<EnemyEntity>();
+                // Change the layer of the collider to ignore it on the next cast
+                entityCastResults.collider.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                disabledColliders.Add(entityCastResults.collider);
+                currentBeamPos = transform.position + transform.forward * entityCastResults.distance;
+
+                // If the enemy hit is supposed to be ignored, skip this part
+                if (enemyHit.EnemyInstanceID != setupData.EnemyIgnored && !enemyHits.Contains(enemyHit.EnemyInstanceID))
                 {
-                    Explode(transform.position);
-                }
-                else 
-                {
-                    e.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
-                    e.Knockback(setupData.Knockback, currentDirection);
-                }
-                if (bouncesRemaining > 0)
-                {
-                    bouncesRemaining--;
-                    lifetimeRemaining = LIFETIME;
-                    SetNewDirection(GetBounceDirection(transform.position, true, collision.collider));
-                }
-                else 
-                {
-                    piercesRemaining--;
-                    if (piercesRemaining <= 0)
+                    setupData.EnemyIgnored = enemyHit.EnemyInstanceID;
+                    enemyHits.Add(enemyHit.EnemyInstanceID);
+                    OnEntityCollision();
+                    if (setupData.Splash > 0)
                     {
-                        gameObject.SetActive(false);
+                        Explode(entityCastResults.point);
+                    }
+                    else
+                    {
+                        enemyHit.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                        enemyHit.Knockback(setupData.Knockback, direction);
+                    }
+
+                    // Spend pierces to continue
+                    if (setupData.Pierces > 0)
+                    {
+                        setupData.Pierces--;
+                    }
+                    // If there's no pierces left, use bounces AND stop the beam
+                    else if (setupData.Bounces > 0)
+                    {
+                        beamInterruptedByEntity = true;
+                        beamEnd = currentBeamPos;
+                        setupData.Bounces--;
+                        direction = GetBounceDirection(beamEnd, true, entityCastResults.collider);
+                        transform.rotation = Quaternion.Euler(0, direction, 0);
+                        enemyHits.Clear();
+                    }
+                    else
+                    {
+                        beamInterruptedByEntity = true;
+                        beamEnd = currentBeamPos;
+                        // No bounces and pierces left
+                        SetRemoveable();
                     }
                 }
             }
-        }
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            RaycastHit h;
-            Physics.Raycast(transform.position, transform.forward, out h, NORMAL_CHECK_RAYCAST_LENGHT, normalCheckRaycastMask);
-
-            if (h.collider != null)
+            else
             {
-                if (setupData.Splash > 0) 
-                {
-                    Explode(transform.position);
-                }
-                if (bouncesRemaining > 0)
-                {
-                    SetNewDirection(GameTools.AngleReflection(currentDirection, GameTools.NormalToEuler(h.normal) + 90));
-                    bouncesRemaining--;
-                    lifetimeRemaining = LIFETIME;
-                }
-                else
-                {
-                    gameObject.SetActive(false);
-                }
-
+                currentBeamPos = beamEnd;
             }
 
         }
+        // If no entity collisions are found and terrain raycast found something... (the bullet hit a wall and nothing else)
+        if (!beamInterruptedByEntity && terrainCastResults.collider != null)
+        {
+            // Move the end of the beam a small amount towards the start, this improves the bounces against straight walls
+            beamEnd = Vector3.MoveTowards(beamEnd, transform.position, BOUNCE_END_SEPARATION); 
 
+            tr.AddPosition(currentBeamPos);
+            OnTerrainCollision();
+
+            if (setupData.Splash > 0 && ExplodeOnWallCollision) { Explode(beamEnd); }
+            if (setupData.Bounces > 0 || UnlimitedWallBounces)
+            {
+                if (!UnlimitedWallBounces) { setupData.Bounces--; }
+                
+                direction = GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainCastResults.normal) + 90);
+                transform.rotation = Quaternion.Euler(0, direction, 0);
+                enemyHits.Clear();
+            }
+            else 
+            {
+                distanceCovered = MaxTravelDistance; // This marks the attack as finished
+            }
+        }
+        
+        distanceCovered += Vector3.Distance(transform.position, beamEnd);
+        transform.position = beamEnd;
+        if (beamInterruptedByEntity || terrainCastResults.collider != null) { PlayImpactParticles(); }
+
+        // Return the colliders to their layer
+        for (int i = 0; i < disabledColliders.Count; i++)
+        {
+            disabledColliders[i].gameObject.layer = LayerMask.NameToLayer("EnemyHitboxes");
+        }
     }
 }

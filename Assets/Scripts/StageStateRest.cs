@@ -4,9 +4,9 @@ public class StageStateRest : StageStateBase
 {
     private bool allPlayersReady;
 
-    public override StateType GetStateType()
+    public override GameState GetGameStateType()
     {
-        return StateType.Rest;
+        return GameState.Rest;
     }
 
     public override float GetTimerDisplay()

@@ -21,6 +21,7 @@ public class ColorDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Fire: { return GetColor("ELEM_COLOR_FIRE"); }
             case GameEnums.DamageElement.Frost: { return GetColor("ELEM_COLOR_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetColor("ELEM_COLOR_THUNDER"); }
+            case GameEnums.DamageElement.Void: { return GetColor("ELEM_COLOR_VOID"); }
             default: { return Color.white; }
         }
     }

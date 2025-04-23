@@ -25,7 +25,7 @@ public class EnemyAttackFireBomb : EnemyAttackBase
     public override void Initialize(Vector3 pos, float dir)
     {
         startPos = pos;
-        Vector3 closestPlayerPos = StageManagerBase.GetClosestPlayer(transform.position).transform.position;
+        Vector3 closestPlayerPos = PlayerEntity.ActiveInstance.transform.position;
         targetPos = new Vector3(closestPlayerPos.x, 0, closestPlayerPos.z);
         LayerMask m = LayerMask.GetMask("Walls");
 
@@ -138,7 +138,7 @@ public class EnemyAttackFireBomb : EnemyAttackBase
 
     }
 
-    public override void OnWaveEnded()
+    public override void OnStageStateEnded()
     {
         gameObject.SetActive(false);
     }

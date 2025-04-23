@@ -28,7 +28,7 @@ public class AiStateBeamAttack : AiStateBase
 
     public override void StartState(EnemyEntity e)
     {
-        PlayerEntity target = StageManagerBase.GetClosestPlayer(e.transform.position);
+        PlayerEntity target = PlayerEntity.ActiveInstance;
         e.TargetLookPosition = target.transform.position;
         stateEndTime = Time.time + WAIT_AFTER_ATTACK;
 

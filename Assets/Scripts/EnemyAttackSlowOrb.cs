@@ -71,7 +71,7 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
         // No actions
     }
 
-    public override void OnWaveEnded()
+    public override void OnStageStateEnded()
     {
         gameObject.SetActive(false);
     }

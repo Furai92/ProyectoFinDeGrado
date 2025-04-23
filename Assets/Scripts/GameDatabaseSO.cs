@@ -16,6 +16,7 @@ public class GameDatabaseSO : ScriptableObject
     [field: SerializeField] public GameObject HealthPickupPrefab { get; private set; }
     [field: SerializeField] public GameObject WeaponPickupPrefab { get; private set; }
     [field: SerializeField] public GameObject ChestPrefab { get; private set; }
+    [field: SerializeField] public GameObject VoidNovaPrefab { get; private set; }
 }
 
 

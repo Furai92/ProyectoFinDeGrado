@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class PlayerProjectileStandard : PlayerProjectileBase
 {
-
-    protected override void OnSpawn() 
-    {
-
-    }
-    protected override void OnEntityImpact()
+    public override void OnBulletEnd()
     {
 
     }
 
-    protected override void OnLifetimeExpired()
+    public override void OnBulletSpawn()
     {
 
     }
 
-    protected override void OnWallImpact()
+    public override void OnFixedUpdate()
     {
 
     }
 
-    protected override void UpdateBehaviour()
+    public override void OnEntityCollision()
+    {
+
+    }
+
+    public override void OnTerrainCollision()
     {
 
     }

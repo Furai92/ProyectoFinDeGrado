@@ -31,6 +31,6 @@ public class AiStateWalkStraightToTarget : AiStateBase
     public override void StartState(EnemyEntity e)
     {
         stateEndTime = Time.time + STATE_DURATION;
-        target = StageManagerBase.GetClosestPlayer(e.transform.position);
+        target = PlayerEntity.ActiveInstance;
     }
 }

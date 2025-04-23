@@ -131,7 +131,7 @@ public class EnemyAttackBeam : EnemyAttackBase
         if (phase < 2) { gameObject.SetActive(false); }
     }
 
-    public override void OnWaveEnded()
+    public override void OnStageStateEnded()
     {
         gameObject.SetActive(false);
     }

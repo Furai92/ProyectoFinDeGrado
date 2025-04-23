@@ -9,27 +9,31 @@ public class EventManager
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
     public static event Action<HudCombatWarningElement.WarningType, Vector3> CombatWarningDisplayedEvent;
     public static event Action<PlayerEntity> PlayerStatsUpdatedEvent;
+    public static event Action<PlayerEntity> PlayerSpawnedEvent;
     public static event Action StageStatsUpdatedEvent;
     public static event Action<Vector3> PlayerEvasionEvent;
-
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
     public static event Action<Interactable> InteractableDisabledEvent;
-    public static event Action<StageStateBase> StageStateStartedEvent;
-    public static event Action<StageStateBase> StageStateEndedEvent;
+    public static event Action<StageStateBase.GameState> StageStateStartedEvent;
+    public static event Action<StageStateBase.GameState> StageStateEndedEvent;
     public static event Action AllPlayersReadyEvent;
 
     // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
     public static event Action<bool> UiFocusChangedEvent;
-    public static event Action<IngameMenuBase> UiMenuChangedEvent;
+    public static event Action<IGameMenu> UiMenuFocusChangedEvent;
+    public static event Action<IGameMenu> UiMenuClosedEvent;
 
-    public static void OnUiMenuCanged(IngameMenuBase m) 
+    // Game System 
+    public static event Action GameSettingsChangedEvent;
+
+    public static void OnUiMenuFocusChanged(IGameMenu m) 
     {
-        UiMenuChangedEvent?.Invoke(m);
+        UiMenuFocusChangedEvent?.Invoke(m);
     }
     public static void OnUiFocusChanged(bool uifocused)
     {
@@ -63,11 +67,11 @@ public class EventManager
     {
         InteractableDisabledEvent?.Invoke(i);
     }
-    public static void OnStageStateStarted(StageStateBase s) 
+    public static void OnStageStateStarted(StageStateBase.GameState s) 
     {
         StageStateStartedEvent?.Invoke(s);
     }
-    public static void OnStageStateEnded(StageStateBase s)
+    public static void OnStageStateEnded(StageStateBase.GameState s)
     {
         StageStateEndedEvent?.Invoke(s);
     }
@@ -94,5 +98,17 @@ public class EventManager
     public static void OnStageStatsUpdated() 
     {
         StageStatsUpdatedEvent?.Invoke();
+    }
+    public static void OnGameSettingsChanged() 
+    {
+        GameSettingsChangedEvent?.Invoke();
+    }
+    public static void OnUiMenuClosed(IGameMenu m) 
+    {
+        UiMenuClosedEvent?.Invoke(m);
+    }
+    public static void OnPlayerSpawned(PlayerEntity p) 
+    {
+        PlayerSpawnedEvent?.Invoke(p);
     }
 }

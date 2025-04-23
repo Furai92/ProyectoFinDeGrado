@@ -28,14 +28,21 @@ public class EnemyEntity : MonoBehaviour
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
+    
     private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.3f;
     private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.15f;
+    private const float SHOCK_STATUS_BONUS_CRIT_CHANCE = 50f;
     private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.1f;
+    private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.13f;
+    private const float VOID_STATUS_RADIUS_BASE = 5f;
+    private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
+    private const float VOID_STATUS_PULL_BASE = 6f;
+    private const float VOID_STATUS_PULL_SCALING = 0.003f;
     private const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
     private const float HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP = 0.4f;
-    private const int BUILDUP_ARRAY_LENGHT = 5;
+    private const int BUILDUP_ARRAY_LENGHT = 6;
 
     // AI Management ===========================================
 
@@ -158,15 +165,22 @@ public class EnemyEntity : MonoBehaviour
 
         if (statusDurations[(int)GameEnums.DamageElement.Fire] > 0)
         {
-            DealStatusDamage(BaseHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire);
+            DealStatusDamage(maxHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire);
         }
         if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0)
         {
-            DealStatusDamage(BaseHealth * FROST_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Frost);
+            DealStatusDamage(maxHealth * FROST_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Frost);
         }
         if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0)
         {
-            DealStatusDamage(BaseHealth * SHOCK_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Thunder);
+            DealStatusDamage(maxHealth * SHOCK_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Thunder);
+        }
+        if (statusDurations[(int)GameEnums.DamageElement.Void] > 0)
+        {
+            ObjectPoolManager.GetVoidNovaFromPool().SetUp(BaseHealth * VOID_STATUS_PULL_SCALING + VOID_STATUS_PULL_BASE,
+                maxHealth * VOID_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL,
+                BaseHealth * VOID_STATUS_RADIUS_SCALING + VOID_STATUS_RADIUS_BASE,
+                transform.position, this);
         }
 
         for (int i = 0; i < statusDurations.Length; i++) 
@@ -196,7 +210,7 @@ public class EnemyEntity : MonoBehaviour
     }
     public bool IsInCombatRange() 
     {
-        Vector3 closestPlayerPos = StageManagerBase.GetClosestPlayerPosition(transform.position);
+        Vector3 closestPlayerPos = PlayerEntity.ActiveInstance.transform.position;
         float distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
         if (distanceToPlayer < MaxCombatDistance) 
         {
@@ -266,6 +280,7 @@ public class EnemyEntity : MonoBehaviour
     {
         // Roll for critical hits
         int critLevel = 0;
+        if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0) { critChance += SHOCK_STATUS_BONUS_CRIT_CHANCE; } 
         while (Random.Range(0, 101) < critChance) 
         {
             critChance -= 100;
