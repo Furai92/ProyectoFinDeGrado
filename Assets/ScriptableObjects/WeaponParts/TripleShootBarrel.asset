@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
   m_Name: TripleShootBarrel
   m_EditorClassIdentifier: 
-  <RangedAttackOverrideID>k__BackingField: 
-  <MeleeAttackOverrideID>k__BackingField: 
+  <ProjectileComponentIDOverride>k__BackingField: 
+  <CleaveComponentIDOverride>k__BackingField: 
+  <ProjectileComponentDamageOverride>k__BackingField: 0
+  <CleaveComponentDamageOverride>k__BackingField: 0
   <ElementOverride>k__BackingField: 0
   <DamageMultiplier>k__BackingField: 1
   <MultishootModifier>k__BackingField: 2
@@ -27,4 +29,4 @@ MonoBehaviour:
   <BouncesModifier>k__BackingField: 0
   <PiercesModifier>k__BackingField: 0
   <TimescaleMultiplier>k__BackingField: 1
-  <KnockbackMultiplier>k__BackingField: 1
+  <KnockbackModifier>k__BackingField: 0

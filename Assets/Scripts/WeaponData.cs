@@ -60,7 +60,6 @@ public class WeaponData
             ws.Timescale *= Parts[i].TimescaleMultiplier;
             ws.SizeMultiplier = Parts[i].SizeMultiplier;
         }
-
         return ws;
     }
 

@@ -106,7 +106,11 @@ public class PlayerEntity : NetworkBehaviour
         rangedAttackReady = meleeAttackReady = 1;
 
         for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); }
-        EquipWeapon(new WeaponData(debugRangedWeaponSO));
+
+        WeaponData rangedweapon = new WeaponData(debugRangedWeaponSO);
+        print(rangedweapon.GetStats().ProjectileComponentID);
+
+        EquipWeapon(rangedweapon);
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
 
         currentDirection = 0; UpdateRotation();
