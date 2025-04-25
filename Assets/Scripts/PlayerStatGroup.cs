@@ -2,7 +2,22 @@ using UnityEngine;
 
 public class PlayerStatGroup
 {
-    public enum Stat { MaxHealth, Might, Dexterity, Intellect, Endurance,  DashCount, CritChance, Speed, Firerate, DashRechargeRate, PickupRadius, CritBonusDamage }
+    public enum Stat {
+        MaxHealth,
+        Might, 
+        Dexterity, 
+        Intellect, 
+        Endurance,  
+        DashCount, 
+        CritChance, 
+        Speed, 
+        Firerate, 
+        DashRechargeRate, 
+        PickupRadius, 
+        CritBonusDamage,
+        HeatFloorBonus,
+        HeatCapBonus
+    }
     public enum PlayerFlags { NoHeal }
 
     private float[] stats;
