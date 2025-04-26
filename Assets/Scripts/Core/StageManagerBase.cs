@@ -15,16 +15,15 @@ public abstract class StageManagerBase : MonoBehaviour
     private int playerRoomX = -1;
     private int playerRoomY = -1;
     private List<MapNode> validEnemySpawnNodes;
-    private Vector3 playerPosition;
     protected List<EnemyEntity> enemiesInStage;
     protected StageStateBase currentState;
     private List<PlayerEntity> players;
-    private List<float> playerCurrencies;
     protected IMapData stageMapData;
     private int enemyIDCounter;
     private bool initializationFinished = false;
     private Dictionary<string, List<WeaponSO>> weaponPools;
     protected StageStatGroup stageStats;
+    private bool playersSpawned = false;
 
     private static StageManagerBase _instance;
 
@@ -58,7 +57,6 @@ public abstract class StageManagerBase : MonoBehaviour
         nextWeaponDrop = Random.Range(0, 1);
         pathfindingMng.Initialize(stageMapData.GetStagePieces());
         enemiesInStage = new List<EnemyEntity>();
-        SetupPlayers(stageMapData.GetPlayerSpawnPosition());
         InitializeStage();
 
         ingameHud.SetActive(true);
@@ -84,14 +82,16 @@ public abstract class StageManagerBase : MonoBehaviour
         }
     }
 
-    private void SetupPlayers(Vector3 pos) 
+    public static void SpawnPlayers() 
     {
-        players = new List<PlayerEntity>();
-        playerCurrencies = new List<float>();
-        GameObject p = Instantiate(playerPrefab);
-        p.GetComponent<PlayerEntity>().SetUp(pos);
-        players.Add(p.GetComponent<PlayerEntity>());
-        playerCurrencies.Add(0);
+        if (_instance == null) { return; }
+        if (_instance.playersSpawned) { return; }
+
+        _instance.playersSpawned = true;
+        _instance.players = new List<PlayerEntity>();
+        GameObject p = Instantiate(_instance.playerPrefab);
+        p.GetComponent<PlayerEntity>().SetUp(_instance.stageMapData.GetPlayerSpawnPosition());
+        _instance.players.Add(p.GetComponent<PlayerEntity>());
     }
     private void SetUpItemPools() 
     {
@@ -203,6 +203,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
     }
     #region Public Static Methods
+    public static List<MapNode> GetStageLayout() 
+    {
+        if (_instance == null) { return new List<MapNode>(); }
+
+        return _instance.stageMapData.GetLayoutList();
+    }
     public static Vector3 GetRandomEnemySpawnPosition(int playerindex) 
     {
         if (_instance == null) { return Vector3.zero; }
@@ -247,19 +253,6 @@ public abstract class StageManagerBase : MonoBehaviour
 
         return _instance.currentState.GetTimerDisplay();
     }
-    public static void ChangeCurrency(float amount) 
-    {
-        if (_instance == null) { return; }
-
-        _instance.playerCurrencies[0] += amount;
-        EventManager.OnCurrencyUpdated();
-    }
-    public static float GetPlayerCurrency(int playerindex) 
-    {
-        if (_instance == null) { return 0; }
-
-        return _instance.playerCurrencies[0];
-    }
     public static List<Vector3> GetEnemySpawnPositions() 
     {
         return _instance == null ? new List<Vector3>() : _instance.stageMapData.GetEnemySpawnPositions();
@@ -293,7 +286,6 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         if (_instance == null) { return; }
 
-        _instance.playerPosition = newpos;
         int newRoomX = (int)((newpos.x + StagePiece.PIECE_SPACING/2) / StagePiece.PIECE_SPACING);
         int newRoomY = (int)((newpos.z + StagePiece.PIECE_SPACING/2) / StagePiece.PIECE_SPACING);
 

@@ -5,6 +5,8 @@ public class HudPlayerHealthBarManager : MonoBehaviour
 {
     [SerializeField] private Image healthFill;
     [SerializeField] private Image healthFillTrail;
+    [SerializeField] private Image shieldFill;
+    [SerializeField] private Image lightDamageFill;
     [SerializeField] private Transform activeParent;
 
     private const float HEALTH_FILL_TRAIL_SPEED = 2f;
@@ -41,6 +43,8 @@ public class HudPlayerHealthBarManager : MonoBehaviour
         if (!activeParent.gameObject.activeInHierarchy) { return; }
 
         healthFill.fillAmount = PlayerEntity.ActiveInstance.GetHealthPercent();
+        shieldFill.fillAmount = PlayerEntity.ActiveInstance.GetShieldPercent();
+        lightDamageFill.fillAmount = PlayerEntity.ActiveInstance.GetLightDamagePercent();
         healthFillTrail.fillAmount = Mathf.MoveTowards(healthFillTrail.fillAmount, healthFill.fillAmount, Time.deltaTime * HEALTH_FILL_TRAIL_SPEED);
     }
 }

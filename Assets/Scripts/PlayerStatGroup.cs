@@ -8,7 +8,8 @@ public class PlayerStatGroup
         Dexterity, 
         Intellect, 
         Endurance,  
-        DashCount, 
+        DashCount,
+        DashBonusDuration,
         CritChance, 
         Speed, 
         Firerate, 
@@ -16,7 +17,10 @@ public class PlayerStatGroup
         PickupRadius, 
         CritBonusDamage,
         HeatFloorBonus,
-        HeatCapBonus
+        HeatCapBonus,
+        DamageToLightConversion,
+        DamageToShieldConversion,
+        EchoChance
     }
     public enum PlayerFlags { NoHeal }
 

@@ -1,13 +1,15 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HudStageIntroManager : MonoBehaviour
 {
     [SerializeField] private Transform introParent;
     [SerializeField] private TextMeshProUGUI stageNameText;
-    [SerializeField] private TextMeshProUGUI difficultyNameText;
     [SerializeField] private TextMeshProUGUI pressToBeginText;
+    [SerializeField] private List<HudTraitCard> traitCards;
+    [SerializeField] private HudDifficultyLevelCard difficultyCard;
     [SerializeField] private CanvasGroup fadeCG;
 
     private const float FADE_IN_DURATION = 2f;
@@ -15,8 +17,22 @@ public class HudStageIntroManager : MonoBehaviour
     private void OnEnable()
     {
         stageNameText.text = "Test Stage";
-        difficultyNameText.text = "Normal";
         pressToBeginText.text = "- Press R to begin -";
+
+        difficultyCard.SetUp(PersistentDataManager.GetCurrentDifficulty());
+        List<PlayerTraitSO> selectedTraits = PersistentDataManager.GetTraitSelection();
+        for (int i = 0; i < traitCards.Count; i++) 
+        {
+            if (i < selectedTraits.Count) 
+            {
+                traitCards[i].gameObject.SetActive(true);
+                traitCards[i].SetUp(selectedTraits[i]);
+            }
+            else 
+            {
+                traitCards[i].gameObject.SetActive(false);
+            }
+        }
 
         StartCoroutine(FadeInCR());
         EventManager.StageStateStartedEvent += OnStageStateStart;

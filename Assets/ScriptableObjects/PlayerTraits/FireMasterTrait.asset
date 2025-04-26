@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73954554289a61479ff28289dfbcd29, type: 3}
+  m_Name: FireMasterTrait
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: FIRE_MASTER
+  <NameID>k__BackingField: TRAIT_NAME_FIRE_MASTER
+  <DescID>k__BackingField: TRAIT_DESC_FIRE_MASTER
+  <IconColor>k__BackingField: {r: 1, g: 0.6341173, b: 0, a: 1}
+  <Tech>k__BackingField: {fileID: 11400000, guid: 6328147f0e0b61b499ac4958a32dc321, type: 2}

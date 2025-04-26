@@ -31,7 +31,19 @@ public class HudStageStatusMenu : MonoBehaviour, IGameMenu
 
     public bool CanBeOpened()
     {
-        return true; // Can always be opened, has no wave type or gamestate restrictions
+        switch (StageManagerBase.GetCurrentStateType())
+        {
+            case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.EnemyWave:
+            case StageStateBase.GameState.BossFight:
+                {
+                    return true;
+                }
+            default:
+                {
+                    return false;
+                }
+        }
     }
 
     public void CloseMenu()

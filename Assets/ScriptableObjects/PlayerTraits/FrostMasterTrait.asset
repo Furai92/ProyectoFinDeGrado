@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b73954554289a61479ff28289dfbcd29, type: 3}
-  m_Name: FireTrait
+  m_Name: FrostMasterTrait
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: FIRE
-  <NameID>k__BackingField: TRAIT_NAME_FIRE
-  <DescID>k__BackingField: TRAIT_DESC_FIRE
-  <IconColor>k__BackingField: {r: 1, g: 0.6341173, b: 0, a: 1}
-  <Tech>k__BackingField: {fileID: 0}
-  <BonusStats>k__BackingField: []
+  <ID>k__BackingField: FROST_MASTER
+  <NameID>k__BackingField: TRAIT_NAME_FROST_MASTER
+  <DescID>k__BackingField: TRAIT_DESC_FROST_MASTER
+  <IconColor>k__BackingField: {r: 0, g: 0.7287984, b: 1, a: 1}
+  <Tech>k__BackingField: {fileID: 11400000, guid: 066ca41514a3af243adf381baafd7831, type: 2}

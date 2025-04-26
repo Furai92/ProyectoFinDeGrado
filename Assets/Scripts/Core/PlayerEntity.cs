@@ -6,11 +6,15 @@ public class PlayerEntity : NetworkBehaviour
 {
     // Status ========================================================================================
 
+    public float CurrentLightDamage { get; private set; }
+    public float CurrentShield { get; private set; }
     public float CurrentHealth { get; private set; }
     public int CurrentDashes { get; private set; }
     public float DashRechargePercent { get; private set; }
+    public float Money { get; private set; }
 
     private const float BASE_DASH_RECHARGE_RATE = 0.25f;
+    private const float LIGHT_DAMAGE_HEALING_MULT = 3f;
 
     // Weapon status =================================================================================
 
@@ -98,6 +102,7 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(PlayerStatGroup.Stat.DashCount, 3);
         stats.ChangeStat(PlayerStatGroup.Stat.DashRechargeRate, 1);
         stats.ChangeStat(PlayerStatGroup.Stat.Firerate, 1);
+
         CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
@@ -105,10 +110,15 @@ public class PlayerEntity : NetworkBehaviour
         StatusOverheatRanged = StatusOverheatMelee = false;
         rangedAttackReady = meleeAttackReady = 1;
 
-        for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); }
+        for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); } // Test
+
+        List<PlayerTraitSO> selectedTraits = PersistentDataManager.GetTraitSelection();
+        for (int i = 0; i < selectedTraits.Count; i++)
+        {
+            if (selectedTraits[i].Tech != null) { EquipTech(selectedTraits[i].Tech); }
+        }
 
         WeaponData rangedweapon = new WeaponData(debugRangedWeaponSO);
-        print(rangedweapon.GetStats().ProjectileComponentID);
 
         EquipWeapon(rangedweapon);
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
@@ -380,7 +390,14 @@ public class PlayerEntity : NetworkBehaviour
     }
     public void DealDamage(float magnitude)
     {
+        float damageToShield = Mathf.Min(CurrentShield, magnitude);
+        CurrentShield -= damageToShield;
+        magnitude -= damageToShield;
+
         CurrentHealth -= magnitude;
+        AddShield(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToShieldConversion));
+        AddLightDamage(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToLightConversion));
+
         if (CurrentHealth <= 0)
         {
             // Kill?
@@ -390,17 +407,51 @@ public class PlayerEntity : NetworkBehaviour
     {
         return dashDurationRemaining > 0;
     }
+    public void AddLightDamage(float amount) 
+    {
+        CurrentLightDamage = Mathf.Clamp(CurrentLightDamage + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth) - CurrentHealth);
+    }
+    public void AddShield(float amount) 
+    {
+        CurrentShield = Mathf.Clamp(CurrentShield + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+    }
     public void Heal(float amount)
     {
-        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+        amount = Mathf.Max(amount, 0); // Healing cannot be negative
+        float lightDamageHealing = Mathf.Min(CurrentLightDamage / LIGHT_DAMAGE_HEALING_MULT, amount);
+        CurrentLightDamage -= lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;
+        amount -= lightDamageHealing;
+
+        float totalHealing = lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;
+        totalHealing += amount;
+        CurrentHealth = Mathf.Clamp(CurrentHealth + totalHealing, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
     }
     public float GetHealthPercent()
     {
         return CurrentHealth / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
     }
+    public float GetLightDamagePercent() 
+    {
+        return GetHealthPercent() + CurrentLightDamage / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+    }
+    public float GetShieldPercent() 
+    {
+        return CurrentShield / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+    }
     public float GetStat(PlayerStatGroup.Stat s) 
     {
         return stats.GetStat(s);
+    }
+    public void AddMoney(float amount)
+    {
+        Money += amount;
+        EventManager.OnCurrencyUpdated();
+    }
+    public void SpendMoney(float amount)
+    {
+        Money -= amount;
+        Money = Mathf.Max(0, Money);
+        EventManager.OnCurrencyUpdated();
     }
 
     public class TechGroup

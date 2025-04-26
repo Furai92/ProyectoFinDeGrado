@@ -22,6 +22,7 @@ public class StageStateIntro : StageStateBase
     public override void StateEnd()
     {
         EventManager.AllPlayersReadyEvent -= OnAllPlayersReady;
+        StageManagerBase.SpawnPlayers();
     }
 
     public override void StateStart()

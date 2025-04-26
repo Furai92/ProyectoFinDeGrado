@@ -8,6 +8,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private MainMenuTravellingCamera travellingCam;
     [SerializeField] private HudSettingsMenu settingsMenu;
     [SerializeField] private Transform mainStateParent;
+    [SerializeField] private HudNewRunMenu newRunMenu;
 
     private ProceduralStageData backgroundStage;
 
@@ -52,10 +53,9 @@ public class MainMenuManager : MonoBehaviour
     }
 
 
-    public void OnStartRunClicked() 
+    public void OnStartRunClicked()
     {
-        // TEMP
-        SceneManager.LoadScene("Ingame");
+        ToggleMenu(newRunMenu);
     }
     public void OnCollectionClicked() 
     {

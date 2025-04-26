@@ -66,3 +66,63 @@ MonoBehaviour:
     <Data>k__BackingField: 'Bounces: {0}'
   - <ID>k__BackingField: WEAPON_CARD_PIERCES_FORMAT
     <Data>k__BackingField: 'Pierces: {0}'
+  - <ID>k__BackingField: NEWRUN_MENU_HEADER_MAIN
+    <Data>k__BackingField: Run settings
+  - <ID>k__BackingField: NEWRUN_MENU_HEADER_0
+    <Data>k__BackingField: Which element do you want to master?
+  - <ID>k__BackingField: NEWRUN_MENU_HEADER_1
+    <Data>k__BackingField: What will be your defense strategy?
+  - <ID>k__BackingField: NEWRUN_MENU_HEADER_2
+    <Data>k__BackingField: Select a difficulty level
+  - <ID>k__BackingField: DIF_NAME_EASY
+    <Data>k__BackingField: Easy
+  - <ID>k__BackingField: DIF_NAME_NORMAL
+    <Data>k__BackingField: Normal
+  - <ID>k__BackingField: DIF_NAME_HARD
+    <Data>k__BackingField: Hard
+  - <ID>k__BackingField: DIF_NAME_EXPERT
+    <Data>k__BackingField: Exert
+  - <ID>k__BackingField: DIF_DESC_EASY
+    <Data>k__BackingField: Enemies have their attributes reduced, shop items are
+      cheaper
+  - <ID>k__BackingField: DIF_DESC_NORMAL
+    <Data>k__BackingField: A balanced difficulty that offers a decent challenge
+  - <ID>k__BackingField: DIF_DESC_HARD
+    <Data>k__BackingField: Enemies have enhanced attributes, more enemies can spawn
+  - <ID>k__BackingField: DIF_DESC_EXPERT
+    <Data>k__BackingField: Enemies have enhanced attributes, spawn faster, much more
+      enemies can spawn, and shop items are more expensive
+  - <ID>k__BackingField: TRAIT_NAME_FIRE_MASTER
+    <Data>k__BackingField: Fire Master
+  - <ID>k__BackingField: TRAIT_DESC_FIRE_MASTER
+    <Data>k__BackingField: Your weapons can reach 100 more heat points before overheating.
+      Each heat point over 100 increases your weapon damage by 1%.
+  - <ID>k__BackingField: TRAIT_NAME_FROST_MASTER
+    <Data>k__BackingField: Frost Master
+  - <ID>k__BackingField: TRAIT_DESC_FROST_MASTER
+    <Data>k__BackingField: Your weapons can cool down 100 heat points below 0. Each
+      heat point below 0 increases your weapon damage by 1%.
+  - <ID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
+    <Data>k__BackingField: Thunder Master
+  - <ID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
+    <Data>k__BackingField: Increases attack speed by 25%. Your attacks have a 33%
+      chance to be duplicated.
+  - <ID>k__BackingField: TRAIT_DESC_VOID_MASTER
+    <Data>k__BackingField: All your weapon attacks become explosive. Your explosions
+      deal 5% more damage per each 1M of radius.
+  - <ID>k__BackingField: TRAIT_NAME_VOID_MASTER
+    <Data>k__BackingField: Void Master
+  - <ID>k__BackingField: TRAIT_NAME_RESTORATION
+    <Data>k__BackingField: Restoration
+  - <ID>k__BackingField: TRAIT_DESC_RESTORATION
+    <Data>k__BackingField: When taking damage, 50% of the lost heal will be marked
+      as light damage, healing this health is 3X stronger.
+  - <ID>k__BackingField: TRAIT_NAME_PROTECTION
+    <Data>k__BackingField: Protection
+  - <ID>k__BackingField: TRAIT_DESC_PROTECTION
+    <Data>k__BackingField: When losing health, gain a shield equivalent to 2X the
+      health lost
+  - <ID>k__BackingField: TRAIT_NAME_AGILITY
+    <Data>k__BackingField: Agility
+  - <ID>k__BackingField: TRAIT_DESC_AGILITY
+    <Data>k__BackingField: Gain +2 dash charges. Dashes are twice as long.

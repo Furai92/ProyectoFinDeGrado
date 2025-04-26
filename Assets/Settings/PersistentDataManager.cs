@@ -1,7 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PersistentDataManager : MonoBehaviour
 {
+    private DifficultyLevelSO currentDifficulty;
+    private List<PlayerTraitSO> selectedTraits;
+
     private const string INSTANCE_GO_NAME = "[Persistent]GameDataManager";
 
     private static PersistentDataManager instance;
@@ -17,4 +21,14 @@ public class PersistentDataManager : MonoBehaviour
         }
         return instance;
     }
+    public static void SetGameDifficulty(DifficultyLevelSO d) 
+    {
+        GetInstance().currentDifficulty = d;
+    }
+    public static void SetTraitSelection(List<PlayerTraitSO> traits) 
+    {
+        GetInstance().selectedTraits = traits;
+    }
+    public static List<PlayerTraitSO> GetTraitSelection() { return GetInstance().selectedTraits; }
+    public static DifficultyLevelSO GetCurrentDifficulty() { return GetInstance().currentDifficulty; }
 }

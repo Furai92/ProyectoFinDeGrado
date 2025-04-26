@@ -22,7 +22,14 @@ public class HudCurrencyDisplay : MonoBehaviour
     }
     private void OnCurrencyUpdated() 
     {
-        currencyText.text = StageManagerBase.GetPlayerCurrency(0).ToString("F0");
+        if (PlayerEntity.ActiveInstance != null) 
+        {
+            currencyText.text = PlayerEntity.ActiveInstance.Money.ToString("F0"); 
+        }
+        else 
+        {
+            currencyText.text = "";
+        }
     }
     private void UpdateVisibility(StageStateBase.GameState s) 
     {

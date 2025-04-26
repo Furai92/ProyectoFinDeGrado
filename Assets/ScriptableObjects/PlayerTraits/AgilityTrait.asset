@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73954554289a61479ff28289dfbcd29, type: 3}
+  m_Name: AgilityTrait
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: AGILITY
+  <NameID>k__BackingField: TRAIT_NAME_AGILITY
+  <DescID>k__BackingField: TRAIT_DESC_AGILITY
+  <IconColor>k__BackingField: {r: 0.5082325, g: 0.75700045, b: 0.764151, a: 1}
+  <Tech>k__BackingField: {fileID: 11400000, guid: edee272fff023514680aa25efc6f9d18, type: 2}

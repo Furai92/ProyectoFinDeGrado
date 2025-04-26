@@ -126,9 +126,9 @@ public class HudShop : MonoBehaviour, IGameMenu
     {
         if (!menuParent.gameObject.activeInHierarchy) { return; }
         if (StageManagerBase.GetCurrentStateType() != StageStateBase.GameState.Rest) { return; }
-        if (StageManagerBase.GetPlayerCurrency(0) < GetRefreshPrice()) { return; }
+        if (PlayerEntity.ActiveInstance.Money < GetRefreshPrice()) { return; }
 
-        StageManagerBase.ChangeCurrency(-GetRefreshPrice());
+        PlayerEntity.ActiveInstance.SpendMoney(GetRefreshPrice());
         refreshesDone++;
         Refresh();
     }
@@ -138,9 +138,9 @@ public class HudShop : MonoBehaviour, IGameMenu
         if (StageManagerBase.GetCurrentStateType() != StageStateBase.GameState.Rest) { return; }
         if (index >= techInStock.Count) { return; }
         if (techInStock[index] == null) { return; }
-        if (StageManagerBase.GetPlayerCurrency(0) < GetTechPrice(techInStock[index])) { return; }
+        if (PlayerEntity.ActiveInstance.Money < GetTechPrice(techInStock[index])) { return; }
 
-        StageManagerBase.ChangeCurrency(-GetTechPrice(techInStock[index]));
+        PlayerEntity.ActiveInstance.SpendMoney(GetTechPrice(techInStock[index]));
         PlayerEntity.ActiveInstance.EquipTech(techInStock[index]);
         techInStock[index] = null;
         UpdateShopVisuals();
