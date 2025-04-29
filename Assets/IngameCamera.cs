@@ -43,6 +43,7 @@ public class IngameCamera : MonoBehaviour
     {
         switch (StageManagerBase.GetCurrentStateType()) 
         {
+            case StageStateBase.GameState.Victory:
             case StageStateBase.GameState.Rest:
             case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.BossFight: 
@@ -51,7 +52,6 @@ public class IngameCamera : MonoBehaviour
                     break;
                 }
             case StageStateBase.GameState.Intro: { currentCameraMode = CameraMode.Intro; modeT = 1; break; }
-            case StageStateBase.GameState.Victory:
             case StageStateBase.GameState.GameOver: 
                 {
                     currentCameraMode = CameraMode.Outro;

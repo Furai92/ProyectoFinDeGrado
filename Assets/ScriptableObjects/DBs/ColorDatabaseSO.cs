@@ -25,6 +25,18 @@ public class ColorDatabaseSO : ScriptableObject
             default: { return Color.white; }
         }
     }
+    public Color TechRarityToColor(GameEnums.TechRarity r)
+    {
+        switch (r)
+        {
+            case GameEnums.TechRarity.Common: { return GetColor("RARITY_COLOR_COMMON"); }
+            case GameEnums.TechRarity.Rare: { return GetColor("RARITY_COLOR_RARE"); }
+            case GameEnums.TechRarity.Exotic: { return GetColor("RARITY_COLOR_EXOTIC"); }
+            case GameEnums.TechRarity.Prototype: { return GetColor("RARITY_COLOR_PROTOTYPE"); }
+            case GameEnums.TechRarity.Special: { return GetColor("RARITY_COLOR_SPECIAL"); }
+            default: { return Color.white; }
+        }
+    }
     public Color GetColor(string id)
     {
         if (m_colorDictionary == null) { GenerateColorDictionary(); }

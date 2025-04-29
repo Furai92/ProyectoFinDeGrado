@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: AgilityTraitCoreTech
   m_EditorClassIdentifier: 
   <ID>k__BackingField: AGILITY_CORE
-  <NameID>k__BackingField: TCH_N_AGILITY
-  <DescID>k__BackingField: TCH_D_AGILITY
+  <NameID>k__BackingField: TRAIT_NAME_AGILITY
+  <DescID>k__BackingField: TRAIT_DESC_AGILITY
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 3
-  <TraitRequirement>k__BackingField: {fileID: 0}
+  <Rarity>k__BackingField: 4
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: dca949ea592a48d44beea7e5b8b8d831, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 5
     <Second>k__BackingField: 2
   - <First>k__BackingField: 6
-    <Second>k__BackingField: 1
+    <Second>k__BackingField: 0.5
   <BonusFlags>k__BackingField: 

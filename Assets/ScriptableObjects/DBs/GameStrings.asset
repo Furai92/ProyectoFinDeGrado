@@ -125,4 +125,27 @@ MonoBehaviour:
   - <ID>k__BackingField: TRAIT_NAME_AGILITY
     <Data>k__BackingField: Agility
   - <ID>k__BackingField: TRAIT_DESC_AGILITY
-    <Data>k__BackingField: Gain +2 dash charges. Dashes are twice as long.
+    <Data>k__BackingField: Gain +2 dash charges. Dashes are 50% longer.
+  - <ID>k__BackingField: TRAIT_NAME_GENERAL
+    <Data>k__BackingField: General
+  - <ID>k__BackingField: TRAIT_DESC_GENERAL
+    <Data>k__BackingField: No special attributes.
+  - <ID>k__BackingField: TCH_N_TORMENTOR
+    <Data>k__BackingField: Tormentor
+  - <ID>k__BackingField: TCH_D_TORMENTOR
+    <Data>k__BackingField: Increases your intellect, but decreases your might and
+      dexterity
+  - <ID>k__BackingField: TCH_N_COOLING_STEP
+    <Data>k__BackingField: Cooling Step
+  - <ID>k__BackingField: TCH_D_COOLING_STEP
+    <Data>k__BackingField: Evading an enemy attack cools down your weapons
+  - <ID>k__BackingField: RARITY_NAME_COMMON
+    <Data>k__BackingField: Common
+  - <ID>k__BackingField: RARITY_NAME_RARE
+    <Data>k__BackingField: Rare
+  - <ID>k__BackingField: RARITY_NAME_EXOTIC
+    <Data>k__BackingField: Exotic
+  - <ID>k__BackingField: RARITY_NAME_PROTOTYPE
+    <Data>k__BackingField: Prototype
+  - <ID>k__BackingField: RARITY_NAME_SPECIAL
+    <Data>k__BackingField: Special

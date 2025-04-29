@@ -14,6 +14,7 @@ public class EventManager
     public static event Action<Vector3> PlayerEvasionEvent;
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
+    public static event Action PlayerDefeatedEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -110,5 +111,9 @@ public class EventManager
     public static void OnPlayerSpawned(PlayerEntity p) 
     {
         PlayerSpawnedEvent?.Invoke(p);
+    }
+    public static void OnPlayerDefeated()
+    {
+        PlayerDefeatedEvent?.Invoke();
     }
 }

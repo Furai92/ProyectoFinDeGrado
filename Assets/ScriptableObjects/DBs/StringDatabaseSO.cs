@@ -49,6 +49,18 @@ public class StringDatabaseSO : ScriptableObject
             default: { return ""; }
         }
     }
+    public string RarityToName(GameEnums.TechRarity e)
+    {
+        switch (e)
+        {
+            case GameEnums.TechRarity.Common: { return GetString("RARITY_NAME_COMMON"); }
+            case GameEnums.TechRarity.Rare: { return GetString("RARITY_NAME_RARE"); }
+            case GameEnums.TechRarity.Exotic: { return GetString("RARITY_NAME_EXOTIC"); }
+            case GameEnums.TechRarity.Prototype: { return GetString("RARITY_NAME_PROTOTYPE"); }
+            case GameEnums.TechRarity.Special: { return GetString("RARITY_NAME_SPECIAL"); }
+            default: { return ""; }
+        }
+    }
     public string GetString(string id)
     {
         if (m_stringDictionary == null) { GenerateStringDictionary(); }

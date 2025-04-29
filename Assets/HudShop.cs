@@ -13,21 +13,22 @@ public class HudShop : MonoBehaviour, IGameMenu
     [SerializeField] private TextMeshProUGUI refreshCostText;
     [SerializeField] private Transform menuParent;
 
+    private TechPool tp;
     private int refreshesDone;
     private List<TechSO> techInStock;
-
+    private const float TECH_CHANCE_RARE = 25f;
+    private const float TECH_CHANCE_EXOTIC = 5f;
+    private const float TECH_CHANCE_PROTOTYPE = 1f;
     private const float REFRESH_COST_BASE = 5f;
     private const float REFRESH_COST_SCALING = 2f;
 
-    public void SetUp(PlayerEntity p) 
-    {
-        gameObject.SetActive(true);
-        menuParent.gameObject.SetActive(false);
-    }
     private void OnEnable()
     {
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.StageStateEndedEvent += OnStageStateEnded;
+        tp = new TechPool(dbso, PersistentDataManager.GetTraitSelection());
+        gameObject.SetActive(true);
+        menuParent.gameObject.SetActive(false);
     }
     private void OnDisable()
     {
@@ -40,6 +41,8 @@ public class HudShop : MonoBehaviour, IGameMenu
     }
     private void OnStageStateStarted(StageStateBase.GameState s)
     {
+        if (s != StageStateBase.GameState.Rest) { return; }
+
         refreshesDone = 0;
         Refresh();
     }
@@ -55,7 +58,27 @@ public class HudShop : MonoBehaviour, IGameMenu
         techInStock = new List<TechSO>();
         for (int i = 0; i < 5; i++) 
         {
-            techInStock.Add(GetCompatibleTech());
+            GameEnums.TechRarity selectedRarity = GameEnums.TechRarity.Common;
+            int rarityRoll = Random.Range(0, 101);
+            if (rarityRoll < TECH_CHANCE_RARE) 
+            {
+                if (rarityRoll < TECH_CHANCE_EXOTIC)
+                {
+                    if (rarityRoll < TECH_CHANCE_PROTOTYPE)
+                    {
+                        selectedRarity = GameEnums.TechRarity.Prototype;
+                    }
+                    else 
+                    {
+                        selectedRarity = GameEnums.TechRarity.Exotic;
+                    }
+                }
+                else 
+                {
+                    selectedRarity = GameEnums.TechRarity.Rare;
+                }
+            }
+            techInStock.Add(tp.GetRandomTech(selectedRarity, PlayerEntity.ActiveInstance.ActiveTechDictionary));
         }
         UpdateShopVisuals();
     }
@@ -85,7 +108,7 @@ public class HudShop : MonoBehaviour, IGameMenu
                     soldOutPanels[i].gameObject.SetActive(false);
                     purchaseButtons[i].gameObject.SetActive(true);
                     prices[i].gameObject.SetActive(true); prices[i].text = GetTechPrice(techInStock[i]).ToString("F0");
-                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i]);
+                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], true);
                     purchaseButtons[i].gameObject.SetActive(true);
                 }
             }
@@ -108,20 +131,6 @@ public class HudShop : MonoBehaviour, IGameMenu
     {
         return  REFRESH_COST_BASE + refreshesDone * REFRESH_COST_SCALING;
     }
-    private TechSO GetCompatibleTech() 
-    {
-        List<TechSO> compatibleTech = new List<TechSO>();
-        for (int i = 0; i < dbso.Techs.Count; i++) 
-        {
-            compatibleTech.Add(dbso.Techs[i]);
-        }
-
-        if (compatibleTech.Count > 0) 
-        {
-            return compatibleTech[Random.Range(0, compatibleTech.Count)];
-        }
-        return null;
-    }
     public void OnRefreshClicked() 
     {
         if (!menuParent.gameObject.activeInHierarchy) { return; }
@@ -142,6 +151,18 @@ public class HudShop : MonoBehaviour, IGameMenu
 
         PlayerEntity.ActiveInstance.SpendMoney(GetTechPrice(techInStock[index]));
         PlayerEntity.ActiveInstance.EquipTech(techInStock[index]);
+
+        // It is possible that the store generated more than one item that has a purchase count limit.
+        // If after this purchase, the tech is maxed out, and any of the tech's in the shop is the same as this one, it should be removed from the shop
+
+        TechSO techPurchased = techInStock[index];
+        if (techPurchased.MaxLevel > 0 && PlayerEntity.ActiveInstance.GetTechLevel(techPurchased.ID) >= techPurchased.MaxLevel) 
+        {
+            for (int i = 0; i < techInStock.Count; i++) 
+            {
+                if (techInStock[i].ID == techPurchased.ID) { techInStock[i] = null; }
+            }
+        }
         techInStock[index] = null;
         UpdateShopVisuals();
     }
@@ -153,6 +174,7 @@ public class HudShop : MonoBehaviour, IGameMenu
     public void CloseMenu()
     {
         menuParent.gameObject.SetActive(false);
+        EventManager.OnUiMenuClosed(this);
     }
 
     public bool IsOpen()

@@ -9,6 +9,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private HudSettingsMenu settingsMenu;
     [SerializeField] private Transform mainStateParent;
     [SerializeField] private HudNewRunMenu newRunMenu;
+    [SerializeField] private HudCollectionMenu collectionMenu;
 
     private ProceduralStageData backgroundStage;
 
@@ -59,7 +60,7 @@ public class MainMenuManager : MonoBehaviour
     }
     public void OnCollectionClicked() 
     {
-
+        ToggleMenu(collectionMenu);
     }
     public void OnSettingsClicked() 
     {

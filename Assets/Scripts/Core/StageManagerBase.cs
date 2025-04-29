@@ -24,6 +24,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private Dictionary<string, List<WeaponSO>> weaponPools;
     protected StageStatGroup stageStats;
     private bool playersSpawned = false;
+    private bool playerDefeated = false;
 
     private static StageManagerBase _instance;
 
@@ -37,11 +38,13 @@ public abstract class StageManagerBase : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
         StartCoroutine(Startcr());
     }
     private void OnDisable()
     {
         EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
     }
     private IEnumerator Startcr() 
     {
@@ -70,6 +73,7 @@ public abstract class StageManagerBase : MonoBehaviour
     private void Update()
     {
         if (!initializationFinished) { return; }
+        if (playerDefeated) { return; }
 
         currentState.UpdateState();
         if (currentState.IsFinished()) 
@@ -112,6 +116,10 @@ public abstract class StageManagerBase : MonoBehaviour
                 }
             }
         }
+    }
+    private void OnPlayerDefeated() 
+    {
+        playerDefeated = true;
     }
     private void OnEnemyDefeated(EnemyEntity e) 
     {

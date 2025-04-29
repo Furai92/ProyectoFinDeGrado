@@ -22,7 +22,7 @@ public class StageStateVictory : StageStateBase
 
     public override void StateEnd()
     {
-
+        
     }
 
     public override void StateStart()

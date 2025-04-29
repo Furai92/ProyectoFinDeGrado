@@ -6,7 +6,7 @@ public abstract class PlayerAttackBase : MonoBehaviour
     protected WeaponAttackSetupData setupData;
     public abstract void SetUp(Vector3 pos, float direction, WeaponAttackSetupData sd, PlayerAttackBase parentAttack);
 
-    private const float BOUNCE_TARGET_SEARCH_RADIUS = 20f;
+    private const float BOUNCE_TARGET_SEARCH_RADIUS = 30f;
 
     protected void Explode(Vector3 center)
     {

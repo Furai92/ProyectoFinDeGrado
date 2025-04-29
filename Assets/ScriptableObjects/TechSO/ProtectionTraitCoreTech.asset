@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ProtectionTraitCoreTech
   m_EditorClassIdentifier: 
   <ID>k__BackingField: PROTECTION_CORE
-  <NameID>k__BackingField: TCH_N_PROTECTION
-  <DescID>k__BackingField: TCH_D_PROTECTION
+  <NameID>k__BackingField: TRAIT_NAME_PROTECTION
+  <DescID>k__BackingField: TRAIT_DESC_PROTECTION
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 3
-  <TraitRequirement>k__BackingField: {fileID: 0}
+  <Rarity>k__BackingField: 4
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: d4f80f5ccf5e31e46b1f23927fb2da56, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 16

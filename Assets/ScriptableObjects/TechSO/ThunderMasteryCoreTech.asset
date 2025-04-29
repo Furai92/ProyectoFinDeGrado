@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ThunderMasteryCoreTech
   m_EditorClassIdentifier: 
   <ID>k__BackingField: THUNDER_MASTERY_CORE
-  <NameID>k__BackingField: TCH_N_THUNDER_MASTERY
-  <DescID>k__BackingField: TCH_D_THUNDER_MASTERY
+  <NameID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
+  <DescID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 3
-  <TraitRequirement>k__BackingField: {fileID: 0}
+  <Rarity>k__BackingField: 4
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 17

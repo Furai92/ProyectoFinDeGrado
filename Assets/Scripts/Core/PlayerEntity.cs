@@ -54,6 +54,11 @@ public class PlayerEntity : NetworkBehaviour
     [SerializeField] private Rigidbody m_rb;
     [SerializeField] private Collider m_agentCollisionsCollider;
 
+    // Tech ================================================================================================
+
+    public List<TechGroup> ActiveTechList { get; private set; }
+    public Dictionary<string, TechGroup> ActiveTechDictionary { get; private set; }
+
     // Static reference
 
     public static PlayerEntity ActiveInstance { get; private set; }
@@ -66,6 +71,7 @@ public class PlayerEntity : NetworkBehaviour
     private Vector3 dashMovementVector;
     private float dashDurationRemaining;
     private bool _isPlayerControlsEnabled = false;
+    private bool defeated = false;
 
     private const float LOCK_Y = 1.0f;
     private const float BASE_MOVEMENT_SPEED = 10f;
@@ -77,12 +83,6 @@ public class PlayerEntity : NetworkBehaviour
     private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
 
     // Buffs
-
-
-
-    // Techs ========================================================================================
-
-    private Dictionary<string, TechGroup> ActiveTechDictionary;
 
     // Debug ========================================================================================
 
@@ -107,6 +107,7 @@ public class PlayerEntity : NetworkBehaviour
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
         ActiveTechDictionary = new Dictionary<string, TechGroup>();
+        ActiveTechList = new List<TechGroup>();
         StatusOverheatRanged = StatusOverheatMelee = false;
         rangedAttackReady = meleeAttackReady = 1;
 
@@ -179,6 +180,7 @@ public class PlayerEntity : NetworkBehaviour
             tg = new TechGroup(t);
             if (tg.Script != null) { tg.Script.PlayerRef = this; }
             ActiveTechDictionary.Add(tg.SO.ID, tg);
+            ActiveTechList.Add(tg);
         }
         // Add stat and flag bonuses
         for (int i = 0; i < tg.SO.BonusStats.Count; i++)
@@ -206,6 +208,7 @@ public class PlayerEntity : NetworkBehaviour
             }
             ActiveTechDictionary[t.ID].Script?.OnTechRemoved();
             ActiveTechDictionary.Remove(t.ID);
+            ActiveTechList.Remove(tg);
         }
         EventManager.OnPlayerStatsUpdated(this);
     }
@@ -236,6 +239,11 @@ public class PlayerEntity : NetworkBehaviour
                     break;
                 }
         }
+    }
+    public int GetTechLevel(string id) 
+    {
+        if (ActiveTechDictionary.ContainsKey(id)) { return ActiveTechDictionary[id].Level; }
+        return 0;
     }
     private void UpdateRotation()
     {
@@ -302,6 +310,8 @@ public class PlayerEntity : NetworkBehaviour
     }
     private void Attack(WeaponSO.WeaponSlot s)
     {
+        if (defeated) { return; }
+
         WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
         float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ?
             GameTools.DexterityToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Might));
@@ -386,10 +396,12 @@ public class PlayerEntity : NetworkBehaviour
 
         dashMovementVector = movementInputV * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
-        dashDurationRemaining = DASH_DURATION;
+        dashDurationRemaining = DASH_DURATION * 1 + stats.GetStat(PlayerStatGroup.Stat.DashBonusDuration);
     }
     public void DealDamage(float magnitude)
     {
+        if (defeated) { return; }
+
         float damageToShield = Mathf.Min(CurrentShield, magnitude);
         CurrentShield -= damageToShield;
         magnitude -= damageToShield;
@@ -400,6 +412,7 @@ public class PlayerEntity : NetworkBehaviour
 
         if (CurrentHealth <= 0)
         {
+            EventManager.OnPlayerDefeated();
             // Kill?
         }
     }
@@ -409,14 +422,20 @@ public class PlayerEntity : NetworkBehaviour
     }
     public void AddLightDamage(float amount) 
     {
+        if (defeated) { return; }
+
         CurrentLightDamage = Mathf.Clamp(CurrentLightDamage + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth) - CurrentHealth);
     }
     public void AddShield(float amount) 
     {
+        if (defeated) { return; }
+
         CurrentShield = Mathf.Clamp(CurrentShield + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
     }
     public void Heal(float amount)
     {
+        if (defeated) { return; }
+
         amount = Mathf.Max(amount, 0); // Healing cannot be negative
         float lightDamageHealing = Mathf.Min(CurrentLightDamage / LIGHT_DAMAGE_HEALING_MULT, amount);
         CurrentLightDamage -= lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;

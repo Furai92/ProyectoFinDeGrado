@@ -23,3 +23,13 @@ MonoBehaviour:
     <Data>k__BackingField: {r: 0.58433104, g: 0, b: 1, a: 1}
   - <ID>k__BackingField: ELEM_COLOR_PHYSICAL
     <Data>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - <ID>k__BackingField: RARITY_COLOR_COMMON
+    <Data>k__BackingField: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
+  - <ID>k__BackingField: RARITY_COLOR_RARE
+    <Data>k__BackingField: {r: 0.24296904, g: 0.5596209, b: 0.7924528, a: 1}
+  - <ID>k__BackingField: RARITY_COLOR_EXOTIC
+    <Data>k__BackingField: {r: 0.7924528, g: 0.7602681, b: 0.31772873, a: 1}
+  - <ID>k__BackingField: RARITY_COLOR_LEGENDARY
+    <Data>k__BackingField: {r: 0.40937248, g: 0.24363652, b: 0.7075472, a: 1}
+  - <ID>k__BackingField: RARITY_COLOR_SPECIAL
+    <Data>k__BackingField: {r: 0.7058824, g: 0.24313723, b: 0.35367787, a: 1}
