@@ -12,6 +12,7 @@ public class WeaponSO : ScriptableObject
     [field: SerializeField] public List<string> Pools { get; private set; }
     [field: SerializeField] public string ProjectileComponentID { get; private set; }
     [field: SerializeField] public string CleaveComponentID { get; private set; }
+    [field: SerializeField] public string ImpactEffectID { get; private set; }
 
     [field: SerializeField] public GameEnums.DamageElement Element { get; private set; }
     [field: SerializeField] public float ProjectileComponentDamage { get; private set; }

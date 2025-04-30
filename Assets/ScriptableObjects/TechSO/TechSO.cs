@@ -8,7 +8,7 @@ public class TechSO : ScriptableObject
     [field: SerializeField] public string NameID { get; private set; }
     [field: SerializeField] public string DescID { get; private set; }
     [field: SerializeField] public int MaxLevel { get; private set; }
-    [field: SerializeField] public GameEnums.TechRarity Rarity { get; private set; }
+    [field: SerializeField] public GameEnums.Rarity Rarity { get; private set; }
     [field: SerializeField] public PlayerTraitSO RelatedTrait { get; private set; }
 
     [field: SerializeField] public string Script { get; private set; }

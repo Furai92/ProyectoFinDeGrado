@@ -58,7 +58,7 @@ public class HudShop : MonoBehaviour, IGameMenu
         techInStock = new List<TechSO>();
         for (int i = 0; i < 5; i++) 
         {
-            GameEnums.TechRarity selectedRarity = GameEnums.TechRarity.Common;
+            GameEnums.Rarity selectedRarity = GameEnums.Rarity.Common;
             int rarityRoll = Random.Range(0, 101);
             if (rarityRoll < TECH_CHANCE_RARE) 
             {
@@ -66,16 +66,16 @@ public class HudShop : MonoBehaviour, IGameMenu
                 {
                     if (rarityRoll < TECH_CHANCE_PROTOTYPE)
                     {
-                        selectedRarity = GameEnums.TechRarity.Prototype;
+                        selectedRarity = GameEnums.Rarity.Prototype;
                     }
                     else 
                     {
-                        selectedRarity = GameEnums.TechRarity.Exotic;
+                        selectedRarity = GameEnums.Rarity.Exotic;
                     }
                 }
                 else 
                 {
-                    selectedRarity = GameEnums.TechRarity.Rare;
+                    selectedRarity = GameEnums.Rarity.Rare;
                 }
             }
             techInStock.Add(tp.GetRandomTech(selectedRarity, PlayerEntity.ActiveInstance.ActiveTechDictionary));

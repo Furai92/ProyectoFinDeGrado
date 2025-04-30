@@ -9,12 +9,13 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     private const float TERRAIN_COLLISION_RAYCAST_LENGHT = 1f;
     private const float ORB_SPEED = 7.5f;
     private const float LIFETIME = 10f;
+    private const float SPAWN_HEIGHT = 0.5f;
 
     public override void Initialize(Vector3 pos, float direction)
     {
         gameObject.SetActive(true);
         terrainCollisionMask = LayerMask.GetMask("Walls");
-        transform.position = pos;
+        transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
         transform.rotation = Quaternion.Euler(0, direction, 0);
         removeTime = Time.time + LIFETIME;
     }

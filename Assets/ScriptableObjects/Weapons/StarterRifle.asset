@@ -19,6 +19,7 @@ MonoBehaviour:
   - STANDARD
   <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
+  <ImpactEffectID>k__BackingField: STANDARD
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 100
   <CleaveComponentDamage>k__BackingField: 0
@@ -29,7 +30,7 @@ MonoBehaviour:
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 0.01
-  <Splash>k__BackingField: 10
+  <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 0
   <Timescale>k__BackingField: 30

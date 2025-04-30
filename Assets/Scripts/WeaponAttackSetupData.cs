@@ -3,6 +3,7 @@ using UnityEngine;
 public class WeaponAttackSetupData
 {
     public PlayerEntity User { get; set; }
+    public string ImpactEffectID { get; set; }
     public GameEnums.DamageElement Element { get; set; }
     public float Magnitude { get; set; }
     public float CritChance { get; set; }
@@ -47,6 +48,7 @@ public class WeaponAttackSetupData
         Splash = sd.Splash;
         Knockback = sd.Knockback;
         EnemyIgnored = sd.EnemyIgnored;
+        ImpactEffectID = sd.ImpactEffectID;
     }
 
 }

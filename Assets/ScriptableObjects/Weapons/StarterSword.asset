@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 0
   <ID>k__BackingField: SWORD
+  <NameID>k__BackingField: 
   <Pools>k__BackingField:
   - STANDARD
   <ProjectileComponentID>k__BackingField: 
   <CleaveComponentID>k__BackingField: MELEE
+  <ImpactEffectID>k__BackingField: STANDARD
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 0
   <CleaveComponentDamage>k__BackingField: 200

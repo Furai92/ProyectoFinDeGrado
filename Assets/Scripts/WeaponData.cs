@@ -5,11 +5,13 @@ public class WeaponData
 {
     public WeaponSO BaseWeapon { get; private set; }
     public List<WeaponPartSO> Parts { get; private set; }
+    public GameEnums.Rarity Rarity { get; private set; }
 
     public WeaponData(WeaponSO baseweapon) 
     {
         BaseWeapon = baseweapon;
         Parts = new List<WeaponPartSO>();
+        Rarity = GameEnums.Rarity.Common; // TEMP
         for (int i = 0; i < baseweapon.PartSlots.Count; i++)
         {
             Parts.Add(baseweapon.PartSlots[i].CompatibleParts[Random.Range(0, baseweapon.PartSlots[i].CompatibleParts.Count)]);
@@ -36,6 +38,7 @@ public class WeaponData
             HeatGen = BaseWeapon.HeatGeneration,
             Timescale = BaseWeapon.Timescale,
             SizeMultiplier = BaseWeapon.SizeMultiplier,
+            ImpactEffectID = BaseWeapon.ImpactEffectID
         };
         for (int i = 0; i < Parts.Count; i++) 
         {
@@ -68,6 +71,7 @@ public class WeaponData
         public GameEnums.DamageElement Element;
         public string ProjectileComponentID;
         public string CleaveComponentID;
+        public string ImpactEffectID;
         public float ProjectileComponentMagnitude;
         public float CleaveComponentMagnitude;
         public float Firerate;

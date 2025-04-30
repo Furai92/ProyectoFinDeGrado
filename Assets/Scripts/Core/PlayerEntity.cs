@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class PlayerEntity : NetworkBehaviour
 {
@@ -59,7 +60,19 @@ public class PlayerEntity : NetworkBehaviour
     public List<TechGroup> ActiveTechList { get; private set; }
     public Dictionary<string, TechGroup> ActiveTechDictionary { get; private set; }
 
-    // Static reference
+    // Buffs ===============================================================================================
+
+    private Dictionary<string, BuffEffectSO> buffDictionary;
+    public List<ActiveBuff> ActiveBuffs { get; private set; }
+    private float buffUpdateTime;
+
+    private const float BUFF_UPDATE_INTERVAL = 0.5f;
+
+    // Scriptable Objects ==================================================================================
+
+    [SerializeField] private GameDatabaseSO database;
+
+    // Static reference ====================================================================================
 
     public static PlayerEntity ActiveInstance { get; private set; }
 
@@ -70,29 +83,26 @@ public class PlayerEntity : NetworkBehaviour
     private float rotationInputV;
     private Vector3 dashMovementVector;
     private float dashDurationRemaining;
-    private bool _isPlayerControlsEnabled = false;
     private bool defeated = false;
 
     private const float LOCK_Y = 1.0f;
     private const float BASE_MOVEMENT_SPEED = 10f;
     private const float DASH_MOVEMENT_SPEED = 35f;
     private const float DASH_DURATION = 0.5f;
+    private const float DASH_SLAM_RAYCAST_LENGHT = 2.5f;
+    private const float DASH_SLAM_WALL_SEPARATION = 0.5f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
-    private const float CAM_HORIZONTAL_DISPLACEMENT_WHEN_MOVING = 2f;
 
-    // Buffs
 
-    // Debug ========================================================================================
-
-    [SerializeField] private GameObject _cube;
-    [SerializeField] private GameObject _capsule;
 
 
     public void SetUp(Vector3 pos)
     {
         gameObject.SetActive(true);
+        SetUpBuffDictionary();
+        buffUpdateTime = Time.time + BUFF_UPDATE_INTERVAL;
         transform.position = pos;
         StageManagerBase.UpdatePlayerPosition(transform.position);
         ActiveInstance = this;
@@ -110,6 +120,8 @@ public class PlayerEntity : NetworkBehaviour
         ActiveTechList = new List<TechGroup>();
         StatusOverheatRanged = StatusOverheatMelee = false;
         rangedAttackReady = meleeAttackReady = 1;
+
+        ActiveBuffs = new List<ActiveBuff>();
 
         for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); } // Test
 
@@ -138,112 +150,6 @@ public class PlayerEntity : NetworkBehaviour
     private void OnUiMenuChanged(IGameMenu m) 
     {
         inputsAllowed = m == null;
-    }
-    private void Start()
-    {
-        if (IsOwner || NetworkManager.Singleton == null)
-        {
-            _isPlayerControlsEnabled = true;
-        }
-
-        if (IsHost && IsOwner)
-        {
-            _cube.GetComponent<Renderer>().material.color = Color.green;
-            _capsule.GetComponent<Renderer>().material.color = Color.green;
-        }
-        else if (IsHost && !IsOwner)
-        {
-            _cube.GetComponent<Renderer>().material.color = Color.red;
-            _capsule.GetComponent<Renderer>().material.color = Color.red;
-        }
-        else if (!IsHost && IsOwner)
-        {
-            _cube.GetComponent<Renderer>().material.color = Color.red;
-            _capsule.GetComponent<Renderer>().material.color = Color.red;
-        }
-        else if (!IsHost && !IsOwner)
-        {
-            _cube.GetComponent<Renderer>().material.color = Color.green;
-            _capsule.GetComponent<Renderer>().material.color = Color.green;
-        }
-    }
-    public void EquipTech(TechSO t)
-    {
-        TechGroup tg;
-        if (ActiveTechDictionary.ContainsKey(t.ID))
-        {
-            tg = ActiveTechDictionary[t.ID];
-            tg.Upgrade();
-        }
-        else 
-        {
-            tg = new TechGroup(t);
-            if (tg.Script != null) { tg.Script.PlayerRef = this; }
-            ActiveTechDictionary.Add(tg.SO.ID, tg);
-            ActiveTechList.Add(tg);
-        }
-        // Add stat and flag bonuses
-        for (int i = 0; i < tg.SO.BonusStats.Count; i++)
-        {
-            stats.ChangeStat(tg.SO.BonusStats[i].First, tg.SO.BonusStats[i].Second);
-        }
-        for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
-        {
-            stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
-        }
-        EventManager.OnPlayerStatsUpdated(this);
-    }
-    public void UnequipTech(TechSO t)
-    {
-        if (ActiveTechDictionary.ContainsKey(t.ID)) 
-        {
-            TechGroup tg = ActiveTechDictionary[t.ID];
-            for (int i = 0; i < tg.SO.BonusStats.Count; i++) 
-            {
-                stats.ChangeStat(tg.SO.BonusStats[i].First, -tg.SO.BonusStats[i].Second * tg.Level);
-            }
-            for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
-            {
-                stats.ChangeFlag(tg.SO.BonusFlags[i], -tg.Level);
-            }
-            ActiveTechDictionary[t.ID].Script?.OnTechRemoved();
-            ActiveTechDictionary.Remove(t.ID);
-            ActiveTechList.Remove(tg);
-        }
-        EventManager.OnPlayerStatsUpdated(this);
-    }
-    public void EquipWeapon(WeaponData w)
-    {
-        switch (w.BaseWeapon.Slot)
-        {
-            case WeaponSO.WeaponSlot.Melee:
-                {
-                    if (meleeWeapon != null)
-                    {
-                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(meleeWeapon, transform.position);
-                    }
-
-                    meleeWeapon = w;
-                    meleeWeaponStats = meleeWeapon.GetStats();
-                    break;
-                }
-            case WeaponSO.WeaponSlot.Ranged:
-                {
-                    if (rangedWeapon != null)
-                    {
-                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(rangedWeapon, transform.position);
-                    }
-
-                    rangedWeapon = w;
-                    rangedWeaponStats = rangedWeapon.GetStats();
-                    break;
-                }
-        }
-    }
-    public int GetTechLevel(string id) 
-    {
-        if (ActiveTechDictionary.ContainsKey(id)) { return ActiveTechDictionary[id].Level; }
-        return 0;
     }
     private void UpdateRotation()
     {
@@ -300,13 +206,9 @@ public class PlayerEntity : NetworkBehaviour
         }
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 
         {
-            Dash();
+            StartDash();
         }
-    }
-    public void CoolDownWeapons(float tempRemoved) 
-    {
-        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, tempRemoved);
-        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, tempRemoved);
+        if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
     }
     private void Attack(WeaponSO.WeaponSlot s)
     {
@@ -336,7 +238,8 @@ public class PlayerEntity : NetworkBehaviour
                     Timescale = wpn.Timescale,
                     EnemyIgnored = -1,
                     Knockback = wpn.Knockback,
-                    Element = wpn.Element
+                    Element = wpn.Element,
+                    ImpactEffectID = wpn.ImpactEffectID
                 };
                 ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
                 currentMultishootAngle += wpn.Multishoot < 2 ? 0 : wpn.Arc / (wpn.Multishoot - 1);
@@ -359,18 +262,25 @@ public class PlayerEntity : NetworkBehaviour
                 Timescale = wpn.Timescale,
                 EnemyIgnored = -1,
                 Knockback = wpn.Knockback,
-                Element = wpn.Element
+                Element = wpn.Element,
+                ImpactEffectID = wpn.ImpactEffectID
             };
             ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, currentDirection, sd, null);
         }
     }
     private void FixedUpdate()
     {
-        if (!_isPlayerControlsEnabled) return;
-
         if (dashDurationRemaining > 0)
         {
             m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
+            RaycastHit rh;
+            LayerMask m = LayerMask.GetMask("Walls");
+            Physics.Raycast(transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
+            if (rh.collider != null) 
+            {
+                dashDurationRemaining = 0;
+                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.None);
+            }
         }
         else 
         {
@@ -387,7 +297,7 @@ public class PlayerEntity : NetworkBehaviour
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360);
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
     }
-    private void Dash() 
+    private void StartDash() 
     {
         if (CurrentDashes < 1) { return; }
         if (dashDurationRemaining > 0) { return; }
@@ -397,6 +307,40 @@ public class PlayerEntity : NetworkBehaviour
         dashMovementVector = movementInputV * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION * 1 + stats.GetStat(PlayerStatGroup.Stat.DashBonusDuration);
+    }
+    #region Public Methods
+    public void EquipWeapon(WeaponData w)
+    {
+        switch (w.BaseWeapon.Slot)
+        {
+            case WeaponSO.WeaponSlot.Melee:
+                {
+                    if (meleeWeapon != null)
+                    {
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(meleeWeapon, transform.position);
+                    }
+
+                    meleeWeapon = w;
+                    meleeWeaponStats = meleeWeapon.GetStats();
+                    break;
+                }
+            case WeaponSO.WeaponSlot.Ranged:
+                {
+                    if (rangedWeapon != null)
+                    {
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(rangedWeapon, transform.position);
+                    }
+
+                    rangedWeapon = w;
+                    rangedWeaponStats = rangedWeapon.GetStats();
+                    break;
+                }
+        }
+    }
+    public void CoolDownWeapons(float tempRemoved)
+    {
+        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, tempRemoved);
+        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, tempRemoved);
     }
     public void DealDamage(float magnitude)
     {
@@ -416,17 +360,13 @@ public class PlayerEntity : NetworkBehaviour
             // Kill?
         }
     }
-    public bool IsEvading() 
-    {
-        return dashDurationRemaining > 0;
-    }
-    public void AddLightDamage(float amount) 
+    public void AddLightDamage(float amount)
     {
         if (defeated) { return; }
 
         CurrentLightDamage = Mathf.Clamp(CurrentLightDamage + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth) - CurrentHealth);
     }
-    public void AddShield(float amount) 
+    public void AddShield(float amount)
     {
         if (defeated) { return; }
 
@@ -445,22 +385,7 @@ public class PlayerEntity : NetworkBehaviour
         totalHealing += amount;
         CurrentHealth = Mathf.Clamp(CurrentHealth + totalHealing, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
     }
-    public float GetHealthPercent()
-    {
-        return CurrentHealth / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
-    }
-    public float GetLightDamagePercent() 
-    {
-        return GetHealthPercent() + CurrentLightDamage / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
-    }
-    public float GetShieldPercent() 
-    {
-        return CurrentShield / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
-    }
-    public float GetStat(PlayerStatGroup.Stat s) 
-    {
-        return stats.GetStat(s);
-    }
+
     public void AddMoney(float amount)
     {
         Money += amount;
@@ -472,29 +397,182 @@ public class PlayerEntity : NetworkBehaviour
         Money = Mathf.Max(0, Money);
         EventManager.OnCurrencyUpdated();
     }
-
+    #endregion
+    #region Stat/Status Getters
+    public float GetHealthPercent()
+    {
+        return CurrentHealth / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+    }
+    public float GetLightDamagePercent()
+    {
+        return GetHealthPercent() + CurrentLightDamage / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+    }
+    public float GetShieldPercent()
+    {
+        return CurrentShield / stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+    }
+    public float GetStat(PlayerStatGroup.Stat s)
+    {
+        return stats.GetStat(s);
+    }
+    public bool IsEvading()
+    {
+        return dashDurationRemaining > 0;
+    }
+    #endregion
+    #region Tech Management
+    public int GetTechLevel(string id)
+    {
+        if (ActiveTechDictionary.ContainsKey(id)) { return ActiveTechDictionary[id].Level; }
+        return 0;
+    }
+    public void EquipTech(TechSO t)
+    {
+        TechGroup tg;
+        if (ActiveTechDictionary.ContainsKey(t.ID))
+        {
+            tg = ActiveTechDictionary[t.ID];
+            tg.Upgrade();
+        }
+        else
+        {
+            tg = new TechGroup(t);
+            if (tg.Script != null) { tg.Script.PlayerRef = this; }
+            ActiveTechDictionary.Add(tg.SO.ID, tg);
+            ActiveTechList.Add(tg);
+        }
+        // Add stat and flag bonuses
+        for (int i = 0; i < tg.SO.BonusStats.Count; i++)
+        {
+            stats.ChangeStat(tg.SO.BonusStats[i].First, tg.SO.BonusStats[i].Second);
+        }
+        for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
+        {
+            stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
+        }
+        EventManager.OnPlayerStatsUpdated(this);
+    }
+    public void UnequipTech(TechSO t)
+    {
+        if (ActiveTechDictionary.ContainsKey(t.ID))
+        {
+            TechGroup tg = ActiveTechDictionary[t.ID];
+            for (int i = 0; i < tg.SO.BonusStats.Count; i++)
+            {
+                stats.ChangeStat(tg.SO.BonusStats[i].First, -tg.SO.BonusStats[i].Second * tg.Level);
+            }
+            for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
+            {
+                stats.ChangeFlag(tg.SO.BonusFlags[i], -tg.Level);
+            }
+            ActiveTechDictionary[t.ID].Script?.OnTechRemoved();
+            ActiveTechDictionary.Remove(t.ID);
+            ActiveTechList.Remove(tg);
+        }
+        EventManager.OnPlayerStatsUpdated(this);
+    }
     public class TechGroup
     {
         public int Level { get; private set; }
         public TechSO SO { get; private set; }
         public TechBase Script { get; private set; }
 
-        public TechGroup(TechSO t) 
+        public TechGroup(TechSO t)
         {
             Level = 1;
             SO = t;
-            if (SO.Script != "") 
+            if (SO.Script != "")
             {
                 Script = System.Activator.CreateInstance(System.Type.GetType(SO.Script)) as TechBase;
                 Script.Group = this;
                 Script.OnTechAdded();
             }
-            
+
         }
-        public void Upgrade() 
+        public void Upgrade()
         {
             Level++;
             Script?.OnTechUpgraded();
         }
     }
+    #endregion
+    #region Buff Management
+    private void UpdateBuffDurations() 
+    {
+        for (int i = ActiveBuffs.Count-1; i >= 0; i--) 
+        {
+            if (ActiveBuffs[i].GetDurationRemaining() <= 0) 
+            {
+                ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+                ActiveBuffs.RemoveAt(i);
+            }
+        }
+    }
+    private BuffEffectSO GetBuffEffectInfo(string id)
+    {
+        if (!buffDictionary.ContainsKey(id)) { return null; }
+
+        return buffDictionary[id];
+    }
+    private void SetUpBuffDictionary()
+    {
+        buffDictionary = new Dictionary<string, BuffEffectSO>();
+        for (int i = 0; i < database.BuffEffects.Count; i++)
+        {
+            buffDictionary.Add(database.BuffEffects[i].ID, database.BuffEffects[i]);
+        }
+    }
+    public void ChangeBuff(string buffID, float effectMultiplier, int stacks)
+    {
+        BuffEffectSO bso = GetBuffEffectInfo(buffID);
+        if (bso == null) { return; }
+
+        for (int i = 0; i < ActiveBuffs.Count; i++)
+        {
+            if (ActiveBuffs[i].SO.ID == bso.ID && ActiveBuffs[i].EffectMultiplier == effectMultiplier)
+            {
+                ChangeBuffStacks(ActiveBuffs[i], stacks);
+                EventManager.OnPlayerStatsUpdated(this);
+                return;
+            }
+        }
+        ActiveBuff newBuff = new ActiveBuff(bso, effectMultiplier);
+        ChangeBuffStacks(newBuff, stacks);
+        ActiveBuffs.Add(newBuff);
+        EventManager.OnPlayerStatsUpdated(this);
+    }
+    private void ChangeBuffStacks(ActiveBuff buff, int variation)
+    {
+        int previousStacks = buff.Stacks;
+        buff.ChangeStacks(variation);
+        int delta = buff.Stacks - previousStacks;
+        if (delta != 0)
+        {
+            for (int i = 0; i < buff.SO.Effects.Count; i++) 
+            {
+                stats.ChangeStat(buff.SO.Effects[i].First, buff.SO.Effects[i].Second * buff.EffectMultiplier * delta);
+            }
+        }
+    }
+    public class ActiveBuff
+    {
+        public BuffEffectSO SO { get; private set; }
+        public float EffectMultiplier { get; private set; }
+        public int Stacks { get; private set; }
+        public float RemoveTime { get; private set; }
+
+        public ActiveBuff(BuffEffectSO bso, float _effectMult)
+        {
+            SO = bso;
+            EffectMultiplier = _effectMult;
+            RemoveTime = Time.time + SO.Duration;
+        }
+        public void ChangeStacks(int variation)
+        {
+            Stacks = Mathf.Clamp(Stacks + variation, 0, SO.MaxStacks);
+            if (Stacks > 0) { RemoveTime = Time.time + SO.Duration; } // Update the duration if new stacks are added
+        }
+        public float GetDurationRemaining() { return RemoveTime - Time.time; }
+    }
+    #endregion
 }

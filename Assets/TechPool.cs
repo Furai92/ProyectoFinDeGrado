@@ -7,7 +7,7 @@ public class TechPool
     private List<List<TechSO>> loweredRateTechs;
 
     private const string GENERAL_TRAIT_ID = "GENERAL";
-    private const float BOOSTED_CHANCE = 80f;
+    private const float BOOSTED_CHANCE = 90f;
     private const int RARITY_LEVELS = 5;
 
     public TechPool(GameDatabaseSO db, List<PlayerTraitSO> boostedRateTraits) 
@@ -32,7 +32,7 @@ public class TechPool
             }
         }
     }
-    public TechSO GetRandomTech(GameEnums.TechRarity r, Dictionary<string, PlayerEntity.TechGroup> alreadyActiveTech) 
+    public TechSO GetRandomTech(GameEnums.Rarity r, Dictionary<string, PlayerEntity.TechGroup> alreadyActiveTech) 
     {
         List<TechSO> poolSelected = Random.Range(0, 101) < BOOSTED_CHANCE ? boostedRateTechs[(int)r] : loweredRateTechs[(int)r];
         List<TechSO> compatibleTech = new List<TechSO>();

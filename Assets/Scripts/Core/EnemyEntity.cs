@@ -70,7 +70,6 @@ public class EnemyEntity : MonoBehaviour
     private const float KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE = 0.98f;
     private const float KNOCKBACK_FORCE_MAG_CLAMP = 50f;
     private const float VISUAL_ROTATION_SPEED = 300f;
-    private const float HEIGHT_LOCK = 0.5f;
 
     // Other/Cached variables
 
@@ -200,7 +199,6 @@ public class EnemyEntity : MonoBehaviour
             Vector3 movementDir = (new Vector3(TargetMovementPosition.x, 0, TargetMovementPosition.z) - new Vector3(transform.position.x, 0, transform.position.z));
             if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += movementDir.normalized * MovementSpeed; }
         }
-        transform.position = new Vector3(transform.position.x, HEIGHT_LOCK, transform.position.z);
     }
     private void UpdateRotation() 
     {

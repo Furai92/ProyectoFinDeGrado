@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 4571933486184707091}
   - component: {fileID: 8257857130458609485}
   m_Layer: 5
-  m_Name: TraitHighlight
+  m_Name: RarityHighlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,8 +1084,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1222,7 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.03137255}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.011764706}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.53
 --- !u!1 &5565683544043595530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,7 +1387,7 @@ GameObject:
   - component: {fileID: 9072102679236357570}
   - component: {fileID: 2687526353791417956}
   m_Layer: 5
-  m_Name: TechCategoryText
+  m_Name: RarityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1440,7 +1440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CATEGORY
+  m_text: RARITY
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1523,6 +1523,7 @@ GameObject:
   - component: {fileID: 503327229622170911}
   - component: {fileID: 307202902836593768}
   - component: {fileID: 9150045154900737691}
+  - component: {fileID: 8128397468539115244}
   m_Layer: 5
   m_Name: TechCard
   m_TagString: Untagged
@@ -1577,7 +1578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.156, g: 0.156, b: 0.156, a: 0.65882355}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7490196}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1623,10 +1624,25 @@ MonoBehaviour:
   - {fileID: 7993717149315214554}
   - {fileID: 2064126012086216266}
   - {fileID: 1491654060327228073}
-  traitHighlight: {fileID: 8257857130458609485}
-  rarityHighlight: {fileID: 8064929972654842637}
-  categoryText: {fileID: 2687526353791417956}
-  rarityText: {fileID: 7447853652876628030}
+  traitHighlight: {fileID: 8064929972654842637}
+  rarityHighlight: {fileID: 8257857130458609485}
+  categoryText: {fileID: 7447853652876628030}
+  rarityText: {fileID: 2687526353791417956}
+--- !u!114 &8128397468539115244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5966059265149054190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: 5}
+  m_UseGraphicAlpha: 0
 --- !u!1 &6167421049032497177
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,7 +2019,7 @@ GameObject:
   - component: {fileID: 5569565986396366208}
   - component: {fileID: 8064929972654842637}
   m_Layer: 5
-  m_Name: RarityHighlight
+  m_Name: TraitHighlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2078,7 +2094,7 @@ GameObject:
   - component: {fileID: 783568603004549303}
   - component: {fileID: 7447853652876628030}
   m_Layer: 5
-  m_Name: TechRarityText
+  m_Name: TraitText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2131,7 +2147,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RARITY
+  m_text: 'TRAIT
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

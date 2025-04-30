@@ -41,4 +41,8 @@ public abstract class PlayerAttackBase : MonoBehaviour
             return GameTools.AngleBetween(pos, validBounceTargetPositions[Random.Range(0, validBounceTargetPositions.Count)]);
         }
     }
+    protected void PlayImpactEffects(Vector3 pos, float dir) 
+    {
+        if (setupData.ImpactEffectID != "") { ObjectPoolManager.GetImpactEffectFromPool(setupData.ImpactEffectID).SetUp(pos, dir, setupData.Element);  }
+    }
 }

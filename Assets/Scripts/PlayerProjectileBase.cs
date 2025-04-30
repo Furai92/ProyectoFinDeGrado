@@ -7,7 +7,6 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     [SerializeField] private Transform visual;
     [SerializeField] protected TrailRenderer tr;
     [SerializeField] private ColorDatabaseSO cdb;
-    [SerializeField] private ParticleSystem impactPS;
 
     [Space]
     [Header("Params")]
@@ -20,7 +19,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     private int phase;
     private float distanceCovered;
     private float removeTime;
-    private float direction;
+    public float CurrentDirection { get; protected set; }
 
     private const float MINIMUM_STEP_LENGHT = 0.2f; // This prevents an error where decimal rounding gets the bullet stuck with near zero distance steps 
     private const float BASE_SPEED = 20f;
@@ -39,13 +38,11 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
         enemyHits = new List<int>();
         setupData = sd;
-        direction = dir;
-        transform.SetPositionAndRotation(pos, Quaternion.Euler(0, direction, 0));
+        CurrentDirection = dir;
+        transform.SetPositionAndRotation(pos, Quaternion.Euler(0, CurrentDirection, 0));
         phase = 0;
         distanceCovered = 0;
         tr.Clear();
-        ParticleSystem.MainModule m = impactPS.main;
-        m.startColor = cdb.ElementToColor(setupData.Element);
         tr.startColor = tr.endColor = cdb.ElementToColor(setupData.Element);
         tr.AddPosition(visual.position);
         visual.gameObject.SetActive(true);
@@ -55,11 +52,6 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     protected void SetRemoveable() 
     {
         distanceCovered = MaxTravelDistance;
-    }
-    protected void PlayImpactParticles() 
-    {
-        impactPS.Stop();
-        impactPS.Play();
     }
     private void FixedUpdate()
     {
@@ -129,8 +121,9 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                     else
                     {
                         enemyHit.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
-                        enemyHit.Knockback(setupData.Knockback, direction);
+                        enemyHit.Knockback(setupData.Knockback, CurrentDirection);
                     }
+                    PlayImpactEffects(entityCastResults.point, CurrentDirection);
 
                     // Spend pierces to continue
                     if (setupData.Pierces > 0)
@@ -143,8 +136,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                         beamInterruptedByEntity = true;
                         beamEnd = currentBeamPos;
                         setupData.Bounces--;
-                        direction = GetBounceDirection(beamEnd, true, entityCastResults.collider);
-                        transform.rotation = Quaternion.Euler(0, direction, 0);
+                        CurrentDirection = GetBounceDirection(beamEnd, true, entityCastResults.collider);
+                        transform.rotation = Quaternion.Euler(0, CurrentDirection, 0);
                         enemyHits.Clear();
                     }
                     else
@@ -170,14 +163,15 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
 
             tr.AddPosition(currentBeamPos);
             OnTerrainCollision();
+            PlayImpactEffects(beamEnd, CurrentDirection);
 
             if (setupData.Splash > 0 && ExplodeOnWallCollision) { Explode(beamEnd); }
             if (setupData.Bounces > 0 || UnlimitedWallBounces)
             {
                 if (!UnlimitedWallBounces) { setupData.Bounces--; }
                 
-                direction = GameTools.AngleReflection(direction, GameTools.NormalToEuler(terrainCastResults.normal) + 90);
-                transform.rotation = Quaternion.Euler(0, direction, 0);
+                CurrentDirection = GameTools.AngleReflection(CurrentDirection, GameTools.NormalToEuler(terrainCastResults.normal) + 90);
+                transform.rotation = Quaternion.Euler(0, CurrentDirection, 0);
                 enemyHits.Clear();
             }
             else 
@@ -188,7 +182,6 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
         
         distanceCovered += Vector3.Distance(transform.position, beamEnd);
         transform.position = beamEnd;
-        if (beamInterruptedByEntity || terrainCastResults.collider != null) { PlayImpactParticles(); }
 
         // Return the colliders to their layer
         for (int i = 0; i < disabledColliders.Count; i++)

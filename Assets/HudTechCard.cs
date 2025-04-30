@@ -20,7 +20,7 @@ public class HudTechCard : MonoBehaviour
 
     public void SetUp(TechSO t, bool showOwned) 
     {
-        rarityHighlight.color = cdb.TechRarityToColor(t.Rarity);
+        rarityHighlight.color = cdb.RarityToColor(t.Rarity);
         traitHighlight.color = t.RelatedTrait.IconColor;
         categoryText.text = sdb.GetString(t.RelatedTrait.NameID);
         rarityText.text = sdb.RarityToName(t.Rarity);

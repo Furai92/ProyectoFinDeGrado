@@ -24,6 +24,10 @@ public class HudWeaponCard : MonoBehaviour
     [SerializeField] private List<Transform> bonusStatParents;
     [SerializeField] private List<TextMeshProUGUI> bonusStatTexts;
 
+    [SerializeField] private Image elementHighlight;
+    [SerializeField] private Image rarityHighlight;
+    [SerializeField] private TextMeshProUGUI rarityText;
+
     public void SetUp(WeaponData w) 
     {
         // Name panel
@@ -33,10 +37,15 @@ public class HudWeaponCard : MonoBehaviour
         slotText.text = w.BaseWeapon.Slot == WeaponSO.WeaponSlot.Melee ? sdb.GetString("WEAPON_SLOT_NAME_MELEE") : sdb.GetString("WEAPON_SLOT_NAME_RANGED");
 
         // Element panel
+        Color elementColor = cdb.ElementToColor(w.GetStats().Element);
         elementNameText.text = sdb.ElementToName(w.GetStats().Element);
         elementDescText.text = sdb.ElementToDesc(w.GetStats().Element);
-        Color elementColor = cdb.ElementToColor(w.GetStats().Element);
+        elementHighlight.color = elementColor;
         elementPanelBackground.color = new Color(elementColor.r, elementColor.g, elementColor.b, elementPanelBackground.color.a);
+
+        // Rarity
+        rarityText.text = sdb.RarityToName(w.Rarity);
+        rarityHighlight.color = cdb.RarityToColor(w.Rarity);
 
         // Stats panel
         if (w.BaseWeapon.Slot == WeaponSO.WeaponSlot.Melee)

@@ -6,10 +6,11 @@ public class WeaponPickup : Interactable
     private InteractableInfo info;
 
     private const float VISUAL_ROTATION_SPEED = 200f;
+    private const float SPAWN_HEIGHT = 0.5f;
 
     public void SetUp(WeaponData wd, Vector3 wpos) 
     {
-        transform.position = wpos;
+        transform.position = new Vector3(wpos.x, SPAWN_HEIGHT, wpos.z);
         info = new InteractableInfo()
         {
             color = Color.white,

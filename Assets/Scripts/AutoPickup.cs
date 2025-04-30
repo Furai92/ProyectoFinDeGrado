@@ -18,11 +18,12 @@ public abstract class AutoPickup : MonoBehaviour
     private const float PICKUP_ORBIT_DURATION = 1f;
     private const float LIFETIME = 20f;
     private const float REMOVE_DELAY = 1f;
+    private const float SPAWN_HEIGHT = 0.5f;
 
 
     public void SetUp(Vector3 pos) 
     {
-        transform.position = pos;
+        transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
         gameObject.SetActive(true);
         rb.WakeUp();
         autoPickupColliderTransform = null;

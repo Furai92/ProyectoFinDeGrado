@@ -35,7 +35,7 @@ public class PlayerProjectileBouncingOrb : PlayerProjectileBase
         UpdateBounceVisual();
         if (bounceT == 1)
         {
-            PlayImpactParticles();
+            PlayImpactEffects(transform.position, CurrentDirection);
             Explode(transform.position);
             setupData.Bounces--;
             bounceT = 0;

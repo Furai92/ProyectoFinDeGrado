@@ -85,7 +85,6 @@ public abstract class StageManagerBase : MonoBehaviour
             EventManager.OnStageStateStarted(currentState.GetGameStateType());
         }
     }
-
     public static void SpawnPlayers() 
     {
         if (_instance == null) { return; }
@@ -353,6 +352,7 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return enemySelected;
     }
+
     #endregion
 
     protected abstract StageStatGroup GetInitialStageStats();

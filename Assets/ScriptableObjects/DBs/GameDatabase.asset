@@ -39,6 +39,11 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 6445567525718638580, guid: 2aab97147ce126d4da32b5f2b0398748, type: 3}
   - <ID>k__BackingField: BEAM
     <Data>k__BackingField: {fileID: 5598505143166327596, guid: e6023eba246022d45b6a8b35a6d53fc5, type: 3}
+  <ImpactEffects>k__BackingField:
+  - <ID>k__BackingField: STANDARD
+    <Data>k__BackingField: {fileID: 442362864815450504, guid: 373164311b3eab14ea3ec6d00c4aba42, type: 3}
+  - <ID>k__BackingField: SLAM
+    <Data>k__BackingField: {fileID: 442362864815450504, guid: b84ff6dfb98731244b2d4067d3425b60, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
@@ -53,6 +58,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 83c17251914b05e42b0f1d928743ba0b, type: 2}
   - {fileID: 11400000, guid: 3840f044dc6e54043898801f9639f473, type: 2}
   - {fileID: 11400000, guid: 90c8a8436693d7e44aa84858d70b962a, type: 2}
+  <BuffEffects>k__BackingField:
+  - {fileID: 11400000, guid: 7a55eb41e75785f48a64a9e0bc1d287d, type: 2}
+  - {fileID: 11400000, guid: 71475680083bc1741b5650d1ed06a8a4, type: 2}
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}

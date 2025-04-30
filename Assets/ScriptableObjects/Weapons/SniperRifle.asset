@@ -19,6 +19,7 @@ MonoBehaviour:
   - STANDARD
   <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
+  <ImpactEffectID>k__BackingField: STANDARD
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 300
   <CleaveComponentDamage>k__BackingField: 0
