@@ -15,5 +15,16 @@ public class TechSO : ScriptableObject
     [field: SerializeField] public List<SerializedPair<PlayerStatGroup.Stat, float>> BonusStats { get; private set; }
     [field: SerializeField] public List<PlayerStatGroup.PlayerFlags> BonusFlags { get; private set; }
 
+    [field: SerializeField] public List<TechSODescDetail> DescriptionDetails { get; private set; }
 
+    [System.Serializable]
+    public class TechSODescDetail 
+    {
+        public enum DetailType { Neutral, Positive, Negative }
+
+        [field: SerializeField] public string DescTextID { get; private set; }
+        [field: SerializeField] public float DescValueBase { get; private set; }
+        [field: SerializeField] public float DescValueScaling { get; private set; }
+        [field: SerializeField] public DetailType DescDetailType { get; private set; }
+    }
 }

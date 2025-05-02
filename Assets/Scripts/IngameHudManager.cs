@@ -18,6 +18,7 @@ public class IngameHudManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.UiMenuClosedEvent -= OnMenuClosed;
+        Cursor.lockState = CursorLockMode.None;
     }
     private void OnMenuClosed(IGameMenu m) 
     {

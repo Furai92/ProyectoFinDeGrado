@@ -20,10 +20,17 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 1
-    <Second>k__BackingField: -3
-  - <First>k__BackingField: 2
-    <Second>k__BackingField: -3
+  - <First>k__BackingField: 7
+    <Second>k__BackingField: -5
   - <First>k__BackingField: 3
-    <Second>k__BackingField: 5
+    <Second>k__BackingField: 10
   <BonusFlags>k__BackingField: 
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_INT
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 10
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_CRITC
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: -5
+    <DescDetailType>k__BackingField: 2

@@ -29,6 +29,7 @@ public class WeaponData
             Firerate = BaseWeapon.Firerate,
             Multishoot = BaseWeapon.Multishoot,
             Arc = BaseWeapon.MultishootArc,
+            RandomSpread = BaseWeapon.RandomSpread,
             Pierces = BaseWeapon.Pierces,
             Bounces = BaseWeapon.Bounces,
             Splash = BaseWeapon.Splash,
@@ -56,6 +57,7 @@ public class WeaponData
             ws.Bounces = Mathf.Max(ws.Bounces + Parts[i].BouncesModifier, 0);
             ws.Splash = Mathf.Max(ws.Splash + Parts[i].SplashModifier, 0);
             ws.Arc = Mathf.Max(ws.Arc + Parts[i].ArcModifier, 0);
+            ws.RandomSpread += Parts[i].SpreadModifier;
             ws.CritMultiplier *= Parts[i].CriticalDamageMultiplier;
             ws.BuildupRate *= Parts[i].BuildupMultiplier;
             ws.Knockback += Mathf.Max(ws.Knockback + Parts[i].KnockbackModifier, 0);
@@ -79,6 +81,7 @@ public class WeaponData
         public float Arc;
         public int Pierces;
         public int Bounces;
+        public float RandomSpread;
         public float Splash;
         public float CritMultiplier;
         public float BuildupRate;

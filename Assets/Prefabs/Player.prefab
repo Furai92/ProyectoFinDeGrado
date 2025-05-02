@@ -469,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 572134609
+  GlobalObjectIdHash: 1068797867
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -502,7 +502,7 @@ MonoBehaviour:
   debugRangedWeaponSO: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
   debugTechSO:
-  - {fileID: 11400000, guid: 7891b67fa76edfb41b4f642bc304a17a, type: 2}
+  - {fileID: 11400000, guid: 368f74a154fe2004a9984e8df7591658, type: 2}
   m_camTargetPos: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
   m_rotationParent: {fileID: 1892808105939200760}

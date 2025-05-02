@@ -24,6 +24,7 @@ public class WeaponSO : ScriptableObject
     [field: SerializeField] public float CriticalDamage { get; private set; }
     [field: SerializeField] public float SizeMultiplier { get; private set; }
     [field: SerializeField] public float HeatGeneration { get; private set; }
+    [field: SerializeField] public float RandomSpread { get; private set; }
     [field: SerializeField] public float Splash { get; private set; }
     [field: SerializeField] public int Bounces { get; private set; }
     [field: SerializeField] public int Pierces { get; private set; }

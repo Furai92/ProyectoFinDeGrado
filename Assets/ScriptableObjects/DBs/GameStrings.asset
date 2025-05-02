@@ -32,7 +32,7 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_TORMETOR
     <Data>k__BackingField: Tormentor
   - <ID>k__BackingField: TCH_D_TORMETOR
-    <Data>k__BackingField: Your intellect is increased, but your might and dexterity
+    <Data>k__BackingField: Your intellect is increased, but your critical chance
       is reduced.
   - <ID>k__BackingField: ELEMENT_DESC_FIRE
     <Data>k__BackingField: Applies the burning status. Affected enemies take massive
@@ -133,12 +133,30 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_TORMENTOR
     <Data>k__BackingField: Tormentor
   - <ID>k__BackingField: TCH_D_TORMENTOR
-    <Data>k__BackingField: Increases your intellect, but decreases your might and
-      dexterity
+    <Data>k__BackingField: Increases your intellect, but decreases your critical
+      chance.
   - <ID>k__BackingField: TCH_N_COOLING_STEP
     <Data>k__BackingField: Cooling Step
   - <ID>k__BackingField: TCH_D_COOLING_STEP
     <Data>k__BackingField: Evading an enemy attack cools down your weapons
+  - <ID>k__BackingField: TCH_N_UNSTABLE_WEAPONS
+    <Data>k__BackingField: Unstable Weapons
+  - <ID>k__BackingField: TCH_D_UNSTABLE_WEAPONS
+    <Data>k__BackingField: Your might and dexterity is increased, but your weapons
+      generate more heat and become less accurate
+  - <ID>k__BackingField: TCH_N_FUSION_CHARGE
+    <Data>k__BackingField: Fusion Charge
+  - <ID>k__BackingField: TCH_D_FUSION_CHARGE
+    <Data>k__BackingField: Overheating a weapon grants a massive might and dexterity
+      boost for a short time.
+  - <ID>k__BackingField: TCH_N_HEAVY_ARMOR
+    <Data>k__BackingField: Heavy Armor
+  - <ID>k__BackingField: TCH_D_HEAVY_ARMOR
+    <Data>k__BackingField: Increases health and endurance, but reduces movement speed.
+  - <ID>k__BackingField: TCH_N_HAWKEYE
+    <Data>k__BackingField: Hawkeye
+  - <ID>k__BackingField: TCH_D_HAWKEYE
+    <Data>k__BackingField: Increases critical damage but reduces intellect.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -149,3 +167,27 @@ MonoBehaviour:
     <Data>k__BackingField: Prototype
   - <ID>k__BackingField: RARITY_NAME_SPECIAL
     <Data>k__BackingField: Special
+  - <ID>k__BackingField: TCH_DT_INT
+    <Data>k__BackingField: 'Intellect gained: {0}'
+  - <ID>k__BackingField: TCH_DT_MIGHT
+    <Data>k__BackingField: 'Might: {0}'
+  - <ID>k__BackingField: TCH_DT_DEX
+    <Data>k__BackingField: 'Dexterity: {0}'
+  - <ID>k__BackingField: TCH_DT_DURATION
+    <Data>k__BackingField: 'Duration: {0}s'
+  - <ID>k__BackingField: TCH_DT_SPREAD
+    <Data>k__BackingField: "Random Spread: {0}\xBA"
+  - <ID>k__BackingField: TCH_DT_HEATGEN
+    <Data>k__BackingField: 'Heat Generation: {0}%'
+  - <ID>k__BackingField: TCH_DT_MAXSTACKS
+    <Data>k__BackingField: 'Max Stacks: {0}'
+  - <ID>k__BackingField: TCH_DT_HP
+    <Data>k__BackingField: 'Health: {0}'
+  - <ID>k__BackingField: TCH_DT_END
+    <Data>k__BackingField: 'Endurance: {0}'
+  - <ID>k__BackingField: TCH_DT_SPEED
+    <Data>k__BackingField: 'Speed: {0}%'
+  - <ID>k__BackingField: TCH_DT_CRITC
+    <Data>k__BackingField: 'Critical chance: {0}%'
+  - <ID>k__BackingField: TCH_DT_CRITX
+    <Data>k__BackingField: 'Critical damage: {0}%'

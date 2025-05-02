@@ -17,6 +17,7 @@ public class WeaponPartSO : ScriptableObject
     [field: SerializeField] public float SizeMultiplier { get; private set; }
     [field: SerializeField] public float HeatGenerationMultiplier { get; private set; }
     [field: SerializeField] public float SplashModifier { get; private set; }
+    [field: SerializeField] public float SpreadModifier { get; private set; }
     [field: SerializeField] public int BouncesModifier { get; private set; }
     [field: SerializeField] public int PiercesModifier { get; private set; }
     [field: SerializeField] public float TimescaleMultiplier { get; private set; }

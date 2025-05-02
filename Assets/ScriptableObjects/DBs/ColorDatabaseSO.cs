@@ -37,6 +37,16 @@ public class ColorDatabaseSO : ScriptableObject
             default: { return Color.white; }
         }
     }
+    public Color DescDetailTypeToColor(TechSO.TechSODescDetail.DetailType dt)
+    {
+        switch (dt)
+        {
+            case TechSO.TechSODescDetail.DetailType.Positive: { return GetColor("DETAIL_TYPE_POSITIVE"); }
+            case TechSO.TechSODescDetail.DetailType.Negative: { return GetColor("DETAIL_TYPE_NEGATIVE"); }
+            case TechSO.TechSODescDetail.DetailType.Neutral: { return GetColor("DETAIL_TYPE_NEUTRAL"); }
+            default: { return Color.white; }
+        }
+    }
     public Color GetColor(string id)
     {
         if (m_colorDictionary == null) { GenerateColorDictionary(); }

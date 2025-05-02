@@ -12,6 +12,7 @@ public class EventManager
     public static event Action<PlayerEntity> PlayerSpawnedEvent;
     public static event Action StageStatsUpdatedEvent;
     public static event Action<Vector3> PlayerEvasionEvent;
+    public static event Action PlayerWeaponOverheatedEvent;
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
     public static event Action PlayerDefeatedEvent;
@@ -115,5 +116,9 @@ public class EventManager
     public static void OnPlayerDefeated()
     {
         PlayerDefeatedEvent?.Invoke();
+    }
+    public static void OnPlayerWeaponOverheated() 
+    {
+        PlayerWeaponOverheatedEvent?.Invoke();
     }
 }

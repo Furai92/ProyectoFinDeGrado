@@ -60,7 +60,7 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
             int indexReaded = i +(page * techCards.Count);
             if (indexReaded < db.Techs.Count)
             {
-                techCards[i].SetUp(db.Techs[indexReaded], false);
+                techCards[i].SetUp(db.Techs[indexReaded], HudTechCard.TechDisplayMode.Collection);
                 techCards[i].gameObject.SetActive(true);
             }
             else 

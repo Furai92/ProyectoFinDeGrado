@@ -192,16 +192,16 @@ public class PlayerEntity : NetworkBehaviour
         {
             heatDecayRanged = 0;
             rangedAttackReady = 0;
-            StatusHeatRanged += rangedWeaponStats.HeatGen;
-            if (StatusHeatRanged > 1) { StatusOverheatRanged = true; }
+            StatusHeatRanged += rangedWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+            if (StatusHeatRanged > 1) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
             Attack(WeaponSO.WeaponSlot.Ranged);
         }
         if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
         {
             heatDecayMelee = 0;
             meleeAttackReady = 0;
-            StatusHeatMelee += meleeWeaponStats.HeatGen;
-            if (StatusHeatMelee > 1) { StatusOverheatMelee = true; }
+            StatusHeatMelee += meleeWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+            if (StatusHeatMelee > 1) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
             Attack(WeaponSO.WeaponSlot.Melee);
         }
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 
@@ -218,9 +218,12 @@ public class PlayerEntity : NetworkBehaviour
         float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ?
             GameTools.DexterityToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Dexterity)) : GameTools.MightToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Might));
 
+        float baseRandomSpread = Mathf.Max(0, wpn.RandomSpread + stats.GetStat(PlayerStatGroup.Stat.RandomSpread));
+
         // Projectile component
         if (wpn.ProjectileComponentID != "")
         {
+            float shootRandomSpread = Random.Range(-baseRandomSpread, baseRandomSpread);
             float currentMultishootAngle = -wpn.Arc / 2;
             for (int i = 0; i < wpn.Multishoot; i++)
             {
@@ -230,8 +233,8 @@ public class PlayerEntity : NetworkBehaviour
                     Magnitude = wpn.ProjectileComponentMagnitude * attackMagnitudeMultiplier,
                     Bounces = wpn.Bounces,
                     BuildupRate = wpn.BuildupRate,
-                    CritDamage = wpn.CritMultiplier,
-                    CritChance = 0,
+                    CritDamage = wpn.CritMultiplier + stats.GetStat(PlayerStatGroup.Stat.CritBonusDamage),
+                    CritChance = stats.GetStat(PlayerStatGroup.Stat.CritChance),
                     Pierces = wpn.Pierces,
                     SizeMultiplier = wpn.SizeMultiplier,
                     Splash = wpn.Splash,
@@ -241,7 +244,7 @@ public class PlayerEntity : NetworkBehaviour
                     Element = wpn.Element,
                     ImpactEffectID = wpn.ImpactEffectID
                 };
-                ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle, sd, null);
+                ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle + shootRandomSpread, sd, null);
                 currentMultishootAngle += wpn.Multishoot < 2 ? 0 : wpn.Arc / (wpn.Multishoot - 1);
             }
         }
@@ -254,8 +257,8 @@ public class PlayerEntity : NetworkBehaviour
                 Magnitude = wpn.CleaveComponentMagnitude * attackMagnitudeMultiplier,
                 Bounces = wpn.Bounces,
                 BuildupRate = wpn.BuildupRate,
-                CritDamage = wpn.CritMultiplier,
-                CritChance = 0,
+                CritDamage = wpn.CritMultiplier + stats.GetStat(PlayerStatGroup.Stat.CritBonusDamage),
+                CritChance = stats.GetStat(PlayerStatGroup.Stat.CritChance),
                 Pierces = wpn.Pierces,
                 SizeMultiplier = wpn.SizeMultiplier,
                 Splash = wpn.Splash,

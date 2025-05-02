@@ -20,7 +20,9 @@ public class PlayerStatGroup
         HeatCapBonus,
         DamageToLightConversion,
         DamageToShieldConversion,
-        EchoChance
+        EchoChance,
+        RandomSpread,
+        HeatGenIncrease,
     }
     public enum PlayerFlags { NoHeal }
 

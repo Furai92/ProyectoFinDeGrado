@@ -2,9 +2,14 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class HudTechCard : MonoBehaviour
+public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public enum TechDisplayMode { Collection, Shop, ActiveTech }
+
+    [SerializeField] private Transform mouseoverScaleParent;
+
     [SerializeField] private StringDatabaseSO sdb;
     [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private TextMeshProUGUI techName;
@@ -16,26 +21,65 @@ public class HudTechCard : MonoBehaviour
     [SerializeField] private Image rarityHighlight;
     [SerializeField] private TextMeshProUGUI categoryText;
     [SerializeField] private TextMeshProUGUI rarityText;
+    [SerializeField] private Image topBorder;
+    [SerializeField] private Image bottomBorder;
 
+    private const float MOUSEOVER_SCALE = 1.3f;
 
-    public void SetUp(TechSO t, bool showOwned) 
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        rarityHighlight.color = cdb.RarityToColor(t.Rarity);
-        traitHighlight.color = t.RelatedTrait.IconColor;
+        mouseoverScaleParent.transform.localScale = Vector3.one * MOUSEOVER_SCALE;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        mouseoverScaleParent.transform.localScale = Vector3.one;
+    }
+    private void OnEnable()
+    {
+        mouseoverScaleParent.transform.localScale = Vector3.one;
+    }
+
+    public void SetUp(TechSO t, TechDisplayMode mode) 
+    {
+        rarityHighlight.color = bottomBorder.color = cdb.RarityToColor(t.Rarity);
+        traitHighlight.color = topBorder.color = t.RelatedTrait.IconColor;
         categoryText.text = sdb.GetString(t.RelatedTrait.NameID);
         rarityText.text = sdb.RarityToName(t.Rarity);
         techName.text = sdb.GetString(t.NameID);
         techDesc.text = sdb.GetString(t.DescID);
+
+        int maxTechLevel = t.MaxLevel;
+        int currentTechLevel = 0;
+        switch (mode) 
+        {
+            case TechDisplayMode.Collection: { currentTechLevel = 1; break; }
+            case TechDisplayMode.Shop: { currentTechLevel = PlayerEntity.ActiveInstance.GetTechLevel(t.ID) + 1; break; }
+            case TechDisplayMode.ActiveTech: { currentTechLevel = PlayerEntity.ActiveInstance.GetTechLevel(t.ID); break; }
+        }
+
+
         for (int i = 0; i < detailPanels.Count; i++) 
         {
-            // TEMP
-            detailPanels[i].gameObject.SetActive(false);
-        }
-        if (showOwned && PlayerEntity.ActiveInstance != null) 
-        {
-            if (t.MaxLevel > 0)
+            if (i < t.DescriptionDetails.Count)
             {
-                ownedText.text = string.Format("X {0}/{1}", PlayerEntity.ActiveInstance.GetTechLevel(t.ID), t.MaxLevel);
+                detailPanels[i].gameObject.SetActive(true);
+                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
+                string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
+                detailTexts[i].color = cdb.DescDetailTypeToColor(t.DescriptionDetails[i].DescDetailType);
+            }
+            else 
+            {
+                detailPanels[i].gameObject.SetActive(false);
+            }
+
+        }
+        if (mode != TechDisplayMode.Collection && PlayerEntity.ActiveInstance != null) 
+        {
+            if (maxTechLevel > 0)
+            {
+                ownedText.text = string.Format("X {0}/{1}", currentTechLevel, maxTechLevel);
             } 
             else 
             {

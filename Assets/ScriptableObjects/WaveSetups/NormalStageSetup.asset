@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: NormalStageSetup
   m_EditorClassIdentifier: 
   <Waves>k__BackingField:
-  - <Duration>k__BackingField: 20
+  - <Duration>k__BackingField: 40
     <ChestSpawnRate>k__BackingField: 0.1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: RANGED
       <Cooldown>k__BackingField: 3
       <Delay>k__BackingField: 0
       <MaxSpawns>k__BackingField: -1
-  - <Duration>k__BackingField: 20
+  - <Duration>k__BackingField: 60
     <ChestSpawnRate>k__BackingField: 0
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: MELEE
@@ -31,7 +31,7 @@ MonoBehaviour:
       <Cooldown>k__BackingField: 2
       <Delay>k__BackingField: 0
       <MaxSpawns>k__BackingField: -1
-  - <Duration>k__BackingField: 20
+  - <Duration>k__BackingField: 80
     <ChestSpawnRate>k__BackingField: 0
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: MELEE
@@ -46,7 +46,7 @@ MonoBehaviour:
       <Cooldown>k__BackingField: 8
       <Delay>k__BackingField: 0
       <MaxSpawns>k__BackingField: -1
-  - <Duration>k__BackingField: 20
+  - <Duration>k__BackingField: 80
     <ChestSpawnRate>k__BackingField: 0
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: MELEE

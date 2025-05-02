@@ -108,7 +108,7 @@ public class HudShop : MonoBehaviour, IGameMenu
                     soldOutPanels[i].gameObject.SetActive(false);
                     purchaseButtons[i].gameObject.SetActive(true);
                     prices[i].gameObject.SetActive(true); prices[i].text = GetTechPrice(techInStock[i]).ToString("F0");
-                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], true);
+                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], HudTechCard.TechDisplayMode.Shop);
                     purchaseButtons[i].gameObject.SetActive(true);
                 }
             }
@@ -160,6 +160,7 @@ public class HudShop : MonoBehaviour, IGameMenu
         {
             for (int i = 0; i < techInStock.Count; i++) 
             {
+                if (techInStock[i] == null) { continue; }
                 if (techInStock[i].ID == techPurchased.ID) { techInStock[i] = null; }
             }
         }
