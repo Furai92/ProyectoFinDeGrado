@@ -54,7 +54,7 @@ public class HudCombatNotifications : MonoBehaviour
     {
         coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, magnitude.ToString("F0"), cdb.ElementToColor(elem), STATUS_DAMAGE_SIZE * sizeMult, STATUS_DAMAGE_LIFETIME, true, target.transform.position);
     }
-    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity target) 
     {
         string damageText = magnitude.ToString("F0");
         for (int i = 0; i < critlevel; i++) { damageText += "!"; }

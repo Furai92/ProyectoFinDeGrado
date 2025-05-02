@@ -83,7 +83,7 @@ public class DeflectedAttack : MonoBehaviour
             case "EnemyHitbox":
                 {
                     EnemyEntity e = collision.gameObject.GetComponentInParent<EnemyEntity>();
-                    if (e != null) { e.DealDirectDamage(magnitude, 0, 2, 0, GameEnums.DamageElement.Physical); }
+                    if (e != null) { e.DealDirectDamage(magnitude, 0, 2, 0, GameEnums.DamageElement.NonElemental, GameEnums.DamageType.Deflect); }
 
                     ps.Stop();
                     ps.Play();

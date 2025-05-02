@@ -359,7 +359,7 @@ MonoBehaviour:
   <BaseHealth>k__BackingField: 600
   <ExtraBars>k__BackingField: 0
   <KnockbackResistance>k__BackingField: 0
-  <ItemDropRate>k__BackingField: 0.1
+  <ItemDropRate>k__BackingField: 10
   <CurrencyDropRate>k__BackingField: 5
   <HealthDroprate>k__BackingField: 1
   AiFile: {fileID: 11400000, guid: d91aa458b7c682741bee52c8786b44cb, type: 2}

@@ -120,7 +120,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                     }
                     else
                     {
-                        enemyHit.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                        enemyHit.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element, setupData.DamageType);
                         enemyHit.Knockback(setupData.Knockback, CurrentDirection);
                     }
                     PlayImpactEffects(entityCastResults.point, CurrentDirection);

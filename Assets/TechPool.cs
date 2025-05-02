@@ -41,7 +41,7 @@ public class TechPool
             TechSO techReaded = poolSelected[i];
             if (alreadyActiveTech.ContainsKey(techReaded.ID)) 
             {
-                if (alreadyActiveTech[techReaded.ID].Level >= techReaded.MaxLevel) { continue; }
+                if (alreadyActiveTech[techReaded.ID].Level >= techReaded.MaxLevel && techReaded.MaxLevel > 0) { continue; }
             }
             compatibleTech.Add(techReaded);
         }

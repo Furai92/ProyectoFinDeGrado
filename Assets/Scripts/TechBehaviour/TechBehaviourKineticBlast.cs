@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class TechBehaviourKineticBlast : TechBase
+{
+    private const float HP_TO_DAMAGE_RATIO = 0.25f;
+    private const float RADIUS = 10f;
+
+    public override void OnTechAdded()
+    {
+        EventManager.PlayerDamageTakenEvent += OnPlayerDamageTaken;
+    }
+
+    public override void OnTechRemoved()
+    {
+        EventManager.PlayerDamageTakenEvent -= OnPlayerDamageTaken;
+    }
+
+    private void OnPlayerDamageTaken(float mag)
+    {
+        TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
+        {
+            element = PlayerEntity.ActiveInstance.MeleeWeapon.GetStats().Element,
+            sizeMult = RADIUS,
+            enemyIgnored = -1,
+            magnitude = PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.MaxHealth) * HP_TO_DAMAGE_RATIO * Group.Level
+
+        };
+        ObjectPoolManager.GetTechCombatEffectFromPool("EXPLOSION").SetUp(PlayerEntity.ActiveInstance.transform.position, 0, sd);
+    }
+
+    public override void OnTechUpgraded()
+    {
+
+    }
+}

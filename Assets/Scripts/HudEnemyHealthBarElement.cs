@@ -44,7 +44,7 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     {
         if (e == TrackedEnemy) { UpdateFill(); }
     }
-    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity e) 
+    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity e) 
     {
         if (e == TrackedEnemy) { UpdateFill(); }
     }

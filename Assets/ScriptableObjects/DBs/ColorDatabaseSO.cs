@@ -17,7 +17,7 @@ public class ColorDatabaseSO : ScriptableObject
     {
         switch (e)
         {
-            case GameEnums.DamageElement.Physical: { return GetColor("ELEM_COLOR_PHYSICAL"); }
+            case GameEnums.DamageElement.NonElemental: { return GetColor("ELEM_COLOR_PHYSICAL"); }
             case GameEnums.DamageElement.Fire: { return GetColor("ELEM_COLOR_FIRE"); }
             case GameEnums.DamageElement.Frost: { return GetColor("ELEM_COLOR_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetColor("ELEM_COLOR_THUNDER"); }

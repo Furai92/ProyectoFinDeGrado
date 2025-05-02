@@ -43,7 +43,7 @@ public class WeaponData
         };
         for (int i = 0; i < Parts.Count; i++) 
         {
-            if (Parts[i].ElementOverride != GameEnums.DamageElement.None) { ws.Element = Parts[i].ElementOverride; }
+            if (Parts[i].ElementOverride != GameEnums.DamageElement.NonElemental) { ws.Element = Parts[i].ElementOverride; }
             if (Parts[i].ProjectileComponentIDOverride != "") { ws.ProjectileComponentID = Parts[i].ProjectileComponentIDOverride; }
             if (Parts[i].CleaveComponentIDOverride != "") { ws.CleaveComponentID = Parts[i].CleaveComponentIDOverride; }
             if (Parts[i].ProjectileComponentDamageOverride != 0) { ws.ProjectileComponentMagnitude = Parts[i].ProjectileComponentDamageOverride; }

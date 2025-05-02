@@ -4,7 +4,7 @@ using System;
 public class EventManager
 {
     // Combat
-    public static event Action<float, int, GameEnums.DamageElement, EnemyEntity> EnemyDirectDamageTakenEvent;
+    public static event Action<float, int, GameEnums.DamageElement, GameEnums.DamageType, EnemyEntity> EnemyDirectDamageTakenEvent;
     public static event Action<float, GameEnums.DamageElement, EnemyEntity> EnemyStatusDamageTakenEvent;
     public static event Action<GameEnums.DamageElement, EnemyEntity> EnemyStatusEffectAppliedEvent;
     public static event Action<HudCombatWarningElement.WarningType, Vector3> CombatWarningDisplayedEvent;
@@ -16,6 +16,8 @@ public class EventManager
     public static event Action<EnemyEntity> EnemyDefeatedEvent;
     public static event Action<EnemyEntity> EnemyDisabledEvent;
     public static event Action PlayerDefeatedEvent;
+    public static event Action<float> PlayerDamageTakenEvent;
+    public static event Action<float> PlayerDamageAbsorbedEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -49,9 +51,9 @@ public class EventManager
     {
         EnemyStatusDamageTakenEvent?.Invoke(magnitude, element, target);
     }
-    public static void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement element, EnemyEntity target) 
+    public static void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement element, GameEnums.DamageType dtype, EnemyEntity target) 
     {
-        EnemyDirectDamageTakenEvent?.Invoke(magnitude, critlevel, element, target);
+        EnemyDirectDamageTakenEvent?.Invoke(magnitude, critlevel, element, dtype, target);
     }
     public static void OnEnemyDefeated(EnemyEntity e) 
     {
@@ -120,5 +122,13 @@ public class EventManager
     public static void OnPlayerWeaponOverheated() 
     {
         PlayerWeaponOverheatedEvent?.Invoke();
+    }
+    public static void OnPlayerDamageTaken(float dmg)
+    {
+        PlayerDamageTakenEvent?.Invoke(dmg);
+    }
+    public static void OnPlayerDamageAbsorbed(float dmg)
+    {
+        PlayerDamageAbsorbedEvent?.Invoke(dmg);
     }
 }

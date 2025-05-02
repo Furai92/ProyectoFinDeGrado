@@ -28,7 +28,7 @@ public class PlayerMeleeAttack : PlayerAttackBase
             if (e != null)
             {
                 PlayImpactEffects(e.transform.position, direction);
-                e.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element);
+                e.DealDirectDamage(setupData.Magnitude, setupData.CritChance, setupData.CritDamage, setupData.BuildupRate, setupData.Element, setupData.DamageType);
                 Vector3 knockbackDir = (new Vector3(e.transform.position.x, 0, e.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z)).normalized;
                 e.Knockback(setupData.Knockback, knockbackDir);
             }

@@ -28,7 +28,7 @@ public class HudEnemyHealthBarManager : MonoBehaviour
     {
         if (activeElements.ContainsKey(e.TrackedEnemy.EnemyInstanceID)) { activeElements.Remove(e.TrackedEnemy.EnemyInstanceID); }
     }
-    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, EnemyEntity target) 
+    private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity target) 
     {
         if (activeElements.ContainsKey(target.EnemyInstanceID)) { return; }
 

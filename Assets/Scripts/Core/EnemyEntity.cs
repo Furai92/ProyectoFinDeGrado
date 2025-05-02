@@ -232,11 +232,19 @@ public class EnemyEntity : MonoBehaviour
         currentKnockbackForce += magnitude * (1-KnockbackResistance) * direction.normalized;
         currentKnockbackForce = Vector3.ClampMagnitude(currentKnockbackForce, KNOCKBACK_FORCE_MAG_CLAMP);
     }
+    public int GetStatusEffectCount() 
+    {
+        int count = 0;
+        for (int i = 0; i < statusDurations.Length; i++) 
+        {
+            if (statusDurations[i] > 0) { count++; }
+        }
+        return count;
+    }
     public void AddStatus(GameEnums.DamageElement e) 
     {
-        EventManager.OnEnemyStatusApplied(e, this);
-
         statusDurations[(int)e] += STATUS_DURATION_STANDARD;
+        EventManager.OnEnemyStatusApplied(e, this);
     }
     public void DealStatusDamage(float magnitude, GameEnums.DamageElement element) 
     {
@@ -256,6 +264,8 @@ public class EnemyEntity : MonoBehaviour
     }
     public void AddStatusBuildup(float magnitude, GameEnums.DamageElement element) 
     {
+        if (element == GameEnums.DamageElement.NonElemental) { return; }
+
         int statusIndex = (int)element;
         float buildupStrengtht = (magnitude / BaseHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
         while (buildupStrengtht > 0)
@@ -274,17 +284,21 @@ public class EnemyEntity : MonoBehaviour
             }
         }
     }
-    public void DealDirectDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element) 
+    public void DealDirectDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element, GameEnums.DamageType dtype) 
     {
-        // Roll for critical hits
         int critLevel = 0;
-        if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0) { critChance += SHOCK_STATUS_BONUS_CRIT_CHANCE; } 
-        while (Random.Range(0, 101) < critChance) 
+        if (dtype != GameEnums.DamageType.Tech) 
         {
-            critChance -= 100;
-            critLevel++;
-            magnitude *= critDamage;
+            // Roll for critical hits
+            if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0) { critChance += SHOCK_STATUS_BONUS_CRIT_CHANCE; }
+            while (Random.Range(0, 101) < critChance)
+            {
+                critChance -= 100;
+                critLevel++;
+                magnitude *= critDamage;
+            }
         }
+        
 
         // Reduce health
         currentHealth -= magnitude;
@@ -294,7 +308,7 @@ public class EnemyEntity : MonoBehaviour
             RemainingExtraBars--;
             currentHealth += maxHealth;
         }
-        EventManager.OnEnemyDirectDamageTaken(magnitude, 0, element, this);
+        EventManager.OnEnemyDirectDamageTaken(magnitude, critLevel, element, dtype, this);
 
         if (currentHealth <= 0)
         {

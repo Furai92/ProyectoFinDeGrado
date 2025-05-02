@@ -5,6 +5,7 @@ public class WeaponAttackSetupData
     public PlayerEntity User { get; set; }
     public string ImpactEffectID { get; set; }
     public GameEnums.DamageElement Element { get; set; }
+    public GameEnums.DamageType DamageType { get; set; }
     public float Magnitude { get; set; }
     public float CritChance { get; set; }
     public float CritDamage { get; set; }
@@ -20,7 +21,7 @@ public class WeaponAttackSetupData
     public WeaponAttackSetupData() 
     {
         User = null;
-        Element = GameEnums.DamageElement.Physical;
+        Element = GameEnums.DamageElement.NonElemental;
         Magnitude = 0;
         CritChance = 0;
         CritDamage = 1;

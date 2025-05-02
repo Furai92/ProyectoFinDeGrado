@@ -502,7 +502,9 @@ MonoBehaviour:
   debugRangedWeaponSO: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
   debugTechSO:
-  - {fileID: 11400000, guid: 368f74a154fe2004a9984e8df7591658, type: 2}
+  - {fileID: 11400000, guid: c9a275dd5690d984680dfe4955575cc6, type: 2}
+  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
+  - {fileID: 11400000, guid: 1ecba2b318121934592cbe853d522d6f, type: 2}
   m_camTargetPos: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
   m_rotationParent: {fileID: 1892808105939200760}

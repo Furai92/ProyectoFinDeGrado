@@ -10,6 +10,7 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<string, MonoBehaviourPool<EnemyEntity>> enemyPools;
     private Dictionary<string, MonoBehaviourPool<EnemyAttackBase>> enemyAttackPools;
     private Dictionary<string, MonoBehaviourPool<PlayerAttackImpactEffect>> impactEffectPools;
+    private Dictionary<string, MonoBehaviourPool<TechCombatEffect>> techCombatEffectPools;
 
     private MonoBehaviourPool<CurrencyPickup> currencyPickupPool;
     private MonoBehaviourPool<HealthPickup> healthPickupPool;
@@ -46,6 +47,12 @@ public class ObjectPoolManager : MonoBehaviour
         for (int i = 0; i < database.ImpactEffects.Count; i++)
         {
             impactEffectPools.Add(database.ImpactEffects[i].ID, new MonoBehaviourPool<PlayerAttackImpactEffect>(database.ImpactEffects[i].Data, transform));
+        }
+        // Tech Combat Effects
+        techCombatEffectPools = new Dictionary<string, MonoBehaviourPool<TechCombatEffect>>();
+        for (int i = 0; i < database.TechEffectPrefabs.Count; i++)
+        {
+            techCombatEffectPools.Add(database.TechEffectPrefabs[i].ID, new MonoBehaviourPool<TechCombatEffect>(database.TechEffectPrefabs[i].Data, transform));
         }
         // Currency Pickups
         currencyPickupPool = new MonoBehaviourPool<CurrencyPickup>(database.CurrencyPickupPrefab, transform);
@@ -89,6 +96,13 @@ public class ObjectPoolManager : MonoBehaviour
         if (!instance.impactEffectPools.ContainsKey(id)) { return null; }
 
         return instance.impactEffectPools[id].GetCopyFromPool();
+    }
+    public static TechCombatEffect GetTechCombatEffectFromPool(string id)
+    {
+        if (instance == null) { return null; }
+        if (!instance.techCombatEffectPools.ContainsKey(id)) { return null; }
+
+        return instance.techCombatEffectPools[id].GetCopyFromPool();
     }
     public static CurrencyPickup GetCurrencyPickupFromPool()
     {

@@ -157,6 +157,27 @@ MonoBehaviour:
     <Data>k__BackingField: Hawkeye
   - <ID>k__BackingField: TCH_D_HAWKEYE
     <Data>k__BackingField: Increases critical damage but reduces intellect.
+  - <ID>k__BackingField: TCH_N_KINETIC_BLAST
+    <Data>k__BackingField: Kinetic Blast
+  - <ID>k__BackingField: TCH_D_KINETIC_BLAST
+    <Data>k__BackingField: After losing health, release an explosion. Damage is based
+      on a percentage of your maximum health. The element of the explosion will match
+      your melee weapon.
+  - <ID>k__BackingField: TCH_N_ELEMENTAL_MASTER
+    <Data>k__BackingField: Elemental Master
+  - <ID>k__BackingField: TCH_D_ELEMENTAL_MASTER
+    <Data>k__BackingField: Gain might, intellect and dexterity after applying a status
+      effect. This can be stacked once per each different element.
+  - <ID>k__BackingField: TCH_N_DISORDER
+    <Data>k__BackingField: Disorder
+  - <ID>k__BackingField: TCH_D_DISORDER
+    <Data>k__BackingField: After applying a status effect to an enemy, deal instant
+      non elemental damage based on your intellect. This damage is multiplied by
+      the amount of different status effects on that enemy.
+  - <ID>k__BackingField: TCH_N_LIGHT_ARMOR
+    <Data>k__BackingField: Light Armor
+  - <ID>k__BackingField: TCH_D_LIGHT_ARMOR
+    <Data>k__BackingField: Increases dash recharge speed, but reduces endurance
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -191,3 +212,11 @@ MonoBehaviour:
     <Data>k__BackingField: 'Critical chance: {0}%'
   - <ID>k__BackingField: TCH_DT_CRITX
     <Data>k__BackingField: 'Critical damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_HP_TO_DAMAGE
+    <Data>k__BackingField: 'Health to damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_RADIUS
+    <Data>k__BackingField: 'Radius: {0}m'
+  - <ID>k__BackingField: TCH_DT_INT_TO_DAMAGE
+    <Data>k__BackingField: 'Intellect to damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_DASH_RECHARGE
+    <Data>k__BackingField: 'Dash recharge speed: {0}%'

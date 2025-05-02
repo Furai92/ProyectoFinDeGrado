@@ -10,27 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Hawkeye
+  m_Name: General_HeavyArmor
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: HAWKEYE
-  <NameID>k__BackingField: TCH_N_HAWKEYE
-  <DescID>k__BackingField: TCH_D_HAWKEYE
-  <MaxLevel>k__BackingField: -1
+  <ID>k__BackingField: HEAVY_ARMOR
+  <NameID>k__BackingField: TCH_N_HEAVY_ARMOR
+  <DescID>k__BackingField: TCH_D_HEAVY_ARMOR
+  <MaxLevel>k__BackingField: 5
   <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 12
-    <Second>k__BackingField: 0.1
-  - <First>k__BackingField: 3
-    <Second>k__BackingField: -10
+  - <First>k__BackingField: 0
+    <Second>k__BackingField: 20
+  - <First>k__BackingField: 4
+    <Second>k__BackingField: 5
+  - <First>k__BackingField: 8
+    <Second>k__BackingField: -0.05
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_CRITX
+  - <DescTextID>k__BackingField: TCH_DT_HP
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 20
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_INT
+  - <DescTextID>k__BackingField: TCH_DT_END
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: -10
+    <DescValueScaling>k__BackingField: 5
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_SPEED
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: -5
     <DescDetailType>k__BackingField: 2

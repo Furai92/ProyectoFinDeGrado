@@ -16,6 +16,7 @@ public class PlayerEntity : NetworkBehaviour
 
     private const float BASE_DASH_RECHARGE_RATE = 0.25f;
     private const float LIGHT_DAMAGE_HEALING_MULT = 3f;
+    private const float SHIELD_DECAY_RATE = 20f;
 
     // Weapon status =================================================================================
 
@@ -39,8 +40,8 @@ public class PlayerEntity : NetworkBehaviour
     // Stats and equipment =================================================================================
 
     private PlayerStatGroup stats;
-    private WeaponData meleeWeapon;
-    private WeaponData rangedWeapon;
+    public WeaponData MeleeWeapon { get; private set; }
+    public WeaponData RangedWeapon { get; private set; }
 
     private WeaponData.WeaponStats rangedWeaponStats;
     private WeaponData.WeaponStats meleeWeaponStats;
@@ -112,6 +113,7 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(PlayerStatGroup.Stat.DashCount, 3);
         stats.ChangeStat(PlayerStatGroup.Stat.DashRechargeRate, 1);
         stats.ChangeStat(PlayerStatGroup.Stat.Firerate, 1);
+        stats.ChangeStat(PlayerStatGroup.Stat.CritChance, 15);
 
         CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
@@ -187,6 +189,7 @@ public class PlayerEntity : NetworkBehaviour
             }
         }
         dashDurationRemaining -= Time.deltaTime;
+        CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE);
 
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
         {
@@ -242,7 +245,9 @@ public class PlayerEntity : NetworkBehaviour
                     EnemyIgnored = -1,
                     Knockback = wpn.Knockback,
                     Element = wpn.Element,
-                    ImpactEffectID = wpn.ImpactEffectID
+                    ImpactEffectID = wpn.ImpactEffectID,
+                    DamageType = s == WeaponSO.WeaponSlot.Melee ? GameEnums.DamageType.Melee : GameEnums.DamageType.Ranged
+                    
                 };
                 ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle + shootRandomSpread, sd, null);
                 currentMultishootAngle += wpn.Multishoot < 2 ? 0 : wpn.Arc / (wpn.Multishoot - 1);
@@ -266,7 +271,8 @@ public class PlayerEntity : NetworkBehaviour
                 EnemyIgnored = -1,
                 Knockback = wpn.Knockback,
                 Element = wpn.Element,
-                ImpactEffectID = wpn.ImpactEffectID
+                ImpactEffectID = wpn.ImpactEffectID,
+                DamageType = s == WeaponSO.WeaponSlot.Melee ? GameEnums.DamageType.Melee : GameEnums.DamageType.Ranged
             };
             ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, currentDirection, sd, null);
         }
@@ -282,7 +288,7 @@ public class PlayerEntity : NetworkBehaviour
             if (rh.collider != null) 
             {
                 dashDurationRemaining = 0;
-                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.None);
+                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.NonElemental);
             }
         }
         else 
@@ -318,24 +324,24 @@ public class PlayerEntity : NetworkBehaviour
         {
             case WeaponSO.WeaponSlot.Melee:
                 {
-                    if (meleeWeapon != null)
+                    if (MeleeWeapon != null)
                     {
-                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(meleeWeapon, transform.position);
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(MeleeWeapon, transform.position);
                     }
 
-                    meleeWeapon = w;
-                    meleeWeaponStats = meleeWeapon.GetStats();
+                    MeleeWeapon = w;
+                    meleeWeaponStats = MeleeWeapon.GetStats();
                     break;
                 }
             case WeaponSO.WeaponSlot.Ranged:
                 {
-                    if (rangedWeapon != null)
+                    if (RangedWeapon != null)
                     {
-                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(rangedWeapon, transform.position);
+                        ObjectPoolManager.GetWeaponPickupFromPool().SetUp(RangedWeapon, transform.position);
                     }
 
-                    rangedWeapon = w;
-                    rangedWeaponStats = rangedWeapon.GetStats();
+                    RangedWeapon = w;
+                    rangedWeaponStats = RangedWeapon.GetStats();
                     break;
                 }
         }
@@ -352,10 +358,12 @@ public class PlayerEntity : NetworkBehaviour
         float damageToShield = Mathf.Min(CurrentShield, magnitude);
         CurrentShield -= damageToShield;
         magnitude -= damageToShield;
+        if (damageToShield > 0) { EventManager.OnPlayerDamageAbsorbed(damageToShield); }
 
         CurrentHealth -= magnitude;
         AddShield(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToShieldConversion));
         AddLightDamage(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToLightConversion));
+        if (magnitude > 0) { EventManager.OnPlayerDamageTaken(magnitude); }
 
         if (CurrentHealth <= 0)
         {

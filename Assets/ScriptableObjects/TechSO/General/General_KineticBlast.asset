@@ -10,27 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Tormentor
+  m_Name: General_KineticBlast
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: TORMENTOR
-  <NameID>k__BackingField: TCH_N_TORMENTOR
-  <DescID>k__BackingField: TCH_D_TORMENTOR
+  <ID>k__BackingField: KINETIC_BLAST
+  <NameID>k__BackingField: TCH_N_KINETIC_BLAST
+  <DescID>k__BackingField: TCH_D_KINETIC_BLAST
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 0
+  <Rarity>k__BackingField: 1
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
-  <Script>k__BackingField: 
-  <BonusStats>k__BackingField:
-  - <First>k__BackingField: 7
-    <Second>k__BackingField: -5
-  - <First>k__BackingField: 3
-    <Second>k__BackingField: 10
+  <Script>k__BackingField: TechBehaviourKineticBlast
+  <BonusStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_INT
+  - <DescTextID>k__BackingField: TCH_DT_HP_TO_DAMAGE
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 25
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_CRITC
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: -5
-    <DescDetailType>k__BackingField: 2
+  - <DescTextID>k__BackingField: TCH_DT_RADIUS
+    <DescValueBase>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1

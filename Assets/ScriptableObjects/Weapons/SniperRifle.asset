@@ -20,20 +20,21 @@ MonoBehaviour:
   <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
   <ImpactEffectID>k__BackingField: STANDARD
-  <Element>k__BackingField: 1
-  <ProjectileComponentDamage>k__BackingField: 300
+  <Element>k__BackingField: 0
+  <ProjectileComponentDamage>k__BackingField: 500
   <CleaveComponentDamage>k__BackingField: 0
   <Multishoot>k__BackingField: 1
   <MultishootArc>k__BackingField: 0
   <Firerate>k__BackingField: 0.9
-  <BuildupRate>k__BackingField: 1
+  <BuildupRate>k__BackingField: 0.33
   <CriticalDamage>k__BackingField: 3
   <SizeMultiplier>k__BackingField: 2
   <HeatGeneration>k__BackingField: 0.1
+  <RandomSpread>k__BackingField: 0
   <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 1
   <Pierces>k__BackingField: 0
-  <Timescale>k__BackingField: 1
+  <Timescale>k__BackingField: 20
   <Knockback>k__BackingField: 1
   <PartSlots>k__BackingField:
   - <SlotName>k__BackingField: Core
@@ -41,3 +42,4 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
     - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
     - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
+    - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
