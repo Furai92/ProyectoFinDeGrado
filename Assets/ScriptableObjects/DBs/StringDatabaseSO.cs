@@ -29,7 +29,7 @@ public class StringDatabaseSO : ScriptableObject
     {
         switch (e)
         {
-            case GameEnums.DamageElement.NonElemental: { return GetString("ELEMENT_NAME_PHYSICAL"); }
+            case GameEnums.DamageElement.NonElemental: { return GetString("ELEMENT_NAME_NONELEMENTAL"); }
             case GameEnums.DamageElement.Fire: { return GetString("ELEMENT_NAME_FIRE"); }
             case GameEnums.DamageElement.Frost: { return GetString("ELEMENT_NAME_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetString("ELEMENT_NAME_THUNDER"); }
@@ -41,7 +41,7 @@ public class StringDatabaseSO : ScriptableObject
     {
         switch (e)
         {
-            case GameEnums.DamageElement.NonElemental: { return GetString("ELEMENT_DESC_PHYSICAL"); }
+            case GameEnums.DamageElement.NonElemental: { return GetString("ELEMENT_DESC_NONELEMENTAL"); }
             case GameEnums.DamageElement.Fire: { return GetString("ELEMENT_DESC_FIRE"); }
             case GameEnums.DamageElement.Frost: { return GetString("ELEMENT_DESC_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetString("ELEMENT_DESC_THUNDER"); }

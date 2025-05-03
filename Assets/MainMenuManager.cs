@@ -10,6 +10,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Transform mainStateParent;
     [SerializeField] private HudNewRunMenu newRunMenu;
     [SerializeField] private HudCollectionMenu collectionMenu;
+    [SerializeField] private HudPreviousRunRecapMenu previousRunRecapMenu;
 
     private ProceduralStageData backgroundStage;
 
@@ -19,6 +20,7 @@ public class MainMenuManager : MonoBehaviour
     {
         backgroundStage = new ProceduralStageData(Random.Range(0, 9999999), 30, backgroundStageProperties, backgroundStageParent);
         travellingCam.SetUp(backgroundStage);
+        if (PersistentDataManager.GetPreviousStageRecord() != null) { ToggleMenu(previousRunRecapMenu); }
 
         EventManager.UiMenuClosedEvent += OnMenuClosed;
     }

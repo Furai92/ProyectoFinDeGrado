@@ -5,6 +5,7 @@ public class PersistentDataManager : MonoBehaviour
 {
     private DifficultyLevelSO currentDifficulty;
     private List<PlayerTraitSO> selectedTraits;
+    private StageStatsTracker.StageRecord previousRunRecord;
 
     private const string INSTANCE_GO_NAME = "[Persistent]GameDataManager";
 
@@ -31,4 +32,7 @@ public class PersistentDataManager : MonoBehaviour
     }
     public static List<PlayerTraitSO> GetTraitSelection() { return GetInstance().selectedTraits; }
     public static DifficultyLevelSO GetCurrentDifficulty() { return GetInstance().currentDifficulty; }
+    public static void AddStageRecord(StageStatsTracker.StageRecord record) { GetInstance().previousRunRecord = record; }
+    public static void DeletePreviousStageRecord() { GetInstance().previousRunRecord = null; }
+    public static StageStatsTracker.StageRecord GetPreviousStageRecord() { return GetInstance().previousRunRecord; }
 }

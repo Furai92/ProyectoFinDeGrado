@@ -12,8 +12,8 @@ public class HudCombatNotifications : MonoBehaviour
     private MonoBehaviourPool<HudCombatWarningElement> combatWarningPool;
     private float sizeMult;
 
-    private const float SETTINGS_TO_SIZE_MULT_MIN = 0.3f;
-    private const float SETTINGS_TO_SIZE_MULT_MAX = 1f;
+    private const float SETTINGS_TO_SIZE_MULT_MIN = 0.33f;
+    private const float SETTINGS_TO_SIZE_MULT_MAX = 0.66f;
 
     private const float STATUS_DAMAGE_SIZE = 1f;
     private const float DIRECT_DAMAGE_SIZE = 1.5f;
@@ -23,6 +23,8 @@ public class HudCombatNotifications : MonoBehaviour
     private const float STATUS_EFFECT_LIFETIME = 1.25f;
     private const float EVADED_SIZE = 1.5f;
     private const float EVADED_LIFETIME = 1f;
+    private const float RESTORED_SIZE = 2f;
+    private const float RESTORED_LIFETIME = 1.5f;
 
     private void OnEnable()
     {
@@ -36,6 +38,7 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.CombatWarningDisplayedEvent += OnCombatWarningDisplayed;
         EventManager.PlayerEvasionEvent += OnEnemyAttackEvaded;
         EventManager.GameSettingsChangedEvent += UpdateSizeMultiplier;
+        EventManager.PlayerHealthRestoredEvent += OnPlayerHealthRestored;
     }
     private void OnDisable()
     {
@@ -45,6 +48,7 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.CombatWarningDisplayedEvent -= OnCombatWarningDisplayed;
         EventManager.PlayerEvasionEvent -= OnEnemyAttackEvaded;
         EventManager.GameSettingsChangedEvent -= UpdateSizeMultiplier;
+        EventManager.PlayerHealthRestoredEvent -= OnPlayerHealthRestored;
     }
     private void UpdateSizeMultiplier() 
     {
@@ -71,5 +75,9 @@ public class HudCombatNotifications : MonoBehaviour
     private void OnCombatWarningDisplayed(HudCombatWarningElement.WarningType wt, Vector3 pos) 
     {
         combatWarningPool.GetCopyFromPool().SetUp(mCamRef, pos, wt);
+    }
+    private void OnPlayerHealthRestored(float amount) 
+    {
+        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, string.Format("+{0}", amount.ToString("F0")), Color.green, RESTORED_SIZE * sizeMult, RESTORED_LIFETIME, true, PlayerEntity.ActiveInstance.transform.position);
     }
 }

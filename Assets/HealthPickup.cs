@@ -7,5 +7,6 @@ public class HealthPickup : AutoPickup
     public override void OnPickup(PlayerEntity p)
     {
         p.Heal(BASE_HEALING);
+        EventManager.OnPlayerHealthOrbGathered(p.transform.position);
     }
 }

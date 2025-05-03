@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: GameStrings
   m_EditorClassIdentifier: 
   <StringElements>k__BackingField:
+  - <ID>k__BackingField: RUN_RESULT_VICTORY
+    <Data>k__BackingField: Victory!
+  - <ID>k__BackingField: RUN_RESULT_DEFEAT
+    <Data>k__BackingField: Defeat...
+  - <ID>k__BackingField: STATUS_NAME_NONELEMENTAL
+    <Data>k__BackingField: No Effect
   - <ID>k__BackingField: STATUS_NAME_FIRE
     <Data>k__BackingField: Burning
   - <ID>k__BackingField: STATUS_NAME_FROST
@@ -21,6 +27,8 @@ MonoBehaviour:
     <Data>k__BackingField: Shocked
   - <ID>k__BackingField: STATUS_NAME_VOID
     <Data>k__BackingField: Collapsing
+  - <ID>k__BackingField: ELEMENT_NAME_NONELEMENTAL
+    <Data>k__BackingField: Non Elemental
   - <ID>k__BackingField: ELEMENT_NAME_FIRE
     <Data>k__BackingField: Fire
   - <ID>k__BackingField: ELEMENT_NAME_FROST
@@ -34,6 +42,8 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_TORMETOR
     <Data>k__BackingField: Your intellect is increased, but your critical chance
       is reduced.
+  - <ID>k__BackingField: ELEMENT_DESC_NONELEMENTAL
+    <Data>k__BackingField: Non elemental attacks have no special benefits
   - <ID>k__BackingField: ELEMENT_DESC_FIRE
     <Data>k__BackingField: Applies the burning status. Affected enemies take massive
       damage over time.
@@ -157,6 +167,11 @@ MonoBehaviour:
     <Data>k__BackingField: Hawkeye
   - <ID>k__BackingField: TCH_D_HAWKEYE
     <Data>k__BackingField: Increases critical damage but reduces intellect.
+  - <ID>k__BackingField: TCH_N_CHAOTIC_ENERGY
+    <Data>k__BackingField: Chaotic Energy
+  - <ID>k__BackingField: TCH_D_CHAOTIC_ENERGY
+    <Data>k__BackingField: Increases critical chance. Your critical hits have a chance
+      to explode, dealing a percentage of their damage as area damage.
   - <ID>k__BackingField: TCH_N_KINETIC_BLAST
     <Data>k__BackingField: Kinetic Blast
   - <ID>k__BackingField: TCH_D_KINETIC_BLAST
@@ -178,6 +193,19 @@ MonoBehaviour:
     <Data>k__BackingField: Light Armor
   - <ID>k__BackingField: TCH_D_LIGHT_ARMOR
     <Data>k__BackingField: Increases dash recharge speed, but reduces endurance
+  - <ID>k__BackingField: TCH_N_BATTLE_TRANCE
+    <Data>k__BackingField: Battle Trance
+  - <ID>k__BackingField: TCH_D_BATTLE_TRANCE
+    <Data>k__BackingField: Start waves with reduced might and dexterity, but gain
+      might and dexterity with enemy defeats. Stacks are reset after each wave.
+  - <ID>k__BackingField: TCH_N_INFUSION
+    <Data>k__BackingField: Infusion
+  - <ID>k__BackingField: TCH_D_INFUSION
+    <Data>k__BackingField: Picking up health orbs increases your maximum health permanently
+  - <ID>k__BackingField: TCH_N_BEAST_STRENGHT
+    <Data>k__BackingField: Beast Strenght
+  - <ID>k__BackingField: TCH_D_BEAST_STRENGHT
+    <Data>k__BackingField: Increases might. Melee impacts have a chance to heal.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -220,3 +248,13 @@ MonoBehaviour:
     <Data>k__BackingField: 'Intellect to damage: {0}%'
   - <ID>k__BackingField: TCH_DT_DASH_RECHARGE
     <Data>k__BackingField: 'Dash recharge speed: {0}%'
+  - <ID>k__BackingField: TCH_DT_MIGHT_ONKILL
+    <Data>k__BackingField: 'Might on enemy kill: {0}'
+  - <ID>k__BackingField: TCH_DT_DEX_ONKILL
+    <Data>k__BackingField: 'Dexterity on enemy defeated: {0}'
+  - <ID>k__BackingField: TCH_DT_CHANCE
+    <Data>k__BackingField: 'Chance to trigger: {0}%'
+  - <ID>k__BackingField: TCH_DT_DMG_TO_EXPLOSION
+    <Data>k__BackingField: 'Impact damage to explosion: {0}%'
+  - <ID>k__BackingField: TCH_DT_HEALING
+    <Data>k__BackingField: 'Healing: {0}'

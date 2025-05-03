@@ -16,7 +16,7 @@ public class PlayerEntity : NetworkBehaviour
 
     private const float BASE_DASH_RECHARGE_RATE = 0.25f;
     private const float LIGHT_DAMAGE_HEALING_MULT = 3f;
-    private const float SHIELD_DECAY_RATE = 20f;
+    private const float SHIELD_DECAY_RATE = 10f;
 
     // Weapon status =================================================================================
 
@@ -395,6 +395,7 @@ public class PlayerEntity : NetworkBehaviour
         float totalHealing = lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;
         totalHealing += amount;
         CurrentHealth = Mathf.Clamp(CurrentHealth + totalHealing, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+        EventManager.OnPlayerHealthRestored(totalHealing);
     }
 
     public void AddMoney(float amount)
@@ -533,20 +534,36 @@ public class PlayerEntity : NetworkBehaviour
             buffDictionary.Add(database.BuffEffects[i].ID, database.BuffEffects[i]);
         }
     }
+    public void ChangePermanentStat(PlayerStatGroup.Stat s, float variation) 
+    {
+        stats.ChangeStat(s, variation);
+        EventManager.OnPlayerStatsUpdated(this);
+    }
+    public void RemoveBuff(string buffID) 
+    {
+        for (int i = ActiveBuffs.Count-1; i >= 0; i--) 
+        {
+            ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+            if (ActiveBuffs[i].SO.ID == buffID) { ActiveBuffs.RemoveAt(i); }
+        }
+    }
     public void ChangeBuff(string buffID, float effectMultiplier, int stacks)
     {
         BuffEffectSO bso = GetBuffEffectInfo(buffID);
         if (bso == null) { return; }
 
-        for (int i = 0; i < ActiveBuffs.Count; i++)
+        for (int i = ActiveBuffs.Count-1; i >= 0; i--)
         {
             if (ActiveBuffs[i].SO.ID == bso.ID && ActiveBuffs[i].EffectMultiplier == effectMultiplier)
             {
                 ChangeBuffStacks(ActiveBuffs[i], stacks);
+                if (ActiveBuffs[i].Stacks <= 0) { ActiveBuffs.RemoveAt(i); }
                 EventManager.OnPlayerStatsUpdated(this);
                 return;
             }
         }
+        if (stacks <= 0) { return; }
+
         ActiveBuff newBuff = new ActiveBuff(bso, effectMultiplier);
         ChangeBuffStacks(newBuff, stacks);
         ActiveBuffs.Add(newBuff);

@@ -21,28 +21,28 @@ MonoBehaviour:
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 1
-    <Second>k__BackingField: 10
+    <Second>k__BackingField: 5
   - <First>k__BackingField: 2
-    <Second>k__BackingField: 10
+    <Second>k__BackingField: 5
   - <First>k__BackingField: 18
-    <Second>k__BackingField: 2
+    <Second>k__BackingField: 1
   - <First>k__BackingField: 19
     <Second>k__BackingField: 0.05
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_MIGHT
-    <DescValueBase>k__BackingField: 10
-    <DescValueScaling>k__BackingField: 10
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 5
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_DEX
-    <DescValueBase>k__BackingField: 10
-    <DescValueScaling>k__BackingField: 10
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 5
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_SPREAD
-    <DescValueBase>k__BackingField: 2
-    <DescValueScaling>k__BackingField: 0
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 1
     <DescDetailType>k__BackingField: 2
   - <DescTextID>k__BackingField: TCH_DT_HEATGEN
-    <DescValueBase>k__BackingField: 5
-    <DescValueScaling>k__BackingField: 0
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 5
     <DescDetailType>k__BackingField: 2

@@ -18,6 +18,8 @@ public class EventManager
     public static event Action PlayerDefeatedEvent;
     public static event Action<float> PlayerDamageTakenEvent;
     public static event Action<float> PlayerDamageAbsorbedEvent;
+    public static event Action<Vector3> PlayerHealthOrbGatheredEvent;
+    public static event Action<float> PlayerHealthRestoredEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -130,5 +132,13 @@ public class EventManager
     public static void OnPlayerDamageAbsorbed(float dmg)
     {
         PlayerDamageAbsorbedEvent?.Invoke(dmg);
+    }
+    public static void OnPlayerHealthOrbGathered(Vector3 pos) 
+    {
+        PlayerHealthOrbGatheredEvent?.Invoke(pos);
+    }
+    public static void OnPlayerHealthRestored(float amount) 
+    {
+        PlayerHealthRestoredEvent?.Invoke(amount);
     }
 }
