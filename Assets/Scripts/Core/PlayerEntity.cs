@@ -116,13 +116,8 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(PlayerStatGroup.Stat.CritChance, 15);
         stats.ChangeStat(PlayerStatGroup.Stat.HeatCap, 100);
 
-        CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
-        CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
-        DashRechargePercent = 0;
         ActiveTechDictionary = new Dictionary<string, TechGroup>();
         ActiveTechList = new List<TechGroup>();
-        StatusOverheatRanged = StatusOverheatMelee = false;
-        rangedAttackReady = meleeAttackReady = 1;
 
         ActiveBuffs = new List<ActiveBuff>();
 
@@ -138,6 +133,13 @@ public class PlayerEntity : NetworkBehaviour
 
         EquipWeapon(rangedweapon);
         EquipWeapon(new WeaponData(debugMeleeWeaponSO));
+
+        StatusOverheatRanged = StatusOverheatMelee = false;
+        StatusHeatMelee = StatusHeatRanged = -stats.GetStat(PlayerStatGroup.Stat.HeatFloor);
+        rangedAttackReady = meleeAttackReady = 1;
+        CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+        CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
+        DashRechargePercent = 0;
 
         currentDirection = 0; UpdateRotation();
         inputsAllowed = true;
@@ -172,12 +174,12 @@ public class PlayerEntity : NetworkBehaviour
 
         rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
         heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
-        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, Time.deltaTime * heatDecayRanged);
+        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayRanged);
         if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
 
         meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
         heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
-        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, Time.deltaTime * heatDecayMelee);
+        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayMelee);
         if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
 
         if (CurrentDashes < (int)stats.GetStat(PlayerStatGroup.Stat.DashCount)) 

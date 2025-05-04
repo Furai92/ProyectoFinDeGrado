@@ -55,14 +55,14 @@ public class HudPlayerHeatMeters : MonoBehaviour
         float meleePercent = (PlayerEntity.ActiveInstance.StatusHeatMelee + PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatFloor)) / heatRange;
 
         // Ranged
-        heatGaugeRanged.fillAmount = Mathf.Lerp(0, 0.5f, rangedPercent);
+        heatGaugeRanged.fillAmount = Mathf.Lerp(0, 0.25f, rangedPercent);
         heatGaugeRanged.color = heatPercentRanged.color = Color.Lerp(Color.blue, Color.red, rangedPercent);
         heatPercentRanged.text = string.Format("{0}%", (PlayerEntity.ActiveInstance.StatusHeatRanged).ToString("F1"));
         heatWarningRanged.gameObject.SetActive(rangedPercent > 0.8f);
         overheatRanged.gameObject.SetActive(PlayerEntity.ActiveInstance.StatusOverheatRanged);
 
         // Melee
-        heatGaugeMelee.fillAmount = Mathf.Lerp(0, 0.5f, meleePercent);
+        heatGaugeMelee.fillAmount = Mathf.Lerp(0, 0.25f, meleePercent);
         heatGaugeMelee.color = heatPercentMelee.color = Color.Lerp(Color.blue, Color.red, meleePercent);
         heatPercentMelee.text = string.Format("{0}%", (PlayerEntity.ActiveInstance.StatusHeatMelee).ToString("F1"));
         heatWarningMelee.gameObject.SetActive(meleePercent > 0.8f);

@@ -33,6 +33,7 @@ public class WeaponAttackSetupData
         Splash = 0;
         Knockback = 0;
         EnemyIgnored = -1;
+        DamageType = GameEnums.DamageType.Melee;
     }
     public WeaponAttackSetupData(WeaponAttackSetupData sd) 
     {
@@ -50,6 +51,7 @@ public class WeaponAttackSetupData
         Knockback = sd.Knockback;
         EnemyIgnored = sd.EnemyIgnored;
         ImpactEffectID = sd.ImpactEffectID;
+        DamageType = sd.DamageType;
     }
 
 }

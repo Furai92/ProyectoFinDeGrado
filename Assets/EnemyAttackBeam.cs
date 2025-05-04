@@ -21,7 +21,7 @@ public class EnemyAttackBeam : EnemyAttackBase
     private const float DAMAGING_COMPONENT_WIDTH_MIN = 0.1f;
     private const float DAMAGING_COMPONENT_WIDTH_MAX = 8f;
     private const float BEAM_MAX_LENGHT = 50f;
-    private const float SPAWN_HEIGHT = 0.5f;
+    private const float SPAWN_HEIGHT = 1f;
 
     public override void Initialize(Vector3 pos, float dir)
     {
