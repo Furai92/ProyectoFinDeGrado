@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: FrostMasteryCoreTech
+  m_Name: Thunder_ThunderMasteryCoreTech
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: FROST_MASTERY_CORE
-  <NameID>k__BackingField: TRAIT_NAME_FROST_MASTER
-  <DescID>k__BackingField: TRAIT_DESC_FROST_MASTER
+  <ID>k__BackingField: THUNDER_MASTERY_CORE
+  <NameID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
+  <DescID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
   <MaxLevel>k__BackingField: -1
   <Rarity>k__BackingField: 4
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 13
-    <Second>k__BackingField: 100
+  - <First>k__BackingField: 17
+    <Second>k__BackingField: 25
+  - <First>k__BackingField: 9
+    <Second>k__BackingField: 33
   <BonusFlags>k__BackingField: 

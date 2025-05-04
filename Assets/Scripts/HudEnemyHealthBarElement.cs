@@ -29,14 +29,12 @@ public class HudEnemyHealthBarElement : MonoBehaviour
 
         EventManager.EnemyDirectDamageTakenEvent += OnEnemyDirectDamageTaken;
         EventManager.EnemyStatusDamageTakenEvent += OnEnemyStatusDamageTaken;
-        EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
         EventManager.EnemyDisabledEvent += OnEnemyDisabled;
     }
     private void OnDisable()
     {
         EventManager.EnemyDirectDamageTakenEvent -= OnEnemyDirectDamageTaken;
         EventManager.EnemyStatusDamageTakenEvent -= OnEnemyStatusDamageTaken;
-        EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.OnUiEnemyHealthBarDisabled(this);
     }
@@ -48,11 +46,7 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     {
         if (e == TrackedEnemy) { UpdateFill(); }
     }
-    private void OnEnemyDefeated(EnemyEntity e)
-    {
-        if (e == TrackedEnemy) { gameObject.SetActive(false); }
-    }
-    private void OnEnemyDisabled(EnemyEntity e)
+    private void OnEnemyDisabled(EnemyEntity e, bool killcredit)
     {
         if (e == TrackedEnemy) { gameObject.SetActive(false); }
     }

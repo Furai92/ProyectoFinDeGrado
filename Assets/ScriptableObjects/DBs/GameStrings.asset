@@ -186,9 +186,9 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_DISORDER
     <Data>k__BackingField: Disorder
   - <ID>k__BackingField: TCH_D_DISORDER
-    <Data>k__BackingField: After applying a status effect to an enemy, deal instant
-      non elemental damage based on your intellect. This damage is multiplied by
-      the amount of different status effects on that enemy.
+    <Data>k__BackingField: After applying a status effect to an enemy deals instant
+      non elemental damage based on the amount of different status effects on that
+      enemy.
   - <ID>k__BackingField: TCH_N_LIGHT_ARMOR
     <Data>k__BackingField: Light Armor
   - <ID>k__BackingField: TCH_D_LIGHT_ARMOR
@@ -206,6 +206,26 @@ MonoBehaviour:
     <Data>k__BackingField: Beast Strenght
   - <ID>k__BackingField: TCH_D_BEAST_STRENGHT
     <Data>k__BackingField: Increases might. Melee impacts have a chance to heal.
+  - <ID>k__BackingField: TCH_N_ENDLESS_FLAMES
+    <Data>k__BackingField: Endless Flames
+  - <ID>k__BackingField: TCH_D_ENDLESS_FLAMES
+    <Data>k__BackingField: After applying a status effect to an enemy, there's a
+      chance to apply burning to a random nearby enemy.
+  - <ID>k__BackingField: TCH_N_ENDLESS_WINTER
+    <Data>k__BackingField: Endless Winter
+  - <ID>k__BackingField: TCH_D_ENDLESS_WINTER
+    <Data>k__BackingField: After applying a status effect to an enemy, there's a
+      chance to apply frozen to a random nearby enemy.
+  - <ID>k__BackingField: TCH_N_ENDLESS_STORM
+    <Data>k__BackingField: Endless Storm
+  - <ID>k__BackingField: TCH_D_ENDLESS_STORM
+    <Data>k__BackingField: After applying a status effect to an enemy, there's a
+      chance to apply shock to a random nearby enemy.
+  - <ID>k__BackingField: TCH_N_ENDLESS_VOID
+    <Data>k__BackingField: Endless Void
+  - <ID>k__BackingField: TCH_D_ENDLESS_VOID
+    <Data>k__BackingField: After applying a status effect to an enemy, there's a
+      chance to apply collapsing to a random nearby enemy.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -258,3 +278,5 @@ MonoBehaviour:
     <Data>k__BackingField: 'Impact damage to explosion: {0}%'
   - <ID>k__BackingField: TCH_DT_HEALING
     <Data>k__BackingField: 'Healing: {0}'
+  - <ID>k__BackingField: TCH_DT_RANGE
+    <Data>k__BackingField: 'Range: {0}m'

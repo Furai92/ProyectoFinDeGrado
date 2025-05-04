@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: UnstableWeapons
+  m_Name: Fire_UnstableWeapons
   m_EditorClassIdentifier: 
   <ID>k__BackingField: UNSTABLE_WEAPONS
   <NameID>k__BackingField: TCH_N_UNSTABLE_WEAPONS

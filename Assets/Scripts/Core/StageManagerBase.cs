@@ -37,13 +37,13 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent += OnEnemyDefeated;
         EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
         StartCoroutine(Startcr());
     }
     private void OnDisable()
     {
-        EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent -= OnEnemyDefeated;
         EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
     }
     private IEnumerator Startcr() 
@@ -120,8 +120,10 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         playerDefeated = true;
     }
-    private void OnEnemyDefeated(EnemyEntity e) 
+    private void OnEnemyDefeated(EnemyEntity e, bool killcredit) 
     {
+        if (!killcredit) { return; }
+
         nextWeaponDrop += e.ItemDropRate;
         nextCurrencyDrop += e.CurrencyDropRate;
         nextHealthDrop += e.HealthDroprate;
@@ -324,7 +326,7 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return closest;
     }
-    public static EnemyEntity GetRandomEnemyInRange(EnemyEntity ignored, Vector3 pos, float range) 
+    public static EnemyEntity GetRandomEnemyInRange(int ignoredID, Vector3 pos, float range) 
     {
         LayerMask mask = LayerMask.GetMask("EnemyHitboxes");
         Collider[] hitboxesFound = Physics.OverlapSphere(pos, range, mask);
@@ -339,12 +341,12 @@ public abstract class StageManagerBase : MonoBehaviour
         {
             int randomIndexSelected = Random.Range(0, hitboxesFound.Length);
             enemySelected = hitboxesFound[Random.Range(0, hitboxesFound.Length)].GetComponentInParent<EnemyEntity>();
-            if (enemySelected == ignored)
+            if (enemySelected.EnemyInstanceID == ignoredID)
             {
                 randomIndexSelected++;
                 if (randomIndexSelected >= hitboxesFound.Length) { randomIndexSelected = 0; }
                 enemySelected = hitboxesFound[randomIndexSelected].GetComponentInParent<EnemyEntity>();
-                if (enemySelected == ignored)
+                if (enemySelected.EnemyInstanceID == ignoredID)
                 {
                     return null;
                 }

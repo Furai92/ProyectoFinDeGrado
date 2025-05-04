@@ -7,18 +7,19 @@ public class TechBehaviourBattleTrance : TechBase
 
     public override void OnTechAdded()
     {
-        EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent += OnEnemyDisabled;
         EventManager.StageStateEndedEvent += OnStageStateEnded;
     }
 
     public override void OnTechRemoved()
     {
-        EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
 
-    private void OnEnemyDefeated(EnemyEntity e)
+    private void OnEnemyDisabled(EnemyEntity e, bool killcredit)
     {
+        if (!killcredit) { return; }
         PlayerEntity.ActiveInstance.ChangeBuff(BUFF_ID, Group.Level, 1);
     }
     private void OnStageStateEnded(StageStateBase.GameState s) 

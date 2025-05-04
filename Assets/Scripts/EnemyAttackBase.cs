@@ -12,16 +12,16 @@ public abstract class EnemyAttackBase : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EnemyStatusEffectAppliedEvent += OnEnemyStatusApplied;
-        EventManager.EnemyDefeatedEvent += OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent += OnEnemyDisabled;
         EventManager.StageStateEndedEvent += OnStageStateEnded;
     }
     private void OnDisable()
     {
         EventManager.EnemyStatusEffectAppliedEvent -= OnEnemyStatusApplied;
-        EventManager.EnemyDefeatedEvent -= OnEnemyDefeated;
+        EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
-    private void OnEnemyDefeated(EnemyEntity e) 
+    private void OnEnemyDisabled(EnemyEntity e, bool killcredit) 
     {
         if (e == User) { OnUserDefeated(); }
     }

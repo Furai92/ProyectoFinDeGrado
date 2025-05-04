@@ -22,7 +22,7 @@ MonoBehaviour:
   <BonusStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_INT_TO_DAMAGE
+  - <DescTextID>k__BackingField: TCH_DT_DMG_PER_STATUS
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 1000
+    <DescValueScaling>k__BackingField: 500
     <DescDetailType>k__BackingField: 1

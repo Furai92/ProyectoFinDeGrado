@@ -30,6 +30,7 @@ public class HudEnemyHealthBarManager : MonoBehaviour
     }
     private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity target) 
     {
+        if (target.CurrentHealth <= 0) { return; }
         if (activeElements.ContainsKey(target.EnemyInstanceID)) { return; }
 
         HudEnemyHealthBarElement hpbar = elementPool.GetCopyFromPool();
@@ -38,6 +39,7 @@ public class HudEnemyHealthBarManager : MonoBehaviour
     }
     private void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement elem, EnemyEntity target)
     {
+        if (target.CurrentHealth <= 0) { return; }
         if (activeElements.ContainsKey(target.EnemyInstanceID)) { return; }
 
         HudEnemyHealthBarElement hpbar = elementPool.GetCopyFromPool();

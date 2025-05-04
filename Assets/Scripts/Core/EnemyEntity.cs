@@ -22,18 +22,18 @@ public class EnemyEntity : MonoBehaviour
     public int RemainingExtraBars { get; private set; }
 
     private float maxHealth;
-    private float currentHealth;
+    public float CurrentHealth { get; private set; }
     private float[] statusBuildups;
     private float[] statusBuildupResistancesDivider;
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
     
-    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.3f;
-    private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.15f;
+    private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.8f;
+    private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float SHOCK_STATUS_BONUS_CRIT_CHANCE = 50f;
-    private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.1f;
-    private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.13f;
+    private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.4f;
+    private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float VOID_STATUS_RADIUS_BASE = 5f;
     private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
     private const float VOID_STATUS_PULL_BASE = 6f;
@@ -98,7 +98,7 @@ public class EnemyEntity : MonoBehaviour
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
         currentKnockbackForce = Vector3.zero;
-        currentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemyHealthMult);
+        CurrentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemyHealthMult);
         RemainingExtraBars = ExtraBars;
         statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
         statusDurations = new float[BUILDUP_ARRAY_LENGHT];
@@ -108,7 +108,7 @@ public class EnemyEntity : MonoBehaviour
     }
     private void OnDisable()
     {
-        EventManager.OnEnemyDisabled(this);
+        EventManager.OnEnemyDisabled(this, CurrentHealth <= 0);
         StageManagerBase.UnregisterEnemy(this);
     }
     private void FixedUpdate()
@@ -219,7 +219,7 @@ public class EnemyEntity : MonoBehaviour
     }
     public float GetHealthPercent() 
     {
-        return currentHealth / maxHealth;
+        return CurrentHealth / maxHealth;
     }
     public void Knockback(float magnitude, float direction)
     {
@@ -243,28 +243,30 @@ public class EnemyEntity : MonoBehaviour
     }
     public void AddStatus(GameEnums.DamageElement e) 
     {
+        if (CurrentHealth <= 0) { return; }
+
         statusDurations[(int)e] += STATUS_DURATION_STANDARD;
         EventManager.OnEnemyStatusApplied(e, this);
     }
     public void DealStatusDamage(float magnitude, GameEnums.DamageElement element) 
     {
-        currentHealth -= magnitude;
+        CurrentHealth -= magnitude;
         // Use extra health bars
-        while (RemainingExtraBars > 0 && currentHealth <= 0)
+        while (RemainingExtraBars > 0 && CurrentHealth <= 0)
         {
             RemainingExtraBars--;
-            currentHealth += maxHealth;
+            CurrentHealth += maxHealth;
         }
         EventManager.OnEnemyStatusDamageTaken(magnitude, element, this);
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
-            EventManager.OnEnemyDefeated(this);
             gameObject.SetActive(false);
         }
     }
     public void AddStatusBuildup(float magnitude, GameEnums.DamageElement element) 
     {
         if (element == GameEnums.DamageElement.NonElemental) { return; }
+        if (CurrentHealth <= 0) { return; }
 
         int statusIndex = (int)element;
         float buildupStrengtht = (magnitude / BaseHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
@@ -286,6 +288,8 @@ public class EnemyEntity : MonoBehaviour
     }
     public void DealDirectDamage(float magnitude, float critChance, float critDamage, float buildupMultiplier, GameEnums.DamageElement element, GameEnums.DamageType dtype) 
     {
+        if (CurrentHealth <= 0) { return; }
+
         int critLevel = 0;
         if (dtype != GameEnums.DamageType.Tech) 
         {
@@ -301,18 +305,17 @@ public class EnemyEntity : MonoBehaviour
         
 
         // Reduce health
-        currentHealth -= magnitude;
+        CurrentHealth -= magnitude;
         // Use extra health bars
-        while (RemainingExtraBars > 0 && currentHealth <= 0)
+        while (RemainingExtraBars > 0 && CurrentHealth <= 0)
         {
             RemainingExtraBars--;
-            currentHealth += maxHealth;
+            CurrentHealth += maxHealth;
         }
         EventManager.OnEnemyDirectDamageTaken(magnitude, critLevel, element, dtype, this);
 
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
-            EventManager.OnEnemyDefeated(this);
             gameObject.SetActive(false);
         }
         else 
