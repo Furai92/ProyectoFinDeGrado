@@ -18,9 +18,17 @@ MonoBehaviour:
   <MaxLevel>k__BackingField: -1
   <Rarity>k__BackingField: 4
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
-  <Script>k__BackingField: TechBehaviourFireMasteryCore
+  <Script>k__BackingField: TechBehaviourFireMasterCore
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 14
     <Second>k__BackingField: 100
   <BonusFlags>k__BackingField: 
-  <DescriptionDetails>k__BackingField: []
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1

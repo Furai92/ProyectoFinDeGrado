@@ -29,7 +29,8 @@ MonoBehaviour:
   <BuildupRate>k__BackingField: 1
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
-  <HeatGeneration>k__BackingField: 0.1
+  <HeatGeneration>k__BackingField: 10
+  <RandomSpread>k__BackingField: 0
   <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 1

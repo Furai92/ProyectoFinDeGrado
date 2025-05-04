@@ -35,7 +35,7 @@ public class PlayerEntity : NetworkBehaviour
     private float heatDecayMelee;
     private float heatDecayRanged;
 
-    private const float HEAT_DECAY_GROWTH = 0.05f;
+    private const float HEAT_DECAY_GROWTH = 5f;
 
     // Stats and equipment =================================================================================
 
@@ -114,6 +114,7 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(PlayerStatGroup.Stat.DashRechargeRate, 1);
         stats.ChangeStat(PlayerStatGroup.Stat.Firerate, 1);
         stats.ChangeStat(PlayerStatGroup.Stat.CritChance, 15);
+        stats.ChangeStat(PlayerStatGroup.Stat.HeatCap, 100);
 
         CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
@@ -196,7 +197,7 @@ public class PlayerEntity : NetworkBehaviour
             heatDecayRanged = 0;
             rangedAttackReady = 0;
             StatusHeatRanged += rangedWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-            if (StatusHeatRanged > 1) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
+            if (StatusHeatRanged > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
             Attack(WeaponSO.WeaponSlot.Ranged);
         }
         if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
@@ -204,7 +205,7 @@ public class PlayerEntity : NetworkBehaviour
             heatDecayMelee = 0;
             meleeAttackReady = 0;
             StatusHeatMelee += meleeWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-            if (StatusHeatMelee > 1) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
+            if (StatusHeatMelee > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
             Attack(WeaponSO.WeaponSlot.Melee);
         }
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 

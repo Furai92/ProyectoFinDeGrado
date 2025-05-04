@@ -100,8 +100,8 @@ MonoBehaviour:
   - <ID>k__BackingField: TRAIT_NAME_FIRE_MASTER
     <Data>k__BackingField: Fire Master
   - <ID>k__BackingField: TRAIT_DESC_FIRE_MASTER
-    <Data>k__BackingField: Your weapons can reach 100 more heat points before overheating.
-      Each heat point over 100 increases your weapon damage by 1%.
+    <Data>k__BackingField: Your weapons can reach more heat points before overheating.
+      Weapon attacks deal additional fire damage per each point of heat over 100.
   - <ID>k__BackingField: TRAIT_NAME_FROST_MASTER
     <Data>k__BackingField: Frost Master
   - <ID>k__BackingField: TRAIT_DESC_FROST_MASTER
@@ -311,3 +311,7 @@ MonoBehaviour:
     <Data>k__BackingField: 'Damage: {0}'
   - <ID>k__BackingField: TCH_DT_END_OF_WAVE_STACKS
     <Data>k__BackingField: Clears stacks after each wave.
+  - <ID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
+    <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
+  - <ID>k__BackingField: TCH_DT_HEATCAP
+    <Data>k__BackingField: 'Heat cap increase: {0}'
