@@ -15,7 +15,7 @@ MonoBehaviour:
   <ID>k__BackingField: ENDLESS_FLAMES
   <NameID>k__BackingField: TCH_N_ENDLESS_FLAMES
   <DescID>k__BackingField: TCH_D_ENDLESS_FLAMES
-  <MaxLevel>k__BackingField: 3
+  <MaxLevel>k__BackingField: 2
   <Rarity>k__BackingField: 2
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
   <Script>k__BackingField: TechBehaviourEndlessFlames

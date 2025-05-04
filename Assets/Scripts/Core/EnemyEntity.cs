@@ -241,6 +241,7 @@ public class EnemyEntity : MonoBehaviour
         }
         return count;
     }
+    public float GetStatusDuration(GameEnums.DamageElement e) { return statusDurations[(int)e]; }
     public void AddStatus(GameEnums.DamageElement e) 
     {
         if (CurrentHealth <= 0) { return; }

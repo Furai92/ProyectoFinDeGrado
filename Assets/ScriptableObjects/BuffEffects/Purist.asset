@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1e9b86c56acc4499a1efe87bfe5c24, type: 3}
+  m_Name: Purist
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: PURIST
+  <MaxStacks>k__BackingField: 999
+  <Duration>k__BackingField: 99
+  <Icon>k__BackingField: {fileID: 21300000, guid: 5da51ee32ff72914aa6ab37b65e9e6e1, type: 3}
+  <Effects>k__BackingField:
+  - <First>k__BackingField: 3
+    <Second>k__BackingField: 1

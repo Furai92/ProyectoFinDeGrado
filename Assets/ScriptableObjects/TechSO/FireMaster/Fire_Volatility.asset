@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Frost_EndlessWinter
+  m_Name: Fire_Volatility
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: ENDLESS_WINTER
-  <NameID>k__BackingField: TCH_N_ENDLESS_WINTER
-  <DescID>k__BackingField: TCH_D_ENDLESS_WINTER
-  <MaxLevel>k__BackingField: 2
-  <Rarity>k__BackingField: 2
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
-  <Script>k__BackingField: TechBehaviourEndlessWinter
+  <ID>k__BackingField: VOLATILITY
+  <NameID>k__BackingField: TCH_N_VOLATILITY
+  <DescID>k__BackingField: TCH_D_VOLATILITY
+  <MaxLevel>k__BackingField: -1
+  <Rarity>k__BackingField: 0
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
+  <Script>k__BackingField: TechBehaviourVolatility
   <BonusStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_CHANCE
+  - <DescTextID>k__BackingField: TCH_DT_DMG
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 300
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_RANGE
-    <DescValueBase>k__BackingField: 20
+  - <DescTextID>k__BackingField: TCH_DT_RADIUS
+    <DescValueBase>k__BackingField: 8
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

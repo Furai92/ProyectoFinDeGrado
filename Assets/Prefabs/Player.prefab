@@ -501,19 +501,7 @@ MonoBehaviour:
   <StatusOverheatMelee>k__BackingField: 0
   debugRangedWeaponSO: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
-  debugTechSO:
-  - {fileID: 11400000, guid: 54671cff97261794fb682fdf7ddcd811, type: 2}
-  - {fileID: 11400000, guid: 54671cff97261794fb682fdf7ddcd811, type: 2}
-  - {fileID: 11400000, guid: 54671cff97261794fb682fdf7ddcd811, type: 2}
-  - {fileID: 11400000, guid: d0a5d22391065624389c7520a4d2e9b0, type: 2}
-  - {fileID: 11400000, guid: d0a5d22391065624389c7520a4d2e9b0, type: 2}
-  - {fileID: 11400000, guid: d0a5d22391065624389c7520a4d2e9b0, type: 2}
-  - {fileID: 11400000, guid: 8e6914816921a7f4a8c18cb640070651, type: 2}
-  - {fileID: 11400000, guid: 8e6914816921a7f4a8c18cb640070651, type: 2}
-  - {fileID: 11400000, guid: 8e6914816921a7f4a8c18cb640070651, type: 2}
-  - {fileID: 11400000, guid: 70f7f8ebf246eca48a8f769469ea0d97, type: 2}
-  - {fileID: 11400000, guid: 70f7f8ebf246eca48a8f769469ea0d97, type: 2}
-  - {fileID: 11400000, guid: 70f7f8ebf246eca48a8f769469ea0d97, type: 2}
+  debugTechSO: []
   m_camTargetPos: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
   m_rotationParent: {fileID: 1892808105939200760}

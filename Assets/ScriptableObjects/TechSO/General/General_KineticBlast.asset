@@ -24,9 +24,9 @@ MonoBehaviour:
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_HP_TO_DAMAGE
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 25
+    <DescValueScaling>k__BackingField: 10
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_RADIUS
-    <DescValueBase>k__BackingField: 10
+    <DescValueBase>k__BackingField: 5
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

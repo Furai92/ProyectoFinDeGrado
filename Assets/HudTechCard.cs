@@ -29,6 +29,7 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         mouseoverScaleParent.transform.localScale = Vector3.one * MOUSEOVER_SCALE;
+        transform.SetAsLastSibling();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -59,41 +60,50 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 detailPanels[i].gameObject.SetActive(true);
                 detailTexts[i].color = cdb.DescDetailTypeToColor(t.DescriptionDetails[i].DescDetailType);
-                switch (mode)
+                if (t.DescriptionDetails[i].DescValueScaling != 0 || t.DescriptionDetails[i].DescValueBase != 0)
                 {
-                    case TechDisplayMode.Collection: 
-                        {
-                            float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                            string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                            detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed); 
-                            break; 
-                        }
-                    case TechDisplayMode.ActiveTech: 
-                        {
-                            float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                            string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                            detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
-                            break; 
-                        }
-                    case TechDisplayMode.Shop: 
-                        {
-                            if (currentTechLevel >= 1 && t.DescriptionDetails[i].DescValueScaling > 0)
+                    switch (mode)
+                    {
+                        case TechDisplayMode.Collection:
                             {
-                                float previousLevel = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                                float newLevel = t.DescriptionDetails[i].DescValueBase + (currentTechLevel+1) * t.DescriptionDetails[i].DescValueScaling;
-                                string deltaShown = string.Format("{0} -> {1}", previousLevel, newLevel);
-                                string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                                detailTexts[i].text = string.Format(stringDisplayed, deltaShown);
-                            }
-                            else 
-                            {
-                                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + (currentTechLevel+1) * t.DescriptionDetails[i].DescValueScaling;
+                                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
                                 string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
                                 detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
+                                break;
                             }
-                            break;
-                        }
+                        case TechDisplayMode.ActiveTech:
+                            {
+                                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
+                                string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                                detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
+                                break;
+                            }
+                        case TechDisplayMode.Shop:
+                            {
+                                if (currentTechLevel >= 1 && t.DescriptionDetails[i].DescValueScaling > 0)
+                                {
+                                    float previousLevel = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
+                                    float newLevel = t.DescriptionDetails[i].DescValueBase + (currentTechLevel + 1) * t.DescriptionDetails[i].DescValueScaling;
+                                    string deltaShown = string.Format("{0} -> {1}", previousLevel, newLevel);
+                                    string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                                    detailTexts[i].text = string.Format(stringDisplayed, deltaShown);
+                                }
+                                else
+                                {
+                                    float valueDisplayed = t.DescriptionDetails[i].DescValueBase + (currentTechLevel + 1) * t.DescriptionDetails[i].DescValueScaling;
+                                    string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                                    detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
+                                }
+                                break;
+                            }
+                    }
                 }
+                else 
+                {
+                    detailTexts[i].text = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                }
+
+                
             }
             else 
             {

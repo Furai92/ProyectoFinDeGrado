@@ -10,23 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Thunder_EndlessStorm
+  m_Name: Thunder_ThunderShock
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: ENDLESS_STORM
-  <NameID>k__BackingField: TCH_N_ENDLESS_STORM
-  <DescID>k__BackingField: TCH_D_ENDLESS_STORM
-  <MaxLevel>k__BackingField: 2
-  <Rarity>k__BackingField: 2
+  <ID>k__BackingField: THUNDER_SHOCK
+  <NameID>k__BackingField: TCH_N_THUNDER_SHOCK
+  <DescID>k__BackingField: TCH_D_THUNDER_SHOCK
+  <MaxLevel>k__BackingField: -1
+  <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
-  <Script>k__BackingField: TechBehaviourEndlessStorm
+  <Script>k__BackingField: TechBehaviourThunderShock
   <BonusStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_CHANCE
+  - <DescTextID>k__BackingField: TCH_DT_DMG
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_RANGE
-    <DescValueBase>k__BackingField: 20
-    <DescValueScaling>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 200
     <DescDetailType>k__BackingField: 1

@@ -4,7 +4,7 @@ public class TechBehaviourChaoticEnergy : TechBase
 {
     private const float CHANCE_TO_TRIGGER = 25f;
     private const float DMG_TO_EXPLOSION_RATIO = 0.5f;
-    private const float EXPLOSION_RADIUS = 8f;
+    private const float EXPLOSION_RADIUS = 5f;
 
     public override void OnTechAdded()
     {

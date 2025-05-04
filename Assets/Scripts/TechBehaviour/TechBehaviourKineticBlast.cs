@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class TechBehaviourKineticBlast : TechBase
 {
-    private const float HP_TO_DAMAGE_RATIO = 0.25f;
-    private const float RADIUS = 10f;
+    private const float HP_TO_DAMAGE_RATIO = 0.1f;
+    private const float RADIUS = 5f;
 
     public override void OnTechAdded()
     {

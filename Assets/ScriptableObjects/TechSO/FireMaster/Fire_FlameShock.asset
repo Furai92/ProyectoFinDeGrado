@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Fire_FireMasteryCoreTech
+  m_Name: Fire_FlameShock
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: FIRE_MASTERY_CORE
-  <NameID>k__BackingField: TRAIT_NAME_FIRE_MASTER
-  <DescID>k__BackingField: TRAIT_DESC_FIRE_MASTER
+  <ID>k__BackingField: FLAME_SHOCK
+  <NameID>k__BackingField: TCH_N_FLAME_SHOCK
+  <DescID>k__BackingField: TCH_D_FLAME_SHOCK
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 4
+  <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
-  <Script>k__BackingField: TechBehaviourFireMasteryCore
-  <BonusStats>k__BackingField:
-  - <First>k__BackingField: 14
-    <Second>k__BackingField: 100
+  <Script>k__BackingField: TechBehaviourFlameShock
+  <BonusStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
-  <DescriptionDetails>k__BackingField: []
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_DMG
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 200
+    <DescDetailType>k__BackingField: 1

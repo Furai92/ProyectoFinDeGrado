@@ -37,11 +37,6 @@ MonoBehaviour:
     <Data>k__BackingField: Thunder
   - <ID>k__BackingField: ELEMENT_NAME_VOID
     <Data>k__BackingField: Void
-  - <ID>k__BackingField: TCH_N_TORMETOR
-    <Data>k__BackingField: Tormentor
-  - <ID>k__BackingField: TCH_D_TORMETOR
-    <Data>k__BackingField: Your intellect is increased, but your critical chance
-      is reduced.
   - <ID>k__BackingField: ELEMENT_DESC_NONELEMENTAL
     <Data>k__BackingField: Non elemental attacks have no special benefits
   - <ID>k__BackingField: ELEMENT_DESC_FIRE
@@ -197,7 +192,7 @@ MonoBehaviour:
     <Data>k__BackingField: Battle Trance
   - <ID>k__BackingField: TCH_D_BATTLE_TRANCE
     <Data>k__BackingField: Start waves with reduced might and dexterity, but gain
-      might and dexterity with enemy defeats. Stacks are reset after each wave.
+      might and dexterity with enemy defeats.
   - <ID>k__BackingField: TCH_N_INFUSION
     <Data>k__BackingField: Infusion
   - <ID>k__BackingField: TCH_D_INFUSION
@@ -226,6 +221,36 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_ENDLESS_VOID
     <Data>k__BackingField: After applying a status effect to an enemy, there's a
       chance to apply collapsing to a random nearby enemy.
+  - <ID>k__BackingField: TCH_N_FLAME_SHOCK
+    <Data>k__BackingField: Flame Shock
+  - <ID>k__BackingField: TCH_D_FLAME_SHOCK
+    <Data>k__BackingField: Applying burning to an enemy deals instant non elemental
+      damage.
+  - <ID>k__BackingField: TCH_N_FROST_SHOCK
+    <Data>k__BackingField: Frost Shock
+  - <ID>k__BackingField: TCH_D_FROST_SHOCK
+    <Data>k__BackingField: Applying frozen to an enemy deals instant non elemental
+      damage.
+  - <ID>k__BackingField: TCH_N_THUNDER_SHOCK
+    <Data>k__BackingField: Thunder Shock
+  - <ID>k__BackingField: TCH_D_THUNDER_SHOCK
+    <Data>k__BackingField: Applying shocked to an enemy deals instant non elemental
+      damage.
+  - <ID>k__BackingField: TCH_N_VOID_SHOCK
+    <Data>k__BackingField: Void Shock
+  - <ID>k__BackingField: TCH_D_VOID_SHOCK
+    <Data>k__BackingField: Applying collapsing to an enemy deals instant non elemental
+      damage.
+  - <ID>k__BackingField: TCH_N_PURIST
+    <Data>k__BackingField: Purist
+  - <ID>k__BackingField: TCH_D_PURIST
+    <Data>k__BackingField: Applying a status effect increases your intellect. Applying
+      a different status clears all stacks.
+  - <ID>k__BackingField: TCH_N_VOLATILITY
+    <Data>k__BackingField: Volatility
+  - <ID>k__BackingField: TCH_D_VOLATILITY
+    <Data>k__BackingField: Defeating a burning enemy releases an explosion dealing
+      fire damage.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -262,8 +287,6 @@ MonoBehaviour:
     <Data>k__BackingField: 'Critical damage: {0}%'
   - <ID>k__BackingField: TCH_DT_HP_TO_DAMAGE
     <Data>k__BackingField: 'Health to damage: {0}%'
-  - <ID>k__BackingField: TCH_DT_RADIUS
-    <Data>k__BackingField: 'Radius: {0}m'
   - <ID>k__BackingField: TCH_DT_INT_TO_DAMAGE
     <Data>k__BackingField: 'Intellect to damage: {0}%'
   - <ID>k__BackingField: TCH_DT_DASH_RECHARGE
@@ -280,3 +303,11 @@ MonoBehaviour:
     <Data>k__BackingField: 'Healing: {0}'
   - <ID>k__BackingField: TCH_DT_RANGE
     <Data>k__BackingField: 'Range: {0}m'
+  - <ID>k__BackingField: TCH_DT_DMG_PER_STATUS
+    <Data>k__BackingField: 'Damage per status: {0}'
+  - <ID>k__BackingField: TCH_DT_RADIUS
+    <Data>k__BackingField: 'Radius: {0}m'
+  - <ID>k__BackingField: TCH_DT_DMG
+    <Data>k__BackingField: 'Damage: {0}'
+  - <ID>k__BackingField: TCH_DT_END_OF_WAVE_STACKS
+    <Data>k__BackingField: Clears stacks after each wave.
