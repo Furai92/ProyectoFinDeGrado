@@ -3,11 +3,14 @@ using UnityEngine;
 public class Chest : Interactable
 {
     private InteractableInfo info;
+    private int chestID;
+    private const float SPAWN_HEIGHT = 0.5f;
 
-    public void SetUp(Vector3 pos) 
+    public void SetUp(Vector3 pos, int id) 
     {
         gameObject.SetActive(true);
-        transform.position = pos;
+        chestID = id;
+        transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
     }
     private void OnEnable()
     {
@@ -25,6 +28,7 @@ public class Chest : Interactable
     protected override void OnDisable()
     {
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
+        EventManager.OnChestDisabled(chestID);
         base.OnDisable();
     }
 

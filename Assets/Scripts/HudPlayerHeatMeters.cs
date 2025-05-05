@@ -8,12 +8,16 @@ public class HudPlayerHeatMeters : MonoBehaviour
 
     [Header("Ranged Weapon")]
     [SerializeField] private Image heatGaugeRanged;
+    [SerializeField] private Image backgroundOverclockRanged;
+    [SerializeField] private Image backgroundSubzeroRanged;
     [SerializeField] private TextMeshProUGUI heatPercentRanged;
     [SerializeField] private TextMeshProUGUI heatWarningRanged;
     [SerializeField] private TextMeshProUGUI overheatRanged;
 
     [Header("Melee Weapon")]
     [SerializeField] private Image heatGaugeMelee;
+    [SerializeField] private Image backgroundOverclockMelee;
+    [SerializeField] private Image backgroundSubzeroMelee;
     [SerializeField] private TextMeshProUGUI heatPercentMelee;
     [SerializeField] private TextMeshProUGUI heatWarningMelee;
     [SerializeField] private TextMeshProUGUI overheatMelee;
@@ -21,11 +25,18 @@ public class HudPlayerHeatMeters : MonoBehaviour
     private void OnEnable()
     {
         EventManager.StageStateStartedEvent += UpdateVisibility;
+        EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
         UpdateVisibility(StageManagerBase.GetCurrentStateType());
+        UpdateBackgroundMarkers();
     }
     private void OnDisable()
     {
         EventManager.StageStateStartedEvent -= UpdateVisibility;
+        EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
+    }
+    private void OnPlayerStatsUpdated(PlayerEntity p) 
+    {
+        UpdateBackgroundMarkers();
     }
     private void UpdateVisibility(StageStateBase.GameState s)
     {
@@ -45,7 +56,19 @@ public class HudPlayerHeatMeters : MonoBehaviour
                 }
         }
     }
-
+    private void UpdateBackgroundMarkers() 
+    {
+        if (PlayerEntity.ActiveInstance == null)
+        {
+            backgroundSubzeroMelee.fillAmount = backgroundSubzeroRanged.fillAmount = backgroundOverclockMelee.fillAmount = backgroundOverclockRanged.fillAmount = 0;
+        }
+        else 
+        {
+            float heatRange = PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatFloor) + PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatCap);
+            backgroundOverclockMelee.fillAmount = backgroundOverclockRanged.fillAmount = (PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatCap)-100) / heatRange * 0.25f;
+            backgroundSubzeroMelee.fillAmount = backgroundSubzeroRanged.fillAmount = PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatFloor) / heatRange * 0.25f;
+        }
+    }
     private void Update()
     {
         if (!activeParent.gameObject.activeInHierarchy) { return; }

@@ -19,7 +19,11 @@ public class HudShop : MonoBehaviour, IGameMenu
     private const float TECH_CHANCE_RARE = 25f;
     private const float TECH_CHANCE_EXOTIC = 5f;
     private const float TECH_CHANCE_PROTOTYPE = 1f;
-    private const float REFRESH_COST_BASE = 5f;
+    private const float TECH_PRICE_COMMON = 5f;
+    private const float TECH_PRICE_RARE = 15f;
+    private const float TECH_PRICE_EXOTIC = 30f;
+    private const float TECH_PRICE_PROTOTYPE = 50f;
+    private const float REFRESH_COST_BASE = 2f;
     private const float REFRESH_COST_SCALING = 2f;
 
     private void OnEnable()
@@ -125,7 +129,14 @@ public class HudShop : MonoBehaviour, IGameMenu
     }
     private float GetTechPrice(TechSO t) 
     {
-        return 5; // TEMP
+        switch (t.Rarity) 
+        {
+            case GameEnums.Rarity.Common: { return TECH_PRICE_COMMON; }
+            case GameEnums.Rarity.Rare: { return TECH_PRICE_RARE; }
+            case GameEnums.Rarity.Exotic: { return TECH_PRICE_EXOTIC; }
+            case GameEnums.Rarity.Prototype: { return TECH_PRICE_PROTOTYPE; }
+        }
+        return 0;
     }
     private float GetRefreshPrice() 
     {

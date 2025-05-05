@@ -116,6 +116,10 @@ public abstract class StageManagerBase : MonoBehaviour
             }
         }
     }
+    public void SpawnChest() 
+    {
+
+    }
     private void OnPlayerDefeated() 
     {
         playerDefeated = true;

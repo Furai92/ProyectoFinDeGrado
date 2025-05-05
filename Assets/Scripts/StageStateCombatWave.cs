@@ -91,7 +91,7 @@ public class StageStateCombatWave : StageStateBase
     {
         List<Vector3> allPositions = StageManagerBase.GetChestSpawnPositions();
         Vector3 pos = allPositions[Random.Range(0, allPositions.Count)];
-        ObjectPoolManager.GetChestFromPool().SetUp(pos);
+        ObjectPoolManager.GetChestFromPool().SetUp(pos, 0);
     }
     private void SpawnEnemy(string id)
     {

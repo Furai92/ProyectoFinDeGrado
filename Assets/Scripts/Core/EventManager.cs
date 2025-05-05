@@ -26,6 +26,7 @@ public class EventManager
     public static event Action<StageStateBase.GameState> StageStateStartedEvent;
     public static event Action<StageStateBase.GameState> StageStateEndedEvent;
     public static event Action AllPlayersReadyEvent;
+    public static event Action<int> ChestDisabledEvent;
 
     // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
@@ -135,5 +136,9 @@ public class EventManager
     public static void OnPlayerHealthRestored(float amount) 
     {
         PlayerHealthRestoredEvent?.Invoke(amount);
+    }
+    public static void OnChestDisabled(int id) 
+    {
+        ChestDisabledEvent?.Invoke(id);
     }
 }

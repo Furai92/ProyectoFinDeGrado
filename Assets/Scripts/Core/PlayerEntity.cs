@@ -196,19 +196,11 @@ public class PlayerEntity : NetworkBehaviour
 
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
         {
-            heatDecayRanged = 0;
-            rangedAttackReady = 0;
-            StatusHeatRanged += rangedWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-            if (StatusHeatRanged > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
-            Attack(WeaponSO.WeaponSlot.Ranged);
+            Attack(WeaponSO.WeaponSlot.Ranged, currentDirection, true);
         }
         if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
         {
-            heatDecayMelee = 0;
-            meleeAttackReady = 0;
-            StatusHeatMelee += meleeWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-            if (StatusHeatMelee > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
-            Attack(WeaponSO.WeaponSlot.Melee);
+            Attack(WeaponSO.WeaponSlot.Melee, currentDirection, true);
         }
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 
         {
@@ -216,9 +208,26 @@ public class PlayerEntity : NetworkBehaviour
         }
         if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
     }
-    private void Attack(WeaponSO.WeaponSlot s)
+    private void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
     {
         if (defeated) { return; }
+        if (generateHeat) 
+        {
+            if (s == WeaponSO.WeaponSlot.Melee)
+            {
+                heatDecayMelee = 0;
+                meleeAttackReady = 0;
+                StatusHeatMelee += meleeWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+                if (StatusHeatMelee > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
+            }
+            else 
+            {
+                heatDecayRanged = 0;
+                rangedAttackReady = 0;
+                StatusHeatRanged += rangedWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+                if (StatusHeatRanged > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
+            }
+        }
 
         WeaponData.WeaponStats wpn = s == WeaponSO.WeaponSlot.Ranged ? rangedWeaponStats : meleeWeaponStats;
         float attackMagnitudeMultiplier = s == WeaponSO.WeaponSlot.Ranged ?
@@ -252,7 +261,7 @@ public class PlayerEntity : NetworkBehaviour
                     DamageType = s == WeaponSO.WeaponSlot.Melee ? GameEnums.DamageType.Melee : GameEnums.DamageType.Ranged
                     
                 };
-                ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, currentDirection + currentMultishootAngle + shootRandomSpread, sd, null);
+                ObjectPoolManager.GetPlayerAttackFromPool(wpn.ProjectileComponentID).SetUp(transform.position, attackDir + currentMultishootAngle + shootRandomSpread, sd, null);
                 currentMultishootAngle += wpn.Multishoot < 2 ? 0 : wpn.Arc / (wpn.Multishoot - 1);
             }
         }
@@ -277,7 +286,7 @@ public class PlayerEntity : NetworkBehaviour
                 ImpactEffectID = wpn.ImpactEffectID,
                 DamageType = s == WeaponSO.WeaponSlot.Melee ? GameEnums.DamageType.Melee : GameEnums.DamageType.Ranged
             };
-            ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, currentDirection, sd, null);
+            ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, attackDir, sd, null);
         }
     }
     private void FixedUpdate()
