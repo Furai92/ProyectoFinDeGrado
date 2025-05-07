@@ -19,6 +19,9 @@ public class EventManager
     public static event Action<float> PlayerDamageAbsorbedEvent;
     public static event Action<Vector3> PlayerHealthOrbGatheredEvent;
     public static event Action<float> PlayerHealthRestoredEvent;
+    public static event Action<Vector3, float> PlayerDashStartedEvent;
+    public static event Action<Vector3, float> PlayerDashEndedEvent;
+    public static event Action<Vector3> PlayerWallSlamEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -140,5 +143,17 @@ public class EventManager
     public static void OnChestDisabled(int id) 
     {
         ChestDisabledEvent?.Invoke(id);
+    }
+    public static void OnPlayerDashStarted(Vector3 pos, float dir)
+    {
+        PlayerDashStartedEvent?.Invoke(pos, dir);
+    }
+    public static void OnPlayerDashEnded(Vector3 pos, float dir)
+    {
+        PlayerDashEndedEvent?.Invoke(pos, dir);
+    }
+    public static void OnPlayerWallSlam(Vector3 pos) 
+    {
+        PlayerWallSlamEvent?.Invoke(pos);
     }
 }

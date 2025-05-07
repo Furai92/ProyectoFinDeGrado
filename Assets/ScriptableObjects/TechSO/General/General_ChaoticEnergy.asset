@@ -20,8 +20,9 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
   <Script>k__BackingField: TechBehaviourChaoticEnergy
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 7
+  - <First>k__BackingField: 6
     <Second>k__BackingField: 5
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_CRITC

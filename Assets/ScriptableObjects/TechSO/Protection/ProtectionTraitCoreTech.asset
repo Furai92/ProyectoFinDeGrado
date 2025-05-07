@@ -20,6 +20,8 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: d4f80f5ccf5e31e46b1f23927fb2da56, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 16
+  - <First>k__BackingField: 15
     <Second>k__BackingField: 2
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
+  <DescriptionDetails>k__BackingField: []

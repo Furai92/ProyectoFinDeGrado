@@ -26,8 +26,9 @@ MonoBehaviour:
     <Second>k__BackingField: 5
   - <First>k__BackingField: 18
     <Second>k__BackingField: 1
-  - <First>k__BackingField: 19
+  - <First>k__BackingField: 17
     <Second>k__BackingField: 0.05
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_MIGHT

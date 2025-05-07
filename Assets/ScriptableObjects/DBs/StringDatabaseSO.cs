@@ -5,13 +5,18 @@ using System.Collections.Generic;
 public class StringDatabaseSO : ScriptableObject
 {
     [field: SerializeField] public List<SerializedIdentifiedPair<string>> StringElements { get; private set; }
+    [field: SerializeField] public List<SerializedIdentifiedPair<string>> Keywords { get; private set; } 
 
     private Dictionary<string, string> m_stringDictionary;
+    private Dictionary<string, string> m_keywordDictionary;
 
-    private void GenerateStringDictionary()
+    private void GenerateDataDictionary()
     {
         m_stringDictionary = new Dictionary<string, string>();
         for (int i = 0; i < StringElements.Count; i++) { m_stringDictionary.Add(StringElements[i].ID, StringElements[i].Data); }
+
+        m_keywordDictionary = new Dictionary<string, string>();
+        for (int i = 0; i < Keywords.Count; i++) { m_stringDictionary.Add(Keywords[i].ID, Keywords[i].Data); }
     }
     public string ElementToStatusName(GameEnums.DamageElement e)
     {
@@ -64,9 +69,14 @@ public class StringDatabaseSO : ScriptableObject
             default: { return ""; }
         }
     }
+    public bool IsKeyword(string s) 
+    {
+        if (m_keywordDictionary == null) { GenerateDataDictionary(); }
+        return m_keywordDictionary.ContainsKey(s);
+    }
     public string GetString(string id)
     {
-        if (m_stringDictionary == null) { GenerateStringDictionary(); }
+        if (m_stringDictionary == null) { GenerateDataDictionary(); }
         if (m_stringDictionary.ContainsKey(id)) { return m_stringDictionary[id]; }
 
         return string.Format("[{0}]", id);

@@ -24,8 +24,9 @@ MonoBehaviour:
     <Second>k__BackingField: 20
   - <First>k__BackingField: 4
     <Second>k__BackingField: 5
-  - <First>k__BackingField: 8
+  - <First>k__BackingField: 7
     <Second>k__BackingField: -0.05
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_HP

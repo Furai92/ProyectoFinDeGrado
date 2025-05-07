@@ -89,7 +89,7 @@ public class PlayerEntity : NetworkBehaviour
     private const float LOCK_Y = 1.0f;
     private const float BASE_MOVEMENT_SPEED = 10f;
     private const float DASH_MOVEMENT_SPEED = 35f;
-    private const float DASH_DURATION = 0.5f;
+    public const float DASH_DURATION = 0.5f;
     private const float DASH_SLAM_RAYCAST_LENGHT = 2.5f;
     private const float DASH_SLAM_WALL_SEPARATION = 0.5f;
     private const float ROTATION_SPEED = 60f;
@@ -208,7 +208,7 @@ public class PlayerEntity : NetworkBehaviour
         }
         if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
     }
-    private void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
+    public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
     {
         if (defeated) { return; }
         if (generateHeat) 
@@ -300,6 +300,7 @@ public class PlayerEntity : NetworkBehaviour
             if (rh.collider != null) 
             {
                 dashDurationRemaining = 0;
+                EventManager.OnPlayerWallSlam(transform.position);
                 ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.NonElemental);
             }
         }
@@ -327,7 +328,8 @@ public class PlayerEntity : NetworkBehaviour
 
         dashMovementVector = movementInputV * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
-        dashDurationRemaining = DASH_DURATION * 1 + stats.GetStat(PlayerStatGroup.Stat.DashBonusDuration);
+        dashDurationRemaining = DASH_DURATION;
+        EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));
     }
     #region Public Methods
     public void EquipWeapon(WeaponData w)
@@ -409,7 +411,11 @@ public class PlayerEntity : NetworkBehaviour
         CurrentHealth = Mathf.Clamp(CurrentHealth + totalHealing, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
         EventManager.OnPlayerHealthRestored(totalHealing);
     }
-
+    public void RestoreDashCharges(float dashes) 
+    {
+        DashRechargePercent += dashes;
+        while (DashRechargePercent > 1 && CurrentDashes < stats.GetStat(PlayerStatGroup.Stat.DashCount)) { DashRechargePercent -= 1; CurrentDashes++; }
+    }
     public void AddMoney(float amount)
     {
         Money += amount;

@@ -20,8 +20,9 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
   <Script>k__BackingField: TechBehaviourFireMasterCore
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 14
+  - <First>k__BackingField: 13
     <Second>k__BackingField: 100
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_FIRE_MASTER_CORE

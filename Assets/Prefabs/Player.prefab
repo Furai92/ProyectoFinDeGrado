@@ -503,13 +503,9 @@ MonoBehaviour:
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
   debugTechSO:
   - {fileID: 11400000, guid: 70db8e910b0f02a41b98561e87b5b692, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
-  - {fileID: 11400000, guid: cf58d0ad5542b6249bb9bc73238784fb, type: 2}
+  - {fileID: 11400000, guid: 4d1d4ada2ec0a774aa47f61e28f7ba7f, type: 2}
+  - {fileID: 11400000, guid: e2f65190c8a8df346885c3f8e09ad9a7, type: 2}
+  - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   m_camTargetPos: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
   m_rotationParent: {fileID: 1892808105939200760}

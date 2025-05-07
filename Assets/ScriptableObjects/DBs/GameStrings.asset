@@ -266,6 +266,26 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_INCINERATION
     <Data>k__BackingField: Applying burning to an already burning enemy applies incineration,
       a special status effect that deals massive damage over time
+  - <ID>k__BackingField: TCH_N_BULLETSTORM
+    <Data>k__BackingField: Bulletstorm
+  - <ID>k__BackingField: TCH_D_BULLETSTORM
+    <Data>k__BackingField: "While dashing, fire your ranged weapon in a 360\xBA arc.
+      Attacks triggered this way don't generate heat."
+  - <ID>k__BackingField: TCH_N_SWIFT_STRIKE
+    <Data>k__BackingField: Swift Strike
+  - <ID>k__BackingField: TCH_D_SWIFT_STRIKE
+    <Data>k__BackingField: Dashing trough enemies deals damage. Element is based
+      on your melee weapon.
+  - <ID>k__BackingField: TCH_N_SLAM
+    <Data>k__BackingField: Slam
+  - <ID>k__BackingField: TCH_D_SLAM
+    <Data>k__BackingField: Dashing into a wall releases an explosion. Element is
+      based on your melee weapon
+  - <ID>k__BackingField: TCH_N_EVASIVE_STANCE
+    <Data>k__BackingField: Evasive Stance
+  - <ID>k__BackingField: TCH_D_EVASIVE_STANCE
+    <Data>k__BackingField: Melee hits recover dash charges, but your endurance is
+      reduced.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -334,3 +354,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Chest spawn rate: {0}%'
   - <ID>k__BackingField: TCH_DT_WEAPON_DROP_RATE
     <Data>k__BackingField: 'Weapon drop rate: {0}%'
+  - <ID>k__BackingField: TCH_DT_ATTACKS
+    <Data>k__BackingField: 'Attacks: {0}'
+  - <ID>k__BackingField: TCH_DT_DASH_RECOVERY
+    <Data>k__BackingField: 'Dash charge recovered: {0}%'
+  <Keywords>k__BackingField: []

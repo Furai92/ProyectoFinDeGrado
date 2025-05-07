@@ -9,7 +9,6 @@ public class PlayerStatGroup
         Intellect, 
         Endurance,  
         DashCount,
-        DashBonusDuration,
         CritChance, 
         Speed, 
         Firerate, 

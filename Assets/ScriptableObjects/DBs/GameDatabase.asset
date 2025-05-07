@@ -49,6 +49,10 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 7262071496982426308, guid: 54ed033d137570d4891cf9d083bf7e75, type: 3}
   - <ID>k__BackingField: STATUS_TRANSFER
     <Data>k__BackingField: {fileID: 6712093531117118718, guid: ac841078d4088714ea2b3704ffba604a, type: 3}
+  - <ID>k__BackingField: BULLETSTORM
+    <Data>k__BackingField: {fileID: 2648169758317230602, guid: f3293d447ef26be46869091dfc61c51b, type: 3}
+  - <ID>k__BackingField: DASH_DAMAGE
+    <Data>k__BackingField: {fileID: 8384385237789958822, guid: e93f656279be5214b9d7cff41b819b09, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
@@ -88,6 +92,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90c8a8436693d7e44aa84858d70b962a, type: 2}
   - {fileID: 11400000, guid: 8e6914816921a7f4a8c18cb640070651, type: 2}
   - {fileID: 11400000, guid: e64fd68b9d950c3469ffa8c623f38b50, type: 2}
+  - {fileID: 11400000, guid: 3dbbc36186849614caabbc26f3245e27, type: 2}
+  - {fileID: 11400000, guid: 4d1d4ada2ec0a774aa47f61e28f7ba7f, type: 2}
+  - {fileID: 11400000, guid: e2f65190c8a8df346885c3f8e09ad9a7, type: 2}
+  - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   <BuffEffects>k__BackingField:
   - {fileID: 11400000, guid: 7a55eb41e75785f48a64a9e0bc1d287d, type: 2}
   - {fileID: 11400000, guid: 71475680083bc1741b5650d1ed06a8a4, type: 2}

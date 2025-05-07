@@ -74,12 +74,16 @@ public class GameTools
         Vector3 posDelta = pos2 - pos1;
         return Mathf.Atan2(posDelta.x, posDelta.z) * Mathf.Rad2Deg;
     }
+    public static float VectorToAngle(Vector3 v) 
+    {
+        if (v.x == 0) { return v.z > 0 ? 90 : 270; } // Prevents NaN
+        if (v.z == 0) { return v.x > 0 ? 0 : 180; }  // Prevents NaN
+        return Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg + 180;
+    }
     /// <summary> Transforms a Vector3 normal into an euler degree. </summary>
     public static float NormalToEuler(Vector3 normal)
     {
-        if (normal.x == 0) { return normal.z > 0 ? 90 : 270; } // Prevents NaN
-        if (normal.z == 0) { return normal.x > 0 ? 0 : 180; }  // Prevents NaN
-        return Mathf.Atan2(normal.z, normal.x) * Mathf.Rad2Deg + 180;
+        return VectorToAngle(normal);
     }
     /// <summary> Transforms an euler angle into a 2D vector. </summary>
     public static Vector3 AngleToVector(float angle)

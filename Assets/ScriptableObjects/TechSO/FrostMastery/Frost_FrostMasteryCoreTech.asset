@@ -20,7 +20,8 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
   <Script>k__BackingField: TechBehaviourFrostMasterCore
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 13
+  - <First>k__BackingField: 12
     <Second>k__BackingField: 100
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField: []
