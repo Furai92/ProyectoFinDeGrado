@@ -474,6 +474,10 @@ public class PlayerEntity : NetworkBehaviour
         {
             stats.ChangeFlag(tg.SO.BonusFlags[i], 1);
         }
+        for (int i = 0; i < tg.SO.BonusStageStats.Count; i++)
+        {
+            StageManagerBase.ChangeStageStat(tg.SO.BonusStageStats[i].First, tg.SO.BonusStageStats[i].Second);
+        }
         EventManager.OnPlayerStatsUpdated(this);
     }
     public void UnequipTech(TechSO t)
@@ -488,6 +492,10 @@ public class PlayerEntity : NetworkBehaviour
             for (int i = 0; i < tg.SO.BonusFlags.Count; i++)
             {
                 stats.ChangeFlag(tg.SO.BonusFlags[i], -tg.Level);
+            }
+            for (int i = 0; i < tg.SO.BonusStageStats.Count; i++)
+            {
+                StageManagerBase.ChangeStageStat(tg.SO.BonusStageStats[i].First, -tg.SO.BonusStageStats[i].Second * tg.Level);
             }
             ActiveTechDictionary[t.ID].Script?.OnTechRemoved();
             ActiveTechDictionary.Remove(t.ID);

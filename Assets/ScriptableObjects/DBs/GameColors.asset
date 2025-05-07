@@ -21,7 +21,7 @@ MonoBehaviour:
     <Data>k__BackingField: {r: 1, g: 0.32621866, b: 0, a: 1}
   - <ID>k__BackingField: ELEM_COLOR_VOID
     <Data>k__BackingField: {r: 0.58433104, g: 0, b: 1, a: 1}
-  - <ID>k__BackingField: ELEM_COLOR_PHYSICAL
+  - <ID>k__BackingField: ELEM_COLOR_NON_ELEMENTAL
     <Data>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
   - <ID>k__BackingField: RARITY_COLOR_COMMON
     <Data>k__BackingField: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
@@ -39,3 +39,16 @@ MonoBehaviour:
     <Data>k__BackingField: {r: 0.8773585, g: 0.23737343, b: 0.21933962, a: 1}
   - <ID>k__BackingField: DETAIL_TYPE_NEUTRAL
     <Data>k__BackingField: {r: 0.6822608, g: 0.754717, b: 0.19579923, a: 1}
+  <GradientPresets>k__BackingField:
+  - <ID>k__BackingField: ELEM_GRAD_NON_ELEMENTAL
+    <Data>k__BackingField: {fileID: 11400000, guid: 4bbb31538b028e94ea3cc03cbfb2e1db, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_FIRE
+    <Data>k__BackingField: {fileID: 11400000, guid: 7fa4080c47cdb4943b5dc8d0bb447014, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_FROST
+    <Data>k__BackingField: {fileID: 11400000, guid: 5af977fe1e5c1d94aa0760468c8c9185, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_THUNDER
+    <Data>k__BackingField: {fileID: 11400000, guid: c7cb82f9a6a8dd549b5c6d6bf3b3ab01, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_VOID
+    <Data>k__BackingField: {fileID: 11400000, guid: df161962a49ca54498ec667aaa64aad1, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_INCINERATION
+    <Data>k__BackingField: {fileID: 11400000, guid: fbb22673df77e33479ec264f01c51c3c, type: 2}

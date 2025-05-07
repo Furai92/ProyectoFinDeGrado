@@ -27,6 +27,8 @@ MonoBehaviour:
     <Data>k__BackingField: Shocked
   - <ID>k__BackingField: STATUS_NAME_VOID
     <Data>k__BackingField: Collapsing
+  - <ID>k__BackingField: STATUS_NAME_INCINERATION
+    <Data>k__BackingField: Incinerated
   - <ID>k__BackingField: ELEMENT_NAME_NONELEMENTAL
     <Data>k__BackingField: Non Elemental
   - <ID>k__BackingField: ELEMENT_NAME_FIRE
@@ -251,6 +253,19 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_VOLATILITY
     <Data>k__BackingField: Defeating a burning enemy releases an explosion dealing
       fire damage.
+  - <ID>k__BackingField: TCH_N_LUCKY_CHARM
+    <Data>k__BackingField: Lucky Charm
+  - <ID>k__BackingField: TCH_D_LUCKY_CHARM
+    <Data>k__BackingField: Increases the amount of chests spawned around the stage.
+  - <ID>k__BackingField: TCH_N_SCAVENGER
+    <Data>k__BackingField: Scavenger
+  - <ID>k__BackingField: TCH_D_SCAVENGER
+    <Data>k__BackingField: Increases the amount of weapons dropped by enemies.
+  - <ID>k__BackingField: TCH_N_INCINERATION
+    <Data>k__BackingField: Incineration
+  - <ID>k__BackingField: TCH_D_INCINERATION
+    <Data>k__BackingField: Applying burning to an already burning enemy applies incineration,
+      a special status effect that deals massive damage over time
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -315,3 +330,7 @@ MonoBehaviour:
     <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
   - <ID>k__BackingField: TCH_DT_HEATCAP
     <Data>k__BackingField: 'Heat cap increase: {0}'
+  - <ID>k__BackingField: TCH_DT_CHEST_SPAWN_RATE
+    <Data>k__BackingField: 'Chest spawn rate: {0}%'
+  - <ID>k__BackingField: TCH_DT_WEAPON_DROP_RATE
+    <Data>k__BackingField: 'Weapon drop rate: {0}%'

@@ -8,10 +8,10 @@ public class StageStateCombatWave : StageStateBase
     private StageWaveSetupSO.EnemyWave waveData;
     private float waveDurationMax;
     private float waveDurationRemaining;
-    private float chestSpawnRate;
-    private float chestSpawnPercent;
+    private float nextChestSpawn;
     private float nextSpawnCheck;
 
+    private const float CHEST_SPAWN_COOLDOWN = 10f;
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
     private const int MAX_ENEMIES = 20;
 
@@ -19,6 +19,7 @@ public class StageStateCombatWave : StageStateBase
     {
         waveData = w;
         nextSpawnCheck = Time.time + SPAWN_CHECK_INTERVAL;
+        nextChestSpawn = Time.time + CHEST_SPAWN_COOLDOWN / StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestSpawnRate);
     }
 
     public override bool IsFinished()
@@ -40,13 +41,11 @@ public class StageStateCombatWave : StageStateBase
             WaveSpawnTimerData wstd = new WaveSpawnTimerData();
             wstd.spawnID = waveData.EnemySpawns[i].ID;
             wstd.nextSpawn = waveData.EnemySpawns[i].Cooldown + waveData.EnemySpawns[i].Delay;
-            wstd.spawnCooldown = waveData.EnemySpawns[i].Cooldown / StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemySpawnRate);
+            wstd.spawnCooldown = waveData.EnemySpawns[i].Delay + (waveData.EnemySpawns[i].Cooldown / StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemySpawnRate));
             wstd.spawnCount = 0;
             wstd.maxSpawns = waveData.EnemySpawns[i].MaxSpawns;
             spawnTimers.Add(wstd);
         }
-
-        chestSpawnPercent = 0;
         waveDurationRemaining = waveDurationMax;
     }
 
@@ -76,22 +75,15 @@ public class StageStateCombatWave : StageStateBase
         }
 
         // Spawn chests
-        chestSpawnPercent += Time.deltaTime * chestSpawnRate;
-        if (chestSpawnPercent >= 1)
+        if (Time.time >= nextChestSpawn)
         {
-            SpawnChest();
-            chestSpawnPercent = 0;
+            nextChestSpawn = Time.time + CHEST_SPAWN_COOLDOWN / StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestSpawnRate);
+            StageManagerBase.SpawnChest();
         }
     }
     public override float GetTimerDisplay()
     {
         return waveDurationRemaining;
-    }
-    private void SpawnChest() 
-    {
-        List<Vector3> allPositions = StageManagerBase.GetChestSpawnPositions();
-        Vector3 pos = allPositions[Random.Range(0, allPositions.Count)];
-        ObjectPoolManager.GetChestFromPool().SetUp(pos, 0);
     }
     private void SpawnEnemy(string id)
     {

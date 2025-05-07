@@ -19,14 +19,28 @@ public class HudColoredTextNotification : MonoBehaviour
     private const float ANIMATION_MIN_SCALE = 1.5f;
     private const float ANIMATION_DURATION = 0.33f;
 
-
-    public void SetUp(Camera _cam, string _text, Color _color, float _sizeMult, float _lifetime, bool _useRandomOffset, Vector3 _wPos) 
+    public void SetUp(Camera _cam, string _text, TMP_ColorGradient _gradient, float _sizeMult, float _lifetime, bool _useRandomOffset, Vector3 _wPos)
     {
-        gameObject.SetActive(true);
         animT = 0;
         eventWorldPosition = _wPos;
         notificationText.text = _text;
+        notificationText.enableVertexGradient = true;
+        notificationText.color = Color.white;
+        notificationText.colorGradientPreset = _gradient;
+        gameObject.SetActive(true);
+        cam = _cam;
+        removeTime = Time.time + _lifetime;
+        sizeMult = _sizeMult;
+        randomOffsetVector = _useRandomOffset ? new Vector3(Random.Range(-RND_OFFSET, RND_OFFSET), Random.Range(-RND_OFFSET, RND_OFFSET) + VERTICAL_OFFSET, Random.Range(-RND_OFFSET, RND_OFFSET)) : Vector3.zero;
+    }
+    public void SetUp(Camera _cam, string _text, Color _color, float _sizeMult, float _lifetime, bool _useRandomOffset, Vector3 _wPos) 
+    {
+        animT = 0;
+        eventWorldPosition = _wPos;
+        notificationText.text = _text;
+        notificationText.enableVertexGradient = false;
         notificationText.color = _color;
+        gameObject.SetActive(true);
         cam = _cam;
         removeTime = Time.time + _lifetime;
         sizeMult = _sizeMult;

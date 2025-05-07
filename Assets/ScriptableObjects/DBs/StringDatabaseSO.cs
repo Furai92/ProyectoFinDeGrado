@@ -22,7 +22,9 @@ public class StringDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Frost: { return GetString("STATUS_NAME_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetString("STATUS_NAME_THUNDER"); }
             case GameEnums.DamageElement.Void: { return GetString("STATUS_NAME_VOID"); }
-            default: { return ""; }
+            case GameEnums.DamageElement.Incineration: { return GetString("STATUS_NAME_INCINERATION"); }
+
+        default: { return ""; }
         }
     }
     public string ElementToName(GameEnums.DamageElement e)
@@ -34,6 +36,7 @@ public class StringDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Frost: { return GetString("ELEMENT_NAME_FROST"); }
             case GameEnums.DamageElement.Thunder: { return GetString("ELEMENT_NAME_THUNDER"); }
             case GameEnums.DamageElement.Void: { return GetString("ELEMENT_NAME_VOID"); }
+            case GameEnums.DamageElement.Incineration: { return GetString("ELEMENT_NAME_FUSION"); }
             default: { return ""; }
         }
     }

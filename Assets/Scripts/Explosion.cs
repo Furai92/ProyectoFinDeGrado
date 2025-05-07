@@ -3,28 +3,33 @@ using UnityEngine;
 public class Explosion : PlayerAttackBase
 {
     [SerializeField] private Transform explosionVisualParent;
+    [SerializeField] private ParticleSystem PS0;
+    [SerializeField] private ParticleSystem PS1;
+    [SerializeField] private ColorDatabaseSO cdb;
 
-    private float animT;
-    private const float LIFETIME = 0.35f;
+    private float removeTime;
+    private const float LIFETIME = 0.5f;
+ 
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack) {
         setupData = sd;
         gameObject.SetActive(true);
         transform.position = pos;
         transform.localScale = Vector3.one * sd.SizeMultiplier;
-        animT = 0f;
-        UpdateAnimation();
+        removeTime = Time.time + LIFETIME;
+
+        ParticleSystem.MainModule m0 = PS0.main; m0.startColor = cdb.ElementToColor(sd.Element);
+        ParticleSystem.MainModule m1 = PS1.main; m1.startColor = cdb.ElementToColor(sd.Element);
+
+        PS0.Stop();
+        PS0.Play();
+        PS1.Stop();
+        PS1.Play();
     }
 
     void Update()
     {
-        animT += Time.deltaTime / LIFETIME;
-        UpdateAnimation();
-        if (animT > 1) { gameObject.SetActive(false); }   
-    }
-    private void UpdateAnimation() 
-    {
-        explosionVisualParent.localScale = Vector3.one * animT;
+        if (Time.time > removeTime) { gameObject.SetActive(false); }   
     }
     private void OnCollisionEnter(Collision collision)
     {

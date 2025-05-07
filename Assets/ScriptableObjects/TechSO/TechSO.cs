@@ -13,6 +13,7 @@ public class TechSO : ScriptableObject
 
     [field: SerializeField] public string Script { get; private set; }
     [field: SerializeField] public List<SerializedPair<PlayerStatGroup.Stat, float>> BonusStats { get; private set; }
+    [field: SerializeField] public List<SerializedPair<StageStatGroup.StageStat, float>> BonusStageStats { get; private set; }
     [field: SerializeField] public List<PlayerStatGroup.PlayerFlags> BonusFlags { get; private set; }
 
     [field: SerializeField] public List<TechSODescDetail> DescriptionDetails { get; private set; }

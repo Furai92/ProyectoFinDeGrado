@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Chest : Interactable
 {
-    private InteractableInfo info;
     private int chestID;
+    private InteractableInfo info;
     private const float SPAWN_HEIGHT = 0.5f;
 
     public void SetUp(Vector3 pos, int id) 

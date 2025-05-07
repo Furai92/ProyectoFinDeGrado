@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
+  m_Name: Fire_Incineration
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: INCINERATION
+  <NameID>k__BackingField: TCH_N_INCINERATION
+  <DescID>k__BackingField: TCH_D_INCINERATION
+  <MaxLevel>k__BackingField: 1
+  <Rarity>k__BackingField: 3
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
+  <Script>k__BackingField: TechBehaviourIncineration
+  <BonusStats>k__BackingField: []
+  <BonusStageStats>k__BackingField: []
+  <BonusFlags>k__BackingField: 
+  <DescriptionDetails>k__BackingField: []

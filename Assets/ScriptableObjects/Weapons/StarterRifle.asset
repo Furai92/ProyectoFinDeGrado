@@ -31,7 +31,7 @@ MonoBehaviour:
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 1
   <RandomSpread>k__BackingField: 0
-  <Splash>k__BackingField: 0
+  <Splash>k__BackingField: 10
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 0
   <Timescale>k__BackingField: 30

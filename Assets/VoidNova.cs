@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class VoidNova : MonoBehaviour
 {
-    [SerializeField] private Transform visualParent;
+    [SerializeField] private ParticleSystem PS0;
+    [SerializeField] private ParticleSystem PS1;
 
     private float damageMag;
     private float pullMag;
-    private float animT;
     private EnemyEntity noKnockbackEnemy;
+    private float removeTime;
 
-    private const float MIN_VISUAL_SCALE = 0.1f;
     private const float DURATION = 0.5f;
 
     public void SetUp(float _pullMag, float _damageMag, float sizeMult, Vector3 pos, EnemyEntity _noKnockbackEnemy) 
@@ -19,16 +19,17 @@ public class VoidNova : MonoBehaviour
         pullMag = _pullMag;
         damageMag = _damageMag;
         transform.position = pos;
-        animT = 0;
-        visualParent.transform.localScale = Vector3.one;
+        removeTime = Time.time + DURATION;
+
         gameObject.SetActive(true);
+        PS0.Stop();
+        PS0.Play();
+        PS1.Stop();
+        PS1.Play();
     }
     private void Update()
     {
-        animT += Time.deltaTime / DURATION;
-        visualParent.transform.localScale = Vector3.one * Mathf.Lerp(1, MIN_VISUAL_SCALE, animT);
-
-        if (animT > 1) { gameObject.SetActive(false); }
+        if (Time.time > removeTime) { gameObject.SetActive(false); }
     }
     private void OnCollisionEnter(Collision collision)
     {

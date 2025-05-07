@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StageStatGroup
 {
-    public enum StageStat { EnemyHealthMult, EnemyDamageMult, EnemySpawnRate }
+    public enum StageStat { EnemyHealthMult, EnemyDamageMult, EnemySpawnRate, ChestSpawnRate, ChestDropRate, WeaponDropRate, HealthOrbDropRate, ShopPriceMult }
 
     private float[] stats;
 

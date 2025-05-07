@@ -21,11 +21,9 @@ public class HudStageStatusMenu : MonoBehaviour, IGameMenu
     {
         if (!IsOpen()) { return; }
 
-        StageStatGroup ssg = StageManagerBase.GetStageStats();
-
-        statValues[0].text = string.Format("{0}%", (ssg.GetStat(StageStatGroup.StageStat.EnemyDamageMult) * 100).ToString("F0"));
-        statValues[1].text = string.Format("{0}%", (ssg.GetStat(StageStatGroup.StageStat.EnemyHealthMult) * 100).ToString("F0"));
-        statValues[2].text = string.Format("{0}%", (ssg.GetStat(StageStatGroup.StageStat.EnemySpawnRate) * 100).ToString("F0"));
+        statValues[0].text = string.Format("{0}%", (StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult) * 100).ToString("F0"));
+        statValues[1].text = string.Format("{0}%", (StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult) * 100).ToString("F0"));
+        statValues[2].text = string.Format("{0}%", (StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemySpawnRate) * 100).ToString("F0"));
     }
 
 

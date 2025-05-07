@@ -28,7 +28,7 @@ public class EnemyEntity : MonoBehaviour
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
-    
+    private const float FUSION_STATUS_HEALTH_PERCENT_DAMAGE = 1.5f;
     private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.8f;
     private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float SHOCK_STATUS_BONUS_CRIT_CHANCE = 50f;
@@ -38,11 +38,10 @@ public class EnemyEntity : MonoBehaviour
     private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
     private const float VOID_STATUS_PULL_BASE = 6f;
     private const float VOID_STATUS_PULL_SCALING = 0.003f;
-    private const float STATUS_DURATION_STANDARD = 10f;
+    public const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
     private const float HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP = 0.4f;
-    private const int BUILDUP_ARRAY_LENGHT = 6;
 
     // AI Management ===========================================
 
@@ -98,11 +97,11 @@ public class EnemyEntity : MonoBehaviour
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
         currentKnockbackForce = Vector3.zero;
-        CurrentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStats().GetStat(StageStatGroup.StageStat.EnemyHealthMult);
+        CurrentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult);
         RemainingExtraBars = ExtraBars;
-        statusBuildups = new float[BUILDUP_ARRAY_LENGHT];
-        statusDurations = new float[BUILDUP_ARRAY_LENGHT];
-        statusBuildupResistancesDivider = new float[BUILDUP_ARRAY_LENGHT];
+        statusBuildups = new float[GameEnums.DAMAGE_ELEMENTS];
+        statusDurations = new float[GameEnums.DAMAGE_ELEMENTS];
+        statusBuildupResistancesDivider = new float[GameEnums.DAMAGE_ELEMENTS];
         for (int i = 0; i < statusBuildupResistancesDivider.Length; i++) { statusBuildupResistancesDivider[i] = 1; }
         nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
     }
@@ -165,6 +164,10 @@ public class EnemyEntity : MonoBehaviour
         if (statusDurations[(int)GameEnums.DamageElement.Fire] > 0)
         {
             DealStatusDamage(maxHealth * FIRE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Fire);
+        }
+        if (statusDurations[(int)GameEnums.DamageElement.Incineration] > 0)
+        {
+            DealStatusDamage(maxHealth * FUSION_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Incineration);
         }
         if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0)
         {

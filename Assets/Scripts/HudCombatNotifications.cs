@@ -56,17 +56,17 @@ public class HudCombatNotifications : MonoBehaviour
     }
     private void OnEnemyStatusDamageTaken(float magnitude, GameEnums.DamageElement elem, EnemyEntity target) 
     {
-        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, magnitude.ToString("F0"), cdb.ElementToColor(elem), STATUS_DAMAGE_SIZE * sizeMult, STATUS_DAMAGE_LIFETIME, true, target.transform.position);
+        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, magnitude.ToString("F0"), cdb.ElementToGradient(elem), STATUS_DAMAGE_SIZE * sizeMult, STATUS_DAMAGE_LIFETIME, true, target.transform.position);
     }
     private void OnEnemyDirectDamageTaken(float magnitude, int critlevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity target) 
     {
         string damageText = magnitude.ToString("F0");
         for (int i = 0; i < critlevel; i++) { damageText += "!"; }
-        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, damageText, cdb.ElementToColor(elem), DIRECT_DAMAGE_SIZE * sizeMult, DIRECT_DAMAGE_LIFETIME, true, target.transform.position);
+        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, damageText, cdb.ElementToGradient(elem), DIRECT_DAMAGE_SIZE * sizeMult, DIRECT_DAMAGE_LIFETIME, true, target.transform.position);
     }
     private void OnEnemyStatusApplied(GameEnums.DamageElement elem, EnemyEntity target) 
     {
-        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, sdb.ElementToStatusName(elem), cdb.ElementToColor(elem), STATUS_EFFECT_SIZE * sizeMult, STATUS_EFFECT_LIFETIME, true, target.transform.position);
+        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, sdb.ElementToStatusName(elem), cdb.ElementToGradient(elem), STATUS_EFFECT_SIZE * sizeMult, STATUS_EFFECT_LIFETIME, true, target.transform.position);
     }
     private void OnEnemyAttackEvaded(Vector3 wpos)
     {

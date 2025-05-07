@@ -14,6 +14,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private int playerRoomX = -1;
     private int playerRoomY = -1;
+    private List<int> availableChestSpawns;
     private List<MapNode> validEnemySpawnNodes;
     protected List<EnemyEntity> enemiesInStage;
     protected StageStateBase currentState;
@@ -39,12 +40,14 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         EventManager.EnemyDisabledEvent += OnEnemyDefeated;
         EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
+        EventManager.ChestDisabledEvent += OnChestDisabled;
         StartCoroutine(Startcr());
     }
     private void OnDisable()
     {
         EventManager.EnemyDisabledEvent -= OnEnemyDefeated;
         EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+        EventManager.ChestDisabledEvent -= OnChestDisabled;
     }
     private IEnumerator Startcr() 
     {
@@ -52,7 +55,10 @@ public abstract class StageManagerBase : MonoBehaviour
         SetUpItemPools();
         objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
+        availableChestSpawns = new List<int>();
+        for (int i = 0; i < stageMapData.GetChestSpawnPositions().Count; i++) { availableChestSpawns.Add(i); }
         stageStats = GetInitialStageStats();
+
 
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
 
@@ -116,9 +122,9 @@ public abstract class StageManagerBase : MonoBehaviour
             }
         }
     }
-    public void SpawnChest() 
+    private void OnChestDisabled(int id) 
     {
-
+        availableChestSpawns.Add(id);
     }
     private void OnPlayerDefeated() 
     {
@@ -248,11 +254,17 @@ public abstract class StageManagerBase : MonoBehaviour
         }
         return -1;
     }
-    public static StageStatGroup GetStageStats() 
+    public static float GetStageStat(StageStatGroup.StageStat s) 
     {
-        if (_instance == null) { return new StageStatGroup(); }
+        if (_instance == null) { return 0; }
 
-        return _instance.stageStats;
+        return _instance.stageStats.GetStat(s);
+    }
+    public static void ChangeStageStat(StageStatGroup.StageStat s, float change)
+    {
+        if (_instance == null) { return; }
+
+        _instance.stageStats.ChangeStat(s, change);
     }
     public static StageStateBase.GameState GetCurrentStateType() 
     {
@@ -277,6 +289,15 @@ public abstract class StageManagerBase : MonoBehaviour
     public static int GetEnemyCount() 
     {
         return _instance == null ? 0 : _instance.enemiesInStage.Count;
+    }
+    public static void SpawnChest()
+    {
+        if (_instance == null) { return; }
+        if (_instance.availableChestSpawns.Count == 0) { return; }
+
+        int indexSelected = _instance.availableChestSpawns[Random.Range(0, _instance.availableChestSpawns.Count)];
+        _instance.availableChestSpawns.RemoveAt(indexSelected);
+        ObjectPoolManager.GetChestFromPool().SetUp(_instance.stageMapData.GetChestSpawnPositions()[indexSelected], indexSelected);
     }
     public static void DisableAllEnemies() 
     {
