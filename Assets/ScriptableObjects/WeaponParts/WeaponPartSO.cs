@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponPartSO", menuName = "Scriptable Objects/WeaponPartSO")]
 public class WeaponPartSO : ScriptableObject
 {
+    [field: SerializeField] public string DescID { get; private set; }
     [field: SerializeField] public string ProjectileComponentIDOverride { get; private set; }
     [field: SerializeField] public string CleaveComponentIDOverride { get; private set; }
     [field: SerializeField] public float ProjectileComponentDamageOverride { get; private set; }

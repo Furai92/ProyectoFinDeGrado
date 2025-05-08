@@ -358,4 +358,14 @@ MonoBehaviour:
     <Data>k__BackingField: 'Attacks: {0}'
   - <ID>k__BackingField: TCH_DT_DASH_RECOVERY
     <Data>k__BackingField: 'Dash charge recovered: {0}%'
+  - <ID>k__BackingField: PART_DESC_EXPLOSIVE
+    <Data>k__BackingField: Explosion Radius +5m.
+  - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT
+    <Data>k__BackingField: +3 Shoots.
+  - <ID>k__BackingField: PART_DESC_HEAVY_BULLETS
+    <Data>k__BackingField: Heavy Bullets
+  - <ID>k__BackingField: PART_DESC_MELEE_ENERGY_ORB
+    <Data>k__BackingField: Swings shoot energy orbs.
+  - <ID>k__BackingField: PART_DESC_MELEE_LIGHT
+    <Data>k__BackingField: -10% Damage, +20% Attack Speed
   <Keywords>k__BackingField: []

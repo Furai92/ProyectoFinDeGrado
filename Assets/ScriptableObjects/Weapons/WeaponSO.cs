@@ -30,12 +30,9 @@ public class WeaponSO : ScriptableObject
     [field: SerializeField] public int Pierces { get; private set; }
     [field: SerializeField] public float Timescale { get; private set; }
     [field: SerializeField] public float Knockback { get; private set; }
-    [field: SerializeField] public List<WeaponSOPartSlot> PartSlots { get; private set; }
+    [field: SerializeField] public List<WeaponPartSO> CoreParts { get; private set; }
+    [field: SerializeField] public List<WeaponPartSO> RareParts { get; private set; }
+    [field: SerializeField] public List<WeaponPartSO> ExoticParts { get; private set; }
+    [field: SerializeField] public List<WeaponPartSO> PrototypeParts { get; private set; }
 
-    [System.Serializable]
-    public class WeaponSOPartSlot 
-    {
-        [field: SerializeField] public string SlotName { get; private set; }
-        [field: SerializeField] public List<WeaponPartSO> CompatibleParts { get; private set; }
-    }
 }

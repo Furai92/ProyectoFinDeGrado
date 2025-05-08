@@ -20,7 +20,7 @@ public class TechBehaviourSlam : TechBase
         TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
         {
             sizeMult = RADIUS,
-            element = PlayerEntity.ActiveInstance.MeleeWeapon.GetStats().Element,
+            element = PlayerEntity.ActiveInstance.MeleeWeapon.Stats.Element,
             enemyIgnored = -1,
             magnitude = DAMAGE * Group.Level
         };

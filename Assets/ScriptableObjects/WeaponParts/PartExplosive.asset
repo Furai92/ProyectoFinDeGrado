@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
-  m_Name: PartFrostCore
+  m_Name: PartExplosive
   m_EditorClassIdentifier: 
-  <DescID>k__BackingField: 
+  <DescID>k__BackingField: PART_DESC_EXPLOSIVE
   <ProjectileComponentIDOverride>k__BackingField: 
   <CleaveComponentIDOverride>k__BackingField: 
   <ProjectileComponentDamageOverride>k__BackingField: 0
   <CleaveComponentDamageOverride>k__BackingField: 0
-  <ElementOverride>k__BackingField: 2
-  <DamageMultiplier>k__BackingField: 1.1
+  <ElementOverride>k__BackingField: 0
+  <DamageMultiplier>k__BackingField: 1
   <MultishootModifier>k__BackingField: 0
   <ArcModifier>k__BackingField: 0
-  <FirerateMultiplier>k__BackingField: 0.9
+  <FirerateMultiplier>k__BackingField: 1
   <BuildupMultiplier>k__BackingField: 1
   <CriticalDamageMultiplier>k__BackingField: 1
   <SizeMultiplier>k__BackingField: 1
-  <HeatGenerationMultiplier>k__BackingField: 0.9
-  <SplashModifier>k__BackingField: 0
+  <HeatGenerationMultiplier>k__BackingField: 1.1
+  <SplashModifier>k__BackingField: 5
   <SpreadModifier>k__BackingField: 0
   <BouncesModifier>k__BackingField: 0
   <PiercesModifier>k__BackingField: 0

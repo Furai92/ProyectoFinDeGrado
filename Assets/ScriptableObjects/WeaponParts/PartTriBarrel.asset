@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
-  m_Name: TripleShootBarrel
+  m_Name: PartTriBarrel
   m_EditorClassIdentifier: 
+  <DescID>k__BackingField: PART_DESC_TRIPLE_SHOOT
   <ProjectileComponentIDOverride>k__BackingField: 
   <CleaveComponentIDOverride>k__BackingField: 
   <ProjectileComponentDamageOverride>k__BackingField: 0
@@ -26,6 +27,7 @@ MonoBehaviour:
   <SizeMultiplier>k__BackingField: 1
   <HeatGenerationMultiplier>k__BackingField: 1.5
   <SplashModifier>k__BackingField: 0
+  <SpreadModifier>k__BackingField: 0
   <BouncesModifier>k__BackingField: 0
   <PiercesModifier>k__BackingField: 0
   <TimescaleMultiplier>k__BackingField: 1

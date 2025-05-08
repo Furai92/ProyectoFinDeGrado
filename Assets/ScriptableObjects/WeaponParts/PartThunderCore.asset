@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
   m_Name: PartThunderCore
   m_EditorClassIdentifier: 
+  <DescID>k__BackingField: 
   <ProjectileComponentIDOverride>k__BackingField: 
   <CleaveComponentIDOverride>k__BackingField: 
   <ProjectileComponentDamageOverride>k__BackingField: 0

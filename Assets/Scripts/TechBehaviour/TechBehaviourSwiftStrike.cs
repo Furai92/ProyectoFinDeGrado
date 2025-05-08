@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TechBehaviourSwiftStrike : TechBase
 {
-    private const float DAMAGE = 200f;
+    private const float DAMAGE = 400f;
     private const float SIZE = 3f;
 
     public override void OnTechAdded()
@@ -20,7 +20,7 @@ public class TechBehaviourSwiftStrike : TechBase
         TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
         {
             sizeMult = SIZE,
-            element = PlayerEntity.ActiveInstance.MeleeWeapon.GetStats().Element,
+            element = PlayerEntity.ActiveInstance.MeleeWeapon.Stats.Element,
             enemyIgnored = -1,
             magnitude = DAMAGE * Group.Level
         };

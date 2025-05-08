@@ -4,21 +4,63 @@ using System.Collections.Generic;
 public class WeaponData
 {
     public WeaponSO BaseWeapon { get; private set; }
-    public List<WeaponPartSO> Parts { get; private set; }
+    public WeaponPartSO CorePart { get; private set; }
+    public List<WeaponPartSO> SpecialParts { get; private set; }
     public GameEnums.Rarity Rarity { get; private set; }
+    public WeaponStats Stats { get; private set; }
 
-    public WeaponData(WeaponSO baseweapon) 
+    private const float RARITY_CHANCE_RARE = 25f;
+    private const float RARITY_CHANCE_EXOTIC = 5f;
+    private const float RARITY_CHANCE_PROTOTYPE = 1f;
+
+    public WeaponData(WeaponSO baseWeapon) 
+    {
+        BaseWeapon = baseWeapon;
+        RollRarity();
+        RollParts();
+    }
+    public WeaponData(WeaponSO baseweapon, GameEnums.Rarity forcedRarity) 
     {
         BaseWeapon = baseweapon;
-        Parts = new List<WeaponPartSO>();
-        Rarity = GameEnums.Rarity.Common; // TEMP
-        for (int i = 0; i < baseweapon.PartSlots.Count; i++)
+        Rarity = forcedRarity;
+        RollParts();
+    }
+    private void RollRarity() 
+    {
+        int rarityRoll = Random.Range(0, 101);
+        if (rarityRoll < RARITY_CHANCE_RARE)
         {
-            Parts.Add(baseweapon.PartSlots[i].CompatibleParts[Random.Range(0, baseweapon.PartSlots[i].CompatibleParts.Count)]);
+            if (rarityRoll < RARITY_CHANCE_EXOTIC)
+            {
+                Rarity = rarityRoll < RARITY_CHANCE_PROTOTYPE ? Rarity = GameEnums.Rarity.Prototype : Rarity = GameEnums.Rarity.Exotic;
+            }
+            else
+            {
+                Rarity = GameEnums.Rarity.Rare;
+            }
+        }
+        else
+        {
+            Rarity = GameEnums.Rarity.Common; // TEMP
         }
     }
-    public WeaponStats GetStats() 
+    private void RollParts() 
     {
+        CorePart = BaseWeapon.CoreParts[Random.Range(0, BaseWeapon.CoreParts.Count)];
+
+        SpecialParts = new List<WeaponPartSO>();
+        if ((int)Rarity >= (int)GameEnums.Rarity.Rare && BaseWeapon.RareParts.Count > 0) { SpecialParts.Add(BaseWeapon.RareParts[Random.Range(0, BaseWeapon.RareParts.Count)]); }
+        if ((int)Rarity >= (int)GameEnums.Rarity.Exotic && BaseWeapon.ExoticParts.Count > 0) { SpecialParts.Add(BaseWeapon.ExoticParts[Random.Range(0, BaseWeapon.ExoticParts.Count)]); }
+        if ((int)Rarity >= (int)GameEnums.Rarity.Prototype && BaseWeapon.PrototypeParts.Count > 0) { SpecialParts.Add(BaseWeapon.PrototypeParts[Random.Range(0, BaseWeapon.PrototypeParts.Count)]); }
+
+        GenerateStats();
+    }
+    public void GenerateStats() 
+    {
+        List<WeaponPartSO> usedParts = new List<WeaponPartSO>();
+        usedParts.Add(CorePart);
+        for (int i = 0; i < SpecialParts.Count; i++) { usedParts.Add(SpecialParts[i]); }
+
         WeaponStats ws = new WeaponStats()
         {
             Element = BaseWeapon.Element,
@@ -41,31 +83,35 @@ public class WeaponData
             SizeMultiplier = BaseWeapon.SizeMultiplier,
             ImpactEffectID = BaseWeapon.ImpactEffectID
         };
-        for (int i = 0; i < Parts.Count; i++) 
+        for (int i = 0; i < usedParts.Count; i++) 
         {
-            if (Parts[i].ElementOverride != GameEnums.DamageElement.NonElemental) { ws.Element = Parts[i].ElementOverride; }
-            if (Parts[i].ProjectileComponentIDOverride != "") { ws.ProjectileComponentID = Parts[i].ProjectileComponentIDOverride; }
-            if (Parts[i].CleaveComponentIDOverride != "") { ws.CleaveComponentID = Parts[i].CleaveComponentIDOverride; }
-            if (Parts[i].ProjectileComponentDamageOverride != 0) { ws.ProjectileComponentMagnitude = Parts[i].ProjectileComponentDamageOverride; }
-            if (Parts[i].CleaveComponentDamageOverride != 0) { ws.CleaveComponentMagnitude = Parts[i].CleaveComponentDamageOverride; }
+            if (usedParts[i].ElementOverride != GameEnums.DamageElement.NonElemental) { ws.Element = usedParts[i].ElementOverride; }
+            if (usedParts[i].ProjectileComponentIDOverride != "") { ws.ProjectileComponentID = usedParts[i].ProjectileComponentIDOverride; }
+            if (usedParts[i].CleaveComponentIDOverride != "") { ws.CleaveComponentID = usedParts[i].CleaveComponentIDOverride; }
+            if (usedParts[i].ProjectileComponentDamageOverride != 0) { ws.ProjectileComponentMagnitude = usedParts[i].ProjectileComponentDamageOverride; }
+            if (usedParts[i].CleaveComponentDamageOverride != 0) { ws.CleaveComponentMagnitude = usedParts[i].CleaveComponentDamageOverride; }
 
-            ws.CleaveComponentMagnitude *= Parts[i].DamageMultiplier;
-            ws.ProjectileComponentMagnitude *= Parts[i].DamageMultiplier;
-            ws.Firerate *= Parts[i].FirerateMultiplier;
-            ws.Multishoot = Mathf.Max(ws.Multishoot + Parts[i].MultishootModifier, 1);
-            ws.Pierces = Mathf.Max(ws.Pierces + Parts[i].PiercesModifier, 0);
-            ws.Bounces = Mathf.Max(ws.Bounces + Parts[i].BouncesModifier, 0);
-            ws.Splash = Mathf.Max(ws.Splash + Parts[i].SplashModifier, 0);
-            ws.Arc = Mathf.Max(ws.Arc + Parts[i].ArcModifier, 0);
-            ws.RandomSpread += Parts[i].SpreadModifier;
-            ws.CritMultiplier *= Parts[i].CriticalDamageMultiplier;
-            ws.BuildupRate *= Parts[i].BuildupMultiplier;
-            ws.Knockback += Mathf.Max(ws.Knockback + Parts[i].KnockbackModifier, 0);
-            ws.HeatGen *= Parts[i].HeatGenerationMultiplier;
-            ws.Timescale *= Parts[i].TimescaleMultiplier;
-            ws.SizeMultiplier = Parts[i].SizeMultiplier;
+            ws.CleaveComponentMagnitude *= usedParts[i].DamageMultiplier;
+            ws.ProjectileComponentMagnitude *= usedParts[i].DamageMultiplier;
+            ws.Firerate *= usedParts[i].FirerateMultiplier;
+            ws.Multishoot = Mathf.Max(ws.Multishoot + usedParts[i].MultishootModifier, 1);
+            ws.Pierces = Mathf.Max(ws.Pierces + usedParts[i].PiercesModifier, 0);
+            ws.Bounces = Mathf.Max(ws.Bounces + usedParts[i].BouncesModifier, 0);
+            ws.Splash = Mathf.Max(ws.Splash + usedParts[i].SplashModifier, 0);
+            ws.Arc = Mathf.Max(ws.Arc + usedParts[i].ArcModifier, 0);
+            ws.RandomSpread += usedParts[i].SpreadModifier;
+            ws.CritMultiplier *= usedParts[i].CriticalDamageMultiplier;
+            ws.BuildupRate *= usedParts[i].BuildupMultiplier;
+            ws.Knockback += Mathf.Max(ws.Knockback + usedParts[i].KnockbackModifier, 0);
+            ws.HeatGen *= usedParts[i].HeatGenerationMultiplier;
+            ws.Timescale *= usedParts[i].TimescaleMultiplier;
+            ws.SizeMultiplier = usedParts[i].SizeMultiplier;
         }
-        return ws;
+        // Fix possible inspector strings to null bugs
+        if (ws.CleaveComponentID == null) { ws.CleaveComponentID = ""; }
+        if (ws.ProjectileComponentID == null) { ws.ProjectileComponentID = ""; }
+
+        Stats = ws;
     }
 
     public struct WeaponStats 

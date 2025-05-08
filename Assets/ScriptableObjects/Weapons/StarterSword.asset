@@ -21,7 +21,7 @@ MonoBehaviour:
   <CleaveComponentID>k__BackingField: MELEE
   <ImpactEffectID>k__BackingField: STANDARD
   <Element>k__BackingField: 1
-  <ProjectileComponentDamage>k__BackingField: 0
+  <ProjectileComponentDamage>k__BackingField: 100
   <CleaveComponentDamage>k__BackingField: 200
   <Multishoot>k__BackingField: 0
   <MultishootArc>k__BackingField: 0
@@ -36,9 +36,14 @@ MonoBehaviour:
   <Pierces>k__BackingField: 1
   <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 20
-  <PartSlots>k__BackingField:
-  - <SlotName>k__BackingField: Core
-    <CompatibleParts>k__BackingField:
-    - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
-    - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
-    - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
+  <CoreParts>k__BackingField:
+  - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
+  - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
+  - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
+  - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
+  <RareParts>k__BackingField:
+  - {fileID: 11400000, guid: f62b9c5b3db0c1b4bad99fbb5a65ca25, type: 2}
+  <ExoticParts>k__BackingField:
+  - {fileID: 11400000, guid: f62b9c5b3db0c1b4bad99fbb5a65ca25, type: 2}
+  <PrototypeParts>k__BackingField:
+  - {fileID: 11400000, guid: 6dc47abefb58d8d449ebe19c508a314a, type: 2}

@@ -129,10 +129,8 @@ public class PlayerEntity : NetworkBehaviour
             if (selectedTraits[i].Tech != null) { EquipTech(selectedTraits[i].Tech); }
         }
 
-        WeaponData rangedweapon = new WeaponData(debugRangedWeaponSO);
-
-        EquipWeapon(rangedweapon);
-        EquipWeapon(new WeaponData(debugMeleeWeaponSO));
+        EquipWeapon(new WeaponData(debugRangedWeaponSO, GameEnums.Rarity.Common));
+        EquipWeapon(new WeaponData(debugMeleeWeaponSO, GameEnums.Rarity.Common));
 
         StatusOverheatRanged = StatusOverheatMelee = false;
         StatusHeatMelee = StatusHeatRanged = -stats.GetStat(PlayerStatGroup.Stat.HeatFloor);
@@ -151,6 +149,7 @@ public class PlayerEntity : NetworkBehaviour
     private void OnDisable()
     {
         EventManager.UiMenuFocusChangedEvent -= OnUiMenuChanged;
+        for (int i = 0; i < ActiveTechList.Count; i++) { ActiveTechList[i].Script?.OnTechRemoved(); }
     }
     private void OnUiMenuChanged(IGameMenu m) 
     {
@@ -344,7 +343,7 @@ public class PlayerEntity : NetworkBehaviour
                     }
 
                     MeleeWeapon = w;
-                    meleeWeaponStats = MeleeWeapon.GetStats();
+                    meleeWeaponStats = MeleeWeapon.Stats;
                     break;
                 }
             case WeaponSO.WeaponSlot.Ranged:
@@ -355,7 +354,7 @@ public class PlayerEntity : NetworkBehaviour
                     }
 
                     RangedWeapon = w;
-                    rangedWeaponStats = RangedWeapon.GetStats();
+                    rangedWeaponStats = RangedWeapon.Stats;
                     break;
                 }
         }

@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9da96c452ae9ffa488d79da629b22039, type: 3}
-  m_Name: UselessBarrel
+  m_Name: PartMeleeLight
   m_EditorClassIdentifier: 
+  <DescID>k__BackingField: PART_DESC_MELEE_LIGHT
   <ProjectileComponentIDOverride>k__BackingField: 
   <CleaveComponentIDOverride>k__BackingField: 
   <ProjectileComponentDamageOverride>k__BackingField: 0
   <CleaveComponentDamageOverride>k__BackingField: 0
   <ElementOverride>k__BackingField: 0
-  <DamageMultiplier>k__BackingField: 10
-  <MultishootModifier>k__BackingField: 5
-  <ArcModifier>k__BackingField: 90
-  <FirerateMultiplier>k__BackingField: 2.5
-  <BuildupMultiplier>k__BackingField: 1.5
-  <CriticalDamageMultiplier>k__BackingField: 2.5
-  <SizeMultiplier>k__BackingField: 5
-  <HeatGenerationMultiplier>k__BackingField: 1
-  <SplashModifier>k__BackingField: 10
-  <BouncesModifier>k__BackingField: 2
-  <PiercesModifier>k__BackingField: -99
-  <TimescaleMultiplier>k__BackingField: 0.05
+  <DamageMultiplier>k__BackingField: 0.9
+  <MultishootModifier>k__BackingField: 0
+  <ArcModifier>k__BackingField: 0
+  <FirerateMultiplier>k__BackingField: 1.2
+  <BuildupMultiplier>k__BackingField: 1
+  <CriticalDamageMultiplier>k__BackingField: 1
+  <SizeMultiplier>k__BackingField: 1
+  <HeatGenerationMultiplier>k__BackingField: 0.8
+  <SplashModifier>k__BackingField: 0
+  <SpreadModifier>k__BackingField: 0
+  <BouncesModifier>k__BackingField: 0
+  <PiercesModifier>k__BackingField: 0
+  <TimescaleMultiplier>k__BackingField: 1
   <KnockbackModifier>k__BackingField: 0

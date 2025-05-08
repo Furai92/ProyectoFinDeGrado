@@ -16,7 +16,7 @@ public class TechCombatEffectStatusTransfer : TechCombatEffect
     private const float SPAWN_HEIGHT = 0.5f;
     private const float FLY_HEIGHT = 3f;
     private const float SPAWN_DURATION = 0.5f;
-    private const float CHASE_SPEED_GAIN_RATE = 4f;
+    private const float CHASE_SPEED_GAIN_RATE = 6f;
     private const float REMOVE_DELAY = 1.5f;
 
     protected override void Initialize(Vector3 pos, float dir)

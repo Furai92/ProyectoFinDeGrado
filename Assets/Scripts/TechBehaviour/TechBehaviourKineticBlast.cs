@@ -19,7 +19,7 @@ public class TechBehaviourKineticBlast : TechBase
     {
         TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
         {
-            element = PlayerEntity.ActiveInstance.MeleeWeapon.GetStats().Element,
+            element = PlayerEntity.ActiveInstance.MeleeWeapon.Stats.Element,
             sizeMult = RADIUS,
             enemyIgnored = -1,
             magnitude = PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.MaxHealth) * HP_TO_DAMAGE_RATIO * Group.Level

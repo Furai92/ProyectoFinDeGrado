@@ -24,6 +24,6 @@ MonoBehaviour:
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_DMG
-    <DescValueBase>k__BackingField: 200
+    <DescValueBase>k__BackingField: 400
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
