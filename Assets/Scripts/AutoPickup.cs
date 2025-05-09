@@ -73,6 +73,7 @@ public abstract class AutoPickup : MonoBehaviour
         PlayerEntity p = other.gameObject.GetComponentInParent<PlayerEntity>();
         if (p == null) { return; }
 
+        bsc.EndBounceAnimation();
         playerCollidedWith = p;
         autoPickupColliderTransform = other.transform;
         rb.Sleep();

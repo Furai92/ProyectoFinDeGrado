@@ -12,7 +12,7 @@ public class EventManager
     public static event Action<PlayerEntity> PlayerSpawnedEvent;
     public static event Action StageStatsUpdatedEvent;
     public static event Action<Vector3> PlayerEvasionEvent;
-    public static event Action PlayerWeaponOverheatedEvent;
+    public static event Action<WeaponSO.WeaponSlot> PlayerWeaponOverheatedEvent;
     public static event Action<EnemyEntity, bool> EnemyDisabledEvent;
     public static event Action PlayerDefeatedEvent;
     public static event Action<float> PlayerDamageTakenEvent;
@@ -22,6 +22,7 @@ public class EventManager
     public static event Action<Vector3, float> PlayerDashStartedEvent;
     public static event Action<Vector3, float> PlayerDashEndedEvent;
     public static event Action<Vector3> PlayerWallSlamEvent;
+    public static event Action<Vector3, WeaponSO.WeaponSlot, float> PlayerAttackStartedEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -120,9 +121,9 @@ public class EventManager
     {
         PlayerDefeatedEvent?.Invoke();
     }
-    public static void OnPlayerWeaponOverheated() 
+    public static void OnPlayerWeaponOverheated(WeaponSO.WeaponSlot s) 
     {
-        PlayerWeaponOverheatedEvent?.Invoke();
+        PlayerWeaponOverheatedEvent?.Invoke(s);
     }
     public static void OnPlayerDamageTaken(float dmg)
     {
@@ -155,5 +156,9 @@ public class EventManager
     public static void OnPlayerWallSlam(Vector3 pos) 
     {
         PlayerWallSlamEvent?.Invoke(pos);
+    }
+    public static void OnPlayerAttackStarted(Vector3 pos, WeaponSO.WeaponSlot slot, float direction)
+    {
+        PlayerAttackStartedEvent?.Invoke(pos, slot, direction);
     }
 }

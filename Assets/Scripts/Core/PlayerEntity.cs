@@ -210,21 +210,20 @@ public class PlayerEntity : NetworkBehaviour
     public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
     {
         if (defeated) { return; }
+        EventManager.OnPlayerAttackStarted(transform.position, s, attackDir);
         if (generateHeat) 
         {
             if (s == WeaponSO.WeaponSlot.Melee)
             {
                 heatDecayMelee = 0;
                 meleeAttackReady = 0;
-                StatusHeatMelee += meleeWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-                if (StatusHeatMelee > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(); }
+                ChangeWeaponHeat(meleeWeaponStats.HeatGen, WeaponSO.WeaponSlot.Melee);
             }
             else 
             {
                 heatDecayRanged = 0;
                 rangedAttackReady = 0;
-                StatusHeatRanged += rangedWeaponStats.HeatGen * (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
-                if (StatusHeatRanged > stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(); }
+                ChangeWeaponHeat(rangedWeaponStats.HeatGen, WeaponSO.WeaponSlot.Ranged);
             }
         }
 
@@ -359,10 +358,36 @@ public class PlayerEntity : NetworkBehaviour
                 }
         }
     }
-    public void CoolDownWeapons(float tempRemoved)
+
+    public void ChangeWeaponHeat(float change, WeaponSO.WeaponSlot s) 
     {
-        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, 0, tempRemoved);
-        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, 0, tempRemoved);
+        if (s == WeaponSO.WeaponSlot.Melee) 
+        {
+            if (change > 0)
+            {
+                change *= (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+                StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
+                if (StatusHeatMelee >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Melee); }
+            }
+            else 
+            {
+                StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), -change);
+            }
+            
+        }
+        else
+        {
+            if (change > 0)
+            {
+                change *= (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+                StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
+                if (StatusHeatRanged >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Ranged); }
+            }
+            else
+            {
+                StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), -change);
+            }
+        }
     }
     public void DealDamage(float magnitude)
     {

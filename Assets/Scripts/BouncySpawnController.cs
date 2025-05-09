@@ -42,6 +42,10 @@ public class BouncySpawnController : MonoBehaviour
             UpdateBounceAnimation(0);
         }
     }
+    public void EndBounceAnimation() 
+    {
+        bouncesDone = BOUNCES_MAX;
+    }
     private void UpdateBounceAnimation(float t)
     {
         visualParent.localPosition = new Vector3(0, Mathf.Sin(t * 180 * Mathf.Deg2Rad) * randomizedHeight / (bouncesDone + 1), 0);

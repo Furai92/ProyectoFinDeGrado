@@ -286,6 +286,26 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_EVASIVE_STANCE
     <Data>k__BackingField: Melee hits recover dash charges, but your endurance is
       reduced.
+  - <ID>k__BackingField: TCH_N_HEAT_WAVE
+    <Data>k__BackingField: Heat Wave
+  - <ID>k__BackingField: TCH_D_HEAT_WAVE
+    <Data>k__BackingField: Ranged weapon attacks release a powerful piercing fire
+      wave. Activating this effect generates heat. This effect has a cooldown.
+  - <ID>k__BackingField: TCH_N_THERMAL_RESISTANCE
+    <Data>k__BackingField: Thermal Resistance
+  - <ID>k__BackingField: TCH_D_THERMAL_RESISTANCE
+    <Data>k__BackingField: Increases the amount of heat your weapons can reach before
+      overheating.
+  - <ID>k__BackingField: TCH_N_BACKFIRE
+    <Data>k__BackingField: Backfire
+  - <ID>k__BackingField: TCH_D_BACKFIRE
+    <Data>k__BackingField: Release a powerful fire explosion after overheating your
+      weapons. Damage is based on the heat reached
+  - <ID>k__BackingField: TCH_N_HEATSINKS
+    <Data>k__BackingField: Heatsinks
+  - <ID>k__BackingField: TCH_D_HEATSINKS
+    <Data>k__BackingField: After overheating a weapon, instantly remove a percentage
+      of the heat level.
   - <ID>k__BackingField: RARITY_NAME_COMMON
     <Data>k__BackingField: Common
   - <ID>k__BackingField: RARITY_NAME_RARE
@@ -350,6 +370,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
   - <ID>k__BackingField: TCH_DT_HEATCAP
     <Data>k__BackingField: 'Heat cap increase: {0}'
+  - <ID>k__BackingField: TCH_DT_COOLDOWN
+    <Data>k__BackingField: 'Cooldown: {0}s'
   - <ID>k__BackingField: TCH_DT_CHEST_SPAWN_RATE
     <Data>k__BackingField: 'Chest spawn rate: {0}%'
   - <ID>k__BackingField: TCH_DT_WEAPON_DROP_RATE
@@ -358,14 +380,16 @@ MonoBehaviour:
     <Data>k__BackingField: 'Attacks: {0}'
   - <ID>k__BackingField: TCH_DT_DASH_RECOVERY
     <Data>k__BackingField: 'Dash charge recovered: {0}%'
+  - <ID>k__BackingField: TCH_DT_HEAT
+    <Data>k__BackingField: 'Heat generation: {0}'
+  - <ID>k__BackingField: TCH_DT_HEAT_TO_DAMAGE
+    <Data>k__BackingField: 'Damage per point of heat: {0}'
+  - <ID>k__BackingField: TCH_DT_COOLING_PERCENT
+    <Data>k__BackingField: 'Heat removed: {0}%'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT
     <Data>k__BackingField: +3 Shoots.
   - <ID>k__BackingField: PART_DESC_HEAVY_BULLETS
     <Data>k__BackingField: Heavy Bullets
-  - <ID>k__BackingField: PART_DESC_MELEE_ENERGY_ORB
-    <Data>k__BackingField: Swings shoot energy orbs.
-  - <ID>k__BackingField: PART_DESC_MELEE_LIGHT
-    <Data>k__BackingField: -10% Damage, +20% Attack Speed
   <Keywords>k__BackingField: []

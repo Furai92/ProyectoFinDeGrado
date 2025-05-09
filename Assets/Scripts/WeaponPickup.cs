@@ -3,6 +3,9 @@ using UnityEngine;
 public class WeaponPickup : Interactable
 {
     [SerializeField] private Transform visualParent;
+    [SerializeField] private ParticleSystem ps;
+    [SerializeField] private ColorDatabaseSO cdb;
+
     private InteractableInfo info;
 
     private const float VISUAL_ROTATION_SPEED = 200f;
@@ -10,6 +13,7 @@ public class WeaponPickup : Interactable
 
     public void SetUp(WeaponData wd, Vector3 wpos) 
     {
+        ParticleSystem.MainModule m = ps.main; m.startColor = cdb.RarityToColor(wd.Rarity);
         transform.position = new Vector3(wpos.x, SPAWN_HEIGHT, wpos.z);
         info = new InteractableInfo()
         {

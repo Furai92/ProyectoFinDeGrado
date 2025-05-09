@@ -21,18 +21,19 @@ MonoBehaviour:
   <Script>k__BackingField: TechBehaviourBattleTrance
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 1
-    <Second>k__BackingField: -30
+    <Second>k__BackingField: -20
   - <First>k__BackingField: 2
-    <Second>k__BackingField: -30
+    <Second>k__BackingField: -20
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_MIGHT
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: -30
+    <DescValueScaling>k__BackingField: -20
     <DescDetailType>k__BackingField: 2
   - <DescTextID>k__BackingField: TCH_DT_DEX
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: -30
+    <DescValueScaling>k__BackingField: -20
     <DescDetailType>k__BackingField: 2
   - <DescTextID>k__BackingField: TCH_DT_MIGHT_ONKILL
     <DescValueBase>k__BackingField: 0

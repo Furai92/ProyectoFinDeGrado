@@ -16,7 +16,6 @@ public class TechBehaviourCoolingStep : TechBase
 
     private void OnPlayerEvasion(Vector3 pos) 
     {
-        PlayerRef.CoolDownWeapons(BASE_COOLING_RATE * Group.Level);
     }
 
     public override void OnTechUpgraded()
