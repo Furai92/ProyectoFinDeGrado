@@ -7,7 +7,7 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
 
     private const float BASE_DAMAGE = 20f;
     private const float TERRAIN_COLLISION_RAYCAST_LENGHT = 1f;
-    private const float ORB_SPEED = 7.5f;
+    private const float ORB_SPEED = 15f;
     private const float LIFETIME = 10f;
     private const float SPAWN_HEIGHT = 0.5f;
 

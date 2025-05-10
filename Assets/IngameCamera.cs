@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class IngameCamera : MonoBehaviour
 {
+    [SerializeField] private Camera cam;
 
     private enum CameraMode { StandBy, Intro, Playable, Outro }
 
@@ -10,11 +11,16 @@ public class IngameCamera : MonoBehaviour
     private LayerMask camTerrainMask;
 
     private float modeT;
+    private float higherFovEndTime;
     private float introRotationStart;
     private float introRotationEnd;
     private Vector3 introPosStart;
     private Vector3 introPosEnd;
 
+    private const float BASE_FOV = 75f;
+    private const float DASH_FOV_MULT = 1.3f;
+    private const float DASH_FOV_DURATION = 0.25f;
+    private const float FOV_CHANGE_SPEED = 150f;
     private const float INTRO_PLANE_HEIGHT = 0.5f;
     private const float INTRO_PLANE_DURATION = 2.5f;
     private const float WALL_SEPARATION = 0.2f;
@@ -25,11 +31,19 @@ public class IngameCamera : MonoBehaviour
         camTerrainMask = LayerMask.GetMask("Walls", "Ground");
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.PlayerSpawnedEvent += OnPlayerSpawned;
+        EventManager.PlayerDashStartedEvent += OnPlayerDashStarted;
+        higherFovEndTime = 0;
+        UpdateFov();
     }
     private void OnDisable()
     {
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.PlayerSpawnedEvent -= OnPlayerSpawned;
+        EventManager.PlayerDashStartedEvent -= OnPlayerDashStarted;
+    }
+    private void OnPlayerDashStarted(Vector3 pos, float dir) 
+    {
+        higherFovEndTime = Time.time + DASH_FOV_DURATION;
     }
     private void OnStageStateStarted(StageStateBase.GameState s) 
     {
@@ -59,9 +73,14 @@ public class IngameCamera : MonoBehaviour
                 }
         }
     }
-
+    private void UpdateFov() 
+    {
+        float targetFov = Time.time > higherFovEndTime ? BASE_FOV : BASE_FOV * DASH_FOV_MULT;
+        cam.fieldOfView = Mathf.MoveTowards(cam.fieldOfView, targetFov, Time.deltaTime * FOV_CHANGE_SPEED);
+    }
     void Update()
     {
+        UpdateFov();
         switch (currentCameraMode) 
         {
             case CameraMode.Playable: 

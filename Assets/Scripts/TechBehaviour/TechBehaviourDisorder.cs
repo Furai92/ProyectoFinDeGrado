@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TechBehaviourDisorder : TechBase
 {
-    private const float BASE_DAMAGE = 500f;
+    private const float BASE_DAMAGE = 1000f;
 
     public override void OnTechAdded()
     {
@@ -17,6 +17,7 @@ public class TechBehaviourDisorder : TechBase
     private void OnEnemyStatusEffectApplied(GameEnums.DamageElement elem, EnemyEntity enem)
     {
         int statuses = enem.GetStatusEffectCount();
+        if (statuses < 2) { return; }
         enem.DealDirectDamage(BASE_DAMAGE * Group.Level * statuses, 0, 1, 0, GameEnums.DamageElement.NonElemental, GameEnums.DamageType.Tech);
     }
 

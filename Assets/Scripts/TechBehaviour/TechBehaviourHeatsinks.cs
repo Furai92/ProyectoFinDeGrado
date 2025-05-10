@@ -16,8 +16,7 @@ public class TechBehaviourHeatsinks : TechBase
 
     private void OnPlayerWeaponOverheated(WeaponSO.WeaponSlot s)
     {
-        float heatRange = PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatFloor) + PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatCap);
-        PlayerEntity.ActiveInstance.ChangeWeaponHeat(-heatRange * COOLING_PERCENT * Group.Level, s);
+        PlayerEntity.ActiveInstance.ChangeWeaponHeat(-PlayerEntity.ActiveInstance.GetHeatRange() * COOLING_PERCENT * Group.Level, s);
     }
 
     public override void OnTechUpgraded()

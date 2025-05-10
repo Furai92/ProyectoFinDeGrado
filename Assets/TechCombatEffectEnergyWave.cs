@@ -9,12 +9,12 @@ public class TechCombatEffectEnergyWave : TechCombatEffect
     private int phase;
     private float phaseT;
 
-    private const float FLIGHT_DURATION = 10f;
+    private const float FLIGHT_DURATION = 6f;
     private const float SPAWN_GROWTH_DURATION = 0.5f;
-    private const float REMOVE_DELAY = 2f;
+    private const float REMOVE_DELAY = 1f;
     private const float RAYCAST_LEGHT_MULT = 2f;
     private const float MINIMUM_SCALE = 0.1f;
-    private const float SPEED = 20f;
+    private const float SPEED = 30f;
     private const float SPAWN_HEIGHT = 1f;
 
     protected override void Initialize(Vector3 pos, float dir)

@@ -28,8 +28,9 @@ public class StringDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Thunder: { return GetString("STATUS_NAME_THUNDER"); }
             case GameEnums.DamageElement.Void: { return GetString("STATUS_NAME_VOID"); }
             case GameEnums.DamageElement.Incineration: { return GetString("STATUS_NAME_INCINERATION"); }
+            case GameEnums.DamageElement.Frostbite: { return GetString("STATUS_NAME_FROSTBITE"); }
 
-        default: { return ""; }
+            default: { return ""; }
         }
     }
     public string ElementToName(GameEnums.DamageElement e)

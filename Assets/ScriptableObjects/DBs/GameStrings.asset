@@ -29,6 +29,8 @@ MonoBehaviour:
     <Data>k__BackingField: Collapsing
   - <ID>k__BackingField: STATUS_NAME_INCINERATION
     <Data>k__BackingField: Incinerated
+  - <ID>k__BackingField: STATUS_NAME_FROSTBITE
+    <Data>k__BackingField: Frostbitten
   - <ID>k__BackingField: ELEMENT_NAME_NONELEMENTAL
     <Data>k__BackingField: Non Elemental
   - <ID>k__BackingField: ELEMENT_NAME_FIRE
@@ -137,6 +139,16 @@ MonoBehaviour:
     <Data>k__BackingField: General
   - <ID>k__BackingField: TRAIT_DESC_GENERAL
     <Data>k__BackingField: No special attributes.
+  - <ID>k__BackingField: RARITY_NAME_COMMON
+    <Data>k__BackingField: Common
+  - <ID>k__BackingField: RARITY_NAME_RARE
+    <Data>k__BackingField: Rare
+  - <ID>k__BackingField: RARITY_NAME_EXOTIC
+    <Data>k__BackingField: Exotic
+  - <ID>k__BackingField: RARITY_NAME_SPECIAL
+    <Data>k__BackingField: Special
+  - <ID>k__BackingField: RARITY_NAME_PROTOTYPE
+    <Data>k__BackingField: Prototype
   - <ID>k__BackingField: TCH_N_TORMENTOR
     <Data>k__BackingField: Tormentor
   - <ID>k__BackingField: TCH_D_TORMENTOR
@@ -183,9 +195,9 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_DISORDER
     <Data>k__BackingField: Disorder
   - <ID>k__BackingField: TCH_D_DISORDER
-    <Data>k__BackingField: After applying a status effect to an enemy deals instant
-      non elemental damage based on the amount of different status effects on that
-      enemy.
+    <Data>k__BackingField: Applying more than one status effect to an enemy deals
+      massive non elemental damage based on the amount of different status effects
+      applied to that enemy.
   - <ID>k__BackingField: TCH_N_LIGHT_ARMOR
     <Data>k__BackingField: Light Armor
   - <ID>k__BackingField: TCH_D_LIGHT_ARMOR
@@ -207,22 +219,23 @@ MonoBehaviour:
     <Data>k__BackingField: Endless Flames
   - <ID>k__BackingField: TCH_D_ENDLESS_FLAMES
     <Data>k__BackingField: After applying a status effect to an enemy, there's a
-      chance to apply burning to a random nearby enemy.
+      chance to apply burning to a random nearby enemy. This effect has a short cooldown.
   - <ID>k__BackingField: TCH_N_ENDLESS_WINTER
     <Data>k__BackingField: Endless Winter
   - <ID>k__BackingField: TCH_D_ENDLESS_WINTER
     <Data>k__BackingField: After applying a status effect to an enemy, there's a
-      chance to apply frozen to a random nearby enemy.
+      chance to apply frozen to a random nearby enemy. This effect has a short cooldown.
   - <ID>k__BackingField: TCH_N_ENDLESS_STORM
     <Data>k__BackingField: Endless Storm
   - <ID>k__BackingField: TCH_D_ENDLESS_STORM
     <Data>k__BackingField: After applying a status effect to an enemy, there's a
-      chance to apply shock to a random nearby enemy.
+      chance to apply shock to a random nearby enemy. This effect has a short cooldown.
   - <ID>k__BackingField: TCH_N_ENDLESS_VOID
     <Data>k__BackingField: Endless Void
   - <ID>k__BackingField: TCH_D_ENDLESS_VOID
     <Data>k__BackingField: After applying a status effect to an enemy, there's a
-      chance to apply collapsing to a random nearby enemy.
+      chance to apply collapsing to a random nearby enemy. This effect has a short
+      cooldown.
   - <ID>k__BackingField: TCH_N_FLAME_SHOCK
     <Data>k__BackingField: Flame Shock
   - <ID>k__BackingField: TCH_D_FLAME_SHOCK
@@ -306,16 +319,44 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_HEATSINKS
     <Data>k__BackingField: After overheating a weapon, instantly remove a percentage
       of the heat level.
-  - <ID>k__BackingField: RARITY_NAME_COMMON
-    <Data>k__BackingField: Common
-  - <ID>k__BackingField: RARITY_NAME_RARE
-    <Data>k__BackingField: Rare
-  - <ID>k__BackingField: RARITY_NAME_EXOTIC
-    <Data>k__BackingField: Exotic
-  - <ID>k__BackingField: RARITY_NAME_PROTOTYPE
-    <Data>k__BackingField: Prototype
-  - <ID>k__BackingField: RARITY_NAME_SPECIAL
-    <Data>k__BackingField: Special
+  - <ID>k__BackingField: TCH_N_SUB_ZERO
+    <Data>k__BackingField: Sub Zero
+  - <ID>k__BackingField: TCH_D_SUB_ZERO
+    <Data>k__BackingField: Lowers the minimum temperature your weapons can reach.
+  - <ID>k__BackingField: TCH_N_ZERO_POINT
+    <Data>k__BackingField: Zero Point
+  - <ID>k__BackingField: TCH_D_ZERO_POINT
+    <Data>k__BackingField: Weapon attacks generate less heat.
+  - <ID>k__BackingField: TCH_N_COOLHEADED
+    <Data>k__BackingField: Coolheaded
+  - <ID>k__BackingField: TCH_D_COOLHEADED
+    <Data>k__BackingField: Increases might and dexterity every second without firing
+      a weapon. Stacks lasts for a very short time after attacking.
+  - <ID>k__BackingField: TCH_N_CHAIN_FREEZE
+    <Data>k__BackingField: Chain Freeze
+  - <ID>k__BackingField: TCH_D_CHAIN_FREEZE
+    <Data>k__BackingField: Freezing an enemy releases an explosion dealing frost
+      damage. This explosion will not damage the enemy that triggered the effect.
+  - <ID>k__BackingField: TCH_N_COLD_SYNERGY
+    <Data>k__BackingField: Cold Synergy
+  - <ID>k__BackingField: TCH_D_COLD_SYNERGY
+    <Data>k__BackingField: Freezing an enemy cools down your weapons.
+  - <ID>k__BackingField: TCH_N_SHATTER
+    <Data>k__BackingField: Shatter
+  - <ID>k__BackingField: TCH_D_SHATTER
+    <Data>k__BackingField: Weapon attacks against frozen enemies deal extra non elemental
+      damage.
+  - <ID>k__BackingField: TCH_N_FROST_AURA
+    <Data>k__BackingField: Frost Aura
+  - <ID>k__BackingField: TCH_D_FROST_AURA
+    <Data>k__BackingField: Periodically release frost novas if both of your weapons
+      have zero or less heat.
+  - <ID>k__BackingField: TCH_N_FROSTBITE
+    <Data>k__BackingField: Frostbite
+  - <ID>k__BackingField: TCH_D_FROSTBITE
+    <Data>k__BackingField: Freezing an enemy also applies Frostbite, enemies under
+      this status recive extra status buildup and take a small amount of damage over
+      time.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -364,6 +405,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Radius: {0}m'
   - <ID>k__BackingField: TCH_DT_DMG
     <Data>k__BackingField: 'Damage: {0}'
+  - <ID>k__BackingField: TCH_DT_DMG_PERCENT
+    <Data>k__BackingField: 'Bonus damage: {0}%'
   - <ID>k__BackingField: TCH_DT_END_OF_WAVE_STACKS
     <Data>k__BackingField: Clears stacks after each wave.
   - <ID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
@@ -382,10 +425,16 @@ MonoBehaviour:
     <Data>k__BackingField: 'Dash charge recovered: {0}%'
   - <ID>k__BackingField: TCH_DT_HEAT
     <Data>k__BackingField: 'Heat generation: {0}'
+  - <ID>k__BackingField: TCH_DT_HEATFLOOR
+    <Data>k__BackingField: 'Heat floor lowered: {0}'
   - <ID>k__BackingField: TCH_DT_HEAT_TO_DAMAGE
     <Data>k__BackingField: 'Damage per point of heat: {0}'
   - <ID>k__BackingField: TCH_DT_COOLING_PERCENT
     <Data>k__BackingField: 'Heat removed: {0}%'
+  - <ID>k__BackingField: TCH_DT_INTERVAL
+    <Data>k__BackingField: 'Interval: {0}s'
+  - <ID>k__BackingField: TCH_DT_BUILDUP_MULT
+    <Data>k__BackingField: 'Status buildup multiplier: +{0}%'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT

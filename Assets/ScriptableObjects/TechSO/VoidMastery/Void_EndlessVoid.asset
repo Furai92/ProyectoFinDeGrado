@@ -20,6 +20,7 @@ MonoBehaviour:
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: e098cc48245bb0d4587df8b2d97459c1, type: 2}
   <Script>k__BackingField: TechBehaviourEndlessVoid
   <BonusStats>k__BackingField: []
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_CHANCE
@@ -30,3 +31,7 @@ MonoBehaviour:
     <DescValueBase>k__BackingField: 20
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_COOLDOWN
+    <DescValueBase>k__BackingField: 0.5
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 0

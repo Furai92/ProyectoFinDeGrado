@@ -23,6 +23,7 @@ public class EventManager
     public static event Action<Vector3, float> PlayerDashEndedEvent;
     public static event Action<Vector3> PlayerWallSlamEvent;
     public static event Action<Vector3, WeaponSO.WeaponSlot, float> PlayerAttackStartedEvent;
+    public static event Action PlayerFixedTimeIntervalEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -160,5 +161,9 @@ public class EventManager
     public static void OnPlayerAttackStarted(Vector3 pos, WeaponSO.WeaponSlot slot, float direction)
     {
         PlayerAttackStartedEvent?.Invoke(pos, slot, direction);
+    }
+    public static void OnPlayerFixedTimeInterval() 
+    {
+        PlayerFixedTimeIntervalEvent?.Invoke();
     }
 }

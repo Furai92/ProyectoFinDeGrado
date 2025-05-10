@@ -52,3 +52,5 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 11400000, guid: df161962a49ca54498ec667aaa64aad1, type: 2}
   - <ID>k__BackingField: ELEM_GRAD_INCINERATION
     <Data>k__BackingField: {fileID: 11400000, guid: fbb22673df77e33479ec264f01c51c3c, type: 2}
+  - <ID>k__BackingField: ELEM_GRAD_FROSTBITE
+    <Data>k__BackingField: {fileID: 11400000, guid: 65c6fc30b062ef24aaa0182bb9845f4f, type: 2}

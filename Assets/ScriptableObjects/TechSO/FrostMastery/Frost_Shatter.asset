@@ -10,28 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Frost_EndlessWinter
+  m_Name: Frost_Shatter
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: ENDLESS_WINTER
-  <NameID>k__BackingField: TCH_N_ENDLESS_WINTER
-  <DescID>k__BackingField: TCH_D_ENDLESS_WINTER
-  <MaxLevel>k__BackingField: 2
-  <Rarity>k__BackingField: 2
+  <ID>k__BackingField: SHATTER
+  <NameID>k__BackingField: TCH_N_SHATTER
+  <DescID>k__BackingField: TCH_D_SHATTER
+  <MaxLevel>k__BackingField: 5
+  <Rarity>k__BackingField: 1
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
-  <Script>k__BackingField: TechBehaviourEndlessWinter
+  <Script>k__BackingField: TechBehaviourShatter
   <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_CHANCE
+  - <DescTextID>k__BackingField: TCH_DT_DMG_PERCENT
     <DescValueBase>k__BackingField: 0
     <DescValueScaling>k__BackingField: 10
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_RANGE
-    <DescValueBase>k__BackingField: 20
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_COOLDOWN
-    <DescValueBase>k__BackingField: 0.5
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 0

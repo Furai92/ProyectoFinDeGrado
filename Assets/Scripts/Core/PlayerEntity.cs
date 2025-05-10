@@ -61,6 +61,8 @@ public class PlayerEntity : NetworkBehaviour
     public List<TechGroup> ActiveTechList { get; private set; }
     public Dictionary<string, TechGroup> ActiveTechDictionary { get; private set; }
 
+    private float nextTechTimeIntervalUpdate;
+
     // Buffs ===============================================================================================
 
     private Dictionary<string, BuffEffectSO> buffDictionary;
@@ -116,6 +118,7 @@ public class PlayerEntity : NetworkBehaviour
         stats.ChangeStat(PlayerStatGroup.Stat.CritChance, 15);
         stats.ChangeStat(PlayerStatGroup.Stat.HeatCap, 100);
 
+        nextTechTimeIntervalUpdate = 0;
         ActiveTechDictionary = new Dictionary<string, TechGroup>();
         ActiveTechList = new List<TechGroup>();
 
@@ -206,6 +209,7 @@ public class PlayerEntity : NetworkBehaviour
             StartDash();
         }
         if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
+        if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + 1; EventManager.OnPlayerFixedTimeInterval(); } 
     }
     public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
     {
@@ -361,11 +365,13 @@ public class PlayerEntity : NetworkBehaviour
 
     public void ChangeWeaponHeat(float change, WeaponSO.WeaponSlot s) 
     {
+        
+        change *= Mathf.Max(0, 1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+
         if (s == WeaponSO.WeaponSlot.Melee) 
         {
             if (change > 0)
             {
-                change *= (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
                 StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
                 if (StatusHeatMelee >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Melee); }
             }
@@ -379,7 +385,6 @@ public class PlayerEntity : NetworkBehaviour
         {
             if (change > 0)
             {
-                change *= (1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
                 StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
                 if (StatusHeatRanged >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Ranged); }
             }
@@ -468,6 +473,10 @@ public class PlayerEntity : NetworkBehaviour
     public float GetStat(PlayerStatGroup.Stat s)
     {
         return stats.GetStat(s);
+    }
+    public float GetHeatRange() 
+    {
+        return stats.GetStat(PlayerStatGroup.Stat.HeatFloor) + stats.GetStat(PlayerStatGroup.Stat.HeatCap);
     }
     public bool IsEvading()
     {

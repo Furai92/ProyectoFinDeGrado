@@ -28,11 +28,13 @@ public class EnemyEntity : MonoBehaviour
     private float[] statusDurations;
     private float nextStatusUpdateTime;
 
-    private const float FUSION_STATUS_HEALTH_PERCENT_DAMAGE = 1.5f;
+    private const float INCINERATE_STATUS_HEALTH_PERCENT_DAMAGE = 1.5f;
     private const float FIRE_STATUS_HEALTH_PERCENT_DAMAGE = 0.8f;
     private const float SHOCK_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float SHOCK_STATUS_BONUS_CRIT_CHANCE = 50f;
-    private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.4f;
+    private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.2f;
+    private const float FROSTBITE_STATUS_HEALTH_PERCENT_DAMAGE = 0.2f;
+    private const float FROSTBITE_STATUS_EFFECT_MULTIPLIER = 1.4f;
     private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float VOID_STATUS_RADIUS_BASE = 5f;
     private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
@@ -167,7 +169,11 @@ public class EnemyEntity : MonoBehaviour
         }
         if (statusDurations[(int)GameEnums.DamageElement.Incineration] > 0)
         {
-            DealStatusDamage(maxHealth * FUSION_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Incineration);
+            DealStatusDamage(maxHealth * INCINERATE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Incineration);
+        }
+        if (statusDurations[(int)GameEnums.DamageElement.Frostbite] > 0)
+        {
+            DealStatusDamage(maxHealth * FROSTBITE_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL, GameEnums.DamageElement.Frostbite);
         }
         if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0)
         {
@@ -274,6 +280,7 @@ public class EnemyEntity : MonoBehaviour
 
         int statusIndex = (int)element;
         float buildupStrengtht = (magnitude / BaseHealth / HEALTH_PERCENT_REQUIRED_TO_FULL_BUILDUP) / statusBuildupResistancesDivider[statusIndex];
+        if (statusDurations[(int)GameEnums.DamageElement.Frostbite] > 0) { buildupStrengtht *= FROSTBITE_STATUS_EFFECT_MULTIPLIER; }
         while (buildupStrengtht > 0)
         {
             statusBuildups[statusIndex] += buildupStrengtht /= statusBuildupResistancesDivider[statusIndex];

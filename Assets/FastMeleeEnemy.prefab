@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MovementSpeed>k__BackingField: 10
-  <BaseHealth>k__BackingField: 1500
+  <BaseHealth>k__BackingField: 4000
   <ExtraBars>k__BackingField: 1
   <KnockbackResistance>k__BackingField: 0
   <ItemDropRate>k__BackingField: 0.2
