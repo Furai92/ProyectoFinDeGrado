@@ -25,7 +25,7 @@ public class TechCombatEffectBulletstorm : TechCombatEffect
         transform.position = PlayerEntity.ActiveInstance.transform.position;
         if (Time.time > nextShootTime) 
         {
-            PlayerEntity.ActiveInstance.Attack(WeaponSO.WeaponSlot.Ranged, direction + shootDir, false);
+            PlayerEntity.ActiveInstance.Attack(WeaponSO.WeaponSlot.Ranged, direction + shootDir, false, true);
             shootDir += 360 / SHOOTS;
             nextShootTime = Time.time + shootInterval;
             shootsFired++;

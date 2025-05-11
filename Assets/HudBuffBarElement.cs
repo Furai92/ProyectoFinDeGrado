@@ -10,7 +10,7 @@ public class HudBuffBarElement : MonoBehaviour
 
     public void SetUp(PlayerEntity.ActiveBuff b) 
     {
-        stackCountText.text = b.Stacks.ToString("F0");
+        stackCountText.text = string.Format("x{0}", b.Stacks.ToString("F0"));
         durationText.text = (b.GetDurationRemaining()+1).ToString("F0");
         icon.sprite = b.SO.Icon;
     }

@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class TechBehaviourFusionCharge : TechBase
+public class TechBehaviourUnload : TechBase
 {
     private bool effectEnabled;
 
-    private const string BUFF_ID = "FUSION_CHARGE";
+    private const float CHANCE = 33f;
+    private const string BUFF_ID = "UNLOAD";
 
     public override void OnTechAdded()
     {
@@ -24,6 +25,7 @@ public class TechBehaviourFusionCharge : TechBase
     private void OnPlayerAttackStarted(Vector3 pos, WeaponSO.WeaponSlot slot, float dir) 
     {
         if (!effectEnabled) { return; }
+        if (Random.Range(1, 101) > CHANCE) { return; }
 
         PlayerEntity.ActiveInstance.ChangeBuff(BUFF_ID, Group.Level, 1);
     }

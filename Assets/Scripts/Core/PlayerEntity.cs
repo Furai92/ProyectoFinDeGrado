@@ -36,6 +36,8 @@ public class PlayerEntity : NetworkBehaviour
     private float heatDecayRanged;
 
     private const float HEAT_DECAY_GROWTH = 5f;
+    private const float ECHO_RANDOM_SPREAD_MIN = 2f;
+    private const float ECHO_RANDOM_SPREAD_MAX = 7f;
 
     // Stats and equipment =================================================================================
 
@@ -198,11 +200,11 @@ public class PlayerEntity : NetworkBehaviour
 
         if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
         {
-            Attack(WeaponSO.WeaponSlot.Ranged, currentDirection, true);
+            Attack(WeaponSO.WeaponSlot.Ranged, currentDirection, true, true);
         }
         if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
         {
-            Attack(WeaponSO.WeaponSlot.Melee, currentDirection, true);
+            Attack(WeaponSO.WeaponSlot.Melee, currentDirection, true, true);
         }
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 
         {
@@ -211,10 +213,12 @@ public class PlayerEntity : NetworkBehaviour
         if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
         if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + 1; EventManager.OnPlayerFixedTimeInterval(); } 
     }
-    public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat)
+    public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat, bool canEcho)
     {
         if (defeated) { return; }
+
         EventManager.OnPlayerAttackStarted(transform.position, s, attackDir);
+
         if (generateHeat) 
         {
             if (s == WeaponSO.WeaponSlot.Melee)
@@ -248,11 +252,11 @@ public class PlayerEntity : NetworkBehaviour
                 {
                     User = this,
                     Magnitude = wpn.ProjectileComponentMagnitude * attackMagnitudeMultiplier,
-                    Bounces = wpn.Bounces,
+                    Bounces = wpn.Bounces + (int)stats.GetStat(PlayerStatGroup.Stat.BonusRangedBounces),
                     BuildupRate = wpn.BuildupRate,
                     CritDamage = wpn.CritMultiplier + stats.GetStat(PlayerStatGroup.Stat.CritBonusDamage),
                     CritChance = stats.GetStat(PlayerStatGroup.Stat.CritChance),
-                    Pierces = wpn.Pierces,
+                    Pierces = wpn.Pierces + (int)stats.GetStat(PlayerStatGroup.Stat.BonusRangedPierces),
                     SizeMultiplier = wpn.SizeMultiplier,
                     Splash = wpn.Splash,
                     Timescale = wpn.Timescale,
@@ -289,6 +293,16 @@ public class PlayerEntity : NetworkBehaviour
                 DamageType = s == WeaponSO.WeaponSlot.Melee ? GameEnums.DamageType.Melee : GameEnums.DamageType.Ranged
             };
             ObjectPoolManager.GetPlayerAttackFromPool(wpn.CleaveComponentID).SetUp(transform.position, attackDir, sd, null);
+        }
+
+        if (stats.GetStat(PlayerStatGroup.Stat.EchoChance) > 0 && canEcho) 
+        {
+            if (Random.Range(0, 101) < stats.GetStat(PlayerStatGroup.Stat.EchoChance)) 
+            {
+                float echoRandomSpread = Random.Range(ECHO_RANDOM_SPREAD_MIN, ECHO_RANDOM_SPREAD_MAX);
+                echoRandomSpread *= Random.Range(0, 2) == 0 ? 1 : -1;
+                Attack(s, attackDir + echoRandomSpread, false, false);
+            }
         }
     }
     private void FixedUpdate()
@@ -602,8 +616,12 @@ public class PlayerEntity : NetworkBehaviour
     {
         for (int i = ActiveBuffs.Count-1; i >= 0; i--) 
         {
-            ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
-            if (ActiveBuffs[i].SO.ID == buffID) { ActiveBuffs.RemoveAt(i); }
+            if (ActiveBuffs[i].SO.ID == buffID) 
+            {
+                ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+                ActiveBuffs.RemoveAt(i);
+                EventManager.OnPlayerStatsUpdated(this);
+            }
         }
     }
     public void ChangeBuff(string buffID, float effectMultiplier, int stacks)

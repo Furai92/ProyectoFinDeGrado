@@ -15,7 +15,7 @@ MonoBehaviour:
   <ID>k__BackingField: ZERO_POINT
   <NameID>k__BackingField: TCH_N_ZERO_POINT
   <DescID>k__BackingField: TCH_D_ZERO_POINT
-  <MaxLevel>k__BackingField: -1
+  <MaxLevel>k__BackingField: 3
   <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
   <Script>k__BackingField: 

@@ -22,13 +22,15 @@ public class PlayerStatGroup
         EchoChance,
         RandomSpread,
         HeatGenIncrease,
+        BonusRangedBounces,
+        BonusRangedPierces
     }
     public enum PlayerFlags { NoHeal }
 
     private float[] stats;
     private int[] flags;
 
-    private const int STAT_ARRAY_LENGHT = 20;
+    private const int STAT_ARRAY_LENGHT = 30;
     private const int FLAG_ARRAY_LENGHT = 5;
 
     public PlayerStatGroup() 

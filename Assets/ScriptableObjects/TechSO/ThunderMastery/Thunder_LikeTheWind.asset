@@ -10,24 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: General_Purist
+  m_Name: Thunder_LikeTheWind
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: PURIST
-  <NameID>k__BackingField: TCH_N_PURIST
-  <DescID>k__BackingField: TCH_D_PURIST
+  <ID>k__BackingField: LIKE_THE_WIND
+  <NameID>k__BackingField: TCH_N_LIKE_THE_WIND
+  <DescID>k__BackingField: TCH_D_LIKE_THE_WIND
   <MaxLevel>k__BackingField: 3
-  <Rarity>k__BackingField: 1
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
-  <Script>k__BackingField: TechBehaviourPurist
+  <Rarity>k__BackingField: 2
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
+  <Script>k__BackingField: TechBehaviourLikeTheWind
   <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_INT
+  - <DescTextID>k__BackingField: TCH_DT_SPEED_TO_DMG
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 50
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 2

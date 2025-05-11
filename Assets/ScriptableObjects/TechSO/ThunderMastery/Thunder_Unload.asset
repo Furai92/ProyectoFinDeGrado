@@ -10,35 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Fire_FusionCharge
+  m_Name: Thunder_Unload
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: FUSION_CHARGE
-  <NameID>k__BackingField: TCH_N_FUSION_CHARGE
-  <DescID>k__BackingField: TCH_D_FUSION_CHARGE
-  <MaxLevel>k__BackingField: 4
-  <Rarity>k__BackingField: 1
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 96432c85b8c7f4a419bf87b5fddfb81c, type: 2}
-  <Script>k__BackingField: TechBehaviourFusionCharge
+  <ID>k__BackingField: UNLOAD
+  <NameID>k__BackingField: TCH_N_UNLOAD
+  <DescID>k__BackingField: TCH_D_UNLOAD
+  <MaxLevel>k__BackingField: 3
+  <Rarity>k__BackingField: 0
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
+  <Script>k__BackingField: TechBehaviourUnload
   <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_MIGHT
+  - <DescTextID>k__BackingField: TCH_DT_FIRERATE
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 2
+    <DescValueScaling>k__BackingField: 2.5
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_DEX
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 2
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_HEATGEN
-    <DescValueBase>k__BackingField: 5
+  - <DescTextID>k__BackingField: TCH_DT_CHANCE
+    <DescValueBase>k__BackingField: 33
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_DURATION
-    <DescValueBase>k__BackingField: 5
+    <DescValueBase>k__BackingField: 2
     <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 1
+    <DescDetailType>k__BackingField: 0
   - <DescTextID>k__BackingField: TCH_DT_OVERHEAT_RESET
     <DescValueBase>k__BackingField: 0
     <DescValueScaling>k__BackingField: 0

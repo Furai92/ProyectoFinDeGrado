@@ -10,26 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Thunder_ThunderMasteryCoreTech
+  m_Name: Thunder_VoltaicArmaments
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: THUNDER_MASTERY_CORE
-  <NameID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
-  <DescID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
-  <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 4
+  <ID>k__BackingField: VOLTAIC_ARMAMENTS
+  <NameID>k__BackingField: TCH_N_VOLTAIC_ARMAMENTS
+  <DescID>k__BackingField: TCH_D_VOLTAIC_ARMAMENTS
+  <MaxLevel>k__BackingField: 5
+  <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
-  <Script>k__BackingField: TechBehaviourThunderMasterCore
+  <Script>k__BackingField: 
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 16
-    <Second>k__BackingField: 33
+  - <First>k__BackingField: 19
+    <Second>k__BackingField: 1
+  - <First>k__BackingField: 6
+    <Second>k__BackingField: 5
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_ECHO
-    <DescValueBase>k__BackingField: 33
-    <DescValueScaling>k__BackingField: 0
+  - <DescTextID>k__BackingField: TCH_DT_BOUNCES
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 1
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_THUNDER_MASTER_CORE
-    <DescValueBase>k__BackingField: 50
-    <DescValueScaling>k__BackingField: 0
+  - <DescTextID>k__BackingField: TCH_DT_CRITC
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 5
     <DescDetailType>k__BackingField: 1

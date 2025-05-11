@@ -114,8 +114,8 @@ MonoBehaviour:
   - <ID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
     <Data>k__BackingField: Thunder Master
   - <ID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
-    <Data>k__BackingField: Increases attack speed by 25%. Your attacks have a 33%
-      chance to be duplicated.
+    <Data>k__BackingField: Your attacks have a 33% chance to be duplicated.  Critical
+      hits deal 50% bonus thunder damage.
   - <ID>k__BackingField: TRAIT_DESC_VOID_MASTER
     <Data>k__BackingField: All your weapon attacks become explosive. Your explosions
       deal 5% more damage per each 1M of radius.
@@ -166,8 +166,8 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_FUSION_CHARGE
     <Data>k__BackingField: Fusion Charge
   - <ID>k__BackingField: TCH_D_FUSION_CHARGE
-    <Data>k__BackingField: Overheating a weapon grants a massive might and dexterity
-      boost for a short time.
+    <Data>k__BackingField: Attacking with your weapons increases your might, dexterity,
+      and heat generation for a short time. Stacks are lost after overheating a weapon.
   - <ID>k__BackingField: TCH_N_HEAVY_ARMOR
     <Data>k__BackingField: Heavy Armor
   - <ID>k__BackingField: TCH_D_HEAVY_ARMOR
@@ -344,8 +344,9 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_N_SHATTER
     <Data>k__BackingField: Shatter
   - <ID>k__BackingField: TCH_D_SHATTER
-    <Data>k__BackingField: Weapon attacks against frozen enemies deal extra non elemental
-      damage.
+    <Data>k__BackingField: Melee attacks against frozen enemies consume their forzen
+      status to deal massive non elemental damage. The amount of damage dealt is
+      based on the duration of the status consumed.
   - <ID>k__BackingField: TCH_N_FROST_AURA
     <Data>k__BackingField: Frost Aura
   - <ID>k__BackingField: TCH_D_FROST_AURA
@@ -357,6 +358,45 @@ MonoBehaviour:
     <Data>k__BackingField: Freezing an enemy also applies Frostbite, enemies under
       this status recive extra status buildup and take a small amount of damage over
       time.
+  - <ID>k__BackingField: TCH_N_VOLTAIC_ARMAMENTS
+    <Data>k__BackingField: Voltaic Armaments
+  - <ID>k__BackingField: TCH_D_VOLTAIC_ARMAMENTS
+    <Data>k__BackingField: Increases projectile bounces and critical strike chance.
+  - <ID>k__BackingField: TCH_N_OVERCHARGE
+    <Data>k__BackingField: Overcharge
+  - <ID>k__BackingField: TCH_D_OVERCHARGE
+    <Data>k__BackingField: Increases attack speed.
+  - <ID>k__BackingField: TCH_N_FOCUS
+    <Data>k__BackingField: Focus
+  - <ID>k__BackingField: TCH_D_FOCUS
+    <Data>k__BackingField: Defeating enemies has a chance to increase your critical
+      strike chance.
+  - <ID>k__BackingField: TCH_N_SURGE
+    <Data>k__BackingField: Surge
+  - <ID>k__BackingField: TCH_D_SURGE
+    <Data>k__BackingField: Shocking an enemy grants critical strike damage and movement
+      speed for a short time. This effect cannot be stacked.
+  - <ID>k__BackingField: TCH_N_STATIC_CHARGE
+    <Data>k__BackingField: Static Charge
+  - <ID>k__BackingField: TCH_D_STATIC_CHARGE
+    <Data>k__BackingField: Increases critical damage. Melee critical hits increase
+      your movement speed for a short time.
+  - <ID>k__BackingField: TCH_N_UNLOAD
+    <Data>k__BackingField: Unload
+  - <ID>k__BackingField: TCH_D_UNLOAD
+    <Data>k__BackingField: Weapon attacks have a chance to increase your firerate
+      for a very short time. Effect is removed after overheating a weapon.
+  - <ID>k__BackingField: TCH_N_LIKE_THE_WIND
+    <Data>k__BackingField: Like the wind
+  - <ID>k__BackingField: TCH_D_LIKE_THE_WIND
+    <Data>k__BackingField: Melee attacks deal thunder damage based on your bonus
+      movement speed.
+  - <ID>k__BackingField: TCH_N_EYE_OF_THE_STORM
+    <Data>k__BackingField: Eye of the storm
+  - <ID>k__BackingField: TCH_D_EYE_OF_THE_STORM
+    <Data>k__BackingField: Critical strikes grant charges based on their critical
+      level. Every second spend 10 charges to release a bouncing bolt. The damage
+      of the bolt is based on your critical strike chance.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -391,6 +431,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Might on enemy kill: {0}'
   - <ID>k__BackingField: TCH_DT_DEX_ONKILL
     <Data>k__BackingField: 'Dexterity on enemy defeated: {0}'
+  - <ID>k__BackingField: TCH_DT_FIRERATE
+    <Data>k__BackingField: 'Attack Speed: {0}'
   - <ID>k__BackingField: TCH_DT_CHANCE
     <Data>k__BackingField: 'Chance to trigger: {0}%'
   - <ID>k__BackingField: TCH_DT_DMG_TO_EXPLOSION
@@ -407,8 +449,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Damage: {0}'
   - <ID>k__BackingField: TCH_DT_DMG_PERCENT
     <Data>k__BackingField: 'Bonus damage: {0}%'
-  - <ID>k__BackingField: TCH_DT_END_OF_WAVE_STACKS
-    <Data>k__BackingField: Clears stacks after each wave.
+  - <ID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
+    <Data>k__BackingField: Resets after the wave ends
   - <ID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
     <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
   - <ID>k__BackingField: TCH_DT_HEATCAP
@@ -431,10 +473,22 @@ MonoBehaviour:
     <Data>k__BackingField: 'Damage per point of heat: {0}'
   - <ID>k__BackingField: TCH_DT_COOLING_PERCENT
     <Data>k__BackingField: 'Heat removed: {0}%'
+  - <ID>k__BackingField: TCH_DT_OVERHEAT_RESET
+    <Data>k__BackingField: Resets after overheating a weapon
   - <ID>k__BackingField: TCH_DT_INTERVAL
     <Data>k__BackingField: 'Interval: {0}s'
   - <ID>k__BackingField: TCH_DT_BUILDUP_MULT
     <Data>k__BackingField: 'Status buildup multiplier: +{0}%'
+  - <ID>k__BackingField: TCH_DT_SPEED_TO_DAMAGE
+    <Data>k__BackingField: 'Damage per point of speed: {0}'
+  - <ID>k__BackingField: TCH_DT_ECHO
+    <Data>k__BackingField: 'Echo chance: {0}%'
+  - <ID>k__BackingField: TCH_DT_THUNDER_MASTER_CORE
+    <Data>k__BackingField: 'Bonus critical thunder damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_DAMAGE_PER_STATUS_DURATION
+    <Data>k__BackingField: 'Damage per second of status consumed: {0}'
+  - <ID>k__BackingField: TCH_DT_BOUNCES
+    <Data>k__BackingField: 'Bonus projectile bounces: {0}'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT

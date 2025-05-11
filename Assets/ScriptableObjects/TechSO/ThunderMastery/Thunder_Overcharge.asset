@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Frost_Shatter
+  m_Name: Thunder_Overcharge
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: SHATTER
-  <NameID>k__BackingField: TCH_N_SHATTER
-  <DescID>k__BackingField: TCH_D_SHATTER
-  <MaxLevel>k__BackingField: 3
-  <Rarity>k__BackingField: 2
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 02d50b47a69a38342b1f19289d7bc885, type: 2}
-  <Script>k__BackingField: TechBehaviourShatter
-  <BonusStats>k__BackingField: []
+  <ID>k__BackingField: OVERCHARGE
+  <NameID>k__BackingField: TCH_N_OVERCHARGE
+  <DescID>k__BackingField: TCH_D_OVERCHARGE
+  <MaxLevel>k__BackingField: 5
+  <Rarity>k__BackingField: 0
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
+  <Script>k__BackingField: 
+  <BonusStats>k__BackingField:
+  - <First>k__BackingField: 8
+    <Second>k__BackingField: 0.1
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_DAMAGE_PER_STATUS_DURATION
+  - <DescTextID>k__BackingField: TCH_DT_FIRERATE
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 250
+    <DescValueScaling>k__BackingField: 10
     <DescDetailType>k__BackingField: 1

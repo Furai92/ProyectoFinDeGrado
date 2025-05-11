@@ -4,10 +4,12 @@ public class TechBehaviourCoolheaded : TechBase
 {
 
     private bool tickDisabled;
-    private bool perkDisabled;
+    private bool effectEnabled;
 
     public override void OnTechAdded()
     {
+        effectEnabled = StageManagerBase.GetCurrentStateType() != StageStateBase.GameState.Rest;
+
         EventManager.PlayerFixedTimeIntervalEvent += OnFixedTimeInterval;
         EventManager.PlayerAttackStartedEvent += OnPlayerAttack;
         EventManager.StageStateStartedEvent += OnStageStateStarted;
@@ -33,11 +35,11 @@ public class TechBehaviourCoolheaded : TechBase
     private void OnStageStateStarted(StageStateBase.GameState s) 
     {
         PlayerEntity.ActiveInstance.RemoveBuff("COOLHEADED");
-        perkDisabled = s == StageStateBase.GameState.Rest;
+        effectEnabled = s != StageStateBase.GameState.Rest;
     }
     private void OnFixedTimeInterval() 
     {
-        if (perkDisabled) { return; }
+        if (!effectEnabled) { return; }
         if (tickDisabled) { tickDisabled = false; return; }
 
         PlayerEntity.ActiveInstance.ChangeBuff("COOLHEADED", Group.Level, 1);

@@ -3,7 +3,7 @@ using UnityEngine;
 public class TechBehaviourChainFreeze : TechBase
 {
     private const float EXPLOSION_RADIUS = 8f;
-    private const float DAMAGE = 500f;
+    private const float DAMAGE = 350f;
 
     public override void OnTechAdded()
     {

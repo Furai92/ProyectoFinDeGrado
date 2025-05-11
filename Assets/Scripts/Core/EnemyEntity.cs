@@ -258,6 +258,10 @@ public class EnemyEntity : MonoBehaviour
         statusDurations[(int)e] += STATUS_DURATION_STANDARD;
         EventManager.OnEnemyStatusApplied(e, this);
     }
+    public void RemoveStatus(GameEnums.DamageElement e) 
+    {
+        statusDurations[(int)e] = 0;
+    }
     public void DealStatusDamage(float magnitude, GameEnums.DamageElement element) 
     {
         CurrentHealth -= magnitude;

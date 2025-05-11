@@ -55,6 +55,8 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 8384385237789958822, guid: e93f656279be5214b9d7cff41b819b09, type: 3}
   - <ID>k__BackingField: WAVE
     <Data>k__BackingField: {fileID: 4033443227064948951, guid: e47a1ce0a74ff5f4ab4868d6d9448dae, type: 3}
+  - <ID>k__BackingField: BOUNCING_BOLT
+    <Data>k__BackingField: {fileID: 8533638725067763978, guid: b051c519ebf71194f8c2020b009ff565, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
@@ -98,9 +100,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a9d801d303c18f4d8e5512506663f8e, type: 2}
   - {fileID: 11400000, guid: c04e00cd9bb54ee4fa92a172ff6498f8, type: 2}
   - {fileID: 11400000, guid: 83c17251914b05e42b0f1d928743ba0b, type: 2}
+  - {fileID: 11400000, guid: 13e91ecf92743ae43a2a44833e1c90ca, type: 2}
+  - {fileID: 11400000, guid: 513517b4d13538749baa8cbae17c49d8, type: 2}
+  - {fileID: 11400000, guid: 8dfe24cd058727045a25bd4946c93648, type: 2}
   - {fileID: 11400000, guid: 70f7f8ebf246eca48a8f769469ea0d97, type: 2}
   - {fileID: 11400000, guid: 3840f044dc6e54043898801f9639f473, type: 2}
   - {fileID: 11400000, guid: c5bc4e1d784ed6d49a968595347a9656, type: 2}
+  - {fileID: 11400000, guid: b8e490327ae40e84b8718b7faa3b4b15, type: 2}
+  - {fileID: 11400000, guid: cba71e9f240e6504b8bb4126ad965243, type: 2}
+  - {fileID: 11400000, guid: 66c772d2a201afc45b5e0b09b2d1844f, type: 2}
+  - {fileID: 11400000, guid: 57b3d4ab1b5080645863820d5889cd94, type: 2}
   - {fileID: 11400000, guid: 90c8a8436693d7e44aa84858d70b962a, type: 2}
   - {fileID: 11400000, guid: 8e6914816921a7f4a8c18cb640070651, type: 2}
   - {fileID: 11400000, guid: e64fd68b9d950c3469ffa8c623f38b50, type: 2}
@@ -109,8 +118,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e2f65190c8a8df346885c3f8e09ad9a7, type: 2}
   - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   <BuffEffects>k__BackingField:
-  - {fileID: 11400000, guid: 7a55eb41e75785f48a64a9e0bc1d287d, type: 2}
-  - {fileID: 11400000, guid: 71475680083bc1741b5650d1ed06a8a4, type: 2}
   - {fileID: 11400000, guid: 62baebcb255eb3f4094fe3368e4c6c45, type: 2}
   - {fileID: 11400000, guid: 8d61fba67ad505d4b807b1a0e6dc0d96, type: 2}
   - {fileID: 11400000, guid: 1c25e70db4151c043bd0c8f356682dc5, type: 2}
@@ -119,6 +126,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a257a343685c274b9b86f0d765ed402, type: 2}
   - {fileID: 11400000, guid: a7a43b4052570ec4b8dd4cc35cb06514, type: 2}
   - {fileID: 11400000, guid: 5b0b4f6e02b30224cb64bb8993d372f2, type: 2}
+  - {fileID: 11400000, guid: c44e2c03093f664459d14907f9a85d66, type: 2}
+  - {fileID: 11400000, guid: 98f3bbf16d89ba340a9383e2068cc736, type: 2}
+  - {fileID: 11400000, guid: 07c716e877a63c749a43c4bcc5c54218, type: 2}
+  - {fileID: 11400000, guid: ce0153d7fa712024292e48fe9057702e, type: 2}
+  - {fileID: 11400000, guid: 74d19c3eeecc4a7458d2445a42afd5da, type: 2}
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}
