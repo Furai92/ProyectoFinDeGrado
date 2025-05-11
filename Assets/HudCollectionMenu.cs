@@ -9,11 +9,17 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
     [SerializeField] private Transform menuParent;
     [SerializeField] private List<HudTechCard> techCards;
 
+    private List<TechSO> techDisplayed;
+    private TechSOComparer comparer;
+
     private int page;
 
     private void OnEnable()
     {
         page = 0;
+        techDisplayed = db.Techs;
+        comparer = new TechSOComparer();
+        techDisplayed.Sort(comparer);
     }
     public bool CanBeOpened()
     {
@@ -23,7 +29,7 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
     public void OnNextPageClicked() 
     {
         if (!IsOpen()) { return; }
-        if (db.Techs.Count <= ((page+1) * techCards.Count)) { return; }
+        if (techDisplayed.Count <= ((page+1) * techCards.Count)) { return; }
 
         page++;
         UpdateDisplayedInfo();
@@ -58,9 +64,9 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
         for (int i = 0; i < techCards.Count; i++) 
         {
             int indexReaded = i +(page * techCards.Count);
-            if (indexReaded < db.Techs.Count)
+            if (indexReaded < techDisplayed.Count)
             {
-                techCards[i].SetUp(db.Techs[indexReaded], HudTechCard.TechDisplayMode.Collection);
+                techCards[i].SetUp(techDisplayed[indexReaded], HudTechCard.TechDisplayMode.Collection);
                 techCards[i].gameObject.SetActive(true);
             }
             else 

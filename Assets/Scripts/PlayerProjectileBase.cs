@@ -135,6 +135,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
                     {
                         beamInterruptedByEntity = true;
                         beamEnd = currentBeamPos;
+                        EventManager.OnProjectileBounce(this, true);
                         setupData.Bounces--;
                         CurrentDirection = GetBounceDirection(beamEnd, true, entityCastResults.collider);
                         transform.rotation = Quaternion.Euler(0, CurrentDirection, 0);
@@ -169,7 +170,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
             if (setupData.Bounces > 0 || UnlimitedWallBounces)
             {
                 if (!UnlimitedWallBounces) { setupData.Bounces--; }
-                
+
+                EventManager.OnProjectileBounce(this, false);
                 CurrentDirection = GameTools.AngleReflection(CurrentDirection, GameTools.NormalToEuler(terrainCastResults.normal) + 90);
                 transform.rotation = Quaternion.Euler(0, CurrentDirection, 0);
                 enemyHits.Clear();

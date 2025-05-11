@@ -23,7 +23,8 @@ public class PlayerStatGroup
         RandomSpread,
         HeatGenIncrease,
         BonusRangedBounces,
-        BonusRangedPierces
+        BonusRangedPierces,
+        BonusSplash
     }
     public enum PlayerFlags { NoHeal }
 

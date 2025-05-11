@@ -24,4 +24,12 @@ MonoBehaviour:
     <Second>k__BackingField: 100
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
-  <DescriptionDetails>k__BackingField: []
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_HEATFLOOR
+    <DescValueBase>k__BackingField: 100
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_FROST_MASTER_CORE
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1

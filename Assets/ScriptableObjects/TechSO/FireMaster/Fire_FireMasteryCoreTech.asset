@@ -29,7 +29,7 @@ MonoBehaviour:
     <DescValueBase>k__BackingField: 1
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
-    <DescValueBase>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_HEATCAP
+    <DescValueBase>k__BackingField: 100
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

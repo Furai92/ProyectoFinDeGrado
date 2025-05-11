@@ -258,7 +258,7 @@ public class PlayerEntity : NetworkBehaviour
                     CritChance = stats.GetStat(PlayerStatGroup.Stat.CritChance),
                     Pierces = wpn.Pierces + (int)stats.GetStat(PlayerStatGroup.Stat.BonusRangedPierces),
                     SizeMultiplier = wpn.SizeMultiplier,
-                    Splash = wpn.Splash,
+                    Splash = wpn.Splash + stats.GetStat(PlayerStatGroup.Stat.BonusSplash),
                     Timescale = wpn.Timescale,
                     EnemyIgnored = -1,
                     Knockback = wpn.Knockback,

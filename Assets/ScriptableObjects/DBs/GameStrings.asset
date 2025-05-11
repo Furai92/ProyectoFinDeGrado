@@ -117,8 +117,8 @@ MonoBehaviour:
     <Data>k__BackingField: Your attacks have a 33% chance to be duplicated.  Critical
       hits deal 50% bonus thunder damage.
   - <ID>k__BackingField: TRAIT_DESC_VOID_MASTER
-    <Data>k__BackingField: All your weapon attacks become explosive. Your explosions
-      deal 5% more damage per each 1M of radius.
+    <Data>k__BackingField: All your weapon attacks become explosive. Your weapon
+      attacks deal bonus void damage based on your explosion radius.
   - <ID>k__BackingField: TRAIT_NAME_VOID_MASTER
     <Data>k__BackingField: Void Master
   - <ID>k__BackingField: TRAIT_NAME_RESTORATION
@@ -391,12 +391,11 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_LIKE_THE_WIND
     <Data>k__BackingField: Melee attacks deal thunder damage based on your bonus
       movement speed.
-  - <ID>k__BackingField: TCH_N_EYE_OF_THE_STORM
-    <Data>k__BackingField: Eye of the storm
-  - <ID>k__BackingField: TCH_D_EYE_OF_THE_STORM
-    <Data>k__BackingField: Critical strikes grant charges based on their critical
-      level. Every second spend 10 charges to release a bouncing bolt. The damage
-      of the bolt is based on your critical strike chance.
+  - <ID>k__BackingField: TCH_N_REFRACTION
+    <Data>k__BackingField: Refraction
+  - <ID>k__BackingField: TCH_D_REFRACTION
+    <Data>k__BackingField: Your projectiles gain bonus multiplicative damage after
+      bouncing with terrain.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -445,14 +444,20 @@ MonoBehaviour:
     <Data>k__BackingField: 'Damage per status: {0}'
   - <ID>k__BackingField: TCH_DT_RADIUS
     <Data>k__BackingField: 'Radius: {0}m'
+  - <ID>k__BackingField: TCH_DT_SPLASH
+    <Data>k__BackingField: 'Bonus explosion radius: {0}m.'
   - <ID>k__BackingField: TCH_DT_DMG
     <Data>k__BackingField: 'Damage: {0}'
+  - <ID>k__BackingField: TCH_DT_VOID_MASTER_CORE
+    <Data>k__BackingField: 'Bonus damage per splash radius: {0}%'
   - <ID>k__BackingField: TCH_DT_DMG_PERCENT
     <Data>k__BackingField: 'Bonus damage: {0}%'
   - <ID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
     <Data>k__BackingField: Resets after the wave ends
   - <ID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
     <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
+  - <ID>k__BackingField: TCH_DT_FROST_MASTER_CORE
+    <Data>k__BackingField: 'Extra damage per heat below 0: {0}%'
   - <ID>k__BackingField: TCH_DT_HEATCAP
     <Data>k__BackingField: 'Heat cap increase: {0}'
   - <ID>k__BackingField: TCH_DT_COOLDOWN

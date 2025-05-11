@@ -24,6 +24,7 @@ public class EventManager
     public static event Action<Vector3> PlayerWallSlamEvent;
     public static event Action<Vector3, WeaponSO.WeaponSlot, float> PlayerAttackStartedEvent;
     public static event Action PlayerFixedTimeIntervalEvent;
+    public static event Action<PlayerAttackBase, bool> PlayerProjectileBounceEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -165,5 +166,9 @@ public class EventManager
     public static void OnPlayerFixedTimeInterval() 
     {
         PlayerFixedTimeIntervalEvent?.Invoke();
+    }
+    public static void OnProjectileBounce(PlayerAttackBase attack, bool entityBounce) 
+    {
+        PlayerProjectileBounceEvent?.Invoke(attack, entityBounce);
     }
 }

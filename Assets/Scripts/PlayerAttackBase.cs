@@ -15,7 +15,11 @@ public abstract class PlayerAttackBase : MonoBehaviour
 
         ObjectPoolManager.GetPlayerAttackFromPool("EXPLOSION").SetUp(center, 0, explosionsd, this);
     }
-    public float GetBounceDirection(Vector3 pos, bool losCheck, Collider hitboxIgnored = null)
+    public void AmplifyDamage(float mult) 
+    {
+        setupData.Magnitude *= mult;
+    }
+    protected float GetBounceDirection(Vector3 pos, bool losCheck, Collider hitboxIgnored = null)
     {
         LayerMask hitboxMask = LayerMask.GetMask("EnemyHitboxes");
         Collider[] hitboxesFound = Physics.OverlapSphere(pos, BOUNCE_TARGET_SEARCH_RADIUS, hitboxMask);

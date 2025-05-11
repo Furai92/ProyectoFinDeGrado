@@ -10,32 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Thunder_EyeOfTheStorm
+  m_Name: Thunder_Refraction
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: EYE_OF_THE_STORM
-  <NameID>k__BackingField: TCH_N_EYE_OF_THE_STORM
-  <DescID>k__BackingField: TCH_D_EYE_OF_THE_STORM
+  <ID>k__BackingField: REFRACTION
+  <NameID>k__BackingField: TCH_N_REFRACTION
+  <DescID>k__BackingField: TCH_D_REFRACTION
   <MaxLevel>k__BackingField: 1
   <Rarity>k__BackingField: 3
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 1615fe763be4501459dc729dc9cd57fd, type: 2}
-  <Script>k__BackingField: TechBehaviourEyeOfTheStorm
+  <Script>k__BackingField: TechBehaviourRefraction
   <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_STACKS_REQUIRED
-    <DescValueBase>k__BackingField: 10
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_CRITC_TO_DAMAGE
+  - <DescTextID>k__BackingField: TCH_DT_DMG_PERCENT
     <DescValueBase>k__BackingField: 50
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_INTERVAL
-    <DescValueBase>k__BackingField: 1
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 2

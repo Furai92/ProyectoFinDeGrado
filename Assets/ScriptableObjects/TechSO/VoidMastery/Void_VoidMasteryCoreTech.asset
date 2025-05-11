@@ -18,6 +18,18 @@ MonoBehaviour:
   <MaxLevel>k__BackingField: -1
   <Rarity>k__BackingField: 4
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: e098cc48245bb0d4587df8b2d97459c1, type: 2}
-  <Script>k__BackingField: 
-  <BonusStats>k__BackingField: []
+  <Script>k__BackingField: TechBehaviourVoidMasterCore
+  <BonusStats>k__BackingField:
+  - <First>k__BackingField: 21
+    <Second>k__BackingField: 5
+  <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_SPLASH
+    <DescValueBase>k__BackingField: 5
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_VOID_MASTER_CORE
+    <DescValueBase>k__BackingField: 5
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
