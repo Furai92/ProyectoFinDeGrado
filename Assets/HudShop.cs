@@ -112,7 +112,7 @@ public class HudShop : MonoBehaviour, IGameMenu
                     soldOutPanels[i].gameObject.SetActive(false);
                     purchaseButtons[i].gameObject.SetActive(true);
                     prices[i].gameObject.SetActive(true); prices[i].text = GetTechPrice(techInStock[i]).ToString("F0");
-                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], HudTechCard.TechDisplayMode.Shop);
+                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], PlayerEntity.ActiveInstance.GetTechLevel(techInStock[i].ID)+1, true, true);
                     purchaseButtons[i].gameObject.SetActive(true);
                 }
             }

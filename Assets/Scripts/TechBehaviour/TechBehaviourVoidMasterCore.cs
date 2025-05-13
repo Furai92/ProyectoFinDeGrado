@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TechBehaviourVoidMasterCore : TechBase
 {
-    private const float SPLASH_TO_DAMAGE_PERCENT = 5f;
+    private const float SPLASH_TO_DAMAGE_PERCENT = 0.1f;
 
     public override void OnTechAdded()
     {

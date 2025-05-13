@@ -130,7 +130,7 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         playerDefeated = true;
     }
-    private void OnEnemyDefeated(EnemyEntity e, bool killcredit) 
+    private void OnEnemyDefeated(EnemyEntity e, float overkill, bool killcredit) 
     {
         if (!killcredit) { return; }
 

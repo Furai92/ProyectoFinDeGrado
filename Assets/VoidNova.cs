@@ -6,17 +6,16 @@ public class VoidNova : MonoBehaviour
     [SerializeField] private ParticleSystem PS1;
 
     private float damageMag;
-    private float pullMag;
     private EnemyEntity noKnockbackEnemy;
     private float removeTime;
 
+    private const float PULL_MAGNITUDE = 8f;
     private const float DURATION = 0.5f;
 
-    public void SetUp(float _pullMag, float _damageMag, float sizeMult, Vector3 pos, EnemyEntity _noKnockbackEnemy) 
+    public void SetUp(float _damageMag, float sizeMult, Vector3 pos, EnemyEntity _noKnockbackEnemy) 
     {
         transform.localScale = Vector3.one * sizeMult;
         noKnockbackEnemy = _noKnockbackEnemy;
-        pullMag = _pullMag;
         damageMag = _damageMag;
         transform.position = pos;
         removeTime = Time.time + DURATION;
@@ -42,8 +41,7 @@ public class VoidNova : MonoBehaviour
 
                 if (e != noKnockbackEnemy) 
                 {
-                    Vector3 knockbackDir = (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(e.transform.position.x, 0, e.transform.position.z)).normalized;
-                    e.Knockback(pullMag, knockbackDir);
+                    e.AddPullForce(PULL_MAGNITUDE, transform.position, DURATION);
                 }
             }
         }

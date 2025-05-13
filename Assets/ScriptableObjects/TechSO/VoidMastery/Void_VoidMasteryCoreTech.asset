@@ -30,6 +30,6 @@ MonoBehaviour:
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_VOID_MASTER_CORE
-    <DescValueBase>k__BackingField: 5
+    <DescValueBase>k__BackingField: 10
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

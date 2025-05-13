@@ -84,7 +84,7 @@ public class TechCombatEffectStatusTransfer : TechCombatEffect
         impactPS.Stop();
         impactPS.Play();
     }
-    private void OnEnemyDisabled(EnemyEntity e, bool killcredit) 
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit) 
     {
         if (phase != 1) { return; }
         if (e != target) { return; }

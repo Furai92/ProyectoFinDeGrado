@@ -21,7 +21,7 @@ public abstract class EnemyAttackBase : MonoBehaviour
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
-    private void OnEnemyDisabled(EnemyEntity e, bool killcredit) 
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit) 
     {
         if (e == User) { OnUserDefeated(); }
     }

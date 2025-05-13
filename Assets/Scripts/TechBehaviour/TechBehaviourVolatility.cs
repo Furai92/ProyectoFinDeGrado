@@ -15,7 +15,7 @@ public class TechBehaviourVolatility : TechBase
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
     }
 
-    private void OnEnemyDisabled(EnemyEntity e, bool killcredit)
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
     {
         if (!killcredit) { return; }
         if (e.GetStatusDuration(GameEnums.DamageElement.Fire) <= 0) { return; }

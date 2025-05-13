@@ -26,7 +26,7 @@ MonoBehaviour:
   <Multishoot>k__BackingField: 0
   <MultishootArc>k__BackingField: 0
   <Firerate>k__BackingField: 1
-  <BuildupRate>k__BackingField: 1
+  <BuildupRate>k__BackingField: 8
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 10

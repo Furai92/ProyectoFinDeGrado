@@ -13,7 +13,7 @@ public class EventManager
     public static event Action StageStatsUpdatedEvent;
     public static event Action<Vector3> PlayerEvasionEvent;
     public static event Action<WeaponSO.WeaponSlot> PlayerWeaponOverheatedEvent;
-    public static event Action<EnemyEntity, bool> EnemyDisabledEvent;
+    public static event Action<EnemyEntity, float, bool> EnemyDisabledEvent;
     public static event Action PlayerDefeatedEvent;
     public static event Action<float> PlayerDamageTakenEvent;
     public static event Action<float> PlayerDamageAbsorbedEvent;
@@ -63,9 +63,9 @@ public class EventManager
     {
         EnemyDirectDamageTakenEvent?.Invoke(magnitude, critlevel, element, dtype, target);
     }
-    public static void OnEnemyDisabled(EnemyEntity e, bool killcredit)
+    public static void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
     {
-        EnemyDisabledEvent?.Invoke(e, killcredit);
+        EnemyDisabledEvent?.Invoke(e, overkill, killcredit);
     }
     public static void OnCurrencyUpdated() 
     {

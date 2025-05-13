@@ -396,6 +396,47 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_REFRACTION
     <Data>k__BackingField: Your projectiles gain bonus multiplicative damage after
       bouncing with terrain.
+  - <ID>k__BackingField: TCH_N_SINGULARITY
+    <Data>k__BackingField: Singularity
+  - <ID>k__BackingField: TCH_D_SINGULARITY
+    <Data>k__BackingField: Applying collapsing to an already collapsing enemy creates
+      a massive singularity that deals void damage and draws enemies in. This effect
+      has a cooldown.
+  - <ID>k__BackingField: TCH_N_WAVE_CANNON
+    <Data>k__BackingField: Wave Cannon
+  - <ID>k__BackingField: TCH_D_WAVE_CANNON
+    <Data>k__BackingField: Inflicting collapsing to an enemy grants charges. Attacking
+      with your melee weapon spends all charges to release a powerful beam of non
+      elemental energy.
+  - <ID>k__BackingField: TCH_N_OVERFLOWING_ENERGY
+    <Data>k__BackingField: Overflowing Energy
+  - <ID>k__BackingField: TCH_D_OVERFLOWING_ENERGY
+    <Data>k__BackingField: Your weapons gain explosion radius.
+  - <ID>k__BackingField: TCH_N_ETHEREAL_FORM
+    <Data>k__BackingField: Ethereal Form
+  - <ID>k__BackingField: TCH_D_ETHEREAL_FORM
+    <Data>k__BackingField: Gain intellect, lose endurance.
+  - <ID>k__BackingField: TCH_N_OVERKILL
+    <Data>k__BackingField: Overkill
+  - <ID>k__BackingField: TCH_D_OVERKILL
+    <Data>k__BackingField: Enemies defeated explode dealing void damage for a percentage
+      of overkill damage taken.
+  - <ID>k__BackingField: TCH_N_VOID_TOUCH
+    <Data>k__BackingField: Void Touch
+  - <ID>k__BackingField: TCH_D_VOID_TOUCH
+    <Data>k__BackingField: Your weapons deal bonus damage based on your negative
+      endurance.
+  - <ID>k__BackingField: TCH_N_CORRUPTION
+    <Data>k__BackingField: Corruption
+  - <ID>k__BackingField: TCH_D_CORRUPTION
+    <Data>k__BackingField: Recieving any form of healing reduces your endurance and
+      increases your intellect.
+  - <ID>k__BackingField: TCH_N_DESCENT_TO_MADNESS
+    <Data>k__BackingField: Descent to madness
+  - <ID>k__BackingField: TCH_D_DESCENT_TO_MADNESS
+    <Data>k__BackingField: Ranged weapon attacks increase your explosion radius but
+      increase random spread and drain your endurance. If this effect is accumulated
+      high enough you can no longer stop attacking until your ranged weapon overheats.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -422,8 +463,6 @@ MonoBehaviour:
     <Data>k__BackingField: 'Critical damage: {0}%'
   - <ID>k__BackingField: TCH_DT_HP_TO_DAMAGE
     <Data>k__BackingField: 'Health to damage: {0}%'
-  - <ID>k__BackingField: TCH_DT_INT_TO_DAMAGE
-    <Data>k__BackingField: 'Intellect to damage: {0}%'
   - <ID>k__BackingField: TCH_DT_DASH_RECHARGE
     <Data>k__BackingField: 'Dash recharge speed: {0}%'
   - <ID>k__BackingField: TCH_DT_MIGHT_ONKILL
@@ -431,7 +470,7 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_DT_DEX_ONKILL
     <Data>k__BackingField: 'Dexterity on enemy defeated: {0}'
   - <ID>k__BackingField: TCH_DT_FIRERATE
-    <Data>k__BackingField: 'Attack Speed: {0}'
+    <Data>k__BackingField: 'Attack Speed: {0}%'
   - <ID>k__BackingField: TCH_DT_CHANCE
     <Data>k__BackingField: 'Chance to trigger: {0}%'
   - <ID>k__BackingField: TCH_DT_DMG_TO_EXPLOSION
@@ -445,7 +484,7 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_DT_RADIUS
     <Data>k__BackingField: 'Radius: {0}m'
   - <ID>k__BackingField: TCH_DT_SPLASH
-    <Data>k__BackingField: 'Bonus explosion radius: {0}m.'
+    <Data>k__BackingField: 'Bonus explosion radius: {0}m'
   - <ID>k__BackingField: TCH_DT_DMG
     <Data>k__BackingField: 'Damage: {0}'
   - <ID>k__BackingField: TCH_DT_VOID_MASTER_CORE
@@ -484,7 +523,7 @@ MonoBehaviour:
     <Data>k__BackingField: 'Interval: {0}s'
   - <ID>k__BackingField: TCH_DT_BUILDUP_MULT
     <Data>k__BackingField: 'Status buildup multiplier: +{0}%'
-  - <ID>k__BackingField: TCH_DT_SPEED_TO_DAMAGE
+  - <ID>k__BackingField: TCH_DT_SPEED_TO_DMG
     <Data>k__BackingField: 'Damage per point of speed: {0}'
   - <ID>k__BackingField: TCH_DT_ECHO
     <Data>k__BackingField: 'Echo chance: {0}%'
@@ -492,8 +531,22 @@ MonoBehaviour:
     <Data>k__BackingField: 'Bonus critical thunder damage: {0}%'
   - <ID>k__BackingField: TCH_DT_DAMAGE_PER_STATUS_DURATION
     <Data>k__BackingField: 'Damage per second of status consumed: {0}'
+  - <ID>k__BackingField: TCH_DT_DMG_PER_STACK
+    <Data>k__BackingField: 'Damage per stack: {0}'
+  - <ID>k__BackingField: TCH_DT_SIZE_PER_STACK
+    <Data>k__BackingField: 'Size increase per stack: {0}'
   - <ID>k__BackingField: TCH_DT_BOUNCES
     <Data>k__BackingField: 'Bonus projectile bounces: {0}'
+  - <ID>k__BackingField: TCH_DT_STACKS_GAINED
+    <Data>k__BackingField: 'Stacks gained: {0}'
+  - <ID>k__BackingField: TCH_DT_INT_TO_DMG
+    <Data>k__BackingField: 'Intellect to damage: {0}'
+  - <ID>k__BackingField: TCH_DT_OVERKILL_PERCENT
+    <Data>k__BackingField: 'Overkill to damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_STACKS_TO_LOSE_CONTROL
+    <Data>k__BackingField: 'Stacks to lose control: {0}'
+  - <ID>k__BackingField: TCH_DT_NEND_TO_DMG_PERCENT
+    <Data>k__BackingField: 'Negative endurance to bonus damage: {0}%'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT

@@ -38,8 +38,6 @@ public class EnemyEntity : MonoBehaviour
     private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float VOID_STATUS_RADIUS_BASE = 5f;
     private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
-    private const float VOID_STATUS_PULL_BASE = 6f;
-    private const float VOID_STATUS_PULL_SCALING = 0.003f;
     public const float STATUS_DURATION_STANDARD = 10f;
     private const float STATUS_UPDATE_INTERVAL = 1f;
     private const float STATUS_RESISTANCE_GROWTH_MULTIPLIER = 1.5f;
@@ -62,9 +60,9 @@ public class EnemyEntity : MonoBehaviour
     public Vector3 TargetMovementPosition { get; set; }
     public Vector3 TargetLookPosition { get; set; }
 
-
     private Vector3 currentKnockbackForce;
     private float currentLookRotation;
+    private List<PullForce> activePullForces;
 
     private const float MIN_MOVEMENT_DISTANCE = 0.15f;
     private const float KNOCKBACK_FORCE_DECAY_LINEAR = 0.2f;
@@ -104,12 +102,13 @@ public class EnemyEntity : MonoBehaviour
         statusBuildups = new float[GameEnums.DAMAGE_ELEMENTS];
         statusDurations = new float[GameEnums.DAMAGE_ELEMENTS];
         statusBuildupResistancesDivider = new float[GameEnums.DAMAGE_ELEMENTS];
+        activePullForces = new List<PullForce>();
         for (int i = 0; i < statusBuildupResistancesDivider.Length; i++) { statusBuildupResistancesDivider[i] = 1; }
         nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
     }
     private void OnDisable()
     {
-        EventManager.OnEnemyDisabled(this, CurrentHealth <= 0);
+        EventManager.OnEnemyDisabled(this, -CurrentHealth, CurrentHealth <= 0);
         StageManagerBase.UnregisterEnemy(this);
     }
     private void FixedUpdate()
@@ -185,7 +184,7 @@ public class EnemyEntity : MonoBehaviour
         }
         if (statusDurations[(int)GameEnums.DamageElement.Void] > 0)
         {
-            ObjectPoolManager.GetVoidNovaFromPool().SetUp(BaseHealth * VOID_STATUS_PULL_SCALING + VOID_STATUS_PULL_BASE,
+            ObjectPoolManager.GetVoidNovaFromPool().SetUp(
                 maxHealth * VOID_STATUS_HEALTH_PERCENT_DAMAGE / STATUS_DURATION_STANDARD / STATUS_UPDATE_INTERVAL,
                 BaseHealth * VOID_STATUS_RADIUS_SCALING + VOID_STATUS_RADIUS_BASE,
                 transform.position, this);
@@ -202,6 +201,13 @@ public class EnemyEntity : MonoBehaviour
         rb.linearVelocity = currentKnockbackForce;
         currentKnockbackForce *= KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE;
         currentKnockbackForce = Vector3.MoveTowards(currentKnockbackForce, Vector3.zero, Time.fixedDeltaTime * KNOCKBACK_FORCE_DECAY_LINEAR);
+
+        for (int i = activePullForces.Count-1; i >= 0; i--) 
+        {
+            Vector3 pullDir = (new Vector3(activePullForces[i].center.x, 0, activePullForces[i].center.z) - new Vector3(transform.position.x, 0, transform.position.z));
+            rb.linearVelocity += pullDir.normalized * activePullForces[i].magnitude;
+            if (Time.time > activePullForces[i].endTime) { activePullForces.RemoveAt(i); }
+        }
 
         if (statusDurations[(int)GameEnums.DamageElement.Frost] <= 0)
         {
@@ -277,6 +283,10 @@ public class EnemyEntity : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+    public void AddPullForce(float _mag, Vector3 _center, float _duration) 
+    {
+        activePullForces.Add(new PullForce() { center = _center, endTime = Time.time + _duration, magnitude = _mag });
+    }
     public void AddStatusBuildup(float magnitude, GameEnums.DamageElement element) 
     {
         if (element == GameEnums.DamageElement.NonElemental) { return; }
@@ -340,5 +350,10 @@ public class EnemyEntity : MonoBehaviour
             AddStatusBuildup(magnitude * buildupMultiplier, element);
         }
     }
-
+    private struct PullForce 
+    {
+        public float endTime;
+        public float magnitude;
+        public Vector3 center;
+    }
 }

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
+  m_Name: Void_DescentToMadness
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: DESCENT_TO_MADNESS
+  <NameID>k__BackingField: TCH_N_DESCENT_TO_MADNESS
+  <DescID>k__BackingField: TCH_D_DESCENT_TO_MADNESS
+  <MaxLevel>k__BackingField: 1
+  <Rarity>k__BackingField: 3
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: e098cc48245bb0d4587df8b2d97459c1, type: 2}
+  <Script>k__BackingField: TechBehaviourDescentToMadness
+  <BonusStats>k__BackingField: []
+  <BonusStageStats>k__BackingField: []
+  <BonusFlags>k__BackingField: 
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_SPLASH
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 0.25
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_END
+    <DescValueBase>k__BackingField: -10
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2
+  - <DescTextID>k__BackingField: TCH_DT_SPREAD
+    <DescValueBase>k__BackingField: 2
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2
+  - <DescTextID>k__BackingField: TCH_DT_STACKS_TO_LOSE_CONTROL
+    <DescValueBase>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2
+  - <DescTextID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2
+  - <DescTextID>k__BackingField: TCH_DT_OVERHEAT_RESET
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2

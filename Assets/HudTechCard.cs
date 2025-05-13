@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public enum TechDisplayMode { Collection, Shop, ActiveTech }
-
     [SerializeField] private Transform mouseoverScaleParent;
 
     [SerializeField] private StringDatabaseSO sdb;
@@ -41,7 +39,7 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         mouseoverScaleParent.transform.localScale = Vector3.one;
     }
 
-    public void SetUp(TechSO t, TechDisplayMode mode) 
+    public void SetUp(TechSO t, int levelDisplayed, bool compareWithPrevious, bool showOwned) 
     {
         rarityHighlight.color = bottomBorder.color = cdb.RarityToColor(t.Rarity);
         traitHighlight.color = topBorder.color = t.RelatedTrait.IconColor;
@@ -49,10 +47,7 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rarityText.text = sdb.RarityToName(t.Rarity);
         techName.text = sdb.GetString(t.NameID);
         techDesc.text = sdb.GetString(t.DescID);
-
-        int maxTechLevel = t.MaxLevel;
-        int currentTechLevel = mode == TechDisplayMode.Collection ? 1 : PlayerEntity.ActiveInstance.GetTechLevel(t.ID);
-
+        if (t.MaxLevel > 0 && levelDisplayed > t.MaxLevel) { levelDisplayed = t.MaxLevel; }
 
         for (int i = 0; i < detailPanels.Count; i++) 
         {
@@ -60,42 +55,29 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 detailPanels[i].gameObject.SetActive(true);
                 detailTexts[i].color = cdb.DescDetailTypeToColor(t.DescriptionDetails[i].DescDetailType);
+
                 if (t.DescriptionDetails[i].DescValueScaling != 0 || t.DescriptionDetails[i].DescValueBase != 0)
                 {
-                    switch (mode)
+                    if (compareWithPrevious && levelDisplayed > 1 && t.DescriptionDetails[i].DescValueScaling != 0)
                     {
-                        case TechDisplayMode.Collection:
-                            {
-                                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                                string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                                detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
-                                break;
-                            }
-                        case TechDisplayMode.ActiveTech:
-                            {
-                                float valueDisplayed = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                                string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                                detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
-                                break;
-                            }
-                        case TechDisplayMode.Shop:
-                            {
-                                if (currentTechLevel >= 1 && t.DescriptionDetails[i].DescValueScaling > 0)
-                                {
-                                    float previousLevel = t.DescriptionDetails[i].DescValueBase + currentTechLevel * t.DescriptionDetails[i].DescValueScaling;
-                                    float newLevel = t.DescriptionDetails[i].DescValueBase + (currentTechLevel + 1) * t.DescriptionDetails[i].DescValueScaling;
-                                    string deltaShown = string.Format("{0} -> {1}", previousLevel, newLevel);
-                                    string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                                    detailTexts[i].text = string.Format(stringDisplayed, deltaShown);
-                                }
-                                else
-                                {
-                                    float valueDisplayed = t.DescriptionDetails[i].DescValueBase + (currentTechLevel + 1) * t.DescriptionDetails[i].DescValueScaling;
-                                    string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
-                                    detailTexts[i].text = string.Format(stringDisplayed, valueDisplayed);
-                                }
-                                break;
-                            }
+                        float previousLevel = t.DescriptionDetails[i].DescValueBase + ((levelDisplayed-1) * t.DescriptionDetails[i].DescValueScaling);
+                        float newLevel = t.DescriptionDetails[i].DescValueBase + levelDisplayed * t.DescriptionDetails[i].DescValueScaling;
+                        string deltaShown = string.Format("{0} -> {1}", previousLevel, newLevel);
+                        string stringDisplayed = sdb.GetString(t.DescriptionDetails[i].DescTextID);
+                        detailTexts[i].text = string.Format(stringDisplayed, deltaShown);
+                    }
+                    else
+                    {
+                        float valueDisplayed;
+                        if (t.DescriptionDetails[i].DescValueBase == 0)
+                        {
+                            valueDisplayed = levelDisplayed * t.DescriptionDetails[i].DescValueScaling;
+                        }
+                        else 
+                        {
+                            valueDisplayed = t.DescriptionDetails[i].DescValueBase + ((levelDisplayed - 1) * t.DescriptionDetails[i].DescValueScaling);
+                        } 
+                        detailTexts[i].text = string.Format(sdb.GetString(t.DescriptionDetails[i].DescTextID), valueDisplayed);
                     }
                 }
                 else 
@@ -103,7 +85,6 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     detailTexts[i].text = sdb.GetString(t.DescriptionDetails[i].DescTextID);
                 }
 
-                
             }
             else 
             {
@@ -112,23 +93,20 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         }
         // Owned Text
-        switch (mode) 
+        if (showOwned)
         {
-            case TechDisplayMode.Collection: { ownedText.text = ""; break; }
-            case TechDisplayMode.Shop:
-            case TechDisplayMode.ActiveTech:
-                {
-                    if (maxTechLevel > 0)
-                    {
-                        ownedText.text = string.Format("X {0}/{1}", currentTechLevel, maxTechLevel);
-
-                    }
-                    else
-                    {
-                        ownedText.text = string.Format("X {0}", PlayerEntity.ActiveInstance.GetTechLevel(t.ID));
-                    }
-                    break;
-                }
+            if (t.MaxLevel > 0)
+            {
+                ownedText.text = string.Format("X {0}/{1}", levelDisplayed, t.MaxLevel);
+            }
+            else
+            {
+                ownedText.text = string.Format("X {0}", levelDisplayed);
+            }
+        }
+        else 
+        {
+            ownedText.text = "";
         }
     }
 }

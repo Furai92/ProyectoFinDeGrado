@@ -26,7 +26,7 @@ public class PlayerStatGroup
         BonusRangedPierces,
         BonusSplash
     }
-    public enum PlayerFlags { NoHeal }
+    public enum PlayerFlags { NoHeal, NoStopAttackRanged, NoStopAttackMelee }
 
     private float[] stats;
     private int[] flags;

@@ -34,8 +34,11 @@ public class PlayerEntity : NetworkBehaviour
     private float currentDirection;
     private float heatDecayMelee;
     private float heatDecayRanged;
+    private float coolingReadyTimeMelee;
+    private float coolingReadyTimeRanged;
 
-    private const float HEAT_DECAY_GROWTH = 5f;
+    private const float COOLING_START_DELAY = 2f;
+    private const float HEAT_DECAY_GROWTH = 8f;
     private const float ECHO_RANDOM_SPREAD_MIN = 2f;
     private const float ECHO_RANDOM_SPREAD_MAX = 7f;
 
@@ -67,7 +70,8 @@ public class PlayerEntity : NetworkBehaviour
 
     // Buffs ===============================================================================================
 
-    private Dictionary<string, BuffEffectSO> buffDictionary;
+    private Dictionary<string, BuffEffectSO> buffSODictionary;
+    public Dictionary<string, ActiveBuff> ActiveBuffDictionary { get; private set; }
     public List<ActiveBuff> ActiveBuffs { get; private set; }
     private float buffUpdateTime;
 
@@ -125,6 +129,7 @@ public class PlayerEntity : NetworkBehaviour
         ActiveTechList = new List<TechGroup>();
 
         ActiveBuffs = new List<ActiveBuff>();
+        ActiveBuffDictionary = new Dictionary<string, ActiveBuff>();
 
         for (int i = 0; i < debugTechSO.Count; i++) { EquipTech(debugTechSO[i]); } // Test
 
@@ -138,6 +143,7 @@ public class PlayerEntity : NetworkBehaviour
         EquipWeapon(new WeaponData(debugMeleeWeaponSO, GameEnums.Rarity.Common));
 
         StatusOverheatRanged = StatusOverheatMelee = false;
+        coolingReadyTimeMelee = coolingReadyTimeRanged = 0;
         StatusHeatMelee = StatusHeatRanged = -stats.GetStat(PlayerStatGroup.Stat.HeatFloor);
         rangedAttackReady = meleeAttackReady = 1;
         CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
@@ -177,13 +183,19 @@ public class PlayerEntity : NetworkBehaviour
         ClampCamVerticalRotation();
 
         rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
-        heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
-        StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayRanged);
+        if (Time.time > coolingReadyTimeRanged) 
+        {
+            StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayRanged);
+            heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
+        }
         if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
 
         meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
-        heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
-        StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayMelee);
+        if (Time.time > coolingReadyTimeMelee) 
+        {
+            heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
+            StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayMelee);
+        }
         if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
 
         if (CurrentDashes < (int)stats.GetStat(PlayerStatGroup.Stat.DashCount)) 
@@ -198,11 +210,11 @@ public class PlayerEntity : NetworkBehaviour
         dashDurationRemaining -= Time.deltaTime;
         CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE);
 
-        if (InputManager.Instance.GetRangedAttackInput() && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
+        if ((InputManager.Instance.GetRangedAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackRanged) > 0) && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
         {
             Attack(WeaponSO.WeaponSlot.Ranged, currentDirection, true, true);
         }
-        if (InputManager.Instance.GetMeleeAttackInput() && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
+        if ((InputManager.Instance.GetMeleeAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackMelee) > 0) && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
         {
             Attack(WeaponSO.WeaponSlot.Melee, currentDirection, true, true);
         }
@@ -225,12 +237,14 @@ public class PlayerEntity : NetworkBehaviour
             {
                 heatDecayMelee = 0;
                 meleeAttackReady = 0;
+                coolingReadyTimeMelee = Time.time + COOLING_START_DELAY;
                 ChangeWeaponHeat(meleeWeaponStats.HeatGen, WeaponSO.WeaponSlot.Melee);
             }
             else 
             {
                 heatDecayRanged = 0;
                 rangedAttackReady = 0;
+                coolingReadyTimeRanged = Time.time + COOLING_START_DELAY;
                 ChangeWeaponHeat(rangedWeaponStats.HeatGen, WeaponSO.WeaponSlot.Ranged);
             }
         }
@@ -488,6 +502,10 @@ public class PlayerEntity : NetworkBehaviour
     {
         return stats.GetStat(s);
     }
+    public bool GetFlag(PlayerStatGroup.PlayerFlags f) 
+    {
+        return stats.GetFlag(f) > 0;
+    }
     public float GetHeatRange() 
     {
         return stats.GetStat(PlayerStatGroup.Stat.HeatFloor) + stats.GetStat(PlayerStatGroup.Stat.HeatCap);
@@ -589,22 +607,23 @@ public class PlayerEntity : NetworkBehaviour
             if (ActiveBuffs[i].GetDurationRemaining() <= 0) 
             {
                 ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+                ActiveBuffDictionary.Remove(ActiveBuffs[i].SO.ID);
                 ActiveBuffs.RemoveAt(i);
             }
         }
     }
     private BuffEffectSO GetBuffEffectInfo(string id)
     {
-        if (!buffDictionary.ContainsKey(id)) { return null; }
+        if (!buffSODictionary.ContainsKey(id)) { return null; }
 
-        return buffDictionary[id];
+        return buffSODictionary[id];
     }
     private void SetUpBuffDictionary()
     {
-        buffDictionary = new Dictionary<string, BuffEffectSO>();
+        buffSODictionary = new Dictionary<string, BuffEffectSO>();
         for (int i = 0; i < database.BuffEffects.Count; i++)
         {
-            buffDictionary.Add(database.BuffEffects[i].ID, database.BuffEffects[i]);
+            buffSODictionary.Add(database.BuffEffects[i].ID, database.BuffEffects[i]);
         }
     }
     public void ChangePermanentStat(PlayerStatGroup.Stat s, float variation) 
@@ -619,6 +638,7 @@ public class PlayerEntity : NetworkBehaviour
             if (ActiveBuffs[i].SO.ID == buffID) 
             {
                 ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+                ActiveBuffDictionary.Remove(ActiveBuffs[i].SO.ID);
                 ActiveBuffs.RemoveAt(i);
                 EventManager.OnPlayerStatsUpdated(this);
             }
@@ -631,12 +651,30 @@ public class PlayerEntity : NetworkBehaviour
 
         for (int i = ActiveBuffs.Count-1; i >= 0; i--)
         {
-            if (ActiveBuffs[i].SO.ID == bso.ID && ActiveBuffs[i].EffectMultiplier == effectMultiplier)
+            if (ActiveBuffs[i].SO.ID == bso.ID)
             {
-                ChangeBuffStacks(ActiveBuffs[i], stacks);
-                if (ActiveBuffs[i].Stacks <= 0) { ActiveBuffs.RemoveAt(i); }
-                EventManager.OnPlayerStatsUpdated(this);
-                return;
+                if (ActiveBuffs[i].EffectMultiplier > effectMultiplier) { return; } // If the current buff has a higher effect multiplier, no changes.
+
+                // If the effect multiplier is the same, change stacks normally
+                if (ActiveBuffs[i].EffectMultiplier == effectMultiplier)
+                {
+                    ChangeBuffStacks(ActiveBuffs[i], stacks);
+                    if (ActiveBuffs[i].Stacks <= 0)
+                    {
+                        ActiveBuffDictionary.Remove(ActiveBuffs[i].SO.ID);
+                        ActiveBuffs.RemoveAt(i);
+                    }
+                    EventManager.OnPlayerStatsUpdated(this);
+                    return;
+                }
+                // If the current buff has less effect multiplier than the new, remove the current buff. After the for loop is finished a new buff with the highest EM will be added.
+                else
+                {
+                    ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
+                    ActiveBuffDictionary.Remove(ActiveBuffs[i].SO.ID);
+                    ActiveBuffs.RemoveAt(i);
+                    EventManager.OnPlayerStatsUpdated(this);
+                }
             }
         }
         if (stacks <= 0) { return; }
@@ -644,6 +682,7 @@ public class PlayerEntity : NetworkBehaviour
         ActiveBuff newBuff = new ActiveBuff(bso, effectMultiplier);
         ChangeBuffStacks(newBuff, stacks);
         ActiveBuffs.Add(newBuff);
+        ActiveBuffDictionary.Add(newBuff.SO.ID, newBuff);
         EventManager.OnPlayerStatsUpdated(this);
     }
     private void ChangeBuffStacks(ActiveBuff buff, int variation)
@@ -656,6 +695,10 @@ public class PlayerEntity : NetworkBehaviour
             for (int i = 0; i < buff.SO.Effects.Count; i++) 
             {
                 stats.ChangeStat(buff.SO.Effects[i].First, buff.SO.Effects[i].Second * buff.EffectMultiplier * delta);
+            }
+            for (int i = 0; i < buff.SO.Flags.Count; i++)
+            {
+                stats.ChangeFlag(buff.SO.Flags[i], delta);
             }
         }
     }
