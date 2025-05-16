@@ -37,8 +37,8 @@ public class EventManager
     // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
     public static event Action<bool> UiFocusChangedEvent;
-    public static event Action<IGameMenu> UiMenuFocusChangedEvent;
     public static event Action<IGameMenu> UiMenuClosedEvent;
+    public static event Action<IGameMenu> UiMenuFocusChangedEvent;
 
     // Game System 
     public static event Action GameSettingsChangedEvent;

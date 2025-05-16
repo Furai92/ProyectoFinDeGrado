@@ -34,7 +34,7 @@ public class EnemyEntity : MonoBehaviour
     private const float SHOCK_STATUS_BONUS_CRIT_CHANCE = 50f;
     private const float FROST_STATUS_HEALTH_PERCENT_DAMAGE = 0.2f;
     private const float FROSTBITE_STATUS_HEALTH_PERCENT_DAMAGE = 0.2f;
-    private const float FROSTBITE_STATUS_EFFECT_MULTIPLIER = 1.4f;
+    private const float FROSTBITE_STATUS_EFFECT_MULTIPLIER = 1.6f;
     private const float VOID_STATUS_HEALTH_PERCENT_DAMAGE = 0.5f;
     private const float VOID_STATUS_RADIUS_BASE = 5f;
     private const float VOID_STATUS_RADIUS_SCALING = 0.003f;
@@ -316,7 +316,7 @@ public class EnemyEntity : MonoBehaviour
         if (CurrentHealth <= 0) { return; }
 
         int critLevel = 0;
-        if (dtype != GameEnums.DamageType.Tech) 
+        if (dtype != GameEnums.DamageType.Tech && statusDurations[(int)GameEnums.DamageElement.Frostbite] <= 0) 
         {
             // Roll for critical hits
             if (statusDurations[(int)GameEnums.DamageElement.Thunder] > 0) { critChance += SHOCK_STATUS_BONUS_CRIT_CHANCE; }

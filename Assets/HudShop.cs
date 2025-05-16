@@ -39,10 +39,6 @@ public class HudShop : MonoBehaviour, IGameMenu
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
-    private void OnPlayerSpawned(PlayerEntity p) 
-    {
-
-    }
     private void OnStageStateStarted(StageStateBase.GameState s)
     {
         if (s != StageStateBase.GameState.Rest) { return; }

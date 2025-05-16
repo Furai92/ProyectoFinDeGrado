@@ -357,7 +357,7 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_D_FROSTBITE
     <Data>k__BackingField: Freezing an enemy also applies Frostbite, enemies under
       this status recive extra status buildup and take a small amount of damage over
-      time.
+      time. Enemies affected by frostbite cannot be critically hit.
   - <ID>k__BackingField: TCH_N_VOLTAIC_ARMAMENTS
     <Data>k__BackingField: Voltaic Armaments
   - <ID>k__BackingField: TCH_D_VOLTAIC_ARMAMENTS
@@ -553,4 +553,12 @@ MonoBehaviour:
     <Data>k__BackingField: +3 Shoots.
   - <ID>k__BackingField: PART_DESC_HEAVY_BULLETS
     <Data>k__BackingField: Heavy Bullets
+  - <ID>k__BackingField: MENU_NAME_SHOP
+    <Data>k__BackingField: Shop
+  - <ID>k__BackingField: MENU_NAME_SETTINGS
+    <Data>k__BackingField: Settings
+  - <ID>k__BackingField: MENU_NAME_PLAYER_STATS
+    <Data>k__BackingField: Status
+  - <ID>k__BackingField: MENU_NAME_STAGE_STATUS
+    <Data>k__BackingField: Stage Info
   <Keywords>k__BackingField: []

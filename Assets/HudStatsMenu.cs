@@ -8,6 +8,8 @@ public class HudStatsMenu : MonoBehaviour, IGameMenu
     [SerializeField] private Transform menuParent;
     [SerializeField] private List<TextMeshProUGUI> statLabels;
     [SerializeField] private List<TextMeshProUGUI> statValues;
+    [SerializeField] private HudWeaponCard meleeWeapon;
+    [SerializeField] private HudWeaponCard rangedWeapon;
 
     private void OnEnable()
     {
@@ -20,6 +22,9 @@ public class HudStatsMenu : MonoBehaviour, IGameMenu
     private void UpdateDisplayedInfo(PlayerEntity p) 
     {
         if (!IsOpen()) { return; }
+
+        meleeWeapon.SetUp(p.MeleeWeapon);
+        rangedWeapon.SetUp(p.RangedWeapon);
 
         statValues[0].text = p.GetStat(PlayerStatGroup.Stat.MaxHealth).ToString("F0");
         statValues[1].text = p.GetStat(PlayerStatGroup.Stat.Might).ToString("F0");

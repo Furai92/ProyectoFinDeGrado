@@ -25,5 +25,9 @@ MonoBehaviour:
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_BUILDUP_MULT
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 40
+    <DescValueScaling>k__BackingField: 60
     <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_CRITICALS_DISABLED
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 2

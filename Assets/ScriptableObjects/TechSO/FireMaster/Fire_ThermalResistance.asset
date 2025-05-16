@@ -21,11 +21,11 @@ MonoBehaviour:
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 13
-    <Second>k__BackingField: 10
+    <Second>k__BackingField: 15
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_HEATCAP
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 15
     <DescDetailType>k__BackingField: 1

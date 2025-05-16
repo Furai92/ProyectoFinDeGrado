@@ -63,6 +63,7 @@ public class HudWeaponCard : MonoBehaviour
         firerateText.text = string.Format(sdb.GetString("WEAPON_CARD_FIRERATE_FORMAT"), w.Stats.Firerate.ToString("F1"));
         buildupText.text = string.Format(sdb.GetString("WEAPON_CARD_BUILDUP_FORMAT"), (w.Stats.BuildupRate * 100).ToString("F0"));
         critDamageText.text = string.Format(sdb.GetString("WEAPON_CARD_CRITX_FORMAT"), (w.Stats.CritMultiplier * 100).ToString("F0"));
+        buildupText.color = w.Stats.BuildupRate >= 1 ? cdb.GetColor("DETAIL_TYPE_POSITIVE") : cdb.GetColor("DETAIL_TYPE_NEGATIVE");
 
         // Parts panel
         bonusPartsHeaderParent.gameObject.SetActive(w.SpecialParts.Count > 0);

@@ -69,7 +69,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleShop",
+                    "name": "ToggleIngameMenu",
                     "type": "Button",
                     "id": "9301f3ce-540f-4b9a-a3f0-5f38ab2a9df4",
                     "expectedControlType": "",
@@ -78,27 +78,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TogglePlayerStats",
+                    "name": "ToggleShop",
                     "type": "Button",
-                    "id": "c5404f65-788a-4cca-84c8-c4164199c27f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ToggleStageStats",
-                    "type": "Button",
-                    "id": "d0f70177-ec25-489d-8c05-a06ef5d2265b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ToggleSettings",
-                    "type": "Button",
-                    "id": "6702da68-a178-4004-8c79-6effebca7552",
+                    "id": "12001f28-d16b-49cf-84af-3268dce9a11e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -263,44 +245,22 @@
                 {
                     "name": "",
                     "id": "e5279e85-305c-4657-a130-4e696d7ed1e0",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleIngameMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0231b4d6-bf98-4b14-b6e5-646cc2abe5c7",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ToggleShop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8854ab92-a8ca-4182-8f67-13fc3c6ea8f1",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TogglePlayerStats",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8145b587-c99d-462c-b06f-8372129ee0c3",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ToggleStageStats",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8ff67b8e-9a3c-4164-9051-3b1e8291edaf",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ToggleSettings",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

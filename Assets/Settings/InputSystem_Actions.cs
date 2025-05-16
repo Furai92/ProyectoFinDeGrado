@@ -91,7 +91,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ToggleShop"",
+                    ""name"": ""ToggleIngameMenu"",
                     ""type"": ""Button"",
                     ""id"": ""9301f3ce-540f-4b9a-a3f0-5f38ab2a9df4"",
                     ""expectedControlType"": """",
@@ -100,27 +100,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TogglePlayerStats"",
+                    ""name"": ""ToggleShop"",
                     ""type"": ""Button"",
-                    ""id"": ""c5404f65-788a-4cca-84c8-c4164199c27f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ToggleStageStats"",
-                    ""type"": ""Button"",
-                    ""id"": ""d0f70177-ec25-489d-8c05-a06ef5d2265b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ToggleSettings"",
-                    ""type"": ""Button"",
-                    ""id"": ""6702da68-a178-4004-8c79-6effebca7552"",
+                    ""id"": ""12001f28-d16b-49cf-84af-3268dce9a11e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -285,44 +267,22 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e5279e85-305c-4657-a130-4e696d7ed1e0"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleIngameMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0231b4d6-bf98-4b14-b6e5-646cc2abe5c7"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleShop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8854ab92-a8ca-4182-8f67-13fc3c6ea8f1"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TogglePlayerStats"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8145b587-c99d-462c-b06f-8372129ee0c3"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ToggleStageStats"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8ff67b8e-9a3c-4164-9051-3b1e8291edaf"",
-                    ""path"": ""<Keyboard>/4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ToggleSettings"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -867,10 +827,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_RangedAttack = m_Player.FindAction("RangedAttack", throwIfNotFound: true);
         m_Player_MeleeAttack = m_Player.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Player_ReadyUp = m_Player.FindAction("ReadyUp", throwIfNotFound: true);
+        m_Player_ToggleIngameMenu = m_Player.FindAction("ToggleIngameMenu", throwIfNotFound: true);
         m_Player_ToggleShop = m_Player.FindAction("ToggleShop", throwIfNotFound: true);
-        m_Player_TogglePlayerStats = m_Player.FindAction("TogglePlayerStats", throwIfNotFound: true);
-        m_Player_ToggleStageStats = m_Player.FindAction("ToggleStageStats", throwIfNotFound: true);
-        m_Player_ToggleSettings = m_Player.FindAction("ToggleSettings", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -957,10 +915,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RangedAttack;
     private readonly InputAction m_Player_MeleeAttack;
     private readonly InputAction m_Player_ReadyUp;
+    private readonly InputAction m_Player_ToggleIngameMenu;
     private readonly InputAction m_Player_ToggleShop;
-    private readonly InputAction m_Player_TogglePlayerStats;
-    private readonly InputAction m_Player_ToggleStageStats;
-    private readonly InputAction m_Player_ToggleSettings;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -972,10 +928,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @RangedAttack => m_Wrapper.m_Player_RangedAttack;
         public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
         public InputAction @ReadyUp => m_Wrapper.m_Player_ReadyUp;
+        public InputAction @ToggleIngameMenu => m_Wrapper.m_Player_ToggleIngameMenu;
         public InputAction @ToggleShop => m_Wrapper.m_Player_ToggleShop;
-        public InputAction @TogglePlayerStats => m_Wrapper.m_Player_TogglePlayerStats;
-        public InputAction @ToggleStageStats => m_Wrapper.m_Player_ToggleStageStats;
-        public InputAction @ToggleSettings => m_Wrapper.m_Player_ToggleSettings;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1006,18 +960,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ReadyUp.started += instance.OnReadyUp;
             @ReadyUp.performed += instance.OnReadyUp;
             @ReadyUp.canceled += instance.OnReadyUp;
+            @ToggleIngameMenu.started += instance.OnToggleIngameMenu;
+            @ToggleIngameMenu.performed += instance.OnToggleIngameMenu;
+            @ToggleIngameMenu.canceled += instance.OnToggleIngameMenu;
             @ToggleShop.started += instance.OnToggleShop;
             @ToggleShop.performed += instance.OnToggleShop;
             @ToggleShop.canceled += instance.OnToggleShop;
-            @TogglePlayerStats.started += instance.OnTogglePlayerStats;
-            @TogglePlayerStats.performed += instance.OnTogglePlayerStats;
-            @TogglePlayerStats.canceled += instance.OnTogglePlayerStats;
-            @ToggleStageStats.started += instance.OnToggleStageStats;
-            @ToggleStageStats.performed += instance.OnToggleStageStats;
-            @ToggleStageStats.canceled += instance.OnToggleStageStats;
-            @ToggleSettings.started += instance.OnToggleSettings;
-            @ToggleSettings.performed += instance.OnToggleSettings;
-            @ToggleSettings.canceled += instance.OnToggleSettings;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1043,18 +991,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ReadyUp.started -= instance.OnReadyUp;
             @ReadyUp.performed -= instance.OnReadyUp;
             @ReadyUp.canceled -= instance.OnReadyUp;
+            @ToggleIngameMenu.started -= instance.OnToggleIngameMenu;
+            @ToggleIngameMenu.performed -= instance.OnToggleIngameMenu;
+            @ToggleIngameMenu.canceled -= instance.OnToggleIngameMenu;
             @ToggleShop.started -= instance.OnToggleShop;
             @ToggleShop.performed -= instance.OnToggleShop;
             @ToggleShop.canceled -= instance.OnToggleShop;
-            @TogglePlayerStats.started -= instance.OnTogglePlayerStats;
-            @TogglePlayerStats.performed -= instance.OnTogglePlayerStats;
-            @TogglePlayerStats.canceled -= instance.OnTogglePlayerStats;
-            @ToggleStageStats.started -= instance.OnToggleStageStats;
-            @ToggleStageStats.performed -= instance.OnToggleStageStats;
-            @ToggleStageStats.canceled -= instance.OnToggleStageStats;
-            @ToggleSettings.started -= instance.OnToggleSettings;
-            @ToggleSettings.performed -= instance.OnToggleSettings;
-            @ToggleSettings.canceled -= instance.OnToggleSettings;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1199,10 +1141,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnRangedAttack(InputAction.CallbackContext context);
         void OnMeleeAttack(InputAction.CallbackContext context);
         void OnReadyUp(InputAction.CallbackContext context);
+        void OnToggleIngameMenu(InputAction.CallbackContext context);
         void OnToggleShop(InputAction.CallbackContext context);
-        void OnTogglePlayerStats(InputAction.CallbackContext context);
-        void OnToggleStageStats(InputAction.CallbackContext context);
-        void OnToggleSettings(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

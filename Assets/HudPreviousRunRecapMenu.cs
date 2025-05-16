@@ -56,4 +56,8 @@ public class HudPreviousRunRecapMenu : MonoBehaviour, IGameMenu
             typeLabels[i].color = directNumbers[i].color = statusNumbers[i].color = cdb.ElementToColor(e);
         }
     }
+    public string GetMenuNameID()
+    {
+        return "MENU_NAME_RECAP";
+    }
 }

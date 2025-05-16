@@ -187,4 +187,8 @@ public class HudNewRunMenu : MonoBehaviour, IGameMenu
         currentPage = 0;
         UpdatePage();
     }
+    public string GetMenuNameID()
+    {
+        return "MENU_NAME_NEW_RUN";
+    }
 }

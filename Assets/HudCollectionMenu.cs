@@ -75,4 +75,8 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
             }
         }
     }
+    public string GetMenuNameID()
+    {
+        return "MENU_NAME_COLLECTION";
+    }
 }
