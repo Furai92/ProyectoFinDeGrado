@@ -283,7 +283,8 @@ MonoBehaviour:
     <Data>k__BackingField: Bulletstorm
   - <ID>k__BackingField: TCH_D_BULLETSTORM
     <Data>k__BackingField: "While dashing, fire your ranged weapon in a 360\xBA arc.
-      Attacks triggered this way don't generate heat."
+      Attacks triggered this way don't generate heat. You cannot attack with your
+      ranged weapon anymore."
   - <ID>k__BackingField: TCH_N_SWIFT_STRIKE
     <Data>k__BackingField: Swift Strike
   - <ID>k__BackingField: TCH_D_SWIFT_STRIKE
@@ -437,6 +438,31 @@ MonoBehaviour:
     <Data>k__BackingField: Ranged weapon attacks increase your explosion radius but
       increase random spread and drain your endurance. If this effect is accumulated
       high enough you can no longer stop attacking until your ranged weapon overheats.
+  - <ID>k__BackingField: TCH_N_IN_THE_ZONE
+    <Data>k__BackingField: In The Zone
+  - <ID>k__BackingField: TCH_D_IN_THE_ZONE
+    <Data>k__BackingField: Evading an enemy attack grants might and dexterity. Lose
+      all bonuses upon taking damage.
+  - <ID>k__BackingField: TCH_N_TRICKSTER
+    <Data>k__BackingField: Trickster
+  - <ID>k__BackingField: TCH_D_TRICKSTER
+    <Data>k__BackingField: Create a landmine at the endpoint of your dashes. Landmines
+      have an activation delay, and fade after enough time has passed or the wave
+      ends. The landmine gains bonus damage based on your dexterity and the element
+      is based on your ranged weapon.
+  - <ID>k__BackingField: TCH_N_OUTMANOUVER
+    <Data>k__BackingField: Outmanouver
+  - <ID>k__BackingField: TCH_D_OUTMANOUVER
+    <Data>k__BackingField: After dashing, gain critical strike chance and critical
+      damage for a very short time.
+  - <ID>k__BackingField: TCH_N_ENERGY_PACK
+    <Data>k__BackingField: Energy Pack
+  - <ID>k__BackingField: TCH_D_ENERGY_PACK
+    <Data>k__BackingField: Health orbs also restore dash charges.
+  - <ID>k__BackingField: TCH_N_NIMBLE
+    <Data>k__BackingField: Nimble
+  - <ID>k__BackingField: TCH_D_NIMBLE
+    <Data>k__BackingField: Increases maximum dash charges, but reduces your endurance.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -455,6 +481,8 @@ MonoBehaviour:
     <Data>k__BackingField: 'Health: {0}'
   - <ID>k__BackingField: TCH_DT_END
     <Data>k__BackingField: 'Endurance: {0}'
+  - <ID>k__BackingField: TCH_DT_DMG_BASE
+    <Data>k__BackingField: 'Base damage: {0}'
   - <ID>k__BackingField: TCH_DT_SPEED
     <Data>k__BackingField: 'Speed: {0}%'
   - <ID>k__BackingField: TCH_DT_CRITC
@@ -539,14 +567,30 @@ MonoBehaviour:
     <Data>k__BackingField: 'Bonus projectile bounces: {0}'
   - <ID>k__BackingField: TCH_DT_STACKS_GAINED
     <Data>k__BackingField: 'Stacks gained: {0}'
-  - <ID>k__BackingField: TCH_DT_INT_TO_DMG
-    <Data>k__BackingField: 'Intellect to damage: {0}'
+  - <ID>k__BackingField: TCH_DT_LIFETIME
+    <Data>k__BackingField: 'Lifetime: {0}s'
   - <ID>k__BackingField: TCH_DT_OVERKILL_PERCENT
     <Data>k__BackingField: 'Overkill to damage: {0}%'
   - <ID>k__BackingField: TCH_DT_STACKS_TO_LOSE_CONTROL
     <Data>k__BackingField: 'Stacks to lose control: {0}'
   - <ID>k__BackingField: TCH_DT_NEND_TO_DMG_PERCENT
     <Data>k__BackingField: 'Negative endurance to bonus damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_RANGED_ATTACK_DISABLED
+    <Data>k__BackingField: Disables ranged weapon attacks.
+  - <ID>k__BackingField: TCH_DT_MELEE_ATTACK_DISABLED
+    <Data>k__BackingField: Disables melee weapon attacks.
+  - <ID>k__BackingField: TCH_DT_ACTIVATION_DELAY
+    <Data>k__BackingField: 'Activation delay: {0}s'
+  - <ID>k__BackingField: TCH_DT_DMG_TAKEN_RESET
+    <Data>k__BackingField: Resets after taking damage.
+  - <ID>k__BackingField: TCH_DT_MIGHT_TO_DMG
+    <Data>k__BackingField: 'Damage per point of might: {0}'
+  - <ID>k__BackingField: TCH_DT_DEX_TO_DMG
+    <Data>k__BackingField: 'Damage per point of dexterity: {0}'
+  - <ID>k__BackingField: TCH_DT_INT_TO_DMG
+    <Data>k__BackingField: 'Intellect to damage: {0}'
+  - <ID>k__BackingField: TCH_DT_DASH_CHARGES
+    <Data>k__BackingField: 'Dash charges: {0}'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT

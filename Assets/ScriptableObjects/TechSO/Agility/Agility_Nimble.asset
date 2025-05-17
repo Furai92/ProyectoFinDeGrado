@@ -10,24 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Agility_Bulletstorm
+  m_Name: Agility_Nimble
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: BULLETSTORM
-  <NameID>k__BackingField: TCH_N_BULLETSTORM
-  <DescID>k__BackingField: TCH_D_BULLETSTORM
-  <MaxLevel>k__BackingField: 1
-  <Rarity>k__BackingField: 3
+  <ID>k__BackingField: NIMBLE
+  <NameID>k__BackingField: TCH_N_NIMBLE
+  <DescID>k__BackingField: TCH_D_NIMBLE
+  <MaxLevel>k__BackingField: 2
+  <Rarity>k__BackingField: 1
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: dca949ea592a48d44beea7e5b8b8d831, type: 2}
-  <Script>k__BackingField: TechBehaviourBulletstorm
-  <BonusStats>k__BackingField: []
+  <Script>k__BackingField: 
+  <BonusStats>k__BackingField:
+  - <First>k__BackingField: 5
+    <Second>k__BackingField: 1
+  - <First>k__BackingField: 4
+    <Second>k__BackingField: -20
   <BonusStageStats>k__BackingField: []
-  <BonusFlags>k__BackingField: 03000000
+  <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_ATTACKS
-    <DescValueBase>k__BackingField: 6
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_RANGED_ATTACK_DISABLED
+  - <DescTextID>k__BackingField: TCH_DT_DASH_CHARGES
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 1
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_END
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: -20
     <DescDetailType>k__BackingField: 2

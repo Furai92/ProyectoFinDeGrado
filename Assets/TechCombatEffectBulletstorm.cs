@@ -7,13 +7,13 @@ public class TechCombatEffectBulletstorm : TechCombatEffect
     private float nextShootTime;
     private float shootInterval;
     private int shootsFired;
-    private const int SHOOTS = 5;
+    private const int SHOOTS = 6;
 
     protected override void Initialize(Vector3 pos, float dir)
     {
         gameObject.SetActive(true);
         transform.position = pos;
-        direction = dir;
+        direction = PlayerEntity.ActiveInstance.CurrentLookDirection;
         shootDir = 0;
         transform.rotation = Quaternion.Euler(0, direction, 0);
         shootInterval = PlayerEntity.DASH_DURATION / SHOOTS;

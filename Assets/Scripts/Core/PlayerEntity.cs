@@ -25,13 +25,14 @@ public class PlayerEntity : NetworkBehaviour
     [field: SerializeField] public bool StatusOverheatRanged { get; private set; }
     [field: SerializeField] public bool StatusOverheatMelee { get; private set; }
 
+    public float CurrentLookDirection { get; private set; }
+
     [SerializeField] private WeaponSO debugRangedWeaponSO;
     [SerializeField] private WeaponSO debugMeleeWeaponSO;
     [SerializeField] private List<TechSO> debugTechSO;
 
     private float rangedAttackReady;
     private float meleeAttackReady;
-    private float currentDirection;
     private float heatDecayMelee;
     private float heatDecayRanged;
     private float coolingReadyTimeMelee;
@@ -150,7 +151,7 @@ public class PlayerEntity : NetworkBehaviour
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
 
-        currentDirection = 0; UpdateRotation();
+        CurrentLookDirection = 0; UpdateRotation();
         inputsAllowed = true;
 
         EventManager.OnPlayerStatsUpdated(this);
@@ -168,7 +169,7 @@ public class PlayerEntity : NetworkBehaviour
     }
     private void UpdateRotation()
     {
-        m_rotationParent.transform.rotation = Quaternion.Euler(0, currentDirection, 0);
+        m_rotationParent.transform.rotation = Quaternion.Euler(0, CurrentLookDirection, 0);
     }
     private void Update()
     {
@@ -177,7 +178,7 @@ public class PlayerEntity : NetworkBehaviour
         rotationInputH = inputsAllowed ? InputManager.Instance.GetLookInput().x : 0;
         rotationInputV = inputsAllowed ? InputManager.Instance.GetLookInput().y : 0;
 
-        currentDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
+        CurrentLookDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
         UpdateRotation();
         m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
@@ -207,17 +208,23 @@ public class PlayerEntity : NetworkBehaviour
                 CurrentDashes++;
             }
         }
-        dashDurationRemaining -= Time.deltaTime;
         CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE);
 
-        if ((InputManager.Instance.GetRangedAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackRanged) > 0) && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
+        if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableRangedAttack) <= 0) 
         {
-            Attack(WeaponSO.WeaponSlot.Ranged, currentDirection, true, true);
+            if ((InputManager.Instance.GetRangedAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackRanged) > 0) && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
+            {
+                Attack(WeaponSO.WeaponSlot.Ranged, CurrentLookDirection, true, true);
+            }
         }
-        if ((InputManager.Instance.GetMeleeAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackMelee) > 0) && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
+        if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableMeleeAttack) <= 0) 
         {
-            Attack(WeaponSO.WeaponSlot.Melee, currentDirection, true, true);
+            if ((InputManager.Instance.GetMeleeAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackMelee) > 0) && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
+            {
+                Attack(WeaponSO.WeaponSlot.Melee, CurrentLookDirection, true, true);
+            }
         }
+
         if (InputManager.Instance.GetDashInput() && inputsAllowed) 
         {
             StartDash();
@@ -327,12 +334,14 @@ public class PlayerEntity : NetworkBehaviour
             RaycastHit rh;
             LayerMask m = LayerMask.GetMask("Walls");
             Physics.Raycast(transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
+            dashDurationRemaining -= Time.fixedDeltaTime;
             if (rh.collider != null) 
             {
                 dashDurationRemaining = 0;
                 EventManager.OnPlayerWallSlam(transform.position);
                 ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.NonElemental);
             }
+            if (dashDurationRemaining <= 0) { EventManager.OnPlayerDashEnded(transform.position, GameTools.VectorToAngle(dashMovementVector)); }
         }
         else 
         {
@@ -356,7 +365,8 @@ public class PlayerEntity : NetworkBehaviour
 
         CurrentDashes -= 1;
 
-        dashMovementVector = movementInputV * m_rotationParent.forward;
+
+        dashMovementVector = (movementInputV == 0 && movementInputH == 0 ? 1 : movementInputV) * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION;
         EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));

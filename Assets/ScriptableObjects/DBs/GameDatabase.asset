@@ -59,6 +59,8 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 625137152358044939, guid: 5ecfca8886bee824e957d3064199d6b2, type: 3}
   - <ID>k__BackingField: SINGULARITY
     <Data>k__BackingField: {fileID: 287065879031868128, guid: 13f84a1c0af4323458b8142953dc433a, type: 3}
+  - <ID>k__BackingField: LANDMINE
+    <Data>k__BackingField: {fileID: 9160069129515097824, guid: db1bb51ae72a2344f882747635d21521, type: 3}
   <Weapons>k__BackingField:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
@@ -66,7 +68,12 @@ MonoBehaviour:
   <Techs>k__BackingField:
   - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   - {fileID: 11400000, guid: e2f65190c8a8df346885c3f8e09ad9a7, type: 2}
+  - {fileID: 11400000, guid: 1edb2b43c88b7384c92dbc374726fb2e, type: 2}
+  - {fileID: 11400000, guid: 857c752d0ed2590418edc43eca4e1e04, type: 2}
+  - {fileID: 11400000, guid: 98a040007a01b254fb63d9d3d5303929, type: 2}
+  - {fileID: 11400000, guid: 823950c267d65294d887023e8d6e6515, type: 2}
   - {fileID: 11400000, guid: 3dbbc36186849614caabbc26f3245e27, type: 2}
+  - {fileID: 11400000, guid: 7b3edf5655dacd84d8e2ea88abec3416, type: 2}
   - {fileID: 11400000, guid: 4d1d4ada2ec0a774aa47f61e28f7ba7f, type: 2}
   - {fileID: 11400000, guid: edee272fff023514680aa25efc6f9d18, type: 2}
   - {fileID: 11400000, guid: d0008cc30fde07740ae1d30338b1aa6b, type: 2}
@@ -146,6 +153,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2048618718361344fbcbbb0b3e4f9f8d, type: 2}
   - {fileID: 11400000, guid: 83a13edc5de9dc44d8f065e5347b73f3, type: 2}
   - {fileID: 11400000, guid: b095bb343b7f0f547913ec12accc096a, type: 2}
+  - {fileID: 11400000, guid: 8c992660faf61714abca2185f2530aae, type: 2}
+  - {fileID: 11400000, guid: ded88d17f1485b04b949a6d54c77b47b, type: 2}
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}
