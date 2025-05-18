@@ -105,9 +105,6 @@ public class PlayerEntity : NetworkBehaviour
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
 
-
-
-
     public void SetUp(Vector3 pos)
     {
         gameObject.SetActive(true);
@@ -369,6 +366,7 @@ public class PlayerEntity : NetworkBehaviour
         dashMovementVector = (movementInputV == 0 && movementInputH == 0 ? 1 : movementInputV) * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION;
+        Debug.Log("Dashing");
         EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));
     }
     #region Public Methods
