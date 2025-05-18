@@ -30,7 +30,7 @@ public class EnemyAttackSmallMelee : EnemyAttackBase
             if (pe == null) { return; }
             if (!pe.IsEvading())
             {
-                pe.DealDamage(BASE_DAMAGE);
+                pe.DealDamage(BASE_DAMAGE, true, false, false);
             }
             else
             {

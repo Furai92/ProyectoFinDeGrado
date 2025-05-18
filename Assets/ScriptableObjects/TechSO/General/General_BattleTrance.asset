@@ -36,10 +36,14 @@ MonoBehaviour:
     <DescValueScaling>k__BackingField: -20
     <DescDetailType>k__BackingField: 2
   - <DescTextID>k__BackingField: TCH_DT_MIGHT_ONKILL
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 1
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_DEX_ONKILL
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_STACKS_GAINED
     <DescValueBase>k__BackingField: 0
     <DescValueScaling>k__BackingField: 1
     <DescDetailType>k__BackingField: 1

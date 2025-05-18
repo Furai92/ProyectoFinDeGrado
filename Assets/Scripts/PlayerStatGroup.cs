@@ -17,14 +17,15 @@ public class PlayerStatGroup
         CritBonusDamage,
         HeatFloor,
         HeatCap,
-        DamageToLightConversion,
-        DamageToShieldConversion,
+        DamageToSoftDamageConversion,
+        ShieldDecayRateReduction,
         EchoChance,
         RandomSpread,
         HeatGenIncrease,
         BonusRangedBounces,
         BonusRangedPierces,
-        BonusSplash
+        BonusSplash,
+        HealingPrevention
     }
     public enum PlayerFlags { NoHeal, NoStopAttackRanged, NoStopAttackMelee, DisableRangedAttack, DisableMeleeAttack }
 

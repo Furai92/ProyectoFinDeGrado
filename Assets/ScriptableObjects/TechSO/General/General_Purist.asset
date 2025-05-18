@@ -24,6 +24,10 @@ MonoBehaviour:
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_INT
+    <DescValueBase>k__BackingField: 1
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_STACKS_GAINED
     <DescValueBase>k__BackingField: 0
     <DescValueScaling>k__BackingField: 1
     <DescDetailType>k__BackingField: 1

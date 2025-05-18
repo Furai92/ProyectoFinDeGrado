@@ -22,6 +22,8 @@ MonoBehaviour:
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 5
     <Second>k__BackingField: 2
+  - <First>k__BackingField: 9
+    <Second>k__BackingField: 0.25
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField: []

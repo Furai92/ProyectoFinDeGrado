@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: RestorationTraitCoreTech
+  m_Name: Restoration_RestorationCoreTech
   m_EditorClassIdentifier: 
   <ID>k__BackingField: RESTORATION_CORE
   <NameID>k__BackingField: TRAIT_NAME_RESTORATION
@@ -24,4 +24,8 @@ MonoBehaviour:
     <Second>k__BackingField: 0.5
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
-  <DescriptionDetails>k__BackingField: []
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_DAMAGE_TO_SOFT_CONVERSION
+    <DescValueBase>k__BackingField: 50
+    <DescValueScaling>k__BackingField: 0
+    <DescDetailType>k__BackingField: 1

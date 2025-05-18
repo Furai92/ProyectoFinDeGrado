@@ -129,12 +129,13 @@ MonoBehaviour:
   - <ID>k__BackingField: TRAIT_NAME_PROTECTION
     <Data>k__BackingField: Protection
   - <ID>k__BackingField: TRAIT_DESC_PROTECTION
-    <Data>k__BackingField: When losing health, gain a shield equivalent to 2X the
-      health lost
+    <Data>k__BackingField: Reduces speed at which shields decay. At the start of
+      each wave, insantly refill a percentage of your shield.
   - <ID>k__BackingField: TRAIT_NAME_AGILITY
     <Data>k__BackingField: Agility
   - <ID>k__BackingField: TRAIT_DESC_AGILITY
-    <Data>k__BackingField: Gain +2 dash charges. Dashes are 50% longer.
+    <Data>k__BackingField: Gain aditional dash charges and increase the speed at
+      which they recharge.
   - <ID>k__BackingField: TRAIT_NAME_GENERAL
     <Data>k__BackingField: General
   - <ID>k__BackingField: TRAIT_DESC_GENERAL
@@ -463,6 +464,79 @@ MonoBehaviour:
     <Data>k__BackingField: Nimble
   - <ID>k__BackingField: TCH_D_NIMBLE
     <Data>k__BackingField: Increases maximum dash charges, but reduces your endurance.
+  - <ID>k__BackingField: TCH_N_VIGOR
+    <Data>k__BackingField: Vigor
+  - <ID>k__BackingField: TCH_D_VIGOR
+    <Data>k__BackingField: Increases maximum health.
+  - <ID>k__BackingField: TCH_N_AUTO_SHIELDS
+    <Data>k__BackingField: Auto Shields
+  - <ID>k__BackingField: TCH_D_AUTO_SHIELDS
+    <Data>k__BackingField: If your shield is below a percentage, automatically generate
+      shield. This effect is activated in a fixed time interval.
+  - <ID>k__BackingField: TCH_N_TRANSFUSION
+    <Data>k__BackingField: Transfusion
+  - <ID>k__BackingField: TCH_D_TRANSFUSION
+    <Data>k__BackingField: Prevents most of the healing recieved. Any healing prevented
+      is converted into shield at an increased rate.
+  - <ID>k__BackingField: TCH_N_KINETIC_IMPACT
+    <Data>k__BackingField: Kinetic Impact
+  - <ID>k__BackingField: TCH_D_KINETIC_IMPACT
+    <Data>k__BackingField: Dashing trough enemies deals non elemental damage based
+      on a percentage of your shield.
+  - <ID>k__BackingField: TCH_N_SHIELD_PACK
+    <Data>k__BackingField: Shield Pack
+  - <ID>k__BackingField: TCH_D_SHIELD_PACK
+    <Data>k__BackingField: Health orbs grand shield.
+  - <ID>k__BackingField: TCH_N_OVERDRIVE
+    <Data>k__BackingField: Overdrive
+  - <ID>k__BackingField: TCH_D_OVERDRIVE
+    <Data>k__BackingField: After reaching maximum shield capacity, consume a percentage
+      of your shield to release a massive non elemental explosion. Damage is based
+      on the shield consumed.
+  - <ID>k__BackingField: TCH_N_PERSISTENCE
+    <Data>k__BackingField: Persistence
+  - <ID>k__BackingField: TCH_D_PERSISTENCE
+    <Data>k__BackingField: Shields decay slower.
+  - <ID>k__BackingField: TCH_N_MIRROR
+    <Data>k__BackingField: Mirror
+  - <ID>k__BackingField: TCH_D_MIRROR
+    <Data>k__BackingField: Reflects a percentage of the damage absobred by your shield
+      as a non elemental nova.
+  - <ID>k__BackingField: TCH_N_DYNAMO
+    <Data>k__BackingField: Dynamo
+  - <ID>k__BackingField: TCH_D_DYNAMO
+    <Data>k__BackingField: Melee impacts generate shield. This effect has a short
+      cooldown.
+  - <ID>k__BackingField: TCH_N_BACKUP_DEFENSE
+    <Data>k__BackingField: Backup Defenses
+  - <ID>k__BackingField: TCH_D_BACKUP_DEFENSE
+    <Data>k__BackingField: After taking damage, gain shield based on the amount of
+      health lost
+  - <ID>k__BackingField: TCH_N_HARVESTER
+    <Data>k__BackingField: Harvester
+  - <ID>k__BackingField: TCH_D_HARVESTER
+    <Data>k__BackingField: Increases the amount of health orbs dropped by enemies.
+  - <ID>k__BackingField: TCH_N_GROWING_STRENGHT
+    <Data>k__BackingField: Growing Strenght
+  - <ID>k__BackingField: TCH_D_GROWING_STRENGHT
+    <Data>k__BackingField: Health orbs increase your strenght. Stacks reset after
+      the wave ends
+  - <ID>k__BackingField: TCH_N_OVERFLOWING_VITALITY
+    <Data>k__BackingField: Overflowing Vitality
+  - <ID>k__BackingField: TCH_D_OVERFLOWING_VITALITY
+    <Data>k__BackingField: Any health restoration while the health is full will release
+      a nova dealing non elemental damage. Damage is based on a percentage of the
+      overhealing recieved.
+  - <ID>k__BackingField: TCH_N_LIFESTEALER
+    <Data>k__BackingField: Lifestealer
+  - <ID>k__BackingField: TCH_D_LIFESTEALER
+    <Data>k__BackingField: Melee hits have a chance to spawn healing orbs. This effect
+      has a short cooldown.
+  - <ID>k__BackingField: TCH_N_ENERGY_EXTRACTION
+    <Data>k__BackingField: Energy Extraction
+  - <ID>k__BackingField: TCH_D_ENERGY_EXTRACTION
+    <Data>k__BackingField: Applying a status effect to an enemy has a chance to spawn
+      a healing orb.
   - <ID>k__BackingField: TCH_DT_INT
     <Data>k__BackingField: 'Intellect gained: {0}'
   - <ID>k__BackingField: TCH_DT_MIGHT
@@ -505,6 +579,10 @@ MonoBehaviour:
     <Data>k__BackingField: 'Impact damage to explosion: {0}%'
   - <ID>k__BackingField: TCH_DT_HEALING
     <Data>k__BackingField: 'Healing: {0}'
+  - <ID>k__BackingField: TCH_DT_DAMAGE_TO_SOFT_CONVERSION
+    <Data>k__BackingField: 'Damage converted to soft damage: {0}%'
+  - <ID>k__BackingField: TCH_DT_SHIELD_PERCENT_REQ
+    <Data>k__BackingField: 'Shield percent required: {0}%'
   - <ID>k__BackingField: TCH_DT_RANGE
     <Data>k__BackingField: 'Range: {0}m'
   - <ID>k__BackingField: TCH_DT_DMG_PER_STATUS
@@ -565,6 +643,10 @@ MonoBehaviour:
     <Data>k__BackingField: 'Size increase per stack: {0}'
   - <ID>k__BackingField: TCH_DT_BOUNCES
     <Data>k__BackingField: 'Bonus projectile bounces: {0}'
+  - <ID>k__BackingField: TCH_DT_SHIELD
+    <Data>k__BackingField: 'Shield gained: {0}'
+  - <ID>k__BackingField: TCH_DT_SHIELD_TO_DMG_PERCENT
+    <Data>k__BackingField: 'Shield to damage: {0}%'
   - <ID>k__BackingField: TCH_DT_STACKS_GAINED
     <Data>k__BackingField: 'Stacks gained: {0}'
   - <ID>k__BackingField: TCH_DT_LIFETIME
@@ -585,12 +667,32 @@ MonoBehaviour:
     <Data>k__BackingField: Resets after taking damage.
   - <ID>k__BackingField: TCH_DT_MIGHT_TO_DMG
     <Data>k__BackingField: 'Damage per point of might: {0}'
+  - <ID>k__BackingField: TCH_DT_PREV_HEALING_TO_SHIELD_RATE
+    <Data>k__BackingField: 'Prevented healing to shield rate: {0}%'
+  - <ID>k__BackingField: TCH_DT_HEALING_PREVENTION
+    <Data>k__BackingField: 'Healing prevented: {0}%'
   - <ID>k__BackingField: TCH_DT_DEX_TO_DMG
     <Data>k__BackingField: 'Damage per point of dexterity: {0}'
   - <ID>k__BackingField: TCH_DT_INT_TO_DMG
     <Data>k__BackingField: 'Intellect to damage: {0}'
+  - <ID>k__BackingField: TCH_DT_SHIELD_PERCENT
+    <Data>k__BackingField: 'Shield percent: {0}%'
+  - <ID>k__BackingField: TCH_DT_SHIELD_CONSUMED_PERCENT
+    <Data>k__BackingField: 'Shield consumed: {0}%'
+  - <ID>k__BackingField: TCH_DT_ORB_DROPRATE
+    <Data>k__BackingField: 'Orb drop rate bonus: {0}%'
+  - <ID>k__BackingField: TCH_DT_SHIELD_DECAY_REDUCTION
+    <Data>k__BackingField: 'Shield decay reduction: {0}%'
   - <ID>k__BackingField: TCH_DT_DASH_CHARGES
     <Data>k__BackingField: 'Dash charges: {0}'
+  - <ID>k__BackingField: TCH_DT_REFLECT
+    <Data>k__BackingField: 'Damage reflected: {0}%'
+  - <ID>k__BackingField: TCH_DT_HP_LOSS_TO_SHIELD_PERCENT
+    <Data>k__BackingField: 'Lost health converted to shield: {0}%'
+  - <ID>k__BackingField: TCH_DT_CRITICALS_DISABLED
+    <Data>k__BackingField: Cannot critically hit affected enemies.
+  - <ID>k__BackingField: TCH_DT_OVERHEAL_TO_DMG_PERCENT
+    <Data>k__BackingField: 'Overhealing converted to damage: {0}%'
   - <ID>k__BackingField: PART_DESC_EXPLOSIVE
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT

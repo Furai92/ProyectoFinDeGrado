@@ -24,7 +24,7 @@ public class TechBehaviourPurist : TechBase
         if (elem != previousElement) { PlayerEntity.ActiveInstance.RemoveBuff(BUFF_ID); }
 
         previousElement = elem;
-        PlayerEntity.ActiveInstance.ChangeBuff(BUFF_ID, Group.Level, 1);
+        PlayerEntity.ActiveInstance.ChangeBuff(BUFF_ID, 1, Group.Level);
     }
     private void OnStageStateEnded(StageStateBase.GameState s) 
     {

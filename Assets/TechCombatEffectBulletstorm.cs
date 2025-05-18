@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class TechCombatEffectBulletstorm : TechCombatEffect
 {
+    [SerializeField] private ParticleSystem ps;
+
     private float shootDir;
     private float direction;
     private float nextShootTime;
     private float shootInterval;
     private int shootsFired;
     private const int SHOOTS = 6;
+    private bool waitingToRemove;
+    private float removeTime;
+
+    private const float REMOVE_DELAY = 2f;
 
     protected override void Initialize(Vector3 pos, float dir)
     {
@@ -19,17 +25,33 @@ public class TechCombatEffectBulletstorm : TechCombatEffect
         shootInterval = PlayerEntity.DASH_DURATION / SHOOTS;
         nextShootTime = Time.time + shootInterval;
         shootsFired = 0;
+        waitingToRemove = false;
+        ps.Play();
     }
     private void FixedUpdate()
     {
         transform.position = PlayerEntity.ActiveInstance.transform.position;
-        if (Time.time > nextShootTime) 
+        if (waitingToRemove)
         {
-            PlayerEntity.ActiveInstance.Attack(WeaponSO.WeaponSlot.Ranged, direction + shootDir, false, true);
-            shootDir += 360 / SHOOTS;
-            nextShootTime = Time.time + shootInterval;
-            shootsFired++;
-            if (shootsFired >= SHOOTS) { gameObject.SetActive(false); }
+            if (Time.time > removeTime) { gameObject.SetActive(false); } 
         }
+        else 
+        {
+            if (Time.time > nextShootTime)
+            {
+                PlayerEntity.ActiveInstance.Attack(WeaponSO.WeaponSlot.Ranged, direction + shootDir, false, true);
+                shootDir += 360 / SHOOTS;
+                nextShootTime = Time.time + shootInterval;
+                shootsFired++;
+                if (shootsFired >= SHOOTS) 
+                {
+                    removeTime = Time.time + REMOVE_DELAY;
+                    waitingToRemove = true;
+                    ps.Stop();
+                }
+            }
+        }
+
+
     }
 }

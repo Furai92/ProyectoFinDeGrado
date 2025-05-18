@@ -119,7 +119,7 @@ public class EnemyAttackFireBomb : EnemyAttackBase
             if (pe == null) { return; }
             if (!pe.IsEvading())
             {
-                pe.DealDamage(POOL_DAMAGE);
+                pe.DealDamage(POOL_DAMAGE, true, false, false);
             }
             else
             {

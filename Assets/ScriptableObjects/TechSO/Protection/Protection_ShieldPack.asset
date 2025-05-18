@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: ProtectionTraitCoreTech
+  m_Name: Protection_ShieldPack
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: PROTECTION_CORE
-  <NameID>k__BackingField: TRAIT_NAME_PROTECTION
-  <DescID>k__BackingField: TRAIT_DESC_PROTECTION
-  <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 4
+  <ID>k__BackingField: SHIELD_PACK
+  <NameID>k__BackingField: TCH_N_SHIELD_PACK
+  <DescID>k__BackingField: TCH_D_SHIELD_PACK
+  <MaxLevel>k__BackingField: 5
+  <Rarity>k__BackingField: 0
   <RelatedTrait>k__BackingField: {fileID: 11400000, guid: d4f80f5ccf5e31e46b1f23927fb2da56, type: 2}
-  <Script>k__BackingField: 
-  <BonusStats>k__BackingField:
-  - <First>k__BackingField: 15
-    <Second>k__BackingField: 2
+  <Script>k__BackingField: TechBehaviourShieldPack
+  <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
-  <DescriptionDetails>k__BackingField: []
+  <DescriptionDetails>k__BackingField:
+  - <DescTextID>k__BackingField: TCH_DT_SHIELD
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 20
+    <DescDetailType>k__BackingField: 1

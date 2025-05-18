@@ -496,14 +496,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  <StatusHeatRanged>k__BackingField: 0
-  <StatusHeatMelee>k__BackingField: 0
-  <StatusOverheatRanged>k__BackingField: 0
-  <StatusOverheatMelee>k__BackingField: 0
   debugRangedWeaponSO: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
   debugTechSO: []
-  m_camTargetPos: {fileID: 5009270293795097312}
+  m_camTargetTransform: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
   m_rotationParent: {fileID: 1892808105939200760}
   m_rb: {fileID: 5315466479892381301}

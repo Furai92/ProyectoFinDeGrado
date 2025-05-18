@@ -20,11 +20,10 @@ public class PlayerEntity : NetworkBehaviour
 
     // Weapon status =================================================================================
 
-    [field: SerializeField] public float StatusHeatRanged { get; private set; }
-    [field: SerializeField] public float StatusHeatMelee { get; private set; }
-    [field: SerializeField] public bool StatusOverheatRanged { get; private set; }
-    [field: SerializeField] public bool StatusOverheatMelee { get; private set; }
-
+    public float StatusHeatRanged { get; private set; }
+    public float StatusHeatMelee { get; private set; }
+    public bool StatusOverheatRanged { get; private set; }
+    public bool StatusOverheatMelee { get; private set; }
     public float CurrentLookDirection { get; private set; }
 
     [SerializeField] private WeaponSO debugRangedWeaponSO;
@@ -54,9 +53,9 @@ public class PlayerEntity : NetworkBehaviour
 
     // Movement and camera =================================================================================
 
-    public Transform CamTargetTransform { get { return m_camTargetPos; } }
+    public Transform CamTargetTransform { get { return m_camTargetTransform; } }
 
-    [SerializeField] private Transform m_camTargetPos;
+    [SerializeField] public Transform m_camTargetTransform;
     [SerializeField] private Transform m_camVerticalRotationAxis;
     [SerializeField] private Transform m_rotationParent;
     [SerializeField] private Rigidbody m_rb;
@@ -205,7 +204,7 @@ public class PlayerEntity : NetworkBehaviour
                 CurrentDashes++;
             }
         }
-        CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE);
+        CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE * (1 - Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.ShieldDecayRateReduction))));
 
         if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableRangedAttack) <= 0) 
         {
@@ -430,24 +429,37 @@ public class PlayerEntity : NetworkBehaviour
             }
         }
     }
-    public void DealDamage(float magnitude)
+    public void DealDamage(float magnitude, bool lethal, bool ignoreShield, bool ignoreEndurance)
     {
         if (defeated) { return; }
 
-        float damageToShield = Mathf.Min(CurrentShield, magnitude);
-        CurrentShield -= damageToShield;
-        magnitude -= damageToShield;
-        if (damageToShield > 0) { EventManager.OnPlayerDamageAbsorbed(damageToShield); }
+        if (!ignoreEndurance) { magnitude *= GameTools.EnduranceToDamageMultiplier(stats.GetStat(PlayerStatGroup.Stat.Endurance)); }
+
+        if (!ignoreShield) 
+        {
+            float damageToShield = Mathf.Min(CurrentShield, magnitude);
+            CurrentShield -= damageToShield;
+            magnitude -= damageToShield;
+            if (damageToShield > 0) { EventManager.OnPlayerDamageAbsorbed(damageToShield); }
+
+        }
 
         CurrentHealth -= magnitude;
-        AddShield(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToShieldConversion));
-        AddLightDamage(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToLightConversion));
+        AddLightDamage(magnitude * stats.GetStat(PlayerStatGroup.Stat.DamageToSoftDamageConversion));
         if (magnitude > 0) { EventManager.OnPlayerDamageTaken(magnitude); }
 
         if (CurrentHealth <= 0)
         {
-            EventManager.OnPlayerDefeated();
-            // Kill?
+            if (lethal) 
+            {
+                CurrentHealth = 1;
+            }
+            else 
+            {
+                CurrentHealth = 0;
+                // Kill?
+                EventManager.OnPlayerDefeated();
+            }
         }
     }
     public void AddLightDamage(float amount)
@@ -456,24 +468,49 @@ public class PlayerEntity : NetworkBehaviour
 
         CurrentLightDamage = Mathf.Clamp(CurrentLightDamage + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth) - CurrentHealth);
     }
+    public void RemoveShield(float amount) 
+    {
+        amount = Mathf.Min(amount, CurrentShield);
+        CurrentShield -= amount;
+        EventManager.OnPlayerDamageAbsorbed(amount);
+    }
     public void AddShield(float amount)
     {
         if (defeated) { return; }
 
-        CurrentShield = Mathf.Clamp(CurrentShield + amount, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+        CurrentShield += amount;
+        if (CurrentShield > stats.GetStat(PlayerStatGroup.Stat.MaxHealth))
+        {
+            CurrentShield = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+            EventManager.OnPlayerShieldCapped();
+        }
     }
     public void Heal(float amount)
     {
-        if (defeated) { return; }
-
         amount = Mathf.Max(amount, 0); // Healing cannot be negative
+
+        if (defeated) { return; }
+        if (stats.GetStat(PlayerStatGroup.Stat.HealingPrevention) > 0) 
+        {
+            float prevented = amount *= Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.HealingPrevention));
+            amount -= prevented;
+            EventManager.OnPlayerHealingPrevented(amount);
+        }
+
+
         float lightDamageHealing = Mathf.Min(CurrentLightDamage / LIGHT_DAMAGE_HEALING_MULT, amount);
         CurrentLightDamage -= lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;
         amount -= lightDamageHealing;
 
         float totalHealing = lightDamageHealing * LIGHT_DAMAGE_HEALING_MULT;
         totalHealing += amount;
-        CurrentHealth = Mathf.Clamp(CurrentHealth + totalHealing, 0, stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+        CurrentHealth += totalHealing;
+        if (CurrentHealth > stats.GetStat(PlayerStatGroup.Stat.MaxHealth)) 
+        {
+            EventManager.OnPlayerOverhealed(CurrentHealth-stats.GetStat(PlayerStatGroup.Stat.MaxHealth));
+            CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
+        }
+
         EventManager.OnPlayerHealthRestored(totalHealing);
     }
     public void RestoreDashCharges(float dashes) 
