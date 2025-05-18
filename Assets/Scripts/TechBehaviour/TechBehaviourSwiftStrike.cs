@@ -17,6 +17,8 @@ public class TechBehaviourSwiftStrike : TechBase
 
     private void OnPlayerDashStarted(Vector3 pos, float dir)
     {
+        if (PlayerEntity.ActiveInstance.CurrentShield <= 0) { return; }
+
         TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
         {
             sizeMult = SIZE,

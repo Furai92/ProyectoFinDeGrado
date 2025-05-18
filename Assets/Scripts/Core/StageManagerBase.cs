@@ -14,7 +14,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
     private int playerRoomX = -1;
     private int playerRoomY = -1;
-    private List<int> availableChestSpawns;
+    private List<int> availableChestIDs;
     private List<MapNode> validEnemySpawnNodes;
     protected List<EnemyEntity> enemiesInStage;
     protected StageStateBase currentState;
@@ -55,8 +55,8 @@ public abstract class StageManagerBase : MonoBehaviour
         SetUpItemPools();
         objectPoolMng.InitializePools();
         stageMapData = GenerateMap(Random.Range(0, 999999));
-        availableChestSpawns = new List<int>();
-        for (int i = 0; i < stageMapData.GetChestSpawnPositions().Count; i++) { availableChestSpawns.Add(i); }
+        availableChestIDs = new List<int>();
+        for (int i = 0; i < stageMapData.GetChestSpawnPositions().Count; i++) { availableChestIDs.Add(i); }
         stageStats = GetInitialStageStats();
 
 
@@ -124,7 +124,7 @@ public abstract class StageManagerBase : MonoBehaviour
     }
     private void OnChestDisabled(int id) 
     {
-        availableChestSpawns.Add(id);
+        availableChestIDs.Add(id);
     }
     private void OnPlayerDefeated() 
     {
@@ -134,9 +134,10 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         if (!killcredit) { return; }
 
-        nextWeaponDrop += e.ItemDropRate;
         nextCurrencyDrop += e.CurrencyDropRate;
-        nextHealthDrop += e.HealthDroprate;
+
+        nextWeaponDrop += e.ItemDropRate * stageStats.GetStat(StageStatGroup.StageStat.WeaponDropRate);
+        nextHealthDrop += e.HealthDroprate * stageStats.GetStat(StageStatGroup.StageStat.HealthOrbDropRate);
 
         for (int i = 0; i < nextWeaponDrop; i++) 
         {
@@ -293,11 +294,13 @@ public abstract class StageManagerBase : MonoBehaviour
     public static void SpawnChest()
     {
         if (_instance == null) { return; }
-        if (_instance.availableChestSpawns.Count == 0) { return; }
+        if (_instance.availableChestIDs.Count == 0) { return; }
 
-        int indexSelected = _instance.availableChestSpawns[Random.Range(0, _instance.availableChestSpawns.Count)];
-        _instance.availableChestSpawns.RemoveAt(indexSelected);
-        ObjectPoolManager.GetChestFromPool().SetUp(_instance.stageMapData.GetChestSpawnPositions()[indexSelected], indexSelected);
+        int selectedIndex = _instance.availableChestIDs[Random.Range(0, _instance.availableChestIDs.Count)];
+        int selectedID = _instance.availableChestIDs[selectedIndex];
+
+        _instance.availableChestIDs.RemoveAt(selectedIndex);
+        ObjectPoolManager.GetChestFromPool().SetUp(_instance.stageMapData.GetChestSpawnPositions()[selectedID], selectedID);
     }
     public static void DisableAllEnemies() 
     {

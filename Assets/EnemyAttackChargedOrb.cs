@@ -42,7 +42,7 @@ public class EnemyAttackChargedOrb : EnemyAttackBase
                     PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
                     if (pe != null)
                     {
-                        pe.DealDamage(BASE_DAMAGE);
+                        pe.DealDamage(BASE_DAMAGE, true, false, false);
                     }
                     gameObject.SetActive(false);
                     break;

@@ -41,6 +41,11 @@ public class ProceduralStagemanager : StageManagerBase
         ssg.ChangeStat(StageStatGroup.StageStat.EnemyDamageMult, 1);
         ssg.ChangeStat(StageStatGroup.StageStat.EnemyHealthMult, 1);
         ssg.ChangeStat(StageStatGroup.StageStat.EnemySpawnRate, 1);
+        ssg.ChangeStat(StageStatGroup.StageStat.HealthOrbDropRate, 1);
+        ssg.ChangeStat(StageStatGroup.StageStat.ChestSpawnRate, 1);
+        ssg.ChangeStat(StageStatGroup.StageStat.ChestDropRate, 1);
+        ssg.ChangeStat(StageStatGroup.StageStat.ShopPriceMult, 1);
+        ssg.ChangeStat(StageStatGroup.StageStat.WeaponDropRate, 1);
 
         return ssg;
     }

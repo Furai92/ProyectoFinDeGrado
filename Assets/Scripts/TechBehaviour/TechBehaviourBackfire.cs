@@ -22,7 +22,7 @@ public class TechBehaviourBackfire : TechBase
             sizeMult = RADIUS,
             element = GameEnums.DamageElement.Fire,
             enemyIgnored = -1,
-            magnitude = HEAT_TO_DAMAGE * PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatCap)
+            magnitude = HEAT_TO_DAMAGE * PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.HeatCap) * Group.Level
         };
         ObjectPoolManager.GetTechCombatEffectFromPool("EXPLOSION").SetUp(PlayerEntity.ActiveInstance.transform.position, 0, sd);
     }
