@@ -42,7 +42,7 @@ public class GameTools
     }
     public static float EnduranceToDamageMultiplier(float e) 
     {
-        return e >= 0 ? 1 / (1 + ENDURANCE_TO_DR_DIV * -e) : 1 + e * NEGATIVE_ENDURANCE_TO_DAMAGE;
+        return e >= 0 ? 1 / (1 + ENDURANCE_TO_DR_DIV * e) : 1 + -e * NEGATIVE_ENDURANCE_TO_DAMAGE;
     }
     #endregion
     #region Debug

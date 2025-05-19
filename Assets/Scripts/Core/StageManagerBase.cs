@@ -296,7 +296,7 @@ public abstract class StageManagerBase : MonoBehaviour
         if (_instance == null) { return; }
         if (_instance.availableChestIDs.Count == 0) { return; }
 
-        int selectedIndex = _instance.availableChestIDs[Random.Range(0, _instance.availableChestIDs.Count)];
+        int selectedIndex = Random.Range(0, _instance.availableChestIDs.Count);
         int selectedID = _instance.availableChestIDs[selectedIndex];
 
         _instance.availableChestIDs.RemoveAt(selectedIndex);

@@ -365,7 +365,6 @@ public class PlayerEntity : NetworkBehaviour
         dashMovementVector = (movementInputV == 0 && movementInputH == 0 ? 1 : movementInputV) * m_rotationParent.forward;
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION;
-        Debug.Log("Dashing");
         EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));
     }
     #region Public Methods
@@ -450,7 +449,7 @@ public class PlayerEntity : NetworkBehaviour
 
         if (CurrentHealth <= 0)
         {
-            if (lethal) 
+            if (!lethal) 
             {
                 CurrentHealth = 1;
             }
@@ -470,6 +469,8 @@ public class PlayerEntity : NetworkBehaviour
     }
     public void RemoveShield(float amount) 
     {
+        if (amount < 0) { return; }
+
         amount = Mathf.Min(amount, CurrentShield);
         CurrentShield -= amount;
         EventManager.OnPlayerDamageAbsorbed(amount);
