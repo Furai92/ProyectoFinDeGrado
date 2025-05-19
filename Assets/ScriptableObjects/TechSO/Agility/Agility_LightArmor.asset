@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: General_LightArmor
+  m_Name: Agility_LightArmor
   m_EditorClassIdentifier: 
   <ID>k__BackingField: LIGHT_ARMOR
   <NameID>k__BackingField: TCH_N_LIGHT_ARMOR
   <DescID>k__BackingField: TCH_D_LIGHT_ARMOR
   <MaxLevel>k__BackingField: 5
   <Rarity>k__BackingField: 0
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: dca949ea592a48d44beea7e5b8b8d831, type: 2}
   <Script>k__BackingField: 
   <BonusStats>k__BackingField:
   - <First>k__BackingField: 9

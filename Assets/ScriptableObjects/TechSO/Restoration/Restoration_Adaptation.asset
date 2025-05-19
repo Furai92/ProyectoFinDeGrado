@@ -10,34 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: General_BeastStrenght
+  m_Name: Restoration_Adaptation
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: BEAST_STRENGHT
-  <NameID>k__BackingField: TCH_N_BEAST_STRENGHT
-  <DescID>k__BackingField: TCH_D_BEAST_STRENGHT
+  <ID>k__BackingField: ADAPTATION
+  <NameID>k__BackingField: TCH_N_ADAPTATION
+  <DescID>k__BackingField: TCH_D_ADAPTATION
   <MaxLevel>k__BackingField: -1
-  <Rarity>k__BackingField: 1
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: 82aa9802801679f4985578628bec6897, type: 2}
-  <Script>k__BackingField: TechBehaviourBeastStrenght
-  <BonusStats>k__BackingField:
-  - <First>k__BackingField: 1
-    <Second>k__BackingField: 15
+  <Rarity>k__BackingField: 0
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: e957bf91b82fcda408e365194c307545, type: 2}
+  <Script>k__BackingField: TechBehaviourAdaptation
+  <BonusStats>k__BackingField: []
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_MIGHT
+  - <DescTextID>k__BackingField: TCH_DT_STAT_GAIN
     <DescValueBase>k__BackingField: 0
     <DescValueScaling>k__BackingField: 15
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_DEX
+  - <DescTextID>k__BackingField: TCH_DT_STAT_LOSS
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: -10
+    <DescValueScaling>k__BackingField: -15
     <DescDetailType>k__BackingField: 2
-  - <DescTextID>k__BackingField: TCH_DT_CHANCE
-    <DescValueBase>k__BackingField: 33
+  - <DescTextID>k__BackingField: TCH_DT_INTERVAL
+    <DescValueBase>k__BackingField: 1
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
-  - <DescTextID>k__BackingField: TCH_DT_HEALING
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 1
+  - <DescTextID>k__BackingField: TCH_DT_HEALTH_THS
+    <DescValueBase>k__BackingField: 50
+    <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

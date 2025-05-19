@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: IN_THE_ZONE
   <MaxStacks>k__BackingField: 999
-  <Duration>k__BackingField: 99
+  <Duration>k__BackingField: -1
+  <BuffColor>k__BackingField: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
   <Icon>k__BackingField: {fileID: 21300000, guid: 5da51ee32ff72914aa6ab37b65e9e6e1, type: 3}
   <Effects>k__BackingField:
   - <First>k__BackingField: 1

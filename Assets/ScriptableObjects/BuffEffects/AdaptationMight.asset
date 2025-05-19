@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a1e9b86c56acc4499a1efe87bfe5c24, type: 3}
-  m_Name: Descent
+  m_Name: AdaptationMight
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: DESCENT
-  <MaxStacks>k__BackingField: 999
-  <Duration>k__BackingField: 5
-  <BuffColor>k__BackingField: {r: 0.54210186, g: 0, b: 1, a: 1}
+  <ID>k__BackingField: ADAPTATION_MIGHT
+  <MaxStacks>k__BackingField: 1
+  <Duration>k__BackingField: -1
+  <BuffColor>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
   <Icon>k__BackingField: {fileID: 21300000, guid: 5da51ee32ff72914aa6ab37b65e9e6e1, type: 3}
   <Effects>k__BackingField:
+  - <First>k__BackingField: 1
+    <Second>k__BackingField: 15
   - <First>k__BackingField: 4
-    <Second>k__BackingField: -10
-  - <First>k__BackingField: 21
-    <Second>k__BackingField: 0.25
-  - <First>k__BackingField: 17
-    <Second>k__BackingField: 2
+    <Second>k__BackingField: -15
   <Flags>k__BackingField: 

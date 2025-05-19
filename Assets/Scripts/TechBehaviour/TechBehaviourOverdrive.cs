@@ -2,33 +2,20 @@ using UnityEngine;
 
 public class TechBehaviourOverdrive : TechBase
 {
-    private const float SHIELD_PERCENT_CONSUMED = 0.3f;
-    private const float SHIELD_TO_DAMAGE_RATE = 5f;
-    private const float RADIUS = 15f;
 
     public override void OnTechAdded()
     {
-        EventManager.PlayerShieldCappedEvent += OnPlayerShieldCapped;
+        EventManager.PlayerHeatNegatvedEvent += OnHeatNegated;
     }
 
     public override void OnTechRemoved()
     {
-        EventManager.PlayerShieldCappedEvent -= OnPlayerShieldCapped;
+        EventManager.PlayerHeatNegatvedEvent -= OnHeatNegated;
     }
 
-    private void OnPlayerShieldCapped()
+    private void OnHeatNegated(float h) 
     {
-        float explosionMag = PlayerEntity.ActiveInstance.CurrentShield * SHIELD_PERCENT_CONSUMED * Group.Level * SHIELD_TO_DAMAGE_RATE;
-        TechCombatEffect.TechCombatEffectSetupData sd = new TechCombatEffect.TechCombatEffectSetupData()
-        {
-            sizeMult = RADIUS,
-            element = GameEnums.DamageElement.NonElemental,
-            enemyIgnored = -1,
-            magnitude = explosionMag
-        };
-        ObjectPoolManager.GetTechCombatEffectFromPool("EXPLOSION").SetUp(PlayerEntity.ActiveInstance.transform.position, 0, sd);
-        PlayerEntity.ActiveInstance.RemoveShield(PlayerEntity.ActiveInstance.CurrentShield * SHIELD_PERCENT_CONSUMED * Group.Level);
-
+        PlayerEntity.ActiveInstance.DealDamage(h, false, true, true);
     }
 
     public override void OnTechUpgraded()

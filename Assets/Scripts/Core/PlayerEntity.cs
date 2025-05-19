@@ -399,8 +399,16 @@ public class PlayerEntity : NetworkBehaviour
 
     public void ChangeWeaponHeat(float change, WeaponSO.WeaponSlot s) 
     {
-        
-        change *= Mathf.Max(0, 1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+        if (change > 0) 
+        {
+            float negated = change * Mathf.Min(stats.GetStat(PlayerStatGroup.Stat.HeatNegation), 1);
+            if (negated > 0)
+            {
+                change -= negated;
+                EventManager.OnPlayerHeatNegated(negated);
+            }
+            change *= Mathf.Max(0, 1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+        }
 
         if (s == WeaponSO.WeaponSlot.Melee) 
         {
@@ -491,11 +499,11 @@ public class PlayerEntity : NetworkBehaviour
         amount = Mathf.Max(amount, 0); // Healing cannot be negative
 
         if (defeated) { return; }
-        if (stats.GetStat(PlayerStatGroup.Stat.HealingPrevention) > 0) 
+        if (stats.GetStat(PlayerStatGroup.Stat.HealingNegation) > 0) 
         {
-            float prevented = amount *= Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.HealingPrevention));
+            float prevented = amount *= Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.HealingNegation));
             amount -= prevented;
-            EventManager.OnPlayerHealingPrevented(amount);
+            EventManager.OnPlayerHealingNegated(amount);
         }
 
 
@@ -650,6 +658,7 @@ public class PlayerEntity : NetworkBehaviour
     {
         for (int i = ActiveBuffs.Count-1; i >= 0; i--) 
         {
+            if (ActiveBuffs[i].Infinite) { continue; }
             if (ActiveBuffs[i].GetDurationRemaining() <= 0) 
             {
                 ChangeBuffStacks(ActiveBuffs[i], -ActiveBuffs[i].Stacks);
@@ -711,7 +720,7 @@ public class PlayerEntity : NetworkBehaviour
                         ActiveBuffs.RemoveAt(i);
                     }
                     EventManager.OnPlayerStatsUpdated(this);
-                    return;
+                    return ;
                 }
                 // If the current buff has less effect multiplier than the new, remove the current buff. After the for loop is finished a new buff with the highest EM will be added.
                 else
@@ -748,18 +757,25 @@ public class PlayerEntity : NetworkBehaviour
             }
         }
     }
+    public int GetBuffStacks(string id) 
+    {
+        if (ActiveBuffDictionary.ContainsKey(id)) { return ActiveBuffDictionary[id].Stacks; }
+        return 0;
+    }
     public class ActiveBuff
     {
         public BuffEffectSO SO { get; private set; }
         public float EffectMultiplier { get; private set; }
         public int Stacks { get; private set; }
         public float RemoveTime { get; private set; }
+        public bool Infinite { get; private set; }
 
         public ActiveBuff(BuffEffectSO bso, float _effectMult)
         {
             SO = bso;
             EffectMultiplier = _effectMult;
             RemoveTime = Time.time + SO.Duration;
+            Infinite = SO.Duration < 0;
         }
         public void ChangeStacks(int variation)
         {

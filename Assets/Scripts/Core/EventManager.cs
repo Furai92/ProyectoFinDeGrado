@@ -19,7 +19,7 @@ public class EventManager
     public static event Action<float> PlayerDamageAbsorbedEvent;
     public static event Action<Vector3> PlayerHealthOrbGatheredEvent;
     public static event Action<float> PlayerHealthRestoredEvent;
-    public static event Action<float> PlayerHealingPreventedEvent;
+    public static event Action<float> PlayerHealingNegatedEvent;
     public static event Action<Vector3, float> PlayerDashStartedEvent;
     public static event Action<Vector3, float> PlayerDashEndedEvent;
     public static event Action<Vector3> PlayerWallSlamEvent;
@@ -28,6 +28,8 @@ public class EventManager
     public static event Action<PlayerAttackBase, bool> PlayerProjectileBounceEvent;
     public static event Action PlayerShieldCappedEvent;
     public static event Action<float> PlayerOverhealedEvent;
+    public static event Action<float> PlayerHeatNegatvedEvent;
+    public static event Action<Vector3> PlayerDeflectEvent;
 
     // Stage Status
     public static event Action CurrencyUpdateEvent;
@@ -46,6 +48,10 @@ public class EventManager
     // Game System 
     public static event Action GameSettingsChangedEvent;
 
+    public static void OnPlayerDeflect(Vector3 wpos) 
+    {
+        PlayerDeflectEvent?.Invoke(wpos);
+    }
     public static void OnPlayerOverhealed(float h) 
     {
         PlayerOverhealedEvent?.Invoke(h);
@@ -54,9 +60,13 @@ public class EventManager
     {
         PlayerShieldCappedEvent?.Invoke();
     }
-    public static void OnPlayerHealingPrevented(float h) 
+    public static void OnPlayerHeatNegated(float h)
     {
-        PlayerHealingPreventedEvent?.Invoke(h);
+        PlayerHeatNegatvedEvent?.Invoke(h);
+    }
+    public static void OnPlayerHealingNegated(float h) 
+    {
+        PlayerHealingNegatedEvent?.Invoke(h);
     }
     public static void OnUiMenuFocusChanged(IGameMenu m) 
     {

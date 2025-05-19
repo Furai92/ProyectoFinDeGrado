@@ -15,6 +15,7 @@ MonoBehaviour:
   <ID>k__BackingField: ELEMENTAL_MASTER_THUNDER
   <MaxStacks>k__BackingField: 1
   <Duration>k__BackingField: 15
+  <BuffColor>k__BackingField: {r: 0.9388454, g: 1, b: 0, a: 1}
   <Icon>k__BackingField: {fileID: 21300000, guid: 5da51ee32ff72914aa6ab37b65e9e6e1, type: 3}
   <Effects>k__BackingField:
   - <First>k__BackingField: 1
@@ -23,3 +24,4 @@ MonoBehaviour:
     <Second>k__BackingField: 20
   - <First>k__BackingField: 3
     <Second>k__BackingField: 20
+  <Flags>k__BackingField: 

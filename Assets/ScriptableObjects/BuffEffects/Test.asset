@@ -15,7 +15,9 @@ MonoBehaviour:
   <ID>k__BackingField: TEST
   <MaxStacks>k__BackingField: 99
   <Duration>k__BackingField: 10
+  <BuffColor>k__BackingField: {r: 1, g: 1, b: 1, a: 0}
   <Icon>k__BackingField: {fileID: 0}
   <Effects>k__BackingField:
   - <First>k__BackingField: 1
     <Second>k__BackingField: 10
+  <Flags>k__BackingField: 

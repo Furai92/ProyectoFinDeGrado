@@ -10,26 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df97266d7c3beff46a28636d49d2fdeb, type: 3}
-  m_Name: Protection_Transfusion
+  m_Name: Restoration_Overdrive
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: TRANSFUSION
-  <NameID>k__BackingField: TCH_N_TRANSFUSION
-  <DescID>k__BackingField: TCH_D_TRANSFUSION
+  <ID>k__BackingField: OVERDRIVE
+  <NameID>k__BackingField: TCH_N_OVERDRIVE
+  <DescID>k__BackingField: TCH_D_OVERDRIVE
   <MaxLevel>k__BackingField: 1
   <Rarity>k__BackingField: 3
-  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: d4f80f5ccf5e31e46b1f23927fb2da56, type: 2}
-  <Script>k__BackingField: TechBehaviourTransfusion
+  <RelatedTrait>k__BackingField: {fileID: 11400000, guid: e957bf91b82fcda408e365194c307545, type: 2}
+  <Script>k__BackingField: TechBehaviourOverdrive
   <BonusStats>k__BackingField:
-  - <First>k__BackingField: 22
-    <Second>k__BackingField: 0.9
+  - <First>k__BackingField: 23
+    <Second>k__BackingField: 0.8
   <BonusStageStats>k__BackingField: []
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
-  - <DescTextID>k__BackingField: TCH_DT_HEALING_NEGATION
-    <DescValueBase>k__BackingField: 90
-    <DescValueScaling>k__BackingField: 0
-    <DescDetailType>k__BackingField: 2
-  - <DescTextID>k__BackingField: TCH_DT_NEG_HEALING_TO_SHIELD_RATE
-    <DescValueBase>k__BackingField: 300
+  - <DescTextID>k__BackingField: TCH_DT_HEAT_NEGATION
+    <DescValueBase>k__BackingField: 80
     <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1

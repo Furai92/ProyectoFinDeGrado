@@ -1,14 +1,13 @@
 using UnityEngine;
 
-public class TechBehaviourAutoShields : TechBase
+public class TechBehaviourSecondWind : TechBase
 {
-
     private int tickCount;
     private bool perkDisabled;
 
-    private const float SHIELD_GAINED = 40f;
+    private const float HEALTH_RESTORED = 1f;
     private const int TICKS_TO_TRIGGER = 5;
-    private const float SHIELD_PERCENT_THS = 0.4f;
+    private const float HEALTH_PERCENT_THS = 0.4f;
 
     public override void OnTechAdded()
     {
@@ -36,10 +35,10 @@ public class TechBehaviourAutoShields : TechBase
         tickCount++;
         if (tickCount < TICKS_TO_TRIGGER) { return; }
         if (PlayerEntity.ActiveInstance.StatusHeatMelee > 0 || PlayerEntity.ActiveInstance.StatusHeatRanged > 0) { return; }
-        if (PlayerEntity.ActiveInstance.GetShieldPercent() >= SHIELD_PERCENT_THS) { return; }
+        if (PlayerEntity.ActiveInstance.GetHealthPercent() >= HEALTH_PERCENT_THS) { return; }
 
         tickCount = 0;
-        PlayerEntity.ActiveInstance.AddShield(SHIELD_GAINED * Group.Level);
+        PlayerEntity.ActiveInstance.Heal(HEALTH_RESTORED * Group.Level);
     }
 
     public override void OnTechUpgraded()

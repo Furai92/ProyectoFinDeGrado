@@ -6,12 +6,12 @@ public class TechBehaviourTransfusion : TechBase
 
     public override void OnTechAdded()
     {
-        EventManager.PlayerHealingPreventedEvent += OnHealingPrevented;
+        EventManager.PlayerHealingNegatedEvent += OnHealingPrevented;
     }
 
     public override void OnTechRemoved()
     {
-        EventManager.PlayerHealingPreventedEvent -= OnHealingPrevented;
+        EventManager.PlayerHealingNegatedEvent -= OnHealingPrevented;
     }
 
     private void OnHealingPrevented(float h) 

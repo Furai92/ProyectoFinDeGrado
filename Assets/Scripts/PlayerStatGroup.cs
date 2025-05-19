@@ -25,7 +25,8 @@ public class PlayerStatGroup
         BonusRangedBounces,
         BonusRangedPierces,
         BonusSplash,
-        HealingPrevention
+        HealingNegation,
+        HeatNegation
     }
     public enum PlayerFlags { NoHeal, NoStopAttackRanged, NoStopAttackMelee, DisableRangedAttack, DisableMeleeAttack }
 
