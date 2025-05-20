@@ -7,6 +7,7 @@ public class IngameMenuManager : MonoBehaviour
     [SerializeField] private HudSettingsMenu settingsMenu;
     [SerializeField] private HudStatsMenu playerStatsMenu;
     [SerializeField] private HudStageStatusMenu stageStatusMenu;
+    [SerializeField] private HudActiveTechMenu activeTechMenu;
     [SerializeField] private HudShop shopMenu;
 
     [SerializeField] private Transform menuBarParent;
@@ -17,15 +18,13 @@ public class IngameMenuManager : MonoBehaviour
     private int currentMenuIndex;
     private List<IGameMenu> nonShopMenus;
 
-    private const float MENU_TAB_SIZE_SELECTED = 1f;
-    private const float MENU_TAB_SIZE_UNSELECTED = 0.7f;
     private const float MENU_TAB_ALPHA_SELECTED = 1f;
     private const float MENU_TAB_ALPHA_UNSELECTED = 0.5f;
 
     private void OnEnable()
     {
         currentMenuIndex = 0;
-        nonShopMenus = new List<IGameMenu>() { playerStatsMenu, stageStatusMenu, settingsMenu };
+        nonShopMenus = new List<IGameMenu>() { playerStatsMenu, stageStatusMenu, activeTechMenu, settingsMenu };
         menuBarParent.gameObject.SetActive(false);
         UpdateFocus();
     }
@@ -46,6 +45,11 @@ public class IngameMenuManager : MonoBehaviour
             ToggleMenu(shopMenu);
             UpdateFocus();
         }
+        if (InputManager.Instance.GetReadyUpInput() && activeMenu == null)
+        {
+            EventManager.OnAllPlayersReady();
+        }
+
     }
     private void ToggleMenu(IGameMenu m) 
     {
@@ -55,6 +59,7 @@ public class IngameMenuManager : MonoBehaviour
             activeMenu.CloseMenu();
             menuBarParent.gameObject.SetActive(false);
             activeMenu = null;
+            EventManager.OnUiMenuFocusChanged(null);
             return; 
         }
 
@@ -62,12 +67,12 @@ public class IngameMenuManager : MonoBehaviour
         m.OpenMenu();
         activeMenu = m;
         menuBarParent.gameObject.SetActive(m != (IGameMenu)shopMenu);
+        EventManager.OnUiMenuFocusChanged(m);
     }
     private void UpdateMenuBar() 
     {
         for (int i = 0; i < menuNamePanels.Count; i++) 
         {
-            menuNamePanels[i].transform.localScale = currentMenuIndex == i ? Vector3.one * MENU_TAB_SIZE_SELECTED : Vector3.one * MENU_TAB_SIZE_UNSELECTED;
             menuNamePanels[i].alpha = currentMenuIndex == i ? MENU_TAB_ALPHA_SELECTED : MENU_TAB_ALPHA_UNSELECTED;
         }
     }

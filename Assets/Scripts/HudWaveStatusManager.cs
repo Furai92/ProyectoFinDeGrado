@@ -23,8 +23,6 @@ public class HudWaveStatusManager : MonoBehaviour
     }
     private void Update()
     {
-        if (InputManager.Instance.GetReadyUpInput()) { EventManager.OnAllPlayersReady(); }
-
         if (waveTimer.gameObject.activeInHierarchy) 
         {
             float t = StageManagerBase.GetTimerDisplay();

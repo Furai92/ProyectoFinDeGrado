@@ -7,6 +7,7 @@ public class HudCombatNotifications : MonoBehaviour
     [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private StringDatabaseSO sdb;
     [SerializeField] private Camera mCamRef;
+    [SerializeField] private Transform instParent;
 
     private MonoBehaviourPool<HudColoredTextNotification> coloredTextNotificationPool;
     private MonoBehaviourPool<HudCombatWarningElement> combatWarningPool;
@@ -28,8 +29,8 @@ public class HudCombatNotifications : MonoBehaviour
 
     private void OnEnable()
     {
-        coloredTextNotificationPool = new MonoBehaviourPool<HudColoredTextNotification>(coloredTextNotificationPrefab, transform);
-        combatWarningPool = new MonoBehaviourPool<HudCombatWarningElement>(combatWarningPrefab, transform);
+        coloredTextNotificationPool = new MonoBehaviourPool<HudColoredTextNotification>(coloredTextNotificationPrefab, instParent);
+        combatWarningPool = new MonoBehaviourPool<HudCombatWarningElement>(combatWarningPrefab, instParent);
         UpdateSizeMultiplier();
 
         EventManager.EnemyDirectDamageTakenEvent += OnEnemyDirectDamageTaken;

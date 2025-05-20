@@ -401,13 +401,14 @@ public class PlayerEntity : NetworkBehaviour
     {
         if (change > 0) 
         {
+            change *= Mathf.Max(0, 1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
+
             float negated = change * Mathf.Min(stats.GetStat(PlayerStatGroup.Stat.HeatNegation), 1);
             if (negated > 0)
             {
                 change -= negated;
                 EventManager.OnPlayerHeatNegated(negated);
             }
-            change *= Mathf.Max(0, 1 + stats.GetStat(PlayerStatGroup.Stat.HeatGenIncrease));
         }
 
         if (s == WeaponSO.WeaponSlot.Melee) 

@@ -748,4 +748,20 @@ MonoBehaviour:
     <Data>k__BackingField: Status
   - <ID>k__BackingField: MENU_NAME_STAGE_STATUS
     <Data>k__BackingField: Stage Info
+  - <ID>k__BackingField: STAT_DESC_MIGHT_POSITIVE
+    <Data>k__BackingField: Increases melee damage by {0}%
+  - <ID>k__BackingField: STAT_DESC_MIGHT_NEGATIVE
+    <Data>k__BackingField: Decreases melee damage by {0}%
+  - <ID>k__BackingField: STAT_DESC_DEX_POSITIVE
+    <Data>k__BackingField: Increases ranged damage by {0}%
+  - <ID>k__BackingField: STAT_DESC_DEX_NEGATIVE
+    <Data>k__BackingField: Decreases ranged damage by {0}%
+  - <ID>k__BackingField: STAT_DESC_INT_POSITIVE
+    <Data>k__BackingField: Increases status buildup by {0}%
+  - <ID>k__BackingField: STAT_DESC_INT_NEGATIVE
+    <Data>k__BackingField: Decreases status buildup by {0}%
+  - <ID>k__BackingField: STAT_DESC_END_POSITIVE
+    <Data>k__BackingField: Decreases damage taken by {0}%
+  - <ID>k__BackingField: STAT_DESC_END_NEGATIVE
+    <Data>k__BackingField: Increases damage taken by {0}%
   <Keywords>k__BackingField: []

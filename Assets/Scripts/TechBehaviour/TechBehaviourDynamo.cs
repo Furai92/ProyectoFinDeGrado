@@ -4,7 +4,7 @@ public class TechBehaviourDynamo : TechBase
 {
     private float readyTime;
 
-    private const float SHIELD = 15f;
+    private const float SHIELD = 5f;
     private const float COOLDOWN = 0.25f;
 
     public override void OnTechAdded()
