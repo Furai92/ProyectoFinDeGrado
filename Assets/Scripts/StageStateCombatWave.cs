@@ -5,6 +5,7 @@ public class StageStateCombatWave : StageStateBase
 {
     private List<WaveSpawnTimerData> spawnTimers;
 
+    private Dictionary<string, int> trackedSpawns;
     private StageWaveSetupSO.EnemyWave waveData;
     private float waveDurationMax;
     private float waveDurationRemaining;
@@ -29,24 +30,49 @@ public class StageStateCombatWave : StageStateBase
 
     public override void StateEnd()
     {
-        StageManagerBase.DisableAllEnemies();
+        EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
+        EventManager.EnemySpawnedEvent -= OnEnemySpawned;
+    }
+    private void OnEnemySpawned(EnemyEntity e) 
+    {
+        TrackEnemy(e.ID, true);
+    }
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit) 
+    {
+        TrackEnemy(e.ID, false);
+    }
+    private void TrackEnemy(string id, bool addedToStage) 
+    {
+        if (!trackedSpawns.ContainsKey(id)) { trackedSpawns.Add(id, 0); }
+        trackedSpawns[id] += addedToStage ? 1 : -1;
+    }
+    private int GetEnemyCount(string id) 
+    {
+        if (!trackedSpawns.ContainsKey(id)) { return 0; }
+
+        return trackedSpawns[id];
     }
 
     public override void StateStart()
     {
+        trackedSpawns = new Dictionary<string, int>();
         waveDurationMax = waveData.Duration;
         spawnTimers = new List<WaveSpawnTimerData>();
         for (int i = 0; i < waveData.EnemySpawns.Count; i++) 
         {
             WaveSpawnTimerData wstd = new WaveSpawnTimerData();
             wstd.spawnID = waveData.EnemySpawns[i].ID;
-            wstd.nextSpawn = waveData.EnemySpawns[i].Cooldown + waveData.EnemySpawns[i].Delay;
-            wstd.spawnCooldown = waveData.EnemySpawns[i].Delay + (waveData.EnemySpawns[i].Cooldown / StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemySpawnRate));
+            wstd.nextSpawn = waveData.EnemySpawns[i].Delay;
+            wstd.spawnCooldown = (waveData.EnemySpawns[i].Cooldown / StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemySpawnRate));
             wstd.spawnCount = 0;
-            wstd.maxSpawns = waveData.EnemySpawns[i].MaxSpawns;
+            wstd.maxWaveSpawns = waveData.EnemySpawns[i].MaxSpawnsDuringWave;
+            wstd.maxConcurrentSpawns = waveData.EnemySpawns[i].MaxConcurrentSpawns;
             spawnTimers.Add(wstd);
         }
         waveDurationRemaining = waveDurationMax;
+
+        EventManager.EnemyDisabledEvent += OnEnemyDisabled;
+        EventManager.EnemySpawnedEvent += OnEnemySpawned;
     }
 
     public override void UpdateState()
@@ -65,13 +91,13 @@ public class StageStateCombatWave : StageStateBase
         // Spawn enemies
         for (int i = spawnTimers.Count - 1; i >= 0; i--)
         {
-            if (Time.time > spawnTimers[i].nextSpawn)
-            {
-                SpawnEnemy(spawnTimers[i].spawnID);
-                spawnTimers[i].spawnCount++;
-                spawnTimers[i].nextSpawn = Time.time + spawnTimers[i].spawnCooldown;
-                if (spawnTimers[i].maxSpawns > 0 && spawnTimers[i].spawnCount >= spawnTimers[i].maxSpawns) { spawnTimers.RemoveAt(i); }
-            }
+            if (Time.time < spawnTimers[i].nextSpawn) { continue; }
+            if (spawnTimers[i].maxConcurrentSpawns > 0 && GetEnemyCount(spawnTimers[i].spawnID) >= spawnTimers[i].maxConcurrentSpawns) { continue; }
+
+            SpawnEnemy(spawnTimers[i].spawnID);
+            spawnTimers[i].spawnCount++;
+            spawnTimers[i].nextSpawn = Time.time + spawnTimers[i].spawnCooldown;
+            if (spawnTimers[i].maxWaveSpawns > 0 && spawnTimers[i].spawnCount >= spawnTimers[i].maxWaveSpawns) { spawnTimers.RemoveAt(i); }
         }
 
         // Spawn chests
@@ -104,6 +130,7 @@ public class StageStateCombatWave : StageStateBase
         public float spawnCooldown;
         public float nextSpawn;
         public int spawnCount;
-        public int maxSpawns;
+        public int maxWaveSpawns;
+        public int maxConcurrentSpawns;
     }
 }

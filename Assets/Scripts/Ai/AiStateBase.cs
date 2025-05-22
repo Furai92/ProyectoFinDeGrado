@@ -24,24 +24,30 @@ public abstract class AiStateBase
     public AiStateBase GetNextState(EnemyEntity enemyControlled)
     {
         AiStateTransition bestTransition = null;
-        float highestPriority = -Mathf.NegativeInfinity;
+        int highestPriority = int.MinValue;
+        List<AiStateTransition> compatibleTransitions = new List<AiStateTransition>();
         for (int i = 0; i < transitions.Count; i++) 
         {
-            if (transitions[i].Priority > highestPriority) { continue; }
+            if (transitions[i].Priority < highestPriority) { continue; }
             if (!transitions[i].Evaluate(enemyControlled)) { continue; }
 
-            bestTransition = transitions[i];
-            highestPriority = transitions[i].Priority;
+            if (transitions[i].Priority > highestPriority)
+            {
+                compatibleTransitions.Clear();
+                bestTransition = transitions[i];
+                highestPriority = transitions[i].Priority;
+            }
+            compatibleTransitions.Add(transitions[i]);
         }
 
-        if (bestTransition == null) { return this; }
-        return bestTransition.NextState;
+        if (compatibleTransitions.Count == 0) { return this; }
+        return compatibleTransitions[Random.Range(0, compatibleTransitions.Count)].NextState;
     }
 
     private class AiStateTransition 
     {
         public AiStateBase NextState { get; private set; }
-        public float Priority { get; private set; }
+        public int Priority { get; private set; }
 
         private TransitionConditional conditional;
         private TransitionComparator comparator;

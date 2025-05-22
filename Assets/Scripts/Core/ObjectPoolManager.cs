@@ -34,7 +34,7 @@ public class ObjectPoolManager : MonoBehaviour
         enemyPools = new Dictionary<string, MonoBehaviourPool<EnemyEntity>>();
         for (int i = 0; i < database.EnemyPrefabs.Count; i++) 
         {
-            enemyPools.Add(database.EnemyPrefabs[i].ID, new MonoBehaviourPool<EnemyEntity>(database.EnemyPrefabs[i].Data, transform));
+            enemyPools.Add(database.EnemyPrefabs[i].GetComponent<EnemyEntity>().ID, new MonoBehaviourPool<EnemyEntity>(database.EnemyPrefabs[i], transform));
         }
         // Enemy Attacks
         enemyAttackPools = new Dictionary<string, MonoBehaviourPool<EnemyAttackBase>>();

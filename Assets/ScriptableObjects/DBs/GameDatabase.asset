@@ -22,14 +22,11 @@ MonoBehaviour:
   - <ID>k__BackingField: P_BOUNCE_ORB
     <Data>k__BackingField: {fileID: 5508074904858161231, guid: 9bbc97a8b25219c4aab9f95ddc1874ad, type: 3}
   <EnemyPrefabs>k__BackingField:
-  - <ID>k__BackingField: RANGED
-    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 15a534b61cc70e544ad87726280e0f02, type: 3}
-  - <ID>k__BackingField: MELEE
-    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 9303f9ebf9a30334895355d32298f2fa, type: 3}
-  - <ID>k__BackingField: BOMBER
-    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 05ec1c7b2fb71bf4db7eaa8eaa0b138f, type: 3}
-  - <ID>k__BackingField: SNIPER
-    <Data>k__BackingField: {fileID: 6007917864536491662, guid: 0764a6030fe26c342a1b817fb65d5d8b, type: 3}
+  - {fileID: 6007917864536491662, guid: daac18dcf18d833469c0a6bafe6f413a, type: 3}
+  - {fileID: 6007917864536491662, guid: 9303f9ebf9a30334895355d32298f2fa, type: 3}
+  - {fileID: 6007917864536491662, guid: 05ec1c7b2fb71bf4db7eaa8eaa0b138f, type: 3}
+  - {fileID: 6007917864536491662, guid: 0764a6030fe26c342a1b817fb65d5d8b, type: 3}
+  - {fileID: 6007917864536491662, guid: 31704b9d1bc46c640b98f5299d8f9db0, type: 3}
   <EnemyAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: SLOW_ORB
     <Data>k__BackingField: {fileID: 7397320916023109853, guid: b265df20be3bd27439f28b35618dc7e8, type: 3}

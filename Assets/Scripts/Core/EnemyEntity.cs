@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class EnemyEntity : MonoBehaviour
 {
+    [field: SerializeField] public string ID { get; private set; }
 
     // Stats ===================================================
 
@@ -84,6 +85,7 @@ public class EnemyEntity : MonoBehaviour
     {
         transform.position = pos;
         gameObject.SetActive(true);
+        EventManager.OnEnemySpawned(this);
     }
     private void OnEnable()
     {
@@ -91,6 +93,8 @@ public class EnemyEntity : MonoBehaviour
         ResetEntity();
         SetupAi();
         EnemyInstanceID = StageManagerBase.RegisterEnemy(this);
+
+        EventManager.StageStateEndedEvent += OnStageStateEnded;
     }
     private void ResetEntity() 
     {
@@ -110,6 +114,8 @@ public class EnemyEntity : MonoBehaviour
     {
         EventManager.OnEnemyDisabled(this, -CurrentHealth, CurrentHealth <= 0);
         StageManagerBase.UnregisterEnemy(this);
+
+        EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
     private void FixedUpdate()
     {
@@ -117,6 +123,10 @@ public class EnemyEntity : MonoBehaviour
         UpdateRotation();
         UpdateMovement();
         UpdateStatusEffects();
+    }
+    private void OnStageStateEnded(StageStateBase.GameState s)
+    {
+        gameObject.SetActive(false);
     }
     private void SetupAi() 
     {
@@ -132,6 +142,12 @@ public class EnemyEntity : MonoBehaviour
             currentState = pathfindingSearchState;
             inCombat = false;
         }
+        currentState.StartState(this);
+    }
+    private void OnEntityStunned()
+    {
+        currentState.EndState(this);
+        currentState = combatRootState;
         currentState.StartState(this);
     }
     private void UpdateAI() 
@@ -263,6 +279,10 @@ public class EnemyEntity : MonoBehaviour
 
         statusDurations[(int)e] += STATUS_DURATION_STANDARD;
         EventManager.OnEnemyStatusApplied(e, this);
+        if (e == GameEnums.DamageElement.Frost) 
+        {
+            OnEntityStunned();
+        }
     }
     public void RemoveStatus(GameEnums.DamageElement e) 
     {

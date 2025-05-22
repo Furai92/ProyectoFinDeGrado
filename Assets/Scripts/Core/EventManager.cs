@@ -14,6 +14,7 @@ public class EventManager
     public static event Action<Vector3> PlayerEvasionEvent;
     public static event Action<WeaponSO.WeaponSlot> PlayerWeaponOverheatedEvent;
     public static event Action<EnemyEntity, float, bool> EnemyDisabledEvent;
+    public static event Action<EnemyEntity> EnemySpawnedEvent;
     public static event Action PlayerDefeatedEvent;
     public static event Action<float> PlayerDamageTakenEvent;
     public static event Action<float> PlayerDamageAbsorbedEvent;
@@ -48,6 +49,10 @@ public class EventManager
     // Game System 
     public static event Action GameSettingsChangedEvent;
 
+    public static void OnEnemySpawned(EnemyEntity e) 
+    {
+        EnemySpawnedEvent?.Invoke(e);
+    }
     public static void OnPlayerDeflect(Vector3 wpos) 
     {
         PlayerDeflectEvent?.Invoke(wpos);

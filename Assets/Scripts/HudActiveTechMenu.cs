@@ -2,11 +2,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.VFX;
 
 public class HudActiveTechMenu : MonoBehaviour, IGameMenu
 {
     [SerializeField] private List<HudTechCard> cardsDisplayed;
     [SerializeField] private Transform menuParent;
+    public VisualEffect ve;
 
     private int index;
 

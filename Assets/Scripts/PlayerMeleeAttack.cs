@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerMeleeAttack : PlayerAttackBase
 {
+    [SerializeField] private ColorDatabaseSO cdb;
+
     private float removeTime;
     private float direction;
 
-    private const float LIFETIME = 0.25f;
+    private const float LIFETIME = 0.5f;
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {

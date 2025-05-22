@@ -21,7 +21,7 @@ public class EnemyAttackBeam : EnemyAttackBase
     private const float DAMAGING_COMPONENT_WIDTH_MIN = 0.1f;
     private const float DAMAGING_COMPONENT_WIDTH_MAX = 8f;
     private const float BEAM_MAX_LENGHT = 50f;
-    private const float SPAWN_HEIGHT = 2f;
+    private const float SPAWN_HEIGHT = 1f;
 
     public override void Initialize(Vector3 pos, float dir)
     {
@@ -67,7 +67,7 @@ public class EnemyAttackBeam : EnemyAttackBase
             case 0: // Warning Spawning
                 {
                     phaseT += Time.fixedDeltaTime / WARNING_SPAWN_DURATION;
-                    transform.position = User.transform.position;
+                    transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z);
                     float width = Mathf.Lerp(WARNING_WIDTH_MIN, WARNING_WIDTH_MAX, phaseT);
                     warningParent.transform.localScale = new Vector3(width, width, 1);
                     if (phaseT > 1) { phase = 1; phaseT = 0; }
@@ -75,7 +75,7 @@ public class EnemyAttackBeam : EnemyAttackBase
                 }
             case 1: // Warning Linger
                 {
-                    transform.position = User.transform.position;
+                    transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z);
                     phaseT += Time.fixedDeltaTime / WARNING_TICK_INTERVAL;
                     if (phaseT > 1) 
                     {

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36fcf014a63b6dc489c298d10bd6fd87, type: 3}
+  m_Name: HeavyGunnerAi
+  m_EditorClassIdentifier: 
+  <Entry>k__BackingField: MOVE_CLOSER
+  <Nodes>k__BackingField:
+  - <ID>k__BackingField: MOVE_CLOSER
+    <Script>k__BackingField: AiStateWalkStraightToTarget
+  - <ID>k__BackingField: IDLE
+    <Script>k__BackingField: AiStateIdle
+  - <ID>k__BackingField: STRAFE
+    <Script>k__BackingField: AiStateStrafe
+  - <ID>k__BackingField: ATTACK_WAVE
+    <Script>k__BackingField: AiStateBulletWave
+  - <ID>k__BackingField: ATTACK_SPIRAL
+    <Script>k__BackingField: AiStateBulletSpiral
+  <Transitions>k__BackingField:
+  - <From>k__BackingField: MOVE_CLOSER
+    <To>k__BackingField: ATTACK_WAVE
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 0
+    <ConditionalValue>k__BackingField: 0
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: MOVE_CLOSER
+    <To>k__BackingField: ATTACK_SPIRAL
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 0
+    <ConditionalValue>k__BackingField: 0
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: ATTACK_SPIRAL
+    <To>k__BackingField: IDLE
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 0
+    <ConditionalValue>k__BackingField: 0
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: ATTACK_WAVE
+    <To>k__BackingField: IDLE
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 0
+    <ConditionalValue>k__BackingField: 0
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: IDLE
+    <To>k__BackingField: MOVE_CLOSER
+    <Priority>k__BackingField: 1
+    <Condition>k__BackingField: 1
+    <Comparator>k__BackingField: 4
+    <ConditionalValue>k__BackingField: 10
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: IDLE
+    <To>k__BackingField: ATTACK_WAVE
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 4
+    <ConditionalValue>k__BackingField: 10
+    <ConditionalBool>k__BackingField: 0
+  - <From>k__BackingField: IDLE
+    <To>k__BackingField: ATTACK_SPIRAL
+    <Priority>k__BackingField: 0
+    <Condition>k__BackingField: 0
+    <Comparator>k__BackingField: 4
+    <ConditionalValue>k__BackingField: 10
+    <ConditionalBool>k__BackingField: 0

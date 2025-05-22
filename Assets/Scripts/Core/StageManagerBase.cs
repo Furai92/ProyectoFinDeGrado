@@ -48,6 +48,7 @@ public abstract class StageManagerBase : MonoBehaviour
         EventManager.EnemyDisabledEvent -= OnEnemyDefeated;
         EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
         EventManager.ChestDisabledEvent -= OnChestDisabled;
+        currentState.StateEnd();
     }
     private IEnumerator Startcr() 
     {
@@ -301,15 +302,6 @@ public abstract class StageManagerBase : MonoBehaviour
 
         _instance.availableChestIDs.RemoveAt(selectedIndex);
         ObjectPoolManager.GetChestFromPool().SetUp(_instance.stageMapData.GetChestSpawnPositions()[selectedID], selectedID);
-    }
-    public static void DisableAllEnemies() 
-    {
-        if (_instance == null) { return; }
-
-        for (int i = _instance.enemiesInStage.Count-1; i >= 0; i--) 
-        {
-            _instance.enemiesInStage[i].gameObject.SetActive(false);
-        }
     }
     public static void UnregisterEnemy(EnemyEntity e)
     {

@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5628125138159533317}
   - component: {fileID: 8733903310432010687}
   m_Layer: 8
-  m_Name: Sniper
+  m_Name: Enemy_Sniper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,11 +355,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5dc81644a1cd449071f2b111cfbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: SNIPER
   <MovementSpeed>k__BackingField: 6
   <BaseHealth>k__BackingField: 1000
   <ExtraBars>k__BackingField: 0
   <KnockbackResistance>k__BackingField: 0
-  <ItemDropRate>k__BackingField: 10
+  <ItemDropRate>k__BackingField: 1
   <CurrencyDropRate>k__BackingField: 5
   <HealthDroprate>k__BackingField: 1
   AiFile: {fileID: 11400000, guid: d91aa458b7c682741bee52c8786b44cb, type: 2}

@@ -19,6 +19,7 @@ public class StageWaveSetupSO : ScriptableObject
         [field: SerializeField] public string ID { get; private set; }
         [field: SerializeField] public float Cooldown { get; private set; }
         [field: SerializeField] public float Delay { get; private set; }
-        [field: SerializeField] public int MaxSpawns { get; private set; }
+        [field: SerializeField] public int MaxSpawnsDuringWave { get; private set; }
+        [field: SerializeField] public int MaxConcurrentSpawns { get; private set; }
     }
 }

@@ -26,7 +26,6 @@ public class AiStateSmallMeleeAttack : AiStateBase
         {
             EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, e.transform.position);
             attackPerformed = true;
-            ObjectPoolManager.GetEnemyAttackFromPool("MELEE_SMALL").SetUp(e, e.transform.position, GameTools.AngleBetween(e.transform.position, target.transform.position));
         }
     }
 
@@ -40,5 +39,7 @@ public class AiStateSmallMeleeAttack : AiStateBase
         stateEndTime = Time.time + ATTACK_DURATION;
         target = PlayerEntity.ActiveInstance;
         attackPerformed = false;
+
+        EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, e.transform.position);
     }
 }
