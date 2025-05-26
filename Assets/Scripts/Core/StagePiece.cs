@@ -10,6 +10,8 @@ public class StagePiece : MonoBehaviour
     [SerializeField] private Transform _l_blockedParent;
     [SerializeField] private Transform _r_blockedParent;
 
+    [SerializeField] private List<StagePieceVariationData> _variations;
+
     public const float PIECE_SPACING = 20f;
     private const float PIECE_SCALE = 2f;
 
@@ -24,6 +26,25 @@ public class StagePiece : MonoBehaviour
         _d_blockedParent.gameObject.SetActive(n.con_down == null);
         _r_blockedParent.gameObject.SetActive(n.con_right == null);
         _l_blockedParent.gameObject.SetActive(n.con_left == null);
+
+        for (int i = 0; i < _variations.Count; i++) 
+        {
+            if (Random.Range(0, 101) < _variations[i]._chance && _variations[i]._requiredParent.gameObject.activeInHierarchy) 
+            {
+                GameObject variationGO = Instantiate(_variations[i]._prefab, _variations[i]._positionParent);
+                variationGO.SetActive(true);
+                variationGO.transform.localPosition = Vector3.zero;
+            }
+        }
     }
     public Vector3 GetRandomEnemySpawnPosition() { return transform.position; }
+
+    [System.Serializable]
+    public class StagePieceVariationData 
+    {
+        [field: SerializeField] public GameObject _prefab;
+        [field: SerializeField] public Transform _positionParent;
+        [field: SerializeField] public Transform _requiredParent;
+        [field: SerializeField] public float _chance;
+    }
 }

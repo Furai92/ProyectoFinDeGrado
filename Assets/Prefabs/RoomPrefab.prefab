@@ -201,6 +201,10 @@ Transform:
   - {fileID: 5203022233285902216}
   - {fileID: 383544031643596897}
   - {fileID: 6703508865580920670}
+  - {fileID: 867355454882971810}
+  - {fileID: 7541912917094241649}
+  - {fileID: 5413647789054314867}
+  - {fileID: 1190167535741395619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6801290019651019308
@@ -220,6 +224,23 @@ MonoBehaviour:
   _d_blockedParent: {fileID: 6703508865580920670}
   _l_blockedParent: {fileID: 383544031643596897}
   _r_blockedParent: {fileID: 5203022233285902216}
+  _variations:
+  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+    _positionParent: {fileID: 867355454882971810}
+    _requiredParent: {fileID: 9051793901668665463}
+    _chance: 10
+  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+    _positionParent: {fileID: 7541912917094241649}
+    _requiredParent: {fileID: 4716722378474047906}
+    _chance: 10
+  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+    _positionParent: {fileID: 5413647789054314867}
+    _requiredParent: {fileID: 6320286113778807353}
+    _chance: 10
+  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+    _positionParent: {fileID: 1190167535741395619}
+    _requiredParent: {fileID: 5842378843781085403}
+    _chance: 10
 --- !u!1 &2737937652637267412
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +349,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3943604703551518955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5413647789054314867}
+  m_Layer: 0
+  m_Name: LampVariationPos2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5413647789054314867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943604703551518955}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6, y: 0.95, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7651109477315731770}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4134570958315004963
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,6 +594,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 5, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5023121451425534954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7541912917094241649}
+  m_Layer: 0
+  m_Name: LampVariationPos1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7541912917094241649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023121451425534954}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6, y: 0.95, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7651109477315731770}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5181898384435903310
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,6 +658,37 @@ Transform:
   - {fileID: 8624335049083737205}
   - {fileID: 2045283048320026950}
   - {fileID: 1942208992346612285}
+  m_Father: {fileID: 7651109477315731770}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6344128784525466702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1190167535741395619}
+  m_Layer: 0
+  m_Name: LampVariationPos3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1190167535741395619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344128784525466702}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6, y: 0.95, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 7651109477315731770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7382595721602515891
@@ -733,6 +847,37 @@ Transform:
   - {fileID: 9051793901668665463}
   - {fileID: 496046941056597001}
   - {fileID: 8630499707327220758}
+  m_Father: {fileID: 7651109477315731770}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8655196058247984939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 867355454882971810}
+  m_Layer: 0
+  m_Name: LampVariationPos0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &867355454882971810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655196058247984939}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6, y: 0.95, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 7651109477315731770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8669195168611373407
