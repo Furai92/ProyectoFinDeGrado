@@ -5,7 +5,7 @@ public class PlayerHeatLightController : MonoBehaviour
     [SerializeField] private PlayerEntity p;
     [SerializeField] private Light l;
 
-    private const float HEAT_TO_RANGE = 15f;
+    private const float HEAT_TO_RANGE = 0.2f;
     private const float HEAT_TO_COLOR_LERP = 1f;
 
     private void Update()

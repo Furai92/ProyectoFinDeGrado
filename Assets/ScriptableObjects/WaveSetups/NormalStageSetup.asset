@@ -75,3 +75,21 @@ MonoBehaviour:
       <Delay>k__BackingField: 25
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 2
+  - <Duration>k__BackingField: 80
+    <ChestSpawnRate>k__BackingField: 0
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 1.5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 10
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+    - <ID>k__BackingField: HEAVY_GUNNER
+      <Cooldown>k__BackingField: 1
+      <Delay>k__BackingField: 10
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
