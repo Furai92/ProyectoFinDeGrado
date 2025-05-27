@@ -18,3 +18,4 @@ MonoBehaviour:
   - {fileID: 991592059765072839, guid: db1d01183cb40c541ab57e94e2921438, type: 3}
   DecoPrefabs:
   - {fileID: 991592059765072839, guid: da4e61d85f49f834eb1cfe73e3895a44, type: 3}
+  - {fileID: 991592059765072839, guid: f6188387371ffb84b93043a894b4c6bf, type: 3}

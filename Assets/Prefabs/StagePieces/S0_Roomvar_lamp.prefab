@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2970448308091869632}
   - component: {fileID: 3853018947416087639}
   m_Layer: 0
-  m_Name: s0_room_variation_lamp
+  m_Name: S0_Roomvar_lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

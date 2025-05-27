@@ -9,12 +9,15 @@ public class ProceduralStageData : IMapData
     private List<Vector3> enemySpawnPositions;
     private List<Vector3> chestSpawnPositions;
     private List<StagePiece> stagePieces;
+    private List<MapNode> stageDecos;
 
     private const float ROOM_PERCENT = 0.6f;
     private const float CHANCE_TO_2 = 0.2f;
     private const float CHANCE_TO_3 = 0.1f;
     private const float CHANCE_TO_4 = 0.05f;
     private const float CHANCE_TO_ROOM_PER_CONNECTION = 20f;
+    private const float DECO_CHANCE_BASE = 5f;
+    private const float DECO_CHANCE_PER_NEARBY_NODE = 10f;
 
     public ProceduralStageData(int seed, int size, ProceduralStagePropertiesSO stageProperties, Transform instParent) 
     {
@@ -175,6 +178,42 @@ public class ProceduralStageData : IMapData
             convertibleCells.RemoveAt(randomindex);
         }
 
+        // Place deco elements outside of the playable area, the chance of a deco being placed is based on how many playable nodes exist around a specific point in the grid
+        // Go trough all the nodes placed in the stage, and node the highest/lowest X/Y to determine a bounding box
+        int minX = int.MaxValue;
+        int minY = int.MaxValue;
+        int maxX = -1;
+        int maxY = -1;
+        for (int i = 0; i < stageList.Count; i++) 
+        {
+            if (stageList[i].pos_x < minX) { minX = stageList[i].pos_x; }
+            if (stageList[i].pos_y < minY) { minY = stageList[i].pos_y; }
+            if (stageList[i].pos_x > maxX) { maxX = stageList[i].pos_x; }
+            if (stageList[i].pos_y > maxY) { maxY = stageList[i].pos_y; }
+        }
+        // If possible, increase min/max one cell
+        if (minX > 0) { minX--; }
+        if (minY > 0)  { minY--; }
+        if (maxX < StageManagerBase.STAGE_SIZE - 1) { maxX++; }
+        if (maxY < StageManagerBase.STAGE_SIZE - 1) { maxY++; }
+
+        stageDecos = new List<MapNode>();
+        for (int i = minX; i <= maxX; i++) 
+        {
+            for (int j = minY; j <= maxY; j++)
+            {
+                if (stageMatrix[i, j].currentType != MapNode.RoomType.None && stageMatrix[i, j].currentType != MapNode.RoomType.Potential) { continue; } // If it's not empty, check next
+                float chance = DECO_CHANCE_BASE;
+                if (i - 1 > 0 && !stageMatrix[i - 1, j].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (j - 1 > 0 && !stageMatrix[i, j - 1].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (i + 1 < StageManagerBase.STAGE_SIZE && !stageMatrix[i + 1, j].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (j + 1 < StageManagerBase.STAGE_SIZE && !stageMatrix[i, j + 1].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+
+                if (Random.Range(0, 101) < chance) { stageMatrix[i, j].currentType = MapNode.RoomType.Deco; stageDecos.Add(stageMatrix[i, j]); } 
+            }
+        }
+
+
         // Set the variation to each room
         for (int i = 0; i < stageList.Count; i++)
         {
@@ -194,7 +233,7 @@ public class ProceduralStageData : IMapData
                 if (current.con_right != null && current.currentType == current.con_right.currentType && current.con_right.variation < 0) { variationGroup.Add(current.con_right); }
             }
         }
-        // Instantiate prefabs
+        // Instantiate playable areas
         stagePieces = new List<StagePiece>();
         for (int i = 0; i < stageList.Count; i++)
         {
@@ -220,16 +259,14 @@ public class ProceduralStageData : IMapData
                         rp.name = string.Format("stage_piece_{0}_{1}", stageList[i].pos_x, stageList[i].pos_y);
                         break;
                     }
-                case MapNode.RoomType.Deco:
-                    {
-                        GameObject rp = GameObject.Instantiate(stageProperties.DecoPrefabs[Random.Range(0, stageProperties.DecoPrefabs.Count)], instParent) as GameObject;
-                        rp.GetComponent<StagePiece>().SetUp(stageList[i]);
-                        stagePieces.Add(rp.GetComponent<StagePiece>());
-                        stageList[i].piece = rp.GetComponent<StagePiece>();
-                        rp.name = string.Format("deco_{0}_{1}", stageList[i].pos_x, stageList[i].pos_y);
-                        break;
-                    }
             }
+        }
+        // Instantiate deco pieces
+        for (int i = 0; i < stageDecos.Count; i++)
+        {
+            GameObject rp = GameObject.Instantiate(stageProperties.DecoPrefabs[Random.Range(0, stageProperties.DecoPrefabs.Count)], instParent) as GameObject;
+            rp.GetComponent<StageDeco>().SetUp(stageDecos[i]);
+            rp.name = string.Format("deco_{0}_{1}", stageDecos[i].pos_x, stageDecos[i].pos_y);
         }
         // Setup enemy spawn positions
         // TO DO: Improve logic, for now just use room center

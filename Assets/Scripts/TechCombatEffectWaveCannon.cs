@@ -7,6 +7,7 @@ public class TechCombatEffectWaveCannon : TechCombatEffect
     [SerializeField] private ParticleSystem PS2;
     [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private Transform beamParent;
+    [SerializeField] private Transform beamStartParent;
 
     private float phaseT;
     private int phase;
@@ -24,10 +25,6 @@ public class TechCombatEffectWaveCannon : TechCombatEffect
         gameObject.SetActive(true);
         transform.SetPositionAndRotation(new Vector3(pos.x, SPAWN_HEIGHT, pos.z), Quaternion.Euler(0, dir, 0));
 
-        ParticleSystem.MainModule m0 = PS0.main; m0.startColor = cdb.ElementToColor(SetupData.element);
-        ParticleSystem.MainModule m1 = PS1.main; m1.startColor = cdb.ElementToColor(SetupData.element);
-        ParticleSystem.MainModule m2 = PS2.main; m2.startColor = cdb.ElementToColor(SetupData.element);
-
         PS0.transform.localScale = PS1.transform.localScale = PS2.transform.localScale = Vector3.one * SetupData.sizeMult;
 
         PS0.Stop(); PS0.Play();
@@ -39,6 +36,7 @@ public class TechCombatEffectWaveCannon : TechCombatEffect
 
         CastBeam();
         beamParent.gameObject.SetActive(true);
+        beamStartParent.gameObject.SetActive(true);
         UpdateBeamGrowthAnim(0);
     }
     private void FixedUpdate()
@@ -62,7 +60,7 @@ public class TechCombatEffectWaveCannon : TechCombatEffect
                 {
                     phaseT += Time.fixedDeltaTime / FADE_DURATION;
                     UpdateBeamGrowthAnim(1-phaseT);
-                    if (phaseT > 1) { phaseT = 0; phase = 3; beamParent.gameObject.SetActive(false); }
+                    if (phaseT > 1) { phaseT = 0; phase = 3; beamParent.gameObject.SetActive(false); beamStartParent.gameObject.SetActive(false); }
                     break;
                 }
             case 3: // Remove Delay
@@ -77,6 +75,7 @@ public class TechCombatEffectWaveCannon : TechCombatEffect
     {
         float width = Mathf.Lerp(BEAM_MIN_SCALE, 1, t) * SetupData.sizeMult;
         beamParent.transform.localScale = new Vector3(width, width, beamParent.transform.localScale.z);
+        beamStartParent.transform.localScale = new Vector3(width, width, beamStartParent.transform.localScale.z);
     }
     private void OnCollisionEnter(Collision collision)
     {
