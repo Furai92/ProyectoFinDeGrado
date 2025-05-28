@@ -27,7 +27,7 @@ MonoBehaviour:
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_CRITX
     <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 0.15
+    <DescValueScaling>k__BackingField: 15
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_SPEED
     <DescValueBase>k__BackingField: 0

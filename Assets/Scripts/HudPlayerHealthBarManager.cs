@@ -15,26 +15,39 @@ public class HudPlayerHealthBarManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StageStateStartedEvent += UpdateVisibility;
-        UpdateVisibility(StageManagerBase.GetCurrentStateType());
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        UpdateVisibility();
     }
     private void OnDisable()
     {
-        EventManager.StageStateStartedEvent -= UpdateVisibility;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
     }
-    private void UpdateVisibility(StageStateBase.GameState s) 
+    private void OnStageStateStarted(StageStateBase.GameState s)
     {
-        switch (s) 
+        UpdateVisibility();
+    }
+    private void OnUiFocusChanged(IGameMenu m)
+    {
+        UpdateVisibility();
+    }
+    private void UpdateVisibility()
+    {
+        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+
+        switch (StageManagerBase.GetCurrentStateType())
         {
-            case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.Rest:
-            case StageStateBase.GameState.BossFight: 
+            case StageStateBase.GameState.EnemyWave:
+            case StageStateBase.GameState.BossFight:
                 {
                     activeParent.gameObject.SetActive(true);
                     break;
                 }
-            default: 
+            default:
                 {
+                    StopAllCoroutines();
                     activeParent.gameObject.SetActive(false);
                     break;
                 }

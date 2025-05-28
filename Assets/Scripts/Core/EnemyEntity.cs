@@ -65,6 +65,7 @@ public class EnemyEntity : MonoBehaviour
     private float currentLookRotation;
     private List<PullForce> activePullForces;
 
+    private const float OUT_OF_COMBAT_SPEED_MULT = 1.75f;
     private const float MIN_MOVEMENT_DISTANCE = 0.15f;
     private const float KNOCKBACK_FORCE_DECAY_LINEAR = 0.2f;
     private const float KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE = 0.98f;
@@ -228,7 +229,7 @@ public class EnemyEntity : MonoBehaviour
         if (statusDurations[(int)GameEnums.DamageElement.Frost] <= 0)
         {
             Vector3 movementDir = (new Vector3(TargetMovementPosition.x, 0, TargetMovementPosition.z) - new Vector3(transform.position.x, 0, transform.position.z));
-            if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += movementDir.normalized * MovementSpeed; }
+            if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += MovementSpeed * (inCombat ? 1 : OUT_OF_COMBAT_SPEED_MULT) * movementDir.normalized; }
         }
     }
     private void UpdateRotation() 

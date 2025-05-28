@@ -70,8 +70,8 @@ public class MainMenuTravellingCamera : MonoBehaviour
 
         private const float STATE_DURATION = 15f;
         private const float DISTANCE_FROM_CENTER = 100f;
-        private const float CAM_INCLINATION_ANGLE = 30f;
-        private const float HEIGHT = 30f;
+        private const float CAM_INCLINATION_ANGLE = 80f;
+        private const float HEIGHT = 60f;
 
         public override void Initialize(ProceduralStageData stage, Camera c)
         {

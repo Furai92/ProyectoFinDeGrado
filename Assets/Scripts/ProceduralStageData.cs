@@ -16,7 +16,7 @@ public class ProceduralStageData : IMapData
     private const float CHANCE_TO_3 = 0.1f;
     private const float CHANCE_TO_4 = 0.05f;
     private const float CHANCE_TO_ROOM_PER_CONNECTION = 20f;
-    private const float DECO_CHANCE_BASE = 5f;
+    private const float DECO_CHANCE_BASE = 10f;
     private const float DECO_CHANCE_PER_NEARBY_NODE = 10f;
 
     public ProceduralStageData(int seed, int size, ProceduralStagePropertiesSO stageProperties, Transform instParent) 
@@ -204,10 +204,10 @@ public class ProceduralStageData : IMapData
             {
                 if (stageMatrix[i, j].currentType != MapNode.RoomType.None && stageMatrix[i, j].currentType != MapNode.RoomType.Potential) { continue; } // If it's not empty, check next
                 float chance = DECO_CHANCE_BASE;
-                if (i - 1 > 0 && !stageMatrix[i - 1, j].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
-                if (j - 1 > 0 && !stageMatrix[i, j - 1].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
-                if (i + 1 < StageManagerBase.STAGE_SIZE && !stageMatrix[i + 1, j].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
-                if (j + 1 < StageManagerBase.STAGE_SIZE && !stageMatrix[i, j + 1].IsActive()) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (i - 1 > 0 && (stageMatrix[i - 1, j].currentType == MapNode.RoomType.Corridor || stageMatrix[i - 1, j].currentType == MapNode.RoomType.Room)) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (j - 1 > 0 && (stageMatrix[i, j - 1].currentType == MapNode.RoomType.Corridor || stageMatrix[i, j - 1].currentType == MapNode.RoomType.Room)) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (i + 1 < StageManagerBase.STAGE_SIZE && (stageMatrix[i + 1, j].currentType == MapNode.RoomType.Corridor || stageMatrix[i + 1, j].currentType == MapNode.RoomType.Room)) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
+                if (j + 1 < StageManagerBase.STAGE_SIZE && (stageMatrix[i, j + 1].currentType == MapNode.RoomType.Corridor || stageMatrix[i, j + 1].currentType == MapNode.RoomType.Room)) { chance += DECO_CHANCE_PER_NEARBY_NODE; }
 
                 if (Random.Range(0, 101) < chance) { stageMatrix[i, j].currentType = MapNode.RoomType.Deco; stageDecos.Add(stageMatrix[i, j]); } 
             }

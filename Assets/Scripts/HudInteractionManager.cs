@@ -7,6 +7,7 @@ public class HudInteractionManager : MonoBehaviour
     [SerializeField] private Transform interactionPanelParent;
     [SerializeField] private HudWeaponCard wpnCard;
     [SerializeField] private Transform interactableNamePanel;
+    [SerializeField] private Transform visibilityParent;
     [SerializeField] private TextMeshProUGUI interactableNameText;
     [SerializeField] private TextMeshProUGUI actionNameText;
     [SerializeField] private Camera mCamRef;
@@ -25,6 +26,17 @@ public class HudInteractionManager : MonoBehaviour
         instance.UpdatePanelVisuals();
         instance.UpdatePanelPosition();
         wposOffset = new Vector3(0, WORLD_TO_HUD_VERTICAL_OFFSET, 0);
+
+        EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        OnUiFocusChanged(IngameMenuManager.GetActiveMenu());
+    }
+    private void OnDisable()
+    {
+        EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
+    }
+    private void OnUiFocusChanged(IGameMenu m) 
+    {
+        visibilityParent.gameObject.SetActive(m == null);
     }
 
     void Update()

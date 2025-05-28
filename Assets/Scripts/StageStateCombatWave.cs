@@ -11,6 +11,7 @@ public class StageStateCombatWave : StageStateBase
     private float waveDurationRemaining;
     private float nextChestSpawn;
     private float nextSpawnCheck;
+    private bool canSpawnChests;
 
     private const float CHEST_SPAWN_COOLDOWN = 10f;
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
@@ -69,6 +70,7 @@ public class StageStateCombatWave : StageStateBase
             wstd.maxConcurrentSpawns = waveData.EnemySpawns[i].MaxConcurrentSpawns;
             spawnTimers.Add(wstd);
         }
+        canSpawnChests = waveData.CanSpawnChests;
         waveDurationRemaining = waveDurationMax;
 
         EventManager.EnemyDisabledEvent += OnEnemyDisabled;
@@ -101,7 +103,7 @@ public class StageStateCombatWave : StageStateBase
         }
 
         // Spawn chests
-        if (Time.time >= nextChestSpawn)
+        if (Time.time >= nextChestSpawn && canSpawnChests)
         {
             nextChestSpawn = Time.time + CHEST_SPAWN_COOLDOWN / StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestSpawnRate);
             StageManagerBase.SpawnChest();

@@ -24,26 +24,38 @@ public class HudPlayerHeatMeters : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StageStateStartedEvent += UpdateVisibility;
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
-        UpdateVisibility(StageManagerBase.GetCurrentStateType());
+        EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        UpdateVisibility();
         UpdateBackgroundMarkers();
     }
     private void OnDisable()
     {
-        EventManager.StageStateStartedEvent -= UpdateVisibility;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
         EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
     }
     private void OnPlayerStatsUpdated(PlayerEntity p) 
     {
         UpdateBackgroundMarkers();
     }
-    private void UpdateVisibility(StageStateBase.GameState s)
+    private void OnStageStateStarted(StageStateBase.GameState s)
     {
-        switch (s)
+        UpdateVisibility();
+    }
+    private void OnUiFocusChanged(IGameMenu m)
+    {
+        UpdateVisibility();
+    }
+    private void UpdateVisibility()
+    {
+        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+
+        switch (StageManagerBase.GetCurrentStateType())
         {
-            case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.BossFight:
                 {
                     activeParent.gameObject.SetActive(true);
@@ -51,6 +63,7 @@ public class HudPlayerHeatMeters : MonoBehaviour
                 }
             default:
                 {
+                    StopAllCoroutines();
                     activeParent.gameObject.SetActive(false);
                     break;
                 }

@@ -9,15 +9,16 @@ public class HudCurrencyDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StageStateStartedEvent += UpdateVisibility;
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
         EventManager.CurrencyUpdateEvent += OnCurrencyUpdated;
-
         OnCurrencyUpdated();
-        UpdateVisibility(StageManagerBase.GetCurrentStateType());
+        UpdateVisibility();
     }
     private void OnDisable()
     {
-        EventManager.StageStateStartedEvent -= UpdateVisibility;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
         EventManager.CurrencyUpdateEvent -= OnCurrencyUpdated;
     }
     private void OnCurrencyUpdated() 
@@ -31,9 +32,19 @@ public class HudCurrencyDisplay : MonoBehaviour
             currencyText.text = "";
         }
     }
-    private void UpdateVisibility(StageStateBase.GameState s) 
+    private void OnStageStateStarted(StageStateBase.GameState s) 
     {
-        switch (s) 
+        UpdateVisibility();
+    }
+    private void OnUiFocusChanged(IGameMenu m) 
+    {
+        UpdateVisibility();
+    }
+    private void UpdateVisibility() 
+    {
+        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+
+        switch (StageManagerBase.GetCurrentStateType()) 
         {
             case StageStateBase.GameState.Rest:
             case StageStateBase.GameState.EnemyWave:

@@ -14,28 +14,41 @@ public class HudDashBar : MonoBehaviour
     {
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
         EventManager.PlayerSpawnedEvent += OnPlayerSpawned;
-        EventManager.StageStateStartedEvent += UpdateVisibility;
+        EventManager.StageStateStartedEvent += OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
 
-        UpdateVisibility(StageManagerBase.GetCurrentStateType());
         if (PlayerEntity.ActiveInstance != null)
         {
             OnPlayerSpawned(PlayerEntity.ActiveInstance);
             OnPlayerStatsUpdated(PlayerEntity.ActiveInstance);
         }
+
+        UpdateVisibility();
     }
     private void OnDisable()
     {
         EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
         EventManager.PlayerSpawnedEvent -= OnPlayerSpawned;
-        EventManager.StageStateStartedEvent -= UpdateVisibility;
+        EventManager.StageStateStartedEvent -= OnStageStateStarted;
+        EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
     }
 
-    private void UpdateVisibility(StageStateBase.GameState s)
+    private void OnStageStateStarted(StageStateBase.GameState s)
     {
-        switch (s)
+        UpdateVisibility();
+    }
+    private void OnUiFocusChanged(IGameMenu m)
+    {
+        UpdateVisibility();
+    }
+    private void UpdateVisibility()
+    {
+        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+
+        switch (StageManagerBase.GetCurrentStateType())
         {
-            case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.BossFight:
                 {
                     activeParent.gameObject.SetActive(true);
@@ -43,6 +56,7 @@ public class HudDashBar : MonoBehaviour
                 }
             default:
                 {
+                    StopAllCoroutines();
                     activeParent.gameObject.SetActive(false);
                     break;
                 }

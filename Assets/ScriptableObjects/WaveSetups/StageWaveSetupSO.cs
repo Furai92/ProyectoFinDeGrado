@@ -10,7 +10,7 @@ public class StageWaveSetupSO : ScriptableObject
     public class EnemyWave
     {
         [field: SerializeField] public float Duration { get; private set; }
-        [field: SerializeField] public float ChestSpawnRate { get; private set; }
+        [field: SerializeField] public bool CanSpawnChests { get; private set; }
         [field: SerializeField] public List<EnemySpawnData> EnemySpawns { get; private set; }
     }
     [System.Serializable]

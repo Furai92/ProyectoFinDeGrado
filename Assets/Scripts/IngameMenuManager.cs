@@ -17,6 +17,7 @@ public class IngameMenuManager : MonoBehaviour
     private IGameMenu activeMenu;
     private int currentMenuIndex;
     private List<IGameMenu> nonShopMenus;
+    private static IngameMenuManager instance;
 
     private const float MENU_TAB_ALPHA_SELECTED = 1f;
     private const float MENU_TAB_ALPHA_UNSELECTED = 0.5f;
@@ -27,6 +28,7 @@ public class IngameMenuManager : MonoBehaviour
         nonShopMenus = new List<IGameMenu>() { playerStatsMenu, stageStatusMenu, activeTechMenu, settingsMenu };
         menuBarParent.gameObject.SetActive(false);
         UpdateFocus();
+        instance = this;
     }
     private void OnDisable()
     {
@@ -95,6 +97,13 @@ public class IngameMenuManager : MonoBehaviour
         if (currentMenuIndex < 0) { currentMenuIndex = menuNamePanels.Count-1; }
         ToggleMenu(nonShopMenus[currentMenuIndex]);
         UpdateMenuBar();
+    }
+
+    public static IGameMenu GetActiveMenu() 
+    {
+        if (instance == null) { return null; }
+
+        return instance.activeMenu;
     }
 
 }

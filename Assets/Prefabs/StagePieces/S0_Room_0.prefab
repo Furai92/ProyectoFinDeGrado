@@ -224,23 +224,25 @@ MonoBehaviour:
   _d_blockedParent: {fileID: 6703508865580920670}
   _l_blockedParent: {fileID: 383544031643596897}
   _r_blockedParent: {fileID: 5203022233285902216}
-  _variations:
-  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
-    _positionParent: {fileID: 867355454882971810}
-    _requiredParent: {fileID: 9051793901668665463}
-    _chance: 10
-  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
-    _positionParent: {fileID: 7541912917094241649}
-    _requiredParent: {fileID: 4716722378474047906}
-    _chance: 10
-  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
-    _positionParent: {fileID: 5413647789054314867}
-    _requiredParent: {fileID: 6320286113778807353}
-    _chance: 10
-  - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
-    _positionParent: {fileID: 1190167535741395619}
-    _requiredParent: {fileID: 5842378843781085403}
-    _chance: 10
+  _variationGroups:
+  - _chance: 15
+    _variations:
+    - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+      _positionParent: {fileID: 867355454882971810}
+      _requiredParent: {fileID: 9051793901668665463}
+      _randomizeRotation: 0
+    - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+      _positionParent: {fileID: 7541912917094241649}
+      _requiredParent: {fileID: 4716722378474047906}
+      _randomizeRotation: 0
+    - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+      _positionParent: {fileID: 5413647789054314867}
+      _requiredParent: {fileID: 6320286113778807353}
+      _randomizeRotation: 0
+    - _prefab: {fileID: 5868548278187208861, guid: 3f94d95ab5d019441a1ad6c82e52377a, type: 3}
+      _positionParent: {fileID: 1190167535741395619}
+      _requiredParent: {fileID: 5842378843781085403}
+      _randomizeRotation: 0
 --- !u!1 &2737937652637267412
 GameObject:
   m_ObjectHideFlags: 0

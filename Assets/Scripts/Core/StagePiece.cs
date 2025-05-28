@@ -10,7 +10,7 @@ public class StagePiece : MonoBehaviour
     [SerializeField] private Transform _l_blockedParent;
     [SerializeField] private Transform _r_blockedParent;
 
-    [SerializeField] private List<StagePieceVariationData> _variations;
+    [SerializeField] private List<StagePieceVariationGroup> _variationGroups;
 
     public const float PIECE_SPACING = 20f;
     private const float PIECE_SCALE = 2f;
@@ -27,24 +27,43 @@ public class StagePiece : MonoBehaviour
         _r_blockedParent.gameObject.SetActive(n.con_right == null);
         _l_blockedParent.gameObject.SetActive(n.con_left == null);
 
-        for (int i = 0; i < _variations.Count; i++) 
+        for (int i = 0; i < _variationGroups.Count; i++) 
         {
-            if (Random.Range(0, 101) < _variations[i]._chance && _variations[i]._requiredParent.gameObject.activeInHierarchy) 
+            if (Random.Range(0, 101) >= _variationGroups[i]._chance) { continue; }
+            List<StagePieceVariation> compatibleVariations = new List<StagePieceVariation>();
+
+            for (int j = 0; j < _variationGroups[i]._variations.Count; j++) 
             {
-                GameObject variationGO = Instantiate(_variations[i]._prefab, _variations[i]._positionParent);
-                variationGO.SetActive(true);
-                variationGO.transform.localPosition = Vector3.zero;
+                if (_variationGroups[i]._variations[j]._requiredParent == null || _variationGroups[i]._variations[j]._requiredParent.gameObject.activeInHierarchy) 
+                {
+                    compatibleVariations.Add(_variationGroups[i]._variations[j]); 
+                }
+            }
+
+            if (compatibleVariations.Count > 0) 
+            {
+                int randomIndex = Random.Range(0, compatibleVariations.Count);
+                GameObject complementGO = Instantiate(compatibleVariations[randomIndex]._prefab, compatibleVariations[randomIndex]._positionParent);
+                complementGO.SetActive(true);
+                complementGO.transform.localPosition = Vector3.zero;
+                complementGO.transform.rotation = Quaternion.Euler(0, compatibleVariations[randomIndex]._randomizeRotation ? Random.Range(0, 4) * 90 : 0, 0);
             }
         }
     }
     public Vector3 GetRandomEnemySpawnPosition() { return transform.position; }
 
     [System.Serializable]
-    public class StagePieceVariationData 
+    public class StagePieceVariation
     {
         [field: SerializeField] public GameObject _prefab;
         [field: SerializeField] public Transform _positionParent;
         [field: SerializeField] public Transform _requiredParent;
+        [field: SerializeField] public bool _randomizeRotation;
+    }
+    [System.Serializable]
+    public class StagePieceVariationGroup
+    {
         [field: SerializeField] public float _chance;
+        [field: SerializeField] public List<StagePieceVariation> _variations;
     }
 }
