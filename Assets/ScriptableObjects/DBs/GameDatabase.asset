@@ -181,4 +181,6 @@ MonoBehaviour:
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}
   <WeaponPickupPrefab>k__BackingField: {fileID: 4194707245843472174, guid: e8f58634a98d20845952d119f34d0c57, type: 3}
   <ChestPrefab>k__BackingField: {fileID: 9085653830745310390, guid: 2309f81994e79cd4684522e126b1b930, type: 3}
+  <WarningCirclePrefab>k__BackingField: {fileID: 8598110745450462305, guid: 1ad6c7b86e68ca242a3162128aceeb6b, type: 3}
+  <WarningLinePrefab>k__BackingField: {fileID: 4378856187093986415, guid: 1c0edcc526b874b4cacc99dc1b81e2dc, type: 3}
   <VoidNovaPrefab>k__BackingField: {fileID: 4618890703807584224, guid: 4e594def1e6ce2646896d560be45f363, type: 3}

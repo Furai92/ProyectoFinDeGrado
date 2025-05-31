@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 1
   <ID>k__BackingField: RIFLE
-  <NameID>k__BackingField: 
+  <NameID>k__BackingField: WPN_NAME_STARTER_RIFLE
   <Pools>k__BackingField:
   - STANDARD
   <ProjectileComponentID>k__BackingField: P_STANDARD

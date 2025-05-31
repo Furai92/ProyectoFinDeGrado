@@ -5,22 +5,26 @@ public class EnemyAttackFireBomb : EnemyAttackBase
     [SerializeField] private Transform orbParent;
     [SerializeField] private Transform poolParent;
     [SerializeField] private Collider poolCollider;
+    [SerializeField] private ParticleSystem ps;
 
     private float nextDamageTick;
     private Vector3 targetPos;
     private Vector3 startPos;
     private int phase;
     private float phaseT;
+    private float randomizedYScale;
 
-    private const float POOL_DAMAGE = 20f;
+    private const float POOL_DAMAGE = 25f;
     private const float POOL_DAMAGE_TICKRATE = 0.5f;
     private const float ORB_FLIGHT_HEIGHT = 2f;
     private const float ORB_FLIGHT_DURATION = 2f;
     private const float POOL_GROWING_SIZE_MIN = 0.1f;
-    private const float POOL_GROWING_SIZE_MAX = 3f;
+    private const float POOL_GROWING_SIZE_MAX = 15f;
     private const float POOL_GROWING_DURATION = 5f;
-    private const float POOL_LINGER_TIME = 15f;
+    private const float POOL_LINGER_TIME = 25f;
     private const float POOL_FADING_DURATION = 1f;
+    private const float MIN_Y_SCALE = 0.95f;
+    private const float MAX_Y_SCALE = 1.1f;
 
     public override void Initialize(Vector3 pos, float dir)
     {
@@ -33,11 +37,14 @@ public class EnemyAttackFireBomb : EnemyAttackBase
         Physics.Raycast(startPos, targetPos - startPos, out rh, Vector3.Distance(startPos, targetPos), m);
         if (rh.collider != null) { targetPos = new Vector3(rh.point.x, 0, rh.point.z); }
 
+        randomizedYScale = Random.Range(MIN_Y_SCALE, MAX_Y_SCALE);
         phase = 0;
         phaseT = 0;
+        ps.Stop();
         gameObject.SetActive(true);
         orbParent.gameObject.SetActive(true);
         poolParent.gameObject.SetActive(false);
+        ObjectPoolManager.GetWarningCircleFromPool().SetUp(targetPos, POOL_GROWING_SIZE_MAX, ORB_FLIGHT_DURATION);
         orbParent.transform.localPosition = Vector3.zero;
     }
     private void FixedUpdate()
@@ -72,8 +79,9 @@ public class EnemyAttackFireBomb : EnemyAttackBase
                         phase = 1; phaseT = 0;
                         orbParent.gameObject.SetActive(false);
                         poolParent.gameObject.SetActive(true);
+                        ps.Play();
                         poolCollider.gameObject.SetActive(true);
-                        poolParent.transform.localScale = Vector3.one * POOL_GROWING_SIZE_MIN;
+                        UpdatePoolScale(0);
                         EventManager.OnCombatWarningDisplayed(HudCombatWarningElement.WarningType.Normal, transform.position);
                     }
                     break;
@@ -81,12 +89,12 @@ public class EnemyAttackFireBomb : EnemyAttackBase
             case 1: // Pool growing
                 {
                     phaseT += Time.deltaTime / POOL_GROWING_DURATION;
-                    poolParent.transform.localScale = Vector3.one * Mathf.Lerp(POOL_GROWING_SIZE_MIN, POOL_GROWING_SIZE_MAX, phaseT);
+                    UpdatePoolScale(phaseT);
                     if (phaseT > 1)
                     {
                         nextDamageTick = Time.time + POOL_DAMAGE_TICKRATE;
                         phase = 2; phaseT = 0;
-                        poolParent.transform.localScale = Vector3.one * POOL_GROWING_SIZE_MAX;
+                        UpdatePoolScale(1);
                     }
                     break;
                 }
@@ -96,13 +104,14 @@ public class EnemyAttackFireBomb : EnemyAttackBase
                     if (phaseT > 1)
                     {
                         phase = 3; phaseT = 0;
+                        ps.Stop();
                     }
                     break;
                 }
             case 3: // Pool fading
                 {
                     phaseT += Time.deltaTime / POOL_FADING_DURATION;
-                    poolParent.transform.localScale = Vector3.one * Mathf.Lerp(POOL_GROWING_SIZE_MAX, POOL_GROWING_SIZE_MIN, phaseT);
+                    UpdatePoolScale(1 - phaseT);
                     if (phaseT > 1)
                     {
                         gameObject.SetActive(false);
@@ -117,15 +126,16 @@ public class EnemyAttackFireBomb : EnemyAttackBase
         {
             PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
             if (pe == null) { return; }
-            if (!pe.IsEvading())
-            {
-                pe.DealDamage(POOL_DAMAGE, true, false, false);
-            }
-            else
-            {
-                EventManager.OnPlayerEvasion(transform.position);
-            }
+
+            DamagePlayer(pe, POOL_DAMAGE);
         }
+    }
+
+    private void UpdatePoolScale(float t) 
+    {
+        float radius = Mathf.Lerp(POOL_GROWING_SIZE_MIN, POOL_GROWING_SIZE_MAX, t);
+        poolParent.transform.localScale = new Vector3(radius, randomizedYScale, radius);
+        ps.transform.localScale = Vector3.one * radius;
     }
 
     public override void OnUserDefeated()

@@ -356,13 +356,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ID>k__BackingField: BOMBER
-  <MovementSpeed>k__BackingField: 6
+  <MovementSpeed>k__BackingField: 7
   <BaseHealth>k__BackingField: 1500
   <ExtraBars>k__BackingField: 0
   <KnockbackResistance>k__BackingField: 0
   <ItemDropRate>k__BackingField: 1
-  <CurrencyDropRate>k__BackingField: 5
-  <HealthDroprate>k__BackingField: 1
+  <CurrencyDropRate>k__BackingField: 2
+  <HealthDroprate>k__BackingField: 0.2
   AiFile: {fileID: 11400000, guid: b2d424ccd1d8d79488b4a9bc9c8b1733, type: 2}
   <MaxCombatDistance>k__BackingField: 30
   <RequiresLosForCombat>k__BackingField: 1

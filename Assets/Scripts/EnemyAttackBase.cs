@@ -33,6 +33,11 @@ public abstract class EnemyAttackBase : MonoBehaviour
     {
         OnStageStateEnded();
     }
+    protected void DamagePlayer(PlayerEntity p, float magnitude) 
+    {
+        if (p.IsEvading()) { EventManager.OnPlayerEvasion(p.transform.position); }
+        else { p.DealDamage(magnitude * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult), true, false, false); }
+    }
 
     public abstract void Initialize(Vector3 pos, float dir);
     public abstract void OnUserStunned();

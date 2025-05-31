@@ -18,6 +18,8 @@ public class ObjectPoolManager : MonoBehaviour
     private MonoBehaviourPool<Chest> chestPool;
     private MonoBehaviourPool<DeflectedAttack> deflectedAttackPool;
     private MonoBehaviourPool<VoidNova> voidNovaPool;
+    private MonoBehaviourPool<CombatWarningCircle> warningCirclePool;
+    private MonoBehaviourPool<CombatWarningLine> warningLinePool;
 
     private static ObjectPoolManager instance;
 
@@ -66,6 +68,10 @@ public class ObjectPoolManager : MonoBehaviour
         deflectedAttackPool = new MonoBehaviourPool<DeflectedAttack>(database.DeflectedAttackPrefab, transform);
         // Void Nova
         voidNovaPool = new MonoBehaviourPool<VoidNova>(database.VoidNovaPrefab, transform);
+        // Warning circles
+        warningCirclePool = new MonoBehaviourPool<CombatWarningCircle>(database.WarningCirclePrefab, transform);
+        // Warning lines
+        warningLinePool = new MonoBehaviourPool<CombatWarningLine>(database.WarningLinePrefab, transform);
     }
 
     public static PlayerAttackBase GetPlayerAttackFromPool(string id)
@@ -140,5 +146,16 @@ public class ObjectPoolManager : MonoBehaviour
 
         return instance.voidNovaPool.GetCopyFromPool();
     }
+    public static CombatWarningCircle GetWarningCircleFromPool() 
+    {
+        if (instance == null) { return null; }
 
+        return instance.warningCirclePool.GetCopyFromPool();
+    }
+    public static CombatWarningLine GetWarningLineFromPool()
+    {
+        if (instance == null) { return null; }
+
+        return instance.warningLinePool.GetCopyFromPool();
+    }
 }

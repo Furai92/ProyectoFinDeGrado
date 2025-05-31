@@ -55,6 +55,8 @@ public class PlayerEntity : NetworkBehaviour
 
     public Transform CamTargetTransform { get { return m_camTargetTransform; } }
 
+    [SerializeField] private Rigidbody damageHitboxRB;
+
     [SerializeField] public Transform m_camTargetTransform;
     [SerializeField] private Transform m_camVerticalRotationAxis;
     [SerializeField] private Transform m_rotationParent;
@@ -169,42 +171,13 @@ public class PlayerEntity : NetworkBehaviour
     }
     private void Update()
     {
-        movementInputH = InputManager.Instance.GetMovementInput().x;
-        movementInputV = InputManager.Instance.GetMovementInput().y;
-        rotationInputH = inputsAllowed ? InputManager.Instance.GetLookInput().x : 0;
-        rotationInputV = inputsAllowed ? InputManager.Instance.GetLookInput().y : 0;
-
-        CurrentLookDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
-        UpdateRotation();
-        m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
-        ClampCamVerticalRotation();
-
-        rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
-        if (Time.time > coolingReadyTimeRanged) 
-        {
-            StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayRanged);
-            heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
-        }
-        if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
-
-        meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
-        if (Time.time > coolingReadyTimeMelee) 
-        {
-            heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
-            StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayMelee);
-        }
-        if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
-
-        if (CurrentDashes < (int)stats.GetStat(PlayerStatGroup.Stat.DashCount)) 
-        {
-            DashRechargePercent += Time.deltaTime * BASE_DASH_RECHARGE_RATE * stats.GetStat(PlayerStatGroup.Stat.DashRechargeRate);
-            if (DashRechargePercent >= 1) 
-            {
-                DashRechargePercent = 0;
-                CurrentDashes++;
-            }
-        }
-        CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE * (1 - Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.ShieldDecayRateReduction))));
+        UpdateCameraInputs();
+        UpdateMovementInputs();
+        UpdateRotation(); // Move to state?
+        UpdateWeaponStatus();
+        UpdateBuffDurations();
+        UpdateDashRecharge();
+        UpdateShieldDecay();
 
         if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableRangedAttack) <= 0) 
         {
@@ -225,8 +198,35 @@ public class PlayerEntity : NetworkBehaviour
         {
             StartDash();
         }
-        if (Time.time > buffUpdateTime) { UpdateBuffDurations(); }
-        if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + 1; EventManager.OnPlayerFixedTimeInterval(); } 
+        if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + 1; EventManager.OnPlayerFixedTimeInterval(); }
+    }
+    private void FixedUpdate()
+    {
+        damageHitboxRB.MovePosition(transform.position); // This prevents the collisions rigidbody from sleeping in rare situations that would make the player invencible
+
+        if (dashDurationRemaining > 0)
+        {
+            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
+            RaycastHit rh;
+            LayerMask m = LayerMask.GetMask("Walls");
+            Physics.Raycast(transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
+            dashDurationRemaining -= Time.fixedDeltaTime;
+            if (rh.collider != null)
+            {
+                dashDurationRemaining = 0;
+                EventManager.OnPlayerWallSlam(transform.position);
+                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal) - 90, GameEnums.DamageElement.NonElemental);
+            }
+            if (dashDurationRemaining <= 0) { EventManager.OnPlayerDashEnded(transform.position, GameTools.VectorToAngle(dashMovementVector)); }
+        }
+        else
+        {
+            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.forward;
+            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.right;
+        }
+        m_agentCollisionsCollider.enabled = dashDurationRemaining <= 0;
+        transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
+        StageManagerBase.UpdatePlayerPosition(transform.position);
     }
     public void Attack(WeaponSO.WeaponSlot s, float attackDir, bool generateHeat, bool canEcho)
     {
@@ -322,37 +322,40 @@ public class PlayerEntity : NetworkBehaviour
             }
         }
     }
-    private void FixedUpdate()
-    {
-        if (dashDurationRemaining > 0)
-        {
-            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
-            RaycastHit rh;
-            LayerMask m = LayerMask.GetMask("Walls");
-            Physics.Raycast(transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
-            dashDurationRemaining -= Time.fixedDeltaTime;
-            if (rh.collider != null) 
-            {
-                dashDurationRemaining = 0;
-                EventManager.OnPlayerWallSlam(transform.position);
-                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal)-90, GameEnums.DamageElement.NonElemental);
-            }
-            if (dashDurationRemaining <= 0) { EventManager.OnPlayerDashEnded(transform.position, GameTools.VectorToAngle(dashMovementVector)); }
-        }
-        else 
-        {
-            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.forward;
-            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.right;
-        }
-        m_agentCollisionsCollider.enabled = dashDurationRemaining <= 0;
-        transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
-        StageManagerBase.UpdatePlayerPosition(transform.position);
-    }
     private void ClampCamVerticalRotation()
     {
         float x = m_camVerticalRotationAxis.localRotation.eulerAngles.x;
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360);
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
+    }
+    private void UpdateCameraInputs() 
+    {
+        rotationInputH = inputsAllowed ? InputManager.Instance.GetLookInput().x : 0;
+        rotationInputV = inputsAllowed ? InputManager.Instance.GetLookInput().y : 0;
+        CurrentLookDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
+        m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
+        ClampCamVerticalRotation();
+    }
+    private void UpdateMovementInputs() 
+    {
+        movementInputH = InputManager.Instance.GetMovementInput().x;
+        movementInputV = InputManager.Instance.GetMovementInput().y;
+    }
+    private void UpdateDashRecharge() 
+    {
+        if (CurrentDashes < (int)stats.GetStat(PlayerStatGroup.Stat.DashCount))
+        {
+            DashRechargePercent += Time.deltaTime * BASE_DASH_RECHARGE_RATE * stats.GetStat(PlayerStatGroup.Stat.DashRechargeRate);
+            if (DashRechargePercent >= 1)
+            {
+                DashRechargePercent = 0;
+                CurrentDashes++;
+            }
+        }
+    }
+    private void UpdateShieldDecay() 
+    {
+        CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE * (1 - Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.ShieldDecayRateReduction))));
     }
     private void StartDash() 
     {
@@ -366,6 +369,26 @@ public class PlayerEntity : NetworkBehaviour
         dashMovementVector += movementInputH * m_rotationParent.right;
         dashDurationRemaining = DASH_DURATION;
         EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));
+    }
+    private void UpdateWeaponStatus() 
+    {
+        rangedAttackReady += Time.deltaTime * rangedWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
+        meleeAttackReady += Time.deltaTime * meleeWeaponStats.Firerate * stats.GetStat(PlayerStatGroup.Stat.Firerate);
+
+        if (Time.time > coolingReadyTimeRanged)
+        {
+            StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayRanged);
+            heatDecayRanged += Time.deltaTime * HEAT_DECAY_GROWTH;
+        }
+        if (StatusOverheatRanged && StatusHeatRanged <= 0) { StatusOverheatRanged = false; }
+
+        if (Time.time > coolingReadyTimeMelee)
+        {
+            heatDecayMelee += Time.deltaTime * HEAT_DECAY_GROWTH;
+            StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), Time.deltaTime * heatDecayMelee);
+        }
+        if (StatusOverheatMelee && StatusHeatMelee <= 0) { StatusOverheatMelee = false; }
+
     }
     #region Public Methods
     public void EquipWeapon(WeaponData w)
@@ -413,28 +436,13 @@ public class PlayerEntity : NetworkBehaviour
 
         if (s == WeaponSO.WeaponSlot.Melee) 
         {
-            if (change > 0)
-            {
-                StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
-                if (StatusHeatMelee >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Melee); }
-            }
-            else 
-            {
-                StatusHeatMelee = Mathf.MoveTowards(StatusHeatMelee, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), -change);
-            }
-            
+            StatusHeatMelee = Mathf.Clamp(StatusHeatMelee + change, - stats.GetStat(PlayerStatGroup.Stat.HeatFloor), stats.GetStat(PlayerStatGroup.Stat.HeatCap));
+            if (StatusHeatMelee >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatMelee = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Melee); }
         }
         else
         {
-            if (change > 0)
-            {
-                StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, stats.GetStat(PlayerStatGroup.Stat.HeatCap), change);
-                if (StatusHeatRanged >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Ranged); }
-            }
-            else
-            {
-                StatusHeatRanged = Mathf.MoveTowards(StatusHeatRanged, -stats.GetStat(PlayerStatGroup.Stat.HeatFloor), -change);
-            }
+            StatusHeatRanged = Mathf.Clamp(StatusHeatRanged + change, - stats.GetStat(PlayerStatGroup.Stat.HeatFloor), stats.GetStat(PlayerStatGroup.Stat.HeatCap));
+            if (StatusHeatRanged >= stats.GetStat(PlayerStatGroup.Stat.HeatCap)) { StatusOverheatRanged = true; EventManager.OnPlayerWeaponOverheated(WeaponSO.WeaponSlot.Ranged); }
         }
     }
     public void DealDamage(float magnitude, bool lethal, bool ignoreShield, bool ignoreEndurance)
@@ -657,6 +665,9 @@ public class PlayerEntity : NetworkBehaviour
     #region Buff Management
     private void UpdateBuffDurations() 
     {
+        if (Time.time < buffUpdateTime) { return; }
+        buffUpdateTime = Time.time + BUFF_UPDATE_INTERVAL;
+
         for (int i = ActiveBuffs.Count-1; i >= 0; i--) 
         {
             if (ActiveBuffs[i].Infinite) { continue; }

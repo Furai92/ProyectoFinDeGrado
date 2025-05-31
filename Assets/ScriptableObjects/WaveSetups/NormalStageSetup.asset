@@ -20,7 +20,7 @@ MonoBehaviour:
       <Cooldown>k__BackingField: 3
       <Delay>k__BackingField: 0
       <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 10
+      <MaxConcurrentSpawns>k__BackingField: 20
   - <Duration>k__BackingField: 60
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:

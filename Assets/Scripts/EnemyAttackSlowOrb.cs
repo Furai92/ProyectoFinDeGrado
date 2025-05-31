@@ -5,7 +5,7 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
     private float removeTime;
     private LayerMask terrainCollisionMask;
 
-    private const float BASE_DAMAGE = 20f;
+    private const float BASE_DAMAGE = 35f;
     private const float TERRAIN_COLLISION_RAYCAST_LENGHT = 1f;
     private const float ORB_SPEED = 15f;
     private const float LIFETIME = 10f;
@@ -42,15 +42,8 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
                 {
                     PlayerEntity pe = collision.gameObject.GetComponentInParent<PlayerEntity>();
                     if (pe == null) { return; }
-                    if (!pe.IsEvading())
-                    {
-                        pe.DealDamage(BASE_DAMAGE, true, false, false);
-                        gameObject.SetActive(false);
-                    }
-                    else
-                    {
-                        EventManager.OnPlayerEvasion(transform.position);
-                    }
+
+                    DamagePlayer(pe, BASE_DAMAGE);
                     break;
                 }
             case "Deflect": 

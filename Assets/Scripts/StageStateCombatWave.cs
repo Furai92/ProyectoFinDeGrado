@@ -13,6 +13,8 @@ public class StageStateCombatWave : StageStateBase
     private float nextSpawnCheck;
     private bool canSpawnChests;
 
+    private const float ENEMY_HEALTH_SCALING = 0.25f;
+    private const float ENEMY_DAMAGE_SCALING = 0.05f;
     private const float CHEST_SPAWN_COOLDOWN = 10f;
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
     private const int MAX_ENEMIES = 20;
@@ -31,6 +33,8 @@ public class StageStateCombatWave : StageStateBase
 
     public override void StateEnd()
     {
+        StageManagerBase.ChangeStageStat(StageStatGroup.StageStat.EnemyDamageMult, StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult) * ENEMY_DAMAGE_SCALING);
+        StageManagerBase.ChangeStageStat(StageStatGroup.StageStat.EnemyHealthMult, StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult) * ENEMY_HEALTH_SCALING);
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.EnemySpawnedEvent -= OnEnemySpawned;
     }
