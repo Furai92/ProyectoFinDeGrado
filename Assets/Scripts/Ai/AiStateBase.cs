@@ -52,14 +52,12 @@ public abstract class AiStateBase
         private TransitionConditional conditional;
         private TransitionComparator comparator;
         private float floatParam;
-        private bool boolParam;
 
         public AiStateTransition(EnemyAiSO.EnemyAiInspectorTransition t, AiStateBase to) 
         {
             conditional = t.Condition;
             comparator = t.Comparator;
             floatParam = t.ConditionalValue;
-            boolParam = t.ConditionalBool;
             NextState = to;
             Priority = t.Priority;
         }

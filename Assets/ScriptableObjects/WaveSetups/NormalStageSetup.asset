@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Waves>k__BackingField:
   - <Duration>k__BackingField: 40
+    <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: GUNNER
@@ -22,6 +23,7 @@ MonoBehaviour:
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 20
   - <Duration>k__BackingField: 60
+    <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: SOLDIER
@@ -35,6 +37,7 @@ MonoBehaviour:
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 5
   - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: SOLDIER
@@ -53,6 +56,7 @@ MonoBehaviour:
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 2
   - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: SOLDIER
@@ -76,6 +80,7 @@ MonoBehaviour:
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 2
   - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
     <EnemySpawns>k__BackingField:
     - <ID>k__BackingField: GUNNER

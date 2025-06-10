@@ -12,9 +12,9 @@ public class ProceduralStageData : IMapData
     private List<MapNode> stageDecos;
 
     private const float ROOM_PERCENT = 0.6f;
-    private const float CHANCE_TO_2 = 0.2f;
-    private const float CHANCE_TO_3 = 0.1f;
-    private const float CHANCE_TO_4 = 0.05f;
+    private const float CHANCE_TO_2 = 20f;
+    private const float CHANCE_TO_3 = 10f;
+    private const float CHANCE_TO_4 = 5f;
     private const float CHANCE_TO_ROOM_PER_CONNECTION = 20f;
     private const float DECO_CHANCE_BASE = 10f;
     private const float DECO_CHANCE_PER_NEARBY_NODE = 10f;

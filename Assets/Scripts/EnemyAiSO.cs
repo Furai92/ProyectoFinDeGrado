@@ -42,7 +42,6 @@ public class EnemyAiSO : ScriptableObject
         [field: SerializeField] public AiStateBase.TransitionConditional Condition { get; private set; }
         [field: SerializeField] public AiStateBase.TransitionComparator Comparator { get; private set; }
         [field: SerializeField] public float ConditionalValue { get; private set; }
-        [field: SerializeField] public bool ConditionalBool { get; private set; }
     }
 }
 

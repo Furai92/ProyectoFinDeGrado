@@ -10,6 +10,7 @@ public class StageWaveSetupSO : ScriptableObject
     public class EnemyWave
     {
         [field: SerializeField] public float Duration { get; private set; }
+        [field: SerializeField] public List<EnemyKillRequirement> KillRequirements { get; private set; }
         [field: SerializeField] public bool CanSpawnChests { get; private set; }
         [field: SerializeField] public List<EnemySpawnData> EnemySpawns { get; private set; }
     }
@@ -21,5 +22,11 @@ public class StageWaveSetupSO : ScriptableObject
         [field: SerializeField] public float Delay { get; private set; }
         [field: SerializeField] public int MaxSpawnsDuringWave { get; private set; }
         [field: SerializeField] public int MaxConcurrentSpawns { get; private set; }
+    }
+    [System.Serializable]
+    public class EnemyKillRequirement
+    {
+        [field: SerializeField] public string ID { get; private set; }
+        [field: SerializeField] public int Count { get; private set; }
     }
 }
