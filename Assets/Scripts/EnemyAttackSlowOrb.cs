@@ -49,6 +49,7 @@ public class EnemyAttackSlowOrb : EnemyAttackBase
             case "Deflect": 
                 {
                     gameObject.SetActive(false);
+                    EventManager.OnPlayerDeflect(transform.position);
                     ObjectPoolManager.GetDeflectedAttackPool().SetUp(200, transform.position);
                     break;
                 }

@@ -17,8 +17,10 @@ public class ProceduralStagemanager : StageManagerBase
     public override void InitializeStage()
     {
         StageStateIntro introState = new StageStateIntro();
+        StageStateShortDelay delayBeforeStart = new StageStateShortDelay();
+        introState.SetNextState(delayBeforeStart);
 
-        StageStateBase prevState = introState;
+        StageStateBase prevState = delayBeforeStart;
         StageStateBase lastState = introState;
         foreach (StageWaveSetupSO.EnemyWave ew in enemyWaveData.Waves) 
         {

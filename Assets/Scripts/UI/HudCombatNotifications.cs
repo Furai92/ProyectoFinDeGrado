@@ -26,6 +26,8 @@ public class HudCombatNotifications : MonoBehaviour
     private const float EVADED_LIFETIME = 1f;
     private const float RESTORED_SIZE = 2f;
     private const float RESTORED_LIFETIME = 1.5f;
+    private const float DEFLECTED_SIZE = 1.5f;
+    private const float DEFLECTED_LIFETIME = 1f;
 
     private void OnEnable()
     {
@@ -40,6 +42,7 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.PlayerEvasionEvent += OnEnemyAttackEvaded;
         EventManager.GameSettingsChangedEvent += UpdateSizeMultiplier;
         EventManager.PlayerHealthRestoredEvent += OnPlayerHealthRestored;
+        EventManager.PlayerDeflectEvent += OnAttackDeflected;
     }
     private void OnDisable()
     {
@@ -50,6 +53,7 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.PlayerEvasionEvent -= OnEnemyAttackEvaded;
         EventManager.GameSettingsChangedEvent -= UpdateSizeMultiplier;
         EventManager.PlayerHealthRestoredEvent -= OnPlayerHealthRestored;
+        EventManager.PlayerDeflectEvent -= OnAttackDeflected;
     }
     private void UpdateSizeMultiplier() 
     {
@@ -80,5 +84,9 @@ public class HudCombatNotifications : MonoBehaviour
     private void OnPlayerHealthRestored(float amount) 
     {
         coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, string.Format("+{0}", amount.ToString("F0")), Color.green, RESTORED_SIZE * sizeMult, RESTORED_LIFETIME, true, PlayerEntity.ActiveInstance.transform.position);
+    }
+    private void OnAttackDeflected(Vector3 wpos) 
+    {
+        coloredTextNotificationPool.GetCopyFromPool().SetUp(mCamRef, "Deflected!", Color.white, DEFLECTED_SIZE * sizeMult, DEFLECTED_LIFETIME, true, wpos);
     }
 }

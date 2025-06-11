@@ -6,6 +6,7 @@ public class HudCurrencyDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI currencyText;
     [SerializeField] private Transform activeParent;
+    [SerializeField] private TextMeshProUGUI shopReminderText;
 
     private void OnEnable()
     {
@@ -43,10 +44,12 @@ public class HudCurrencyDisplay : MonoBehaviour
     private void UpdateVisibility() 
     {
         if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+        shopReminderText.gameObject.SetActive(StageManagerBase.GetCurrentStateType() == StageStateBase.GameState.Rest);
 
         switch (StageManagerBase.GetCurrentStateType()) 
         {
             case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.Delay:
             case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.BossFight: 
                 {

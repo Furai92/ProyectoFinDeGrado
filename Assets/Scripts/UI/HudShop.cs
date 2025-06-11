@@ -5,6 +5,7 @@ using TMPro;
 public class HudShop : MonoBehaviour, IGameMenu
 {
     [SerializeField] private GameDatabaseSO dbso;
+    [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private List<Transform> cardParents;
     [SerializeField] private List<HudTechCard> cards;
     [SerializeField] private List<Transform> soldOutPanels;
@@ -85,6 +86,7 @@ public class HudShop : MonoBehaviour, IGameMenu
     private void UpdateShopVisuals() 
     {
         refreshCostText.text = GetRefreshPrice().ToString("F0");
+        refreshCostText.color = GetRefreshPrice() <= PlayerEntity.ActiveInstance.Money ? cdb.GetColor("DETAIL_TYPE_POSITIVE") : cdb.GetColor("DETAIL_TYPE_NEGATIVE");
         for (int i = 0; i < cards.Count; i++) 
         {
             if (i < techInStock.Count)
@@ -108,6 +110,7 @@ public class HudShop : MonoBehaviour, IGameMenu
                     soldOutPanels[i].gameObject.SetActive(false);
                     purchaseButtons[i].gameObject.SetActive(true);
                     prices[i].gameObject.SetActive(true); prices[i].text = GetTechPrice(techInStock[i]).ToString("F0");
+                    prices[i].color = GetTechPrice(techInStock[i]) <= PlayerEntity.ActiveInstance.Money ? cdb.GetColor("DETAIL_TYPE_POSITIVE") : cdb.GetColor("DETAIL_TYPE_NEGATIVE");
                     cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], PlayerEntity.ActiveInstance.GetTechLevel(techInStock[i].ID)+1, true, true);
                     purchaseButtons[i].gameObject.SetActive(true);
                 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class StageStateBase
 {
-    public enum GameState { None, Intro, EnemyWave, Rest, BossFight, GameOver, Victory }
+    public enum GameState { None, Intro, EnemyWave, Rest, BossFight, GameOver, Victory, Delay }
 
     private StageStateBase nextState;
 

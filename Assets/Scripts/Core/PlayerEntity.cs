@@ -148,7 +148,8 @@ public class PlayerEntity : NetworkBehaviour
         CurrentHealth = stats.GetStat(PlayerStatGroup.Stat.MaxHealth);
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
-        Money = 999;
+        Money = 0;
+        EventManager.OnCurrencyUpdated();
 
         CurrentLookDirection = 0; UpdateRotation();
         inputsAllowed = true;

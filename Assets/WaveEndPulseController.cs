@@ -10,7 +10,7 @@ public class WaveEndPulseController : MonoBehaviour
     private const float OUTTER_SIZE_MULT = 1f;
     private const float MIN_SIZE = 3f;
     private const float MAX_SIZE = 500f;
-    private const float EFFECT_DURATION = 3f;
+    private const float EFFECT_DURATION = 2f;
 
     private void OnEnable()
     {

@@ -47,6 +47,7 @@ public class HudBuffBar : MonoBehaviour
         switch (StageManagerBase.GetCurrentStateType())
         {
             case StageStateBase.GameState.Rest:
+            case StageStateBase.GameState.Delay:
             case StageStateBase.GameState.EnemyWave:
             case StageStateBase.GameState.BossFight:
                 {
