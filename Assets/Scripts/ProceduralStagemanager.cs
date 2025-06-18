@@ -36,19 +36,4 @@ public class ProceduralStagemanager : StageManagerBase
 
         currentState = introState;
     }
-
-    protected override StageStatGroup GetInitialStageStats()
-    {
-        StageStatGroup ssg = new StageStatGroup();
-        ssg.ChangeStat(StageStatGroup.StageStat.EnemyDamageMult, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.EnemyHealthMult, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.EnemySpawnRate, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.HealthOrbDropRate, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.ChestSpawnRate, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.ChestDropRate, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.ShopPriceMult, 1);
-        ssg.ChangeStat(StageStatGroup.StageStat.WeaponDropRate, 1);
-
-        return ssg;
-    }
 }

@@ -22,6 +22,11 @@ MonoBehaviour:
       <Delay>k__BackingField: 0
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 20
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 3
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 20
   - <Duration>k__BackingField: 60
     <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1

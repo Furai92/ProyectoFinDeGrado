@@ -7,6 +7,7 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
 {
     [SerializeField] private GameDatabaseSO db;
     [SerializeField] private Transform menuParent;
+    [SerializeField] private HudPageDisplay pageDisplay;
     [SerializeField] private List<HudTechCard> techCards;
 
     private List<TechSO> techDisplayed;
@@ -66,7 +67,7 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
             int indexReaded = i +(page * techCards.Count);
             if (indexReaded < techDisplayed.Count)
             {
-                techCards[i].SetUp(techDisplayed[indexReaded], 1, false, false);
+                techCards[i].SetUp(techDisplayed[indexReaded], 1, false, false, true);
                 techCards[i].gameObject.SetActive(true);
             }
             else 
@@ -74,6 +75,7 @@ public class HudCollectionMenu : MonoBehaviour, IGameMenu
                 techCards[i].gameObject.SetActive(false);
             }
         }
+        pageDisplay.UpdateDisplay(techDisplayed.Count / techCards.Count, page);
     }
     public string GetMenuNameID()
     {

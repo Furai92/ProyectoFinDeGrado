@@ -9,9 +9,7 @@ public class HudPreviousRunRecapMenu : MonoBehaviour, IGameMenu
     [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private Transform menuParent;
     [SerializeField] private TextMeshProUGUI runResultText;
-    [SerializeField] private List<TextMeshProUGUI> typeLabels;
-    [SerializeField] private List<TextMeshProUGUI> directNumbers;
-    [SerializeField] private List<TextMeshProUGUI> statusNumbers;
+    [SerializeField] private List<HudPreviousRunRecapDamageElement> damageRecapElements;
 
     public bool CanBeOpened()
     {
@@ -47,13 +45,10 @@ public class HudPreviousRunRecapMenu : MonoBehaviour, IGameMenu
         runResultText.text = record.victory ? sdb.GetString("RUN_RESULT_VICTORY") : sdb.GetString("RUN_RESULT_DEFEAT");
         runResultText.color = record.victory ? Color.green : Color.red;
 
-        for (int i = 0; i < typeLabels.Count; i++) 
+        for (int i = 0; i < damageRecapElements.Count; i++) 
         {
             GameEnums.DamageElement e = (GameEnums.DamageElement)i;
-            typeLabels[i].text = sdb.ElementToName(e);
-            directNumbers[i].text = record.directDamageRecords[i].ToString("F0");
-            statusNumbers[i].text = record.statusDamageRecords[i].ToString("F0");
-            typeLabels[i].color = directNumbers[i].color = statusNumbers[i].color = cdb.ElementToColor(e);
+            damageRecapElements[i].SetUp(e, record.directDamageRecords[i], record.statusDamageRecords[i]);
         }
     }
     public string GetMenuNameID()

@@ -46,7 +46,7 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     {
         if (e == TrackedEnemy) { UpdateFill(); }
     }
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit)
     {
         if (e == TrackedEnemy) { gameObject.SetActive(false); }
     }

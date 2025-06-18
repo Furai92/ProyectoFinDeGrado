@@ -8,22 +8,39 @@ public class WeaponData
     public List<WeaponPartSO> SpecialParts { get; private set; }
     public GameEnums.Rarity Rarity { get; private set; }
     public WeaponStats Stats { get; private set; }
+    public int Level { get; private set; }
 
+    private const float EXTRA_DAMAGE_PER_LEVEL = 0.15f;
     private const float RARITY_CHANCE_RARE = 25f;
     private const float RARITY_CHANCE_EXOTIC = 5f;
     private const float RARITY_CHANCE_PROTOTYPE = 1f;
 
-    public WeaponData(WeaponSO baseWeapon) 
+    public WeaponData(WeaponSO baseWeapon, float levelFactor) 
     {
         BaseWeapon = baseWeapon;
+        RollLevel(levelFactor);
         RollRarity();
         RollParts();
     }
-    public WeaponData(WeaponSO baseweapon, GameEnums.Rarity forcedRarity) 
+    public WeaponData(WeaponSO baseweapon, GameEnums.Rarity forcedRarity, float levelFactor) 
     {
         BaseWeapon = baseweapon;
+        RollLevel(levelFactor);
         Rarity = forcedRarity;
         RollParts();
+
+    }
+    private float GetLevelDamageMult() 
+    {
+        return 1 + (Level * EXTRA_DAMAGE_PER_LEVEL);
+    }
+    private void RollLevel(float levelFactor) 
+    {
+        int minLevel = (int)levelFactor;
+        int maxLevel = (int)levelFactor + 1;
+        float chanceToExtraLevel = (levelFactor - minLevel) * 100;
+
+        Level = Random.Range(0, 101) < chanceToExtraLevel ? maxLevel : minLevel;
     }
     private void RollRarity() 
     {
@@ -85,7 +102,7 @@ public class WeaponData
         };
         for (int i = 0; i < usedParts.Count; i++) 
         {
-            if (usedParts[i].ElementOverride != GameEnums.DamageElement.NonElemental) { ws.Element = usedParts[i].ElementOverride; }
+            if (usedParts[i].ElementOverride != GameEnums.DamageElement.None) { ws.Element = usedParts[i].ElementOverride; }
             if (usedParts[i].ProjectileComponentIDOverride != "") { ws.ProjectileComponentID = usedParts[i].ProjectileComponentIDOverride; }
             if (usedParts[i].CleaveComponentIDOverride != "") { ws.CleaveComponentID = usedParts[i].CleaveComponentIDOverride; }
             if (usedParts[i].ProjectileComponentDamageOverride != 0) { ws.ProjectileComponentMagnitude = usedParts[i].ProjectileComponentDamageOverride; }
@@ -111,6 +128,9 @@ public class WeaponData
         if (ws.CleaveComponentID == null) { ws.CleaveComponentID = ""; }
         if (ws.ProjectileComponentID == null) { ws.ProjectileComponentID = ""; }
 
+        // Scale damage with level
+        ws.ProjectileComponentMagnitude *= GetLevelDamageMult();
+        ws.CleaveComponentMagnitude *= GetLevelDamageMult();
         Stats = ws;
     }
 

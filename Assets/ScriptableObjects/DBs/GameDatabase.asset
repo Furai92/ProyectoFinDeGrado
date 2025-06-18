@@ -30,7 +30,7 @@ MonoBehaviour:
   <EnemyAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: SLOW_ORB
     <Data>k__BackingField: {fileID: 7397320916023109853, guid: b265df20be3bd27439f28b35618dc7e8, type: 3}
-  - <ID>k__BackingField: MELEE_SMALL
+  - <ID>k__BackingField: MELEE_SPIN
     <Data>k__BackingField: {fileID: 3746625057581498513, guid: b9224d28f7e282d44a93baad738eed88, type: 3}
   - <ID>k__BackingField: FIREBOMB
     <Data>k__BackingField: {fileID: 6445567525718638580, guid: 2aab97147ce126d4da32b5f2b0398748, type: 3}
@@ -41,6 +41,8 @@ MonoBehaviour:
     <Data>k__BackingField: {fileID: 442362864815450504, guid: 373164311b3eab14ea3ec6d00c4aba42, type: 3}
   - <ID>k__BackingField: SLAM
     <Data>k__BackingField: {fileID: 442362864815450504, guid: b84ff6dfb98731244b2d4067d3425b60, type: 3}
+  - <ID>k__BackingField: DEFLECT
+    <Data>k__BackingField: {fileID: 442362864815450504, guid: f22914274f5a4a046911d9029cda6ae4, type: 3}
   <TechEffectPrefabs>k__BackingField:
   - <ID>k__BackingField: EXPLOSION
     <Data>k__BackingField: {fileID: 7262071496982426308, guid: 54ed033d137570d4891cf9d083bf7e75, type: 3}
@@ -62,6 +64,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   - {fileID: 11400000, guid: 3ff73338492d7874b9178cc184e1b23f, type: 2}
   - {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
+  - {fileID: 11400000, guid: 769016dd8162abb429dead47518f6cb7, type: 2}
+  - {fileID: 11400000, guid: fff694af300f5b848b56198e64fed79a, type: 2}
+  - {fileID: 11400000, guid: f7a7c8dc9eb29cd4f80fab5b4f9e0581, type: 2}
   <Techs>k__BackingField:
   - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   - {fileID: 11400000, guid: d872e5c0fc6298c45a68a2752e555927, type: 2}
@@ -176,6 +181,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9ccd10cab4288c488f79e4dacec2865, type: 2}
   - {fileID: 11400000, guid: eb24b2b7cb593034bb5411f578a21fea, type: 2}
   - {fileID: 11400000, guid: df375d4a0e4be494d8c975932ed96631, type: 2}
+  <DifficultyLevels>k__BackingField:
+  - {fileID: 11400000, guid: d0dbeaca48069794988c5acc7a27d73c, type: 2}
+  - {fileID: 11400000, guid: 4fb28d4789769ed4aa6bfeddbb95b530, type: 2}
+  - {fileID: 11400000, guid: bfcb2ec977d23fe46ad4eef2851993b9, type: 2}
+  - {fileID: 11400000, guid: 7d6a1004ae9ebf4469310f8aa7b6a09d, type: 2}
+  - {fileID: 11400000, guid: 393915e07fde74449902c1ce895699ed, type: 2}
+  - {fileID: 11400000, guid: a30c7158bb0165e48a2caf20e5fb7d14, type: 2}
+  - {fileID: 11400000, guid: a5ed96c1aae555544b862b3d679a17de, type: 2}
+  - {fileID: 11400000, guid: 271d73699414a4f40a40add7a60b0599, type: 2}
+  - {fileID: 11400000, guid: 1dcb7c2ca42cdd44a965ac5c74513ac6, type: 2}
+  - {fileID: 11400000, guid: 12ac7b76864d99d49b11e19686614d28, type: 2}
+  - {fileID: 11400000, guid: 141f2d8232a330c49a8bb0a08fb34e2a, type: 2}
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}

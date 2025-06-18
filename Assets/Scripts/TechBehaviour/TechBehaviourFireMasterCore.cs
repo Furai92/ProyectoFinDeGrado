@@ -20,16 +20,16 @@ public class TechBehaviourFireMasterCore : TechBase
         {
             case GameEnums.DamageType.Melee: 
                 {
-                    if (PlayerEntity.ActiveInstance.StatusHeatMelee < 100) { return; }
-                    float bonusDamage = (PlayerEntity.ActiveInstance.StatusHeatMelee-100) * DMG_PER_HEAT * mag;
+                    if (PlayerEntity.ActiveInstance.StatusHeatMelee <= 0) { return; }
+                    float bonusDamage = (PlayerEntity.ActiveInstance.StatusHeatMelee) * DMG_PER_HEAT * mag;
                     target.DealDirectDamage(bonusDamage, 0, 1, GameTools.IntellectToBuildupMultiplier(PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.Intellect)),
                         GameEnums.DamageElement.Fire, GameEnums.DamageType.Tech);
                     break;
                 }
             case GameEnums.DamageType.Ranged:
                 {
-                    if (PlayerEntity.ActiveInstance.StatusHeatRanged < 100) { return; }
-                    float bonusDamage = (PlayerEntity.ActiveInstance.StatusHeatRanged-100) * DMG_PER_HEAT * mag;
+                    if (PlayerEntity.ActiveInstance.StatusHeatRanged <= 0) { return; }
+                    float bonusDamage = (PlayerEntity.ActiveInstance.StatusHeatRanged) * DMG_PER_HEAT * mag;
                     target.DealDirectDamage(bonusDamage, 0, 1, GameTools.IntellectToBuildupMultiplier(PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.Intellect)),
                         GameEnums.DamageElement.Fire, GameEnums.DamageType.Tech);
                     break;

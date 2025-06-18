@@ -21,7 +21,7 @@ MonoBehaviour:
   <DamageMultiplier>k__BackingField: 1
   <MultishootModifier>k__BackingField: 2
   <ArcModifier>k__BackingField: 30
-  <FirerateMultiplier>k__BackingField: 0.5
+  <FirerateMultiplier>k__BackingField: 0.8
   <BuildupMultiplier>k__BackingField: 1
   <CriticalDamageMultiplier>k__BackingField: 1
   <SizeMultiplier>k__BackingField: 1

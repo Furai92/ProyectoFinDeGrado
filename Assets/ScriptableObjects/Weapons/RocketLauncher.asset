@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390203488a0b5d04a8bad07f628155b7, type: 3}
+  m_Name: RocketLauncher
+  m_EditorClassIdentifier: 
+  <Slot>k__BackingField: 1
+  <ID>k__BackingField: ROCKET_LAUNCHER
+  <NameID>k__BackingField: WPN_NAME_ROCKET_LAUNCHER
+  <Pools>k__BackingField:
+  - STANDARD
+  <ProjectileComponentID>k__BackingField: P_STANDARD
+  <CleaveComponentID>k__BackingField: 
+  <ImpactEffectID>k__BackingField: STANDARD
+  <Element>k__BackingField: 1
+  <ProjectileComponentDamage>k__BackingField: 800
+  <CleaveComponentDamage>k__BackingField: 0
+  <Multishoot>k__BackingField: 1
+  <MultishootArc>k__BackingField: 0
+  <Firerate>k__BackingField: 0.66
+  <BuildupRate>k__BackingField: 2
+  <CriticalDamage>k__BackingField: 1.5
+  <SizeMultiplier>k__BackingField: 3
+  <HeatGeneration>k__BackingField: 20
+  <RandomSpread>k__BackingField: 0
+  <Splash>k__BackingField: 15
+  <Bounces>k__BackingField: 0
+  <Pierces>k__BackingField: 0
+  <Timescale>k__BackingField: 5
+  <Knockback>k__BackingField: 20
+  <CoreParts>k__BackingField:
+  - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
+  - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
+  - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
+  - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
+  <RareParts>k__BackingField:
+  - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  <ExoticParts>k__BackingField:
+  - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  <PrototypeParts>k__BackingField:
+  - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}

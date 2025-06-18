@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: StarterSword
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 0
-  <ID>k__BackingField: SWORD
-  <NameID>k__BackingField: 
-  <Pools>k__BackingField:
-  - STANDARD
+  <ID>k__BackingField: STARTER_SWORD
+  <NameID>k__BackingField: WPN_NAME_STARTER_SWORD
+  <Pools>k__BackingField: []
   <ProjectileComponentID>k__BackingField: 
   <CleaveComponentID>k__BackingField: MELEE
   <ImpactEffectID>k__BackingField: STANDARD
@@ -26,7 +25,7 @@ MonoBehaviour:
   <Multishoot>k__BackingField: 0
   <MultishootArc>k__BackingField: 0
   <Firerate>k__BackingField: 1
-  <BuildupRate>k__BackingField: 8
+  <BuildupRate>k__BackingField: 1
   <CriticalDamage>k__BackingField: 2
   <SizeMultiplier>k__BackingField: 1
   <HeatGeneration>k__BackingField: 10
@@ -37,10 +36,7 @@ MonoBehaviour:
   <Timescale>k__BackingField: 1
   <Knockback>k__BackingField: 20
   <CoreParts>k__BackingField:
-  - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
-  - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
-  - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
-  - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
+  - {fileID: 11400000, guid: e8e7393f798176840a57f68b7f738f53, type: 2}
   <RareParts>k__BackingField:
   - {fileID: 11400000, guid: f62b9c5b3db0c1b4bad99fbb5a65ca25, type: 2}
   <ExoticParts>k__BackingField:

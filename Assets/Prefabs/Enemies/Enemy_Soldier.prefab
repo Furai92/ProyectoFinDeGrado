@@ -306,7 +306,7 @@ MonoBehaviour:
   <ExtraBars>k__BackingField: 1
   <KnockbackResistance>k__BackingField: 0
   <ItemDropRate>k__BackingField: 0.2
-  <CurrencyDropRate>k__BackingField: 1
+  <CurrencyDropRate>k__BackingField: 3
   <HealthDroprate>k__BackingField: 0.2
   AiFile: {fileID: 11400000, guid: 0f7ff3c462d75a34bb746b8f92ed6c2e, type: 2}
   <MaxCombatDistance>k__BackingField: 20

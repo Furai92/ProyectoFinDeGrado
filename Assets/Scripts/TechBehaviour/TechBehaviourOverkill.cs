@@ -15,7 +15,7 @@ public class TechBehaviourOverkill : TechBase
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
     }
 
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit)
     {
         if (!killcredit) { return; }
         if (overkill <= 0) { return; }

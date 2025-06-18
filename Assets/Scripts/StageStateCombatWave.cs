@@ -17,6 +17,7 @@ public class StageStateCombatWave : StageStateBase
     private const float ENEMY_DAMAGE_SCALING = 0.05f;
     private const float CHEST_SPAWN_COOLDOWN = 10f;
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
+    private const float WEAPON_LEVEL_FACTOR_GAIN_PER_COMBAT = 0.5f;
     private const int MAX_ENEMIES = 20;
 
     public StageStateCombatWave(StageWaveSetupSO.EnemyWave w) 
@@ -35,6 +36,7 @@ public class StageStateCombatWave : StageStateBase
     {
         StageManagerBase.ChangeStageStat(StageStatGroup.StageStat.EnemyDamageMult, StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult) * ENEMY_DAMAGE_SCALING);
         StageManagerBase.ChangeStageStat(StageStatGroup.StageStat.EnemyHealthMult, StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult) * ENEMY_HEALTH_SCALING);
+        StageManagerBase.ChangeStageStat(StageStatGroup.StageStat.DropLevelFactor, WEAPON_LEVEL_FACTOR_GAIN_PER_COMBAT);
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.EnemySpawnedEvent -= OnEnemySpawned;
     }
@@ -42,7 +44,7 @@ public class StageStateCombatWave : StageStateBase
     {
         TrackEnemy(e.ID, true);
     }
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit) 
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit) 
     {
         TrackEnemy(e.ID, false);
     }
@@ -75,7 +77,7 @@ public class StageStateCombatWave : StageStateBase
             spawnTimers.Add(wstd);
         }
         canSpawnChests = waveData.CanSpawnChests;
-        waveDurationRemaining = waveDurationMax;
+        waveDurationRemaining = waveDurationMax * StageManagerBase.GetStageStat(StageStatGroup.StageStat.WaveDurationMult);
 
         EventManager.EnemyDisabledEvent += OnEnemyDisabled;
         EventManager.EnemySpawnedEvent += OnEnemySpawned;

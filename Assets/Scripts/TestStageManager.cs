@@ -11,9 +11,4 @@ public class TestStageManager : StageManagerBase
     {
 
     }
-
-    protected override StageStatGroup GetInitialStageStats()
-    {
-        return new StageStatGroup();
-    }
 }

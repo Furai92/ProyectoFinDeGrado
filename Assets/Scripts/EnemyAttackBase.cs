@@ -21,7 +21,7 @@ public abstract class EnemyAttackBase : MonoBehaviour
         EventManager.EnemyDisabledEvent -= OnEnemyDisabled;
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit) 
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit) 
     {
         if (e == User) { OnUserDefeated(); }
     }
@@ -33,10 +33,10 @@ public abstract class EnemyAttackBase : MonoBehaviour
     {
         OnStageStateEnded();
     }
-    protected void DamagePlayer(PlayerEntity p, float magnitude) 
+    protected bool DamagePlayer(PlayerEntity p, float magnitude) 
     {
-        if (p.IsEvading()) { EventManager.OnPlayerEvasion(p.transform.position); }
-        else { p.DealDamage(magnitude * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult), true, false, false); }
+        if (p.IsEvading()) { EventManager.OnPlayerEvasion(p.transform.position); return false; }
+        else { p.DealDamage(magnitude * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyDamageMult), true, false, false); return true; }
     }
 
     public abstract void Initialize(Vector3 pos, float dir);

@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 1
   <ID>k__BackingField: SNIPER
-  <NameID>k__BackingField: 
+  <NameID>k__BackingField: WPN_NAME_SNIPER
   <Pools>k__BackingField:
   - STANDARD
   <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
   <ImpactEffectID>k__BackingField: STANDARD
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 500
   <CleaveComponentDamage>k__BackingField: 0
   <Multishoot>k__BackingField: 1

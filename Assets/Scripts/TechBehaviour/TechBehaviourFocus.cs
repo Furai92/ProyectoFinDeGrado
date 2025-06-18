@@ -18,7 +18,7 @@ public class TechBehaviourFocus : TechBase
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
 
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit)
     {
         if (!killcredit) { return; }
         if (Random.Range(1, 101) > CHANCE * Group.Level) { return; }

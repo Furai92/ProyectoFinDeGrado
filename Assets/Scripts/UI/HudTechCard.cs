@@ -22,10 +22,14 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private Image topBorder;
     [SerializeField] private Image bottomBorder;
 
+    private bool mouseoverHighlightEnabled;
+
     private const float MOUSEOVER_SCALE = 1.3f;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!mouseoverHighlightEnabled) { return; }
+
         mouseoverScaleParent.transform.localScale = Vector3.one * MOUSEOVER_SCALE;
         transform.SetAsLastSibling();
     }
@@ -39,7 +43,7 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         mouseoverScaleParent.transform.localScale = Vector3.one;
     }
 
-    public void SetUp(TechSO t, int levelDisplayed, bool compareWithPrevious, bool showOwned) 
+    public void SetUp(TechSO t, int levelDisplayed, bool compareWithPrevious, bool showOwned, bool mouseoverHighlight) 
     {
         rarityHighlight.color = bottomBorder.color = cdb.RarityToColor(t.Rarity);
         traitHighlight.color = topBorder.color = t.RelatedTrait.IconColor;
@@ -47,6 +51,7 @@ public class HudTechCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rarityText.text = sdb.RarityToName(t.Rarity);
         techName.text = sdb.GetString(t.NameID);
         techDesc.text = sdb.GetString(t.DescID);
+        mouseoverHighlightEnabled = mouseoverHighlight;
         if (t.MaxLevel > 0 && levelDisplayed > t.MaxLevel) { levelDisplayed = t.MaxLevel; }
 
         for (int i = 0; i < detailPanels.Count; i++) 

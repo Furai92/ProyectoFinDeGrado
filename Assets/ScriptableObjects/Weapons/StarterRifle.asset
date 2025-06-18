@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: StarterRifle
   m_EditorClassIdentifier: 
   <Slot>k__BackingField: 1
-  <ID>k__BackingField: RIFLE
+  <ID>k__BackingField: STARTER_RIFLE
   <NameID>k__BackingField: WPN_NAME_STARTER_RIFLE
-  <Pools>k__BackingField:
-  - STANDARD
+  <Pools>k__BackingField: []
   <ProjectileComponentID>k__BackingField: P_STANDARD
   <CleaveComponentID>k__BackingField: 
   <ImpactEffectID>k__BackingField: STANDARD
@@ -37,10 +36,7 @@ MonoBehaviour:
   <Timescale>k__BackingField: 30
   <Knockback>k__BackingField: 0
   <CoreParts>k__BackingField:
-  - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
-  - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
-  - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
-  - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
+  - {fileID: 11400000, guid: e8e7393f798176840a57f68b7f738f53, type: 2}
   <RareParts>k__BackingField:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
   <ExoticParts>k__BackingField:
