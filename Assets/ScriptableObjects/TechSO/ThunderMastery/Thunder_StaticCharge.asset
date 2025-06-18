@@ -34,10 +34,10 @@ MonoBehaviour:
     <DescValueScaling>k__BackingField: 5
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_DURATION
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 10
+    <DescValueBase>k__BackingField: 10
+    <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 1
   - <DescTextID>k__BackingField: TCH_DT_MAXSTACKS
-    <DescValueBase>k__BackingField: 0
-    <DescValueScaling>k__BackingField: 5
+    <DescValueBase>k__BackingField: 5
+    <DescValueScaling>k__BackingField: 0
     <DescDetailType>k__BackingField: 0

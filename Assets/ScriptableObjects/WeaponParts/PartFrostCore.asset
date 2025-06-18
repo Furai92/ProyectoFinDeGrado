@@ -17,7 +17,7 @@ MonoBehaviour:
   <CleaveComponentIDOverride>k__BackingField: 
   <ProjectileComponentDamageOverride>k__BackingField: 0
   <CleaveComponentDamageOverride>k__BackingField: 0
-  <ElementOverride>k__BackingField: 2
+  <ElementOverride>k__BackingField: 3
   <DamageMultiplier>k__BackingField: 1.1
   <MultishootModifier>k__BackingField: 0
   <ArcModifier>k__BackingField: 0

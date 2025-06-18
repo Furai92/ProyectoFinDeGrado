@@ -4,7 +4,9 @@ public class Chest : Interactable
 {
     private int chestID;
     private InteractableInfo info;
+
     private const float SPAWN_HEIGHT = 0.5f;
+    private const int BASE_CURRENCY_DROP_RATE = 10;
 
     public void SetUp(Vector3 pos, int id) 
     {
@@ -45,9 +47,12 @@ public class Chest : Interactable
     public override void OnInteract(int playerIndex)
     {
         gameObject.SetActive(false);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
-        ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
+
+        int drops = (int)(BASE_CURRENCY_DROP_RATE * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestDropRate));
+
+        for (int i = 0; i < drops; i++) 
+        {
+            ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
+        }
     }
 }

@@ -17,7 +17,7 @@ public class TechBehaviourBattleTrance : TechBase
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
     }
 
-    private void OnEnemyDisabled(EnemyEntity e, float overkill, bool killcredit)
+    private void OnEnemyDisabled(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit)
     {
         if (!killcredit) { return; }
         PlayerEntity.ActiveInstance.ChangeBuff(BUFF_ID, 1, Group.Level);

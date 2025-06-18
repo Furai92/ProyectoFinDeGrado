@@ -13,10 +13,12 @@ public class HudShop : MonoBehaviour, IGameMenu
     [SerializeField] private List<TextMeshProUGUI> prices;
     [SerializeField] private TextMeshProUGUI refreshCostText;
     [SerializeField] private Transform menuParent;
+    [SerializeField] private TextMeshProUGUI currencyCount;
 
     private TechPool tp;
     private int refreshesDone;
     private List<TechSO> techInStock;
+
     private const float TECH_CHANCE_RARE = 25f;
     private const float TECH_CHANCE_EXOTIC = 5f;
     private const float TECH_CHANCE_PROTOTYPE = 1f;
@@ -24,8 +26,8 @@ public class HudShop : MonoBehaviour, IGameMenu
     private const float TECH_PRICE_RARE = 15f;
     private const float TECH_PRICE_EXOTIC = 30f;
     private const float TECH_PRICE_PROTOTYPE = 50f;
-    private const float REFRESH_COST_BASE = 2f;
-    private const float REFRESH_COST_SCALING = 2f;
+    private const float REFRESH_COST_BASE = 0f;
+    private const float REFRESH_COST_SCALING = 1f;
 
     private void OnEnable()
     {
@@ -87,6 +89,7 @@ public class HudShop : MonoBehaviour, IGameMenu
     {
         refreshCostText.text = GetRefreshPrice().ToString("F0");
         refreshCostText.color = GetRefreshPrice() <= PlayerEntity.ActiveInstance.Money ? cdb.GetColor("DETAIL_TYPE_POSITIVE") : cdb.GetColor("DETAIL_TYPE_NEGATIVE");
+        currencyCount.text = string.Format("Currency: {0}", PlayerEntity.ActiveInstance.Money);
         for (int i = 0; i < cards.Count; i++) 
         {
             if (i < techInStock.Count)
@@ -111,7 +114,7 @@ public class HudShop : MonoBehaviour, IGameMenu
                     purchaseButtons[i].gameObject.SetActive(true);
                     prices[i].gameObject.SetActive(true); prices[i].text = GetTechPrice(techInStock[i]).ToString("F0");
                     prices[i].color = GetTechPrice(techInStock[i]) <= PlayerEntity.ActiveInstance.Money ? cdb.GetColor("DETAIL_TYPE_POSITIVE") : cdb.GetColor("DETAIL_TYPE_NEGATIVE");
-                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], PlayerEntity.ActiveInstance.GetTechLevel(techInStock[i].ID)+1, true, true);
+                    cards[i].gameObject.SetActive(true); cards[i].SetUp(techInStock[i], PlayerEntity.ActiveInstance.GetTechLevel(techInStock[i].ID)+1, true, true, true);
                     purchaseButtons[i].gameObject.SetActive(true);
                 }
             }
@@ -130,16 +133,16 @@ public class HudShop : MonoBehaviour, IGameMenu
     {
         switch (t.Rarity) 
         {
-            case GameEnums.Rarity.Common: { return TECH_PRICE_COMMON; }
-            case GameEnums.Rarity.Rare: { return TECH_PRICE_RARE; }
-            case GameEnums.Rarity.Exotic: { return TECH_PRICE_EXOTIC; }
-            case GameEnums.Rarity.Prototype: { return TECH_PRICE_PROTOTYPE; }
+            case GameEnums.Rarity.Common: { return TECH_PRICE_COMMON * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ShopPriceMult); }
+            case GameEnums.Rarity.Rare: { return TECH_PRICE_RARE * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ShopPriceMult); }
+            case GameEnums.Rarity.Exotic: { return TECH_PRICE_EXOTIC * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ShopPriceMult); }
+            case GameEnums.Rarity.Prototype: { return TECH_PRICE_PROTOTYPE * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ShopPriceMult); }
         }
         return 0;
     }
     private float GetRefreshPrice() 
     {
-        return  REFRESH_COST_BASE + refreshesDone * REFRESH_COST_SCALING;
+        return REFRESH_COST_BASE + StageManagerBase.GetStageStat(StageStatGroup.StageStat.ShopRerollBaseCost) + (refreshesDone * REFRESH_COST_SCALING);
     }
     public void OnRefreshClicked() 
     {
@@ -180,6 +183,7 @@ public class HudShop : MonoBehaviour, IGameMenu
     public void OpenMenu()
     {
         menuParent.gameObject.SetActive(true);
+        UpdateShopVisuals();
     }
 
     public void CloseMenu()

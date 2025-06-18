@@ -138,8 +138,8 @@ public class PlayerEntity : NetworkBehaviour
             if (selectedTraits[i].Tech != null) { EquipTech(selectedTraits[i].Tech); }
         }
 
-        EquipWeapon(new WeaponData(debugRangedWeaponSO, GameEnums.Rarity.Common));
-        EquipWeapon(new WeaponData(debugMeleeWeaponSO, GameEnums.Rarity.Common));
+        EquipWeapon(new WeaponData(debugRangedWeaponSO, GameEnums.Rarity.Common, 0));
+        EquipWeapon(new WeaponData(debugMeleeWeaponSO, GameEnums.Rarity.Common, 0));
 
         StatusOverheatRanged = StatusOverheatMelee = false;
         coolingReadyTimeMelee = coolingReadyTimeRanged = 0;

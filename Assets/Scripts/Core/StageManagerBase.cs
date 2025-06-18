@@ -58,8 +58,8 @@ public abstract class StageManagerBase : MonoBehaviour
         stageMapData = GenerateMap(Random.Range(0, 999999));
         availableChestIDs = new List<int>();
         for (int i = 0; i < stageMapData.GetChestSpawnPositions().Count; i++) { availableChestIDs.Add(i); }
-        stageStats = GetInitialStageStats();
-
+        stageStats = new StageStatGroup();
+        ApplyDifficultyModifiers();
 
         yield return new WaitForFixedUpdate(); // This is needed for collision overlap to work after spawning the map assets
 
@@ -90,6 +90,18 @@ public abstract class StageManagerBase : MonoBehaviour
             currentState = currentState.GetNextState();
             currentState.StateStart();
             EventManager.OnStageStateStarted(currentState.GetGameStateType());
+        }
+    }
+    private void ApplyDifficultyModifiers() 
+    {
+        for (int i = 0; i < database.DifficultyLevels.Count; i++) 
+        {
+            if (i > PersistentDataManager.GetCurrentDifficulty().DifficultyIndex) { return; }
+
+            foreach (DifficultyLevelSO.DifficultyEffectPair dp in database.DifficultyLevels[i].Effects) 
+            {
+                stageStats.ChangeStat(dp.Stat, dp.Value);
+            }
         }
     }
     public static void SpawnPlayers() 
@@ -131,7 +143,7 @@ public abstract class StageManagerBase : MonoBehaviour
     {
         playerDefeated = true;
     }
-    private void OnEnemyDefeated(EnemyEntity e, float overkill, bool killcredit) 
+    private void OnEnemyDefeated(EnemyEntity e, float overkill, GameEnums.EnemyRank rank, bool killcredit) 
     {
         if (!killcredit) { return; }
 
@@ -142,7 +154,7 @@ public abstract class StageManagerBase : MonoBehaviour
 
         for (int i = 0; i < nextWeaponDrop; i++) 
         {
-            ObjectPoolManager.GetWeaponPickupFromPool().SetUp(new WeaponData(GetWeaponFromItemPool("STANDARD")), e.transform.position);
+            ObjectPoolManager.GetWeaponPickupFromPool().SetUp(new WeaponData(GetWeaponFromItemPool("STANDARD"), GetStageStat(StageStatGroup.StageStat.DropLevelFactor)), e.transform.position);
             nextWeaponDrop -= 1;
         }
         for (int i = 0; i < nextCurrencyDrop; i++) 
@@ -376,8 +388,6 @@ public abstract class StageManagerBase : MonoBehaviour
     }
 
     #endregion
-
-    protected abstract StageStatGroup GetInitialStageStats();
     protected abstract IMapData GenerateMap(int seed);
     public abstract void InitializeStage();
 }

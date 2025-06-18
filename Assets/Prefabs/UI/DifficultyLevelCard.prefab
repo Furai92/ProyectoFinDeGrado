@@ -226,5 +226,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sdb: {fileID: 11400000, guid: f07a964cac8c6274c86fb0227149f0ef, type: 2}
+  cdb: {fileID: 11400000, guid: 65eecbe3f4e293d40a2157b29b42a957, type: 2}
   difName: {fileID: 503770894423989021}
   difPanel: {fileID: 6241864515853940040}

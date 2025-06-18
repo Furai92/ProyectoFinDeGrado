@@ -41,7 +41,7 @@ public class ColorDatabaseSO : ScriptableObject
             case GameEnums.DamageElement.Void: { return GetGradient("ELEM_GRAD_VOID"); }
             case GameEnums.DamageElement.Incineration: { return GetGradient("ELEM_GRAD_INCINERATION"); }
             case GameEnums.DamageElement.Frostbite: { return GetGradient("ELEM_GRAD_FROSTBITE"); }
-            default: { return new TMPro.TMP_ColorGradient(); }
+            default: { return GetGradient("ELEM_GRAD_NON_ELEMENTAL"); }
         }
     }
     public Color RarityToColor(GameEnums.Rarity r)

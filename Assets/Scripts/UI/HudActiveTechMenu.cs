@@ -21,7 +21,7 @@ public class HudActiveTechMenu : MonoBehaviour, IGameMenu
         for (int i = 0; i < cardsDisplayed.Count; i++) 
         {
             if (i + index - 2 < 0 || i + index - 2 >= activeTech.Count) { cardsDisplayed[i].gameObject.SetActive(false); }
-            else { cardsDisplayed[i].gameObject.SetActive(true); cardsDisplayed[i].SetUp(activeTech[i + index - 2].SO, activeTech[i + index - 2].Level, false, true); }
+            else { cardsDisplayed[i].gameObject.SetActive(true); cardsDisplayed[i].SetUp(activeTech[i + index - 2].SO, activeTech[i + index - 2].Level, false, true, false); }
         }
 
     }

@@ -83,6 +83,13 @@ public class IngameMenuManager : MonoBehaviour
         Cursor.lockState = activeMenu != null ? CursorLockMode.None : CursorLockMode.Locked;
         Time.timeScale = activeMenu != null ? 0 : 1;
     }
+    public void OnCloseShopClicked() 
+    {
+        if (activeMenu != (IGameMenu)shopMenu) { return; }
+
+        ToggleMenu(shopMenu);
+        UpdateFocus();
+    }
     public void OnNextMenuButtonClicked() 
     {
         currentMenuIndex++;

@@ -32,7 +32,7 @@ public class HudWeaponCard : MonoBehaviour
     public void SetUp(WeaponData w) 
     {
         // Name panel
-        nameText.text = sdb.GetString(w.BaseWeapon.NameID);
+        nameText.text = w.Level == 0 ? sdb.GetString(w.BaseWeapon.NameID) : string.Format("{0} +{1}", sdb.GetString(w.BaseWeapon.NameID), w.Level.ToString());
 
         // Slot panel
         slotText.text = w.BaseWeapon.Slot == WeaponSO.WeaponSlot.Melee ? sdb.GetString("WEAPON_SLOT_NAME_MELEE") : sdb.GetString("WEAPON_SLOT_NAME_RANGED");

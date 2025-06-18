@@ -12,6 +12,7 @@ public class GameDatabaseSO : ScriptableObject
     [field: SerializeField] public List<WeaponSO> Weapons { get; private set; }
     [field: SerializeField] public List<TechSO> Techs { get; private set; }
     [field: SerializeField] public List<BuffEffectSO> BuffEffects { get; private set; }
+    [field: SerializeField] public List<DifficultyLevelSO> DifficultyLevels { get; private set; }
 
     [Header("Ungrouped prefabs")]
     [field: SerializeField] public GameObject DeflectedAttackPrefab { get; private set; }

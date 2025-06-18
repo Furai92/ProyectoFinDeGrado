@@ -4,13 +4,15 @@ using TMPro;
 
 public class HudInteractionManager : MonoBehaviour
 {
-    [SerializeField] private Transform interactionPanelParent;
+    [SerializeField] private Transform positionParent;
     [SerializeField] private HudWeaponCard wpnCard;
     [SerializeField] private Transform interactableNamePanel;
     [SerializeField] private Transform visibilityParent;
     [SerializeField] private TextMeshProUGUI interactableNameText;
     [SerializeField] private TextMeshProUGUI actionNameText;
     [SerializeField] private Camera mCamRef;
+    [SerializeField] private Transform currentlyEquippedParent;
+    [SerializeField] private HudWeaponCard currentlyEquippedWeapon;
 
     private Interactable targetInteractable;
     private static HudInteractionManager instance;
@@ -48,23 +50,27 @@ public class HudInteractionManager : MonoBehaviour
     {
         if (targetInteractable == null)
         {
-            interactionPanelParent.gameObject.SetActive(false);
+            positionParent.gameObject.SetActive(false);
+            currentlyEquippedParent.gameObject.SetActive(false);
         }
         else 
         {
-            interactionPanelParent.gameObject.SetActive(true);
+            positionParent.gameObject.SetActive(true);
 
             if (targetInteractable.GetInfo().weapon == null)
             {
                 interactableNameText.text = targetInteractable.GetInfo().name;
                 wpnCard.gameObject.SetActive(false);
                 interactableNamePanel.gameObject.SetActive(true);
+                currentlyEquippedParent.gameObject.SetActive(false);
             }
             else 
             {
                 wpnCard.gameObject.SetActive(true);
                 wpnCard.SetUp(targetInteractable.GetInfo().weapon);
                 interactableNamePanel.gameObject.SetActive(false);
+                currentlyEquippedParent.gameObject.SetActive(true);
+                currentlyEquippedWeapon.SetUp(targetInteractable.GetInfo().weapon.BaseWeapon.Slot == WeaponSO.WeaponSlot.Melee ? PlayerEntity.ActiveInstance.MeleeWeapon : PlayerEntity.ActiveInstance.RangedWeapon);
             }
             actionNameText.text = targetInteractable.GetInfo().desc;
         }
@@ -73,7 +79,7 @@ public class HudInteractionManager : MonoBehaviour
     {
         if (targetInteractable == null) { return; }
 
-        interactionPanelParent.position = mCamRef.WorldToScreenPoint(targetInteractable.GetInfo().gotransform.position + wposOffset);
+        positionParent.position = mCamRef.WorldToScreenPoint(targetInteractable.GetInfo().gotransform.position + wposOffset);
     }
     public static void UpdateTargetInteractable(Interactable inter) 
     {

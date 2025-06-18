@@ -11,6 +11,7 @@ public class EnemyEntity : MonoBehaviour
     [field: SerializeField] public float BaseHealth { get; private set; }
     [field: SerializeField] public int ExtraBars { get; private set; }
     [field: SerializeField] public float KnockbackResistance { get; private set; }
+    [field: SerializeField] public GameEnums.EnemyRank Rank { get; private set; }
 
     // Rewards =================================================
 
@@ -50,9 +51,11 @@ public class EnemyEntity : MonoBehaviour
     [field: SerializeField] public float MaxCombatDistance { get; private set; }
     [field: SerializeField] public bool RequiresLosForCombat { get; private set; }
 
+    
     private AiStateBase pathfindingSearchState;
     private AiStateBase currentState;
     private AiStateBase combatRootState;
+    private float outOfCombatSpeedMult;
     private bool inCombat;
 
     // Movement and Physics ================================================
@@ -61,11 +64,16 @@ public class EnemyEntity : MonoBehaviour
     public Vector3 TargetMovementPosition { get; set; }
     public Vector3 TargetLookPosition { get; set; }
 
+    private float difficultySpeedMult;
     private Vector3 currentKnockbackForce;
     private float currentLookRotation;
     private List<PullForce> activePullForces;
 
-    private const float OUT_OF_COMBAT_SPEED_MULT = 1.75f;
+    private const float ELITE_HP_MULT = 2f;
+    private const int ELITE_EXTRA_BARS = 3;
+
+    private const float OUT_OF_COMBAT_SPEED_CAP = 2f;
+    private const float OUT_OF_COMBAT_SPEED_RAMP_UP = 0.15f; 
     private const float MIN_MOVEMENT_DISTANCE = 0.15f;
     private const float KNOCKBACK_FORCE_DECAY_LINEAR = 0.2f;
     private const float KNOCKBACK_FORCE_DECAY_MULTIPLICATIVE = 0.98f;
@@ -78,7 +86,6 @@ public class EnemyEntity : MonoBehaviour
     private LayerMask LoSMask;
 
     // References
-
     [SerializeField] private Transform rotationParent;
 
 
@@ -99,21 +106,27 @@ public class EnemyEntity : MonoBehaviour
     }
     private void ResetEntity() 
     {
+        if (Rank == GameEnums.EnemyRank.Normal && Random.Range(0, 101) < StageManagerBase.GetStageStat(StageStatGroup.StageStat.EliteChance)) { Rank = GameEnums.EnemyRank.Elite; }
+
         TargetMovementPosition = transform.position;
         currentLookRotation = 0;
         currentKnockbackForce = Vector3.zero;
-        CurrentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult);
-        RemainingExtraBars = ExtraBars;
+        CurrentHealth = maxHealth = BaseHealth * StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyHealthMult) 
+            * (Rank == GameEnums.EnemyRank.Elite ? ELITE_HP_MULT : 1) * (Rank == GameEnums.EnemyRank.Boss ? StageManagerBase.GetStageStat(StageStatGroup.StageStat.BossHealthMult) : 1);
+        RemainingExtraBars = ExtraBars + (int)StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemyExtraHealthBarCount) + (Rank == GameEnums.EnemyRank.Elite ? ELITE_EXTRA_BARS : 0);
         statusBuildups = new float[GameEnums.DAMAGE_ELEMENTS];
         statusDurations = new float[GameEnums.DAMAGE_ELEMENTS];
         statusBuildupResistancesDivider = new float[GameEnums.DAMAGE_ELEMENTS];
         activePullForces = new List<PullForce>();
         for (int i = 0; i < statusBuildupResistancesDivider.Length; i++) { statusBuildupResistancesDivider[i] = 1; }
         nextStatusUpdateTime = Time.time + STATUS_UPDATE_INTERVAL;
+        outOfCombatSpeedMult = 1;
+        difficultySpeedMult = StageManagerBase.GetStageStat(StageStatGroup.StageStat.EnemySpeedMult);
+
     }
     private void OnDisable()
     {
-        EventManager.OnEnemyDisabled(this, -CurrentHealth, CurrentHealth <= 0);
+        EventManager.OnEnemyDisabled(this, -CurrentHealth, Rank, CurrentHealth <= 0);
         StageManagerBase.UnregisterEnemy(this);
 
         EventManager.StageStateEndedEvent -= OnStageStateEnded;
@@ -150,10 +163,12 @@ public class EnemyEntity : MonoBehaviour
         currentState.EndState(this);
         currentState = combatRootState;
         currentState.StartState(this);
+        outOfCombatSpeedMult = 1;
     }
     private void UpdateAI() 
     {
         if (statusDurations[(int)GameEnums.DamageElement.Frost] > 0) { return; } // Pause if frozen
+        if (!inCombat) { outOfCombatSpeedMult = Mathf.MoveTowards(outOfCombatSpeedMult, OUT_OF_COMBAT_SPEED_CAP, OUT_OF_COMBAT_SPEED_RAMP_UP * Time.fixedDeltaTime);  }
 
         currentState.FixedUpdateState(this);
         if (currentState.IsFinished(this)) 
@@ -167,6 +182,7 @@ public class EnemyEntity : MonoBehaviour
             }
             else
             {
+                if (inCombat) { outOfCombatSpeedMult = 1; }
                 currentState = pathfindingSearchState;
                 inCombat = false;
             }
@@ -229,7 +245,7 @@ public class EnemyEntity : MonoBehaviour
         if (statusDurations[(int)GameEnums.DamageElement.Frost] <= 0)
         {
             Vector3 movementDir = (new Vector3(TargetMovementPosition.x, 0, TargetMovementPosition.z) - new Vector3(transform.position.x, 0, transform.position.z));
-            if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += MovementSpeed * (inCombat ? 1 : OUT_OF_COMBAT_SPEED_MULT) * movementDir.normalized; }
+            if (movementDir.sqrMagnitude > MIN_MOVEMENT_DISTANCE) { rb.linearVelocity += MovementSpeed * difficultySpeedMult * (inCombat ? 1 : outOfCombatSpeedMult) * movementDir.normalized; }
         }
     }
     private void UpdateRotation() 

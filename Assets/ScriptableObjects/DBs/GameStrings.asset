@@ -41,8 +41,13 @@ MonoBehaviour:
     <Data>k__BackingField: Thunder
   - <ID>k__BackingField: ELEMENT_NAME_VOID
     <Data>k__BackingField: Void
+  - <ID>k__BackingField: ELEMENT_NAME_INCINERATION
+    <Data>k__BackingField: Incineration
+  - <ID>k__BackingField: ELEMENT_NAME_FROSTBITE
+    <Data>k__BackingField: Frostbite
   - <ID>k__BackingField: ELEMENT_DESC_NONELEMENTAL
-    <Data>k__BackingField: Non elemental attacks have no special benefits
+    <Data>k__BackingField: Non elemental attacks have no special benefits, but they
+      deal more damage.
   - <ID>k__BackingField: ELEMENT_DESC_FIRE
     <Data>k__BackingField: Applies the burning status. Affected enemies take massive
       damage over time.
@@ -78,9 +83,9 @@ MonoBehaviour:
   - <ID>k__BackingField: NEWRUN_MENU_HEADER_MAIN
     <Data>k__BackingField: Run settings
   - <ID>k__BackingField: NEWRUN_MENU_HEADER_0
-    <Data>k__BackingField: Which element do you want to master?
+    <Data>k__BackingField: Select a starter offensive tech.
   - <ID>k__BackingField: NEWRUN_MENU_HEADER_1
-    <Data>k__BackingField: What will be your defense strategy?
+    <Data>k__BackingField: Select a starter defensive tech.
   - <ID>k__BackingField: NEWRUN_MENU_HEADER_2
     <Data>k__BackingField: Select a difficulty level
   - <ID>k__BackingField: DIF_NAME_EASY
@@ -105,22 +110,22 @@ MonoBehaviour:
     <Data>k__BackingField: Fire Master
   - <ID>k__BackingField: TRAIT_DESC_FIRE_MASTER
     <Data>k__BackingField: Your weapons can reach more heat points before overheating.
-      Weapon attacks deal additional fire damage per each point of heat over 100.
+      Weapon attacks deal additional fire damage based on their current heat.
   - <ID>k__BackingField: TRAIT_NAME_FROST_MASTER
     <Data>k__BackingField: Frost Master
   - <ID>k__BackingField: TRAIT_DESC_FROST_MASTER
-    <Data>k__BackingField: Your weapons can cool down 100 heat points below 0. Each
-      heat point below 0 increases your weapon damage by 1%.
+    <Data>k__BackingField: Your weapons can cool down below 0. Weapons deal bonus
+      frost damage based on their heat below 0.
   - <ID>k__BackingField: TRAIT_NAME_THUNDER_MASTER
     <Data>k__BackingField: Thunder Master
   - <ID>k__BackingField: TRAIT_DESC_THUNDER_MASTER
-    <Data>k__BackingField: Your attacks have a 33% chance to be duplicated.  Critical
-      hits deal 50% bonus thunder damage.
+    <Data>k__BackingField: Your attacks have a chance to be duplicated. Weapon critical
+      hits deal bonus thunder damage.
+  - <ID>k__BackingField: TRAIT_NAME_VOID_MASTER
+    <Data>k__BackingField: Void Master
   - <ID>k__BackingField: TRAIT_DESC_VOID_MASTER
     <Data>k__BackingField: All your weapon attacks become explosive. Your weapon
       attacks deal bonus void damage based on your explosion radius.
-  - <ID>k__BackingField: TRAIT_NAME_VOID_MASTER
-    <Data>k__BackingField: Void Master
   - <ID>k__BackingField: TRAIT_NAME_RESTORATION
     <Data>k__BackingField: Restoration
   - <ID>k__BackingField: TRAIT_DESC_RESTORATION
@@ -629,7 +634,7 @@ MonoBehaviour:
   - <ID>k__BackingField: TCH_DT_END_OF_WAVE_RESET
     <Data>k__BackingField: Resets after the wave ends
   - <ID>k__BackingField: TCH_DT_FIRE_MASTER_CORE
-    <Data>k__BackingField: 'Extra damage per heat over 100: {0}%'
+    <Data>k__BackingField: 'Extra damage per point of heat: {0}%'
   - <ID>k__BackingField: TCH_DT_FROST_MASTER_CORE
     <Data>k__BackingField: 'Extra damage per heat below 0: {0}%'
   - <ID>k__BackingField: TCH_DT_HEATCAP
@@ -770,4 +775,40 @@ MonoBehaviour:
     <Data>k__BackingField: Wave completed
   - <ID>k__BackingField: NOTIF_WAVE_GET_READY
     <Data>k__BackingField: Get ready!
+  - <ID>k__BackingField: WPN_NAME_STARTER_SWORD
+    <Data>k__BackingField: Basic Sword
+  - <ID>k__BackingField: WPN_NAME_STARTER_RIFLE
+    <Data>k__BackingField: Basic Rifle
+  - <ID>k__BackingField: WPN_NAME_HIGH_FREQ_BLADE
+    <Data>k__BackingField: High Frequency Blade
+  - <ID>k__BackingField: WPN_NAME_SNIPER
+    <Data>k__BackingField: Sniper Rifle
+  - <ID>k__BackingField: WPN_NAME_GREATSWORD
+    <Data>k__BackingField: Greatsword
+  - <ID>k__BackingField: WPN_NAME_ROCKET_LAUNCHER
+    <Data>k__BackingField: Rocket Launcher
+  - <ID>k__BackingField: DIF_DESC_1
+    <Data>k__BackingField: Enemy waves are longer.
+  - <ID>k__BackingField: DIF_DESC_2
+    <Data>k__BackingField: Shops are more expensive.
+  - <ID>k__BackingField: DIF_DESC_3
+    <Data>k__BackingField: Bosses have more health
+  - <ID>k__BackingField: DIF_DESC_4
+    <Data>k__BackingField: Enemies drop less health orbs.
+  - <ID>k__BackingField: DIF_DESC_5
+    <Data>k__BackingField: Enemies have more health.
+  - <ID>k__BackingField: DIF_DESC_6
+    <Data>k__BackingField: Enemies deal more damage.
+  - <ID>k__BackingField: DIF_DESC_7
+    <Data>k__BackingField: Enemies are faster.
+  - <ID>k__BackingField: DIF_DESC_8
+    <Data>k__BackingField: Shop rerolls cost more.
+  - <ID>k__BackingField: DIF_DESC_9
+    <Data>k__BackingField: Elite enemies can appear.
+  - <ID>k__BackingField: DIF_DESC_10
+    <Data>k__BackingField: All enemies have an extra health bar.
+  - <ID>k__BackingField: DIF_BASE_NAME
+    <Data>k__BackingField: Chaos
+  - <ID>k__BackingField: DIF_DESC_0
+    <Data>k__BackingField: Base difficulty.
   <Keywords>k__BackingField: []
