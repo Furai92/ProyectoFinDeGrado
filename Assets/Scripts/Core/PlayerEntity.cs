@@ -14,6 +14,8 @@ public class PlayerEntity : NetworkBehaviour
     public float DashRechargePercent { get; private set; }
     public float Money { get; private set; }
 
+    private IPlayerState currentState;
+
     private const float BASE_DASH_RECHARGE_RATE = 0.25f;
     private const float LIGHT_DAMAGE_HEALING_MULT = 3f;
     private const float SHIELD_DECAY_RATE = 10f;
@@ -88,23 +90,17 @@ public class PlayerEntity : NetworkBehaviour
     public static PlayerEntity ActiveInstance { get; private set; }
 
     private bool inputsAllowed;
-    private float movementInputH;
-    private float movementInputV;
     private float rotationInputH;
     private float rotationInputV;
-    private Vector3 dashMovementVector;
-    private float dashDurationRemaining;
+
     private bool defeated = false;
 
-    private const float LOCK_Y = 1.0f;
-    private const float BASE_MOVEMENT_SPEED = 10f;
-    private const float DASH_MOVEMENT_SPEED = 35f;
     public const float DASH_DURATION = 0.5f;
-    private const float DASH_SLAM_RAYCAST_LENGHT = 2.5f;
-    private const float DASH_SLAM_WALL_SEPARATION = 0.5f;
+    private const float LOCK_Y = 1.0f;
     private const float ROTATION_SPEED = 60f;
     private const float MIN_CAM_VERTICAL_ROTATION_X = 350f;
     private const float MAX_CAM_VERTICAL_ROTATION_X = 50f;
+    private const float TECH_BEHAVIOUR_UPDATE_INTERVAL = 1f;
 
     public void SetUp(Vector3 pos)
     {
@@ -149,13 +145,14 @@ public class PlayerEntity : NetworkBehaviour
         CurrentDashes = (int)stats.GetStat(PlayerStatGroup.Stat.DashCount);
         DashRechargePercent = 0;
         Money = 0;
-        EventManager.OnCurrencyUpdated();
+
 
         CurrentLookDirection = 0; UpdateRotation();
         inputsAllowed = true;
+        ChangeState(new NormalState());
 
+        EventManager.OnCurrencyUpdated();
         EventManager.OnPlayerStatsUpdated(this);
-
         EventManager.UiMenuFocusChangedEvent += OnUiMenuChanged;
     }
     private void OnDisable()
@@ -167,66 +164,32 @@ public class PlayerEntity : NetworkBehaviour
     {
         inputsAllowed = m == null;
     }
+    private void ChangeState(IPlayerState newState) 
+    {
+        currentState?.EndState(this);
+        currentState = newState;
+        currentState.StartState(this);
+    }
     private void UpdateRotation()
     {
         m_rotationParent.transform.rotation = Quaternion.Euler(0, CurrentLookDirection, 0);
     }
     private void Update()
     {
-        UpdateCameraInputs();
-        UpdateMovementInputs();
-        UpdateRotation(); // Move to state?
+        UpdateShieldDecay();
         UpdateWeaponStatus();
         UpdateBuffDurations();
         UpdateDashRecharge();
-        UpdateShieldDecay();
+        UpdateTimeIntervalTechBehaviour();
 
-        if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableRangedAttack) <= 0) 
-        {
-            if ((InputManager.Instance.GetRangedAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackRanged) > 0) && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
-            {
-                Attack(WeaponSO.WeaponSlot.Ranged, CurrentLookDirection, true, true);
-            }
-        }
-        if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableMeleeAttack) <= 0) 
-        {
-            if ((InputManager.Instance.GetMeleeAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackMelee) > 0) && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
-            {
-                Attack(WeaponSO.WeaponSlot.Melee, CurrentLookDirection, true, true);
-            }
-        }
-
-        if (InputManager.Instance.GetDashInput() && inputsAllowed) 
-        {
-            StartDash();
-        }
-        if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + 1; EventManager.OnPlayerFixedTimeInterval(); }
+        currentState?.UpdateState(this);
+        if (currentState.IsFinished()) { ChangeState(currentState.GetNextState()); }
     }
     private void FixedUpdate()
     {
-        damageHitboxRB.MovePosition(transform.position); // This prevents the collisions rigidbody from sleeping in rare situations that would make the player invencible
+        currentState?.FixedUpdateState(this);
 
-        if (dashDurationRemaining > 0)
-        {
-            m_rb.linearVelocity = DASH_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
-            RaycastHit rh;
-            LayerMask m = LayerMask.GetMask("Walls");
-            Physics.Raycast(transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
-            dashDurationRemaining -= Time.fixedDeltaTime;
-            if (rh.collider != null)
-            {
-                dashDurationRemaining = 0;
-                EventManager.OnPlayerWallSlam(transform.position);
-                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal) - 90, GameEnums.DamageElement.NonElemental);
-            }
-            if (dashDurationRemaining <= 0) { EventManager.OnPlayerDashEnded(transform.position, GameTools.VectorToAngle(dashMovementVector)); }
-        }
-        else
-        {
-            m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.forward;
-            m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * stats.GetStat(PlayerStatGroup.Stat.Speed) * m_rotationParent.right;
-        }
-        m_agentCollisionsCollider.enabled = dashDurationRemaining <= 0;
+        damageHitboxRB.MovePosition(transform.position); // This prevents the collisions rigidbody from sleeping in rare situations that would make the player invencible
         transform.position = new Vector3(transform.position.x, LOCK_Y, transform.position.z);
         StageManagerBase.UpdatePlayerPosition(transform.position);
     }
@@ -330,6 +293,26 @@ public class PlayerEntity : NetworkBehaviour
         x = x < 180 ? Mathf.Clamp(x, 0, MAX_CAM_VERTICAL_ROTATION_X) : Mathf.Clamp(x, MIN_CAM_VERTICAL_ROTATION_X, 360);
         m_camVerticalRotationAxis.localRotation = Quaternion.Euler(x, 0, 0);
     }
+    private void UpdateAttackInputs() 
+    {
+        if (!defeated)
+        {
+            if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableRangedAttack) <= 0)
+            {
+                if ((InputManager.Instance.GetRangedAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackRanged) > 0) && rangedAttackReady >= 1 && !StatusOverheatRanged && inputsAllowed)
+                {
+                    Attack(WeaponSO.WeaponSlot.Ranged, CurrentLookDirection, true, true);
+                }
+            }
+            if (stats.GetFlag(PlayerStatGroup.PlayerFlags.DisableMeleeAttack) <= 0)
+            {
+                if ((InputManager.Instance.GetMeleeAttackInput() || stats.GetFlag(PlayerStatGroup.PlayerFlags.NoStopAttackMelee) > 0) && meleeAttackReady >= 1 && !StatusOverheatMelee && inputsAllowed)
+                {
+                    Attack(WeaponSO.WeaponSlot.Melee, CurrentLookDirection, true, true);
+                }
+            }
+        }
+    }
     private void UpdateCameraInputs() 
     {
         rotationInputH = inputsAllowed ? InputManager.Instance.GetLookInput().x : 0;
@@ -337,11 +320,12 @@ public class PlayerEntity : NetworkBehaviour
         CurrentLookDirection += rotationInputH * Time.deltaTime * ROTATION_SPEED;
         m_camVerticalRotationAxis.Rotate(-rotationInputV * Time.deltaTime * ROTATION_SPEED, 0, 0);
         ClampCamVerticalRotation();
+
+        UpdateRotation();
     }
-    private void UpdateMovementInputs() 
+    private void UpdateTimeIntervalTechBehaviour() 
     {
-        movementInputH = InputManager.Instance.GetMovementInput().x;
-        movementInputV = InputManager.Instance.GetMovementInput().y;
+        if (Time.time > nextTechTimeIntervalUpdate) { nextTechTimeIntervalUpdate = Time.time + TECH_BEHAVIOUR_UPDATE_INTERVAL; EventManager.OnPlayerFixedTimeInterval(); }
     }
     private void UpdateDashRecharge() 
     {
@@ -358,19 +342,6 @@ public class PlayerEntity : NetworkBehaviour
     private void UpdateShieldDecay() 
     {
         CurrentShield = Mathf.MoveTowards(CurrentShield, 0, Time.deltaTime * SHIELD_DECAY_RATE * (1 - Mathf.Clamp01(stats.GetStat(PlayerStatGroup.Stat.ShieldDecayRateReduction))));
-    }
-    private void StartDash() 
-    {
-        if (CurrentDashes < 1) { return; }
-        if (dashDurationRemaining > 0) { return; }
-
-        CurrentDashes -= 1;
-
-
-        dashMovementVector = (movementInputV == 0 && movementInputH == 0 ? 1 : movementInputV) * m_rotationParent.forward;
-        dashMovementVector += movementInputH * m_rotationParent.right;
-        dashDurationRemaining = DASH_DURATION;
-        EventManager.OnPlayerDashStarted(transform.position, GameTools.VectorToAngle(dashMovementVector));
     }
     private void UpdateWeaponStatus() 
     {
@@ -475,8 +446,7 @@ public class PlayerEntity : NetworkBehaviour
             else 
             {
                 CurrentHealth = 0;
-                // Kill?
-                EventManager.OnPlayerDefeated();
+                ChangeState(new DefeatState());
             }
         }
     }
@@ -577,7 +547,7 @@ public class PlayerEntity : NetworkBehaviour
     }
     public bool IsEvading()
     {
-        return dashDurationRemaining > 0;
+        return currentState.IsEvading();
     }
     #endregion
     #region Tech Management
@@ -797,6 +767,166 @@ public class PlayerEntity : NetworkBehaviour
             if (Stacks > 0) { RemoveTime = Time.time + SO.Duration; } // Update the duration if new stacks are added
         }
         public float GetDurationRemaining() { return RemoveTime - Time.time; }
+    }
+    #endregion
+    #region States
+    private interface IPlayerState 
+    {
+        public IPlayerState GetNextState();
+        public bool IsFinished();
+        public void UpdateState(PlayerEntity p);
+        public void FixedUpdateState(PlayerEntity p);
+        public void StartState(PlayerEntity p);
+        public void EndState(PlayerEntity p);
+        public bool IsEvading();
+    }
+    private class NormalState : IPlayerState
+    {
+        private float movementInputH;
+        private float movementInputV;
+
+        private const float BASE_MOVEMENT_SPEED = 10f;
+
+        public void FixedUpdateState(PlayerEntity p)
+        {
+            p.m_rb.linearVelocity = movementInputV * BASE_MOVEMENT_SPEED * p.stats.GetStat(PlayerStatGroup.Stat.Speed) * p.m_rotationParent.forward;
+            p.m_rb.linearVelocity += movementInputH * BASE_MOVEMENT_SPEED * p.stats.GetStat(PlayerStatGroup.Stat.Speed) * p.m_rotationParent.right;
+        }
+        public void UpdateState(PlayerEntity p)
+        {
+            p.UpdateCameraInputs();
+            p.UpdateAttackInputs();
+
+            movementInputH = InputManager.Instance.GetMovementInput().x;
+            movementInputV = InputManager.Instance.GetMovementInput().y;
+
+            if (InputManager.Instance.GetDashInput() && p.inputsAllowed && p.CurrentDashes > 0)
+            {
+                p.CurrentDashes -= 1;
+
+                Vector3 dashMovementVector = (movementInputV == 0 && movementInputH == 0 ? 1 : movementInputV) * p.m_rotationParent.forward;
+                dashMovementVector += movementInputH * p.m_rotationParent.right;
+                p.ChangeState(new DashState(dashMovementVector));
+            }
+        }
+
+        public IPlayerState GetNextState()
+        {
+            return this;
+        }
+
+        public bool IsFinished()
+        {
+            return false;
+        }
+
+        public void StartState(PlayerEntity p)
+        {
+            p.m_agentCollisionsCollider.enabled = true;
+        }
+
+        public void EndState(PlayerEntity p)
+        {
+
+        }
+        public bool IsEvading() 
+        {
+            return false; 
+        }
+    }
+    private class DashState : IPlayerState
+    {
+        private float dashEndTime;
+        private Vector3 dashMovementVector;
+        private float dashDirection;
+
+        private const float DASH_MOVEMENT_SPEED = 35f;
+        private const float DASH_SLAM_RAYCAST_LENGHT = 2.5f;
+        private const float DASH_SLAM_WALL_SEPARATION = 0.5f;
+
+        public DashState(Vector3 dir) 
+        {
+            dashEndTime = Time.time + DASH_DURATION;
+            dashDirection = GameTools.VectorToAngle(dir);
+            dashMovementVector = dir;
+        }
+        public void FixedUpdateState(PlayerEntity p)
+        {
+            p.m_rb.linearVelocity = DASH_MOVEMENT_SPEED * p.stats.GetStat(PlayerStatGroup.Stat.Speed) * dashMovementVector;
+            RaycastHit rh;
+            LayerMask m = LayerMask.GetMask("Walls");
+            Physics.Raycast(p.transform.position, dashMovementVector, out rh, DASH_SLAM_RAYCAST_LENGHT, m);
+            if (rh.collider != null)
+            {
+                dashEndTime = -1;
+                EventManager.OnPlayerWallSlam(p.transform.position);
+                ObjectPoolManager.GetImpactEffectFromPool("SLAM").SetUp(Vector3.MoveTowards(rh.point, p.transform.position, DASH_SLAM_WALL_SEPARATION), GameTools.NormalToEuler(rh.normal) - 90, GameEnums.DamageElement.NonElemental);
+            }
+
+        }
+        public void UpdateState(PlayerEntity p)
+        {
+            p.UpdateCameraInputs();
+        }
+
+        public IPlayerState GetNextState()
+        {
+            return new NormalState();
+        }
+
+        public bool IsFinished()
+        {
+            return Time.time >= dashEndTime;
+        }
+        public void StartState(PlayerEntity p)
+        {
+            p.m_agentCollisionsCollider.enabled = false;
+            EventManager.OnPlayerDashStarted(p.transform.position, dashDirection);
+        }
+
+        public void EndState(PlayerEntity p)
+        {
+            p.m_agentCollisionsCollider.enabled = true;
+            EventManager.OnPlayerDashEnded(p.transform.position, dashDirection);
+        }
+        public bool IsEvading()
+        {
+            return true;
+        }
+    }
+    private class DefeatState : IPlayerState
+    {
+        public void FixedUpdateState(PlayerEntity p)
+        {
+            p.m_rb.linearVelocity = Vector3.zero;
+        }
+        public void UpdateState(PlayerEntity p)
+        {
+
+        }
+
+        public IPlayerState GetNextState()
+        {
+            return this;
+        }
+
+        public bool IsFinished()
+        {
+            return false;
+        }
+        public void StartState(PlayerEntity p)
+        {
+            EventManager.OnPlayerDefeated();
+        }
+
+        public void EndState(PlayerEntity p)
+        {
+
+        }
+        public bool IsEvading()
+        {
+            return false;
+        }
     }
     #endregion
 }
