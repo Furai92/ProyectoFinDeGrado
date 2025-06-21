@@ -22,11 +22,16 @@ public class HudPlayerHeatMeters : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heatWarningMelee;
     [SerializeField] private TextMeshProUGUI overheatMelee;
 
+    private bool playerDefeated;
+
     private void OnEnable()
     {
+        playerDefeated = false;
+
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
         EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
         UpdateVisibility();
         UpdateBackgroundMarkers();
     }
@@ -35,6 +40,12 @@ public class HudPlayerHeatMeters : MonoBehaviour
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
         EventManager.PlayerStatsUpdatedEvent -= OnPlayerStatsUpdated;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+    }
+    private void OnPlayerDefeated()
+    {
+        playerDefeated = true;
+        UpdateVisibility();
     }
     private void OnPlayerStatsUpdated(PlayerEntity p) 
     {
@@ -50,7 +61,7 @@ public class HudPlayerHeatMeters : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+        if (IngameMenuManager.GetActiveMenu() != null || playerDefeated) { activeParent.gameObject.SetActive(false); return; }
 
         switch (StageManagerBase.GetCurrentStateType())
         {

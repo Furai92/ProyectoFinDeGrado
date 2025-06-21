@@ -7,6 +7,7 @@ public class Chest : Interactable
 
     private const float SPAWN_HEIGHT = 0.5f;
     private const int BASE_CURRENCY_DROP_RATE = 10;
+    private const int BASE_HEALTH_DROP_RATE = 2;
 
     public void SetUp(Vector3 pos, int id) 
     {
@@ -48,9 +49,14 @@ public class Chest : Interactable
     {
         gameObject.SetActive(false);
 
-        int drops = (int)(BASE_CURRENCY_DROP_RATE * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestDropRate));
 
-        for (int i = 0; i < drops; i++) 
+        for (int i = 0; i < BASE_HEALTH_DROP_RATE; i++) 
+        {
+            ObjectPoolManager.GetHealthPickupFromPool().SetUp(transform.position);
+        }
+
+        int currency_drops = (int)(BASE_CURRENCY_DROP_RATE * StageManagerBase.GetStageStat(StageStatGroup.StageStat.ChestDropRate));
+        for (int i = 0; i < currency_drops; i++) 
         {
             ObjectPoolManager.GetCurrencyPickupFromPool().SetUp(transform.position);
         }

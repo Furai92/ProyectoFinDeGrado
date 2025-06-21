@@ -9,13 +9,16 @@ public class HudDashBar : MonoBehaviour
     [SerializeField] private List<Image> barFills;
     [SerializeField] private Image fillingDashBar;
 
+    private bool playerDefeated;
 
     private void OnEnable()
     {
+        playerDefeated = false;
         EventManager.PlayerStatsUpdatedEvent += OnPlayerStatsUpdated;
         EventManager.PlayerSpawnedEvent += OnPlayerSpawned;
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
 
         if (PlayerEntity.ActiveInstance != null)
         {
@@ -31,6 +34,7 @@ public class HudDashBar : MonoBehaviour
         EventManager.PlayerSpawnedEvent -= OnPlayerSpawned;
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
     }
 
     private void OnStageStateStarted(StageStateBase.GameState s)
@@ -43,7 +47,7 @@ public class HudDashBar : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+        if (IngameMenuManager.GetActiveMenu() != null || playerDefeated) { activeParent.gameObject.SetActive(false); return; }
 
         switch (StageManagerBase.GetCurrentStateType())
         {
@@ -62,6 +66,11 @@ public class HudDashBar : MonoBehaviour
                     break;
                 }
         }
+    }
+    private void OnPlayerDefeated()
+    {
+        playerDefeated = true;
+        UpdateVisibility();
     }
     private void OnPlayerSpawned(PlayerEntity p) 
     {

@@ -10,7 +10,7 @@ public class HudDefeatPanel : MonoBehaviour
     private bool crStarted = false;
 
     private const float DEFEAT_PANEL_FADE_IN_DURATION = 0.5f;
-    private const float DEFEAT_PANEL_LINGER_DURATION = 3f;
+    private const float DEFEAT_PANEL_LINGER_DURATION = 4f;
     private const float FADE_TO_BLACK_DURATION = 2f;
     private const float BLACK_SCREEN_LINGER = 1f;
 
@@ -19,7 +19,7 @@ public class HudDefeatPanel : MonoBehaviour
         if (crStarted) { return; }
 
         crStarted = true;
-        StartCoroutine(VictoryCR());
+        StartCoroutine(DefeatCR());
     }
     private void OnEnable()
     {
@@ -30,29 +30,27 @@ public class HudDefeatPanel : MonoBehaviour
         EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
     }
 
-    IEnumerator VictoryCR()
+    IEnumerator DefeatCR()
     {
         defeatPanel.gameObject.SetActive(true);
-
-
         float t = 0;
         while (t < 1)
         {
-            t = Mathf.MoveTowards(t, 1, Time.deltaTime / DEFEAT_PANEL_FADE_IN_DURATION);
+            t = Mathf.MoveTowards(t, 1, Time.unscaledDeltaTime / DEFEAT_PANEL_FADE_IN_DURATION);
             defeatPanel.alpha = t;
             yield return null;
         }
-        yield return new WaitForSeconds(DEFEAT_PANEL_LINGER_DURATION);
+        yield return new WaitForSecondsRealtime(DEFEAT_PANEL_LINGER_DURATION);
         t = 0;
         fadePanel.alpha = 0;
         fadePanel.gameObject.SetActive(true);
         while (t < 1)
         {
-            t = Mathf.MoveTowards(t, 1, Time.deltaTime / FADE_TO_BLACK_DURATION);
+            t = Mathf.MoveTowards(t, 1, Time.unscaledDeltaTime / FADE_TO_BLACK_DURATION);
             fadePanel.alpha = t;
             yield return null;
         }
-        yield return new WaitForSeconds(BLACK_SCREEN_LINGER);
+        yield return new WaitForSecondsRealtime(BLACK_SCREEN_LINGER);
         SceneManager.LoadScene("MainMenu");
     }
 }

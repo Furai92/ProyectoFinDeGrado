@@ -159,6 +159,7 @@ public class PlayerEntity : NetworkBehaviour
     {
         EventManager.UiMenuFocusChangedEvent -= OnUiMenuChanged;
         for (int i = 0; i < ActiveTechList.Count; i++) { ActiveTechList[i].Script?.OnTechRemoved(); }
+        currentState?.EndState(this);
     }
     private void OnUiMenuChanged(IGameMenu m) 
     {

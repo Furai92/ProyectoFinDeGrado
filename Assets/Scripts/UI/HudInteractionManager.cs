@@ -17,6 +17,7 @@ public class HudInteractionManager : MonoBehaviour
     private Interactable targetInteractable;
     private static HudInteractionManager instance;
     private Vector3 wposOffset;
+    private bool playerDefeated;
 
     private const float WORLD_TO_HUD_VERTICAL_OFFSET = 1f;
 
@@ -24,21 +25,32 @@ public class HudInteractionManager : MonoBehaviour
     private void OnEnable()
     {
         instance = this;
-
+        playerDefeated = false;
         instance.UpdatePanelVisuals();
         instance.UpdatePanelPosition();
         wposOffset = new Vector3(0, WORLD_TO_HUD_VERTICAL_OFFSET, 0);
 
         EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
         OnUiFocusChanged(IngameMenuManager.GetActiveMenu());
     }
     private void OnDisable()
     {
         EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+    }
+    private void OnPlayerDefeated() 
+    {
+        playerDefeated = true;
+        UpdateVisibility();
     }
     private void OnUiFocusChanged(IGameMenu m) 
     {
-        visibilityParent.gameObject.SetActive(m == null);
+        UpdateVisibility();
+    }
+    private void UpdateVisibility() 
+    {
+        visibilityParent.gameObject.SetActive(IngameMenuManager.GetActiveMenu() == null && !playerDefeated);
     }
 
     void Update()

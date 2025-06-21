@@ -43,6 +43,7 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.GameSettingsChangedEvent += UpdateSizeMultiplier;
         EventManager.PlayerHealthRestoredEvent += OnPlayerHealthRestored;
         EventManager.PlayerDeflectEvent += OnAttackDeflected;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
     }
     private void OnDisable()
     {
@@ -54,6 +55,11 @@ public class HudCombatNotifications : MonoBehaviour
         EventManager.GameSettingsChangedEvent -= UpdateSizeMultiplier;
         EventManager.PlayerHealthRestoredEvent -= OnPlayerHealthRestored;
         EventManager.PlayerDeflectEvent -= OnAttackDeflected;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+    }
+    private void OnPlayerDefeated() 
+    {
+        instParent.gameObject.SetActive(false);
     }
     private void UpdateSizeMultiplier() 
     {

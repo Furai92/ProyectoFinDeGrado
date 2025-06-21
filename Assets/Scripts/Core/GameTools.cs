@@ -66,7 +66,7 @@ public class GameTools
     public static Vector3 OffsetFromAngle(float angle, float distance)
     {
         angle *= Mathf.Deg2Rad;
-        return new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * distance;
+        return new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * distance;
     }
     /// <summary> Returns the angle at wich pos1 would be looking at pos2. </summary>
     public static float AngleBetween(Vector3 pos1, Vector3 pos2)

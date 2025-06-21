@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameSettingsManager : MonoBehaviour
 {
 
-    public enum GameSetting { MasterVolume, MusicVolume, EffectsVolume, RotationCamSpeed, DamageNotificationSize }
+    public enum GameSetting { MasterVolume, MusicVolume, EffectsVolume, RotationCamSpeed, DamageNotificationSize, CamFov }
 
     private float[] settings;
 
@@ -41,6 +41,7 @@ public class GameSettingsManager : MonoBehaviour
         instance.settings[(int)GameSetting.EffectsVolume] = 0.5f;
         instance.settings[(int)GameSetting.RotationCamSpeed] = 0.5f;
         instance.settings[(int)GameSetting.DamageNotificationSize] = 0.5f;
+        instance.settings[(int)GameSetting.CamFov] = 0.5f;
 
         EventManager.OnGameSettingsChanged();
     }

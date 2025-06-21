@@ -284,7 +284,7 @@ public class ProceduralStageData : IMapData
                 chestSpawnPositions.Add(stagePieces[i].ChestSpawnPoints[j].position);
             }
         }
-        Debug.Log("Map finished with a size of " + stageList.Count);
+        //Debug.Log("Map finished with a size of " + stageList.Count);
     }
     private List<MapNode> GetAntiDeadEndStrip(MapNode deadEndNode) 
     {

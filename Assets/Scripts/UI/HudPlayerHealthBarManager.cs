@@ -11,18 +11,28 @@ public class HudPlayerHealthBarManager : MonoBehaviour
     [SerializeField] private Transform activeParent;
     [SerializeField] private TextMeshProUGUI healthNumber;
 
+    private bool playerDefeated;
+
     private const float HEALTH_FILL_TRAIL_SPEED = 2f;
 
     private void OnEnable()
     {
+        playerDefeated = false;
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
         UpdateVisibility();
     }
     private void OnDisable()
     {
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+    }
+    private void OnPlayerDefeated()
+    {
+        playerDefeated = true;
+        UpdateVisibility();
     }
     private void OnStageStateStarted(StageStateBase.GameState s)
     {
@@ -34,7 +44,7 @@ public class HudPlayerHealthBarManager : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+        if (IngameMenuManager.GetActiveMenu() != null || playerDefeated) { activeParent.gameObject.SetActive(false); return; }
 
         switch (StageManagerBase.GetCurrentStateType())
         {

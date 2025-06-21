@@ -7,6 +7,7 @@ public class HudBuffBar : MonoBehaviour
     [SerializeField] private Transform activeParent;
     [SerializeField] private List<HudBuffBarElement> buffBarElements;
 
+    private bool playerDefeated;
     private float buffUpdateTime;
 
     private const float BUFF_UPDATE_INTERVAL = 0.2f;
@@ -14,9 +15,11 @@ public class HudBuffBar : MonoBehaviour
 
     private void OnEnable()
     {
+        playerDefeated = false;
         EventManager.PlayerSpawnedEvent += OnPlayerSpawned;
         EventManager.StageStateStartedEvent += OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent += OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
 
         if (PlayerEntity.ActiveInstance != null)
         {
@@ -31,6 +34,12 @@ public class HudBuffBar : MonoBehaviour
         EventManager.PlayerSpawnedEvent -= OnPlayerSpawned;
         EventManager.StageStateStartedEvent -= OnStageStateStarted;
         EventManager.UiMenuFocusChangedEvent -= OnUiFocusChanged;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
+    }
+    private void OnPlayerDefeated() 
+    {
+        playerDefeated = true;
+        UpdateVisibility();
     }
     private void OnStageStateStarted(StageStateBase.GameState s)
     {
@@ -42,7 +51,7 @@ public class HudBuffBar : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        if (IngameMenuManager.GetActiveMenu() != null) { activeParent.gameObject.SetActive(false); return; }
+        if (IngameMenuManager.GetActiveMenu() != null || playerDefeated) { activeParent.gameObject.SetActive(false); return; }
 
         switch (StageManagerBase.GetCurrentStateType())
         {

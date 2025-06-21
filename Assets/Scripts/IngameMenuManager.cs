@@ -18,6 +18,7 @@ public class IngameMenuManager : MonoBehaviour
     private int currentMenuIndex;
     private List<IGameMenu> nonShopMenus;
     private static IngameMenuManager instance;
+    private bool playerDefeated;
 
     private const float MENU_TAB_ALPHA_SELECTED = 1f;
     private const float MENU_TAB_ALPHA_UNSELECTED = 0.5f;
@@ -29,13 +30,18 @@ public class IngameMenuManager : MonoBehaviour
         menuBarParent.gameObject.SetActive(false);
         UpdateFocus();
         instance = this;
+
+        EventManager.PlayerDefeatedEvent += OnPlayerDefeated;
     }
     private void OnDisable()
     {
         Cursor.lockState = CursorLockMode.None;
+        EventManager.PlayerDefeatedEvent -= OnPlayerDefeated;
     }
     private void Update()
     {
+        if (playerDefeated) { return; } // Ignore inputs if the player is defeated
+
         if (InputManager.Instance.GetIngameMenuInput()) 
         {
             ToggleMenu(nonShopMenus[currentMenuIndex]);
@@ -52,6 +58,10 @@ public class IngameMenuManager : MonoBehaviour
             EventManager.OnAllPlayersReady();
         }
 
+    }
+    private void OnPlayerDefeated() 
+    {
+        playerDefeated = true;
     }
     private void ToggleMenu(IGameMenu m) 
     {
@@ -81,7 +91,7 @@ public class IngameMenuManager : MonoBehaviour
     private void UpdateFocus() 
     {
         Cursor.lockState = activeMenu != null ? CursorLockMode.None : CursorLockMode.Locked;
-        Time.timeScale = activeMenu != null ? 0 : 1;
+        TimescaleManager.SetPauseState(activeMenu != null);
     }
     public void OnCloseShopClicked() 
     {
