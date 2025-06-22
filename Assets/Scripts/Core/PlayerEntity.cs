@@ -786,7 +786,7 @@ public class PlayerEntity : NetworkBehaviour
         private float movementInputH;
         private float movementInputV;
 
-        private const float BASE_MOVEMENT_SPEED = 10f;
+        private const float BASE_MOVEMENT_SPEED = 8f;
 
         public void FixedUpdateState(PlayerEntity p)
         {

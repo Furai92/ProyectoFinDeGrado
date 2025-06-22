@@ -32,9 +32,9 @@ public class AudioManager : MonoBehaviour
     }
     private void OnSettingsChanged()
     {
-        _audioMixer.SetFloat("MasterVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MasterVolume) * 20));
-        _audioMixer.SetFloat("SFXVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.EffectsVolume) * 20));
-        _audioMixer.SetFloat("MusicVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MusicVolume) * 20));
+        //_audioMixer.SetFloat("MasterVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MasterVolume) * 20));
+        //_audioMixer.SetFloat("SFXVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.EffectsVolume) * 20));
+        //_audioMixer.SetFloat("MusicVolume", Mathf.Log10(GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MusicVolume) * 20));
     }
     public static void PlaySound(string id)
     {

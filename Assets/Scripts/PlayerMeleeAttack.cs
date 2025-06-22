@@ -4,23 +4,38 @@ using UnityEngine.VFX;
 public class PlayerMeleeAttack : PlayerAttackBase
 {
     [SerializeField] private ColorDatabaseSO cdb;
+    [SerializeField] private Transform rotationParent;
+    [SerializeField] private MeshRenderer mrColored;
+    [SerializeField] private MeshRenderer mrFlash;
 
-    private float removeTime;
+    private static bool reversedAnim = false;
+
     private float direction;
+    private float t;
+    private float randomInclination;
 
-    private const float LIFETIME = 0.5f;
+    private const float LIFETIME = 0.2f;
+    private const float ANIM_ROTATION = 65f;
+    private const float RANDOM_INCLINATION_RANGE = 7.5f;
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
+        reversedAnim = !reversedAnim;
         direction = dir;
         transform.rotation = Quaternion.Euler(0, dir, 0);
+        transform.localScale = Vector3.one * sd.SizeMultiplier;
         setupData = sd;
-        removeTime = Time.time + LIFETIME;
+        randomInclination = Random.Range(-RANDOM_INCLINATION_RANGE, RANDOM_INCLINATION_RANGE);
+        t = 0;
+        mrColored.material.SetColor("_Color", cdb.ElementToColor(sd.Element));
+        UpdateAnimation(t);
         gameObject.SetActive(true);
     }
     private void FixedUpdate()
     {
-        if (Time.time > removeTime) { gameObject.SetActive(false); }
+        t += Time.fixedDeltaTime / LIFETIME;
+        UpdateAnimation(t);
+        if (t >= 1) { gameObject.SetActive(false); }
         transform.position = setupData.User.transform.position;
     }
     private void OnCollisionEnter(Collision collision)
@@ -36,5 +51,11 @@ public class PlayerMeleeAttack : PlayerAttackBase
                 e.Knockback(setupData.Knockback, knockbackDir);
             }
         }
+    }
+    private void UpdateAnimation(float animT) 
+    {
+        rotationParent.transform.localRotation = reversedAnim ? Quaternion.Euler(0, Mathf.Lerp(-ANIM_ROTATION, ANIM_ROTATION, animT), randomInclination) : Quaternion.Euler(0, Mathf.Lerp(ANIM_ROTATION, -ANIM_ROTATION, animT), randomInclination);
+        mrColored.material.SetFloat("_AnimT", animT);
+        mrFlash.material.SetFloat("_AnimT", animT);
     }
 }

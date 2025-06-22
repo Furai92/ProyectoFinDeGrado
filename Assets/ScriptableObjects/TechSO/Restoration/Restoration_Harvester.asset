@@ -26,6 +26,6 @@ MonoBehaviour:
   <BonusFlags>k__BackingField: 
   <DescriptionDetails>k__BackingField:
   - <DescTextID>k__BackingField: TCH_DT_ORB_DROPRATE
-    <DescValueBase>k__BackingField: 30
-    <DescValueScaling>k__BackingField: 0
+    <DescValueBase>k__BackingField: 0
+    <DescValueScaling>k__BackingField: 30
     <DescDetailType>k__BackingField: 1

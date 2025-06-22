@@ -7,7 +7,7 @@ public class TimescaleManager : MonoBehaviour
     private bool paused;
     private bool playerDefeated;
 
-    private const float DEFEATED_TIMESCALE = 0.15f;
+    private const float DEFEATED_TIMESCALE = 0.25f;
 
     private void OnEnable()
     {

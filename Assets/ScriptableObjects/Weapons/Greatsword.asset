@@ -22,7 +22,7 @@ MonoBehaviour:
   <ImpactEffectID>k__BackingField: STANDARD
   <Element>k__BackingField: 1
   <ProjectileComponentDamage>k__BackingField: 100
-  <CleaveComponentDamage>k__BackingField: 400
+  <CleaveComponentDamage>k__BackingField: 600
   <Multishoot>k__BackingField: 0
   <MultishootArc>k__BackingField: 0
   <Firerate>k__BackingField: 0.8
