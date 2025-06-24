@@ -43,7 +43,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
   <RareParts>k__BackingField:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
+  - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
+  - {fileID: 11400000, guid: cfc9e6ef38255e04f82e6c9670e72d19, type: 2}
   <ExoticParts>k__BackingField:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
+  - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
+  - {fileID: 11400000, guid: cfc9e6ef38255e04f82e6c9670e72d19, type: 2}
   <PrototypeParts>k__BackingField:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
+  - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
+  - {fileID: 11400000, guid: cfc9e6ef38255e04f82e6c9670e72d19, type: 2}

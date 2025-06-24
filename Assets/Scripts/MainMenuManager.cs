@@ -10,6 +10,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private HudNewRunMenu newRunMenu;
     [SerializeField] private HudCollectionMenu collectionMenu;
     [SerializeField] private HudPreviousRunRecapMenu previousRunRecapMenu;
+    [SerializeField] private HudHowToPlayMenu howToPlayMenu;
 
     private ProceduralStageData backgroundStage;
 
@@ -66,6 +67,10 @@ public class MainMenuManager : MonoBehaviour
     public void OnSettingsClicked() 
     {
         ToggleMenu(settingsMenu);
+    }
+    public void OnHowToPlayClicked() 
+    {
+        ToggleMenu(howToPlayMenu);
     }
     public void OnQuitClicked() 
     {

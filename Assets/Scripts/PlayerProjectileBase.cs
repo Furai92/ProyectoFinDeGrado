@@ -26,6 +26,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     private const float BOUNCE_END_SEPARATION = 0.1f; // Helps improve bounces with walls
     private const float BASE_COLLISION_RADIUS = 0.5f;
     private const float REMOVE_DELAY = 0.5f;
+    private const float BASE_TR_WIDTH = 0.15f;
 
     public abstract void OnBulletSpawn();
     public abstract void OnFixedUpdate();
@@ -43,6 +44,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
         phase = 0;
         distanceCovered = 0;
         tr.Clear();
+        tr.startWidth = BASE_TR_WIDTH * setupData.SizeMultiplier;
+        tr.endWidth = 0;
         tr.startColor = tr.endColor = cdb.ElementToColor(setupData.Element);
         tr.AddPosition(visual.position);
         visual.gameObject.SetActive(true);

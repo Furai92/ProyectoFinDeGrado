@@ -132,8 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: BOSS
   <MovementSpeed>k__BackingField: 14
-  <BaseHealth>k__BackingField: 25000
-  <ExtraBars>k__BackingField: 4
+  <BaseHealth>k__BackingField: 35000
+  <ExtraBars>k__BackingField: 5
   <KnockbackResistance>k__BackingField: 0.9
   <Rank>k__BackingField: 2
   <ItemDropRate>k__BackingField: 5

@@ -77,6 +77,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 769016dd8162abb429dead47518f6cb7, type: 2}
   - {fileID: 11400000, guid: fff694af300f5b848b56198e64fed79a, type: 2}
   - {fileID: 11400000, guid: f7a7c8dc9eb29cd4f80fab5b4f9e0581, type: 2}
+  - {fileID: 11400000, guid: eb23916cd4e0b58428d7f7ff41fb165f, type: 2}
+  - {fileID: 11400000, guid: 3c64912eb658af643a16553caee646ef, type: 2}
   <Techs>k__BackingField:
   - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   - {fileID: 11400000, guid: d872e5c0fc6298c45a68a2752e555927, type: 2}

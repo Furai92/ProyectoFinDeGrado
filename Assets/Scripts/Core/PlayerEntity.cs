@@ -227,10 +227,10 @@ public class PlayerEntity : NetworkBehaviour
         // Projectile component
         if (wpn.ProjectileComponentID != "")
         {
-            float shootRandomSpread = Random.Range(-baseRandomSpread, baseRandomSpread);
             float currentMultishootAngle = -wpn.Arc / 2;
             for (int i = 0; i < wpn.Multishoot; i++)
             {
+                float shootRandomSpread = Random.Range(-baseRandomSpread, baseRandomSpread);
                 WeaponAttackSetupData sd = new WeaponAttackSetupData()
                 {
                     User = this,

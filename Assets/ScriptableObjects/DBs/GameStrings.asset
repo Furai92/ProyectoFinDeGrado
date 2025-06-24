@@ -743,6 +743,12 @@ MonoBehaviour:
     <Data>k__BackingField: Explosion Radius +5m.
   - <ID>k__BackingField: PART_DESC_TRIPLE_SHOOT
     <Data>k__BackingField: +3 Shoots.
+  - <ID>k__BackingField: PART_DESC_BOUNCING
+    <Data>k__BackingField: +2 bounces.
+  - <ID>k__BackingField: PART_DESC_PIERCING
+    <Data>k__BackingField: +2 pierces.
+  - <ID>k__BackingField: PART_DESC_UNSTABLE
+    <Data>k__BackingField: "+10\xBA spread, +15% damage."
   - <ID>k__BackingField: PART_DESC_HEAVY_BULLETS
     <Data>k__BackingField: Heavy Bullets
   - <ID>k__BackingField: MENU_NAME_SHOP
@@ -787,6 +793,12 @@ MonoBehaviour:
     <Data>k__BackingField: Greatsword
   - <ID>k__BackingField: WPN_NAME_ROCKET_LAUNCHER
     <Data>k__BackingField: Rocket Launcher
+  - <ID>k__BackingField: WPN_NAME_GATLING
+    <Data>k__BackingField: Gatling
+  - <ID>k__BackingField: WPN_NAME_SHOTGUN
+    <Data>k__BackingField: Shotgun
+  - <ID>k__BackingField: DIF_DESC_0
+    <Data>k__BackingField: Base difficulty.
   - <ID>k__BackingField: DIF_DESC_1
     <Data>k__BackingField: Enemy waves are longer.
   - <ID>k__BackingField: DIF_DESC_2
@@ -809,6 +821,4 @@ MonoBehaviour:
     <Data>k__BackingField: All enemies have an extra health bar.
   - <ID>k__BackingField: DIF_BASE_NAME
     <Data>k__BackingField: Chaos
-  - <ID>k__BackingField: DIF_DESC_0
-    <Data>k__BackingField: Base difficulty.
   <Keywords>k__BackingField: []
