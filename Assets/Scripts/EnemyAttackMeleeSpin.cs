@@ -4,8 +4,11 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
 {
     [SerializeField] private Collider col;
     [SerializeField] private ParticleSystem ps;
+    [SerializeField] private ParticleSystem ps2;
+    [SerializeField] private CombatWarningCircle warning;
+    [SerializeField] private Transform attackParent;
+    [SerializeField] private bool linkToUser;
 
-    private CombatWarningCircle warning;
     private float phaseT;
     private int phase;
 
@@ -20,12 +23,12 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
     {
         gameObject.SetActive(true);
         col.enabled = false;
-        transform.localScale = Vector3.one * SIZE;
+        attackParent.localScale = Vector3.one * SIZE;
         ps.Stop();
+        ps2.Stop();
         phase = 0;
         phaseT = 0;
         UpdatePosition(pos);
-        warning = ObjectPoolManager.GetWarningCircleFromPool();
         warning.SetUp(transform.position, SIZE, WARNING_DURATION);
     }
 
@@ -35,7 +38,7 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
         {
             case 0: // Spawning with warning
                 {
-                    UpdatePosition(User.transform.position);
+                    if (linkToUser) { UpdatePosition(User.transform.position); }
                     phaseT += Time.deltaTime / WARNING_DURATION;
                     warning.UpdatePosition(transform.position);
                     if (phaseT > 1) 
@@ -44,12 +47,13 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
                         phase = 1;
                         col.enabled = true;
                         ps.Play();
+                        ps2.Play();
                     }
                     break;
                 }
             case 1: // Damage linger
                 {
-                    UpdatePosition(User.transform.position);
+                    if (linkToUser) { UpdatePosition(User.transform.position); }
                     phaseT += Time.deltaTime / LINGER_DURATION;
                     if (phaseT > 1) 
                     {
@@ -57,6 +61,7 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
                         phase = 1;
                         col.enabled = false;
                         ps.Stop();
+                        ps2.Stop();
                     }
                     break;
                 }
@@ -86,18 +91,15 @@ public class EnemyAttackMeleeSpin : EnemyAttackBase
     public override void OnUserDefeated()
     {
         gameObject.SetActive(false);
-        if (phase == 0) { warning.gameObject.SetActive(false); }
     }
 
     public override void OnUserStunned()
     {
         gameObject.SetActive(false);
-        if (phase == 0) { warning.gameObject.SetActive(false); }
     }
 
     public override void OnStageStateEnded()
     {
         gameObject.SetActive(false);
-        if (phase == 0) { warning.gameObject.SetActive(false); }
     }
 }

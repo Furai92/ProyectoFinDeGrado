@@ -60,7 +60,6 @@ public class IngameCamera : MonoBehaviour
             case StageStateBase.GameState.Victory:
             case StageStateBase.GameState.Rest:
             case StageStateBase.GameState.EnemyWave:
-            case StageStateBase.GameState.BossFight:
             case StageStateBase.GameState.Delay:
                 {
                     ChangeCamState(PlayerEntity.ActiveInstance == null ? new StandByCamState() : new PlaymodeCamState());

@@ -12,6 +12,7 @@ public abstract class StageManagerBase : MonoBehaviour
     [SerializeField] private GameObject ingameHud;
     [SerializeField] private GameObject ingameCamera;
 
+    private int waveCount;
     private int playerRoomX = -1;
     private int playerRoomY = -1;
     private List<int> availableChestIDs;
@@ -87,6 +88,7 @@ public abstract class StageManagerBase : MonoBehaviour
         {
             currentState.StateEnd();
             EventManager.OnStageStateEnded(currentState.GetGameStateType());
+            if (currentState.GetGameStateType() == StageStateBase.GameState.EnemyWave) { waveCount++; }
             currentState = currentState.GetNextState();
             currentState.StateStart();
             EventManager.OnStageStateStarted(currentState.GetGameStateType());
@@ -236,6 +238,12 @@ public abstract class StageManagerBase : MonoBehaviour
         }
     }
     #region Public Static Methods
+    public static int GetWaveCount() 
+    {
+        if (_instance == null) { return 0; }
+
+        return _instance.waveCount;
+    }
     public static List<MapNode> GetStageLayout() 
     {
         if (_instance == null) { return new List<MapNode>(); }

@@ -59,20 +59,20 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _AnimT: 0.25
-    - _Blend: 0
+    - _Blend: 1
     - _CastShadows: 0
     - _Cull: 0
     - _DstBlend: 10
     - _Intensity: 0.35
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Size: 0.9
-    - _SrcBlend: 5
+    - _Size: 0.75
+    - _SrcBlend: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _Color: {r: 1, g: 0.12657726, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

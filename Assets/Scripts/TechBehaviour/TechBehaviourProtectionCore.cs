@@ -16,7 +16,7 @@ public class TechBehaviourProtectionCore : TechBase
 
     private void OnStageStateStarted(StageStateBase.GameState s) 
     {
-        if (s == StageStateBase.GameState.BossFight || s == StageStateBase.GameState.EnemyWave) 
+        if (s == StageStateBase.GameState.EnemyWave) 
         {
             PlayerEntity.ActiveInstance.AddShield(PlayerEntity.ActiveInstance.GetStat(PlayerStatGroup.Stat.MaxHealth) * SHIELD_PERCENT_RECHARGE);
         }

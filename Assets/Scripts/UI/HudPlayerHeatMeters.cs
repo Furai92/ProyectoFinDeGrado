@@ -68,7 +68,6 @@ public class HudPlayerHeatMeters : MonoBehaviour
             case StageStateBase.GameState.Rest:
             case StageStateBase.GameState.Delay:
             case StageStateBase.GameState.EnemyWave:
-            case StageStateBase.GameState.BossFight:
                 {
                     activeParent.gameObject.SetActive(true);
                     break;

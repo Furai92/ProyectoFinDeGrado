@@ -39,10 +39,14 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void OnAttackStarted(Vector3 position, WeaponSO.WeaponSlot slot, float direction)
     {
+        // TEMP DEACTIVATED
+        /*
+
         if (slot == WeaponSO.WeaponSlot.Melee)
             animator.SetTrigger("MeleeAttack");
         else if (slot == WeaponSO.WeaponSlot.Ranged)
             animator.SetTrigger("RangedAttack");
+        */
     }
 
     private void OnDamageTaken(float amount)

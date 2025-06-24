@@ -36,7 +36,6 @@ public class HudSettingsMenu : MonoBehaviour, IGameMenu
             case StageStateBase.GameState.Rest:
             case StageStateBase.GameState.Delay:
             case StageStateBase.GameState.EnemyWave:
-            case StageStateBase.GameState.BossFight: 
                 {
                     return true;
                 }

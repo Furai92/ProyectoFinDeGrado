@@ -4,8 +4,11 @@ public class EnemyAttackBeam : EnemyAttackBase
 {
     [SerializeField] private Transform warningParent;
     [SerializeField] private Transform damagingParent;
+    [SerializeField] private Transform scaleParent;
     [SerializeField] private MeshRenderer warningMR;
     [SerializeField] private MeshRenderer attackMR;
+    [SerializeField] private MeshRenderer spawnOrbMR;
+    [SerializeField] private bool linkToUser;
 
     private float phaseT;
     private int phase;
@@ -13,6 +16,7 @@ public class EnemyAttackBeam : EnemyAttackBase
     private CombatWarningLine warning;
 
     private const float DAMAGE = 125f;
+    private const float SPAWN_ORB_PARENT_SIZE_MAX = 4.5f;
     private const float WARNING_WIDTH_MIN = 0.1f;
     private const float WARNING_WIDTH_MAX = 1.5f;
     private const float WARNING_SPAWN_DURATION = 0.15f;
@@ -41,6 +45,7 @@ public class EnemyAttackBeam : EnemyAttackBase
         warning.SetUp(transform.position, DAMAGING_COMPONENT_WIDTH_MAX, 1, dir, WARNING_SPAWN_DURATION + (WARNING_TICK_INTERVAL * WARNING_TICKS_MAX));
         UpdateAttackAlpha(0);
         UpdateWarningAlpha(0);
+        UpdateSpawnOrb(0);
         CastBeam();
     }
     private void CastBeam() 
@@ -50,7 +55,7 @@ public class EnemyAttackBeam : EnemyAttackBase
 
         Physics.Raycast(transform.position, transform.forward, out rh, BEAM_MAX_LENGHT, m);
         float distanceToBeamEnd = rh.collider == null ? BEAM_MAX_LENGHT : Vector3.Distance(transform.position, rh.point);
-        transform.localScale = new Vector3(1, 1, distanceToBeamEnd);
+        scaleParent.localScale = new Vector3(1, 1, distanceToBeamEnd);
         warning.UpdateSize(DAMAGING_COMPONENT_WIDTH_MAX, distanceToBeamEnd);
     }
     private void OnCollisionEnter(Collision collision)
@@ -70,17 +75,18 @@ public class EnemyAttackBeam : EnemyAttackBase
             case 0: // Warning Spawning
                 {
                     phaseT += Time.fixedDeltaTime / WARNING_SPAWN_DURATION;
-                    transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z);
+                    if (linkToUser) { transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z); }
                     float width = Mathf.Lerp(WARNING_WIDTH_MIN, WARNING_WIDTH_MAX, phaseT);
                     warningParent.transform.localScale = new Vector3(width, width, 1);
                     warning.UpdatePosition(transform.position);
                     UpdateWarningAlpha(phaseT);
+                    UpdateSpawnOrb(phaseT);
                     if (phaseT > 1) { phase = 1; phaseT = 0; UpdateWarningAlpha(1); }
                     break;
                 }
             case 1: // Warning Linger
                 {
-                    transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z);
+                    if (linkToUser) { transform.position = new Vector3(User.transform.position.x, SPAWN_HEIGHT, User.transform.position.z); }
                     phaseT += Time.fixedDeltaTime / WARNING_TICK_INTERVAL;
                     warning.UpdatePosition(transform.position);
 
@@ -126,13 +132,17 @@ public class EnemyAttackBeam : EnemyAttackBase
                     phaseT += Time.fixedDeltaTime / DAMAGING_COMPONENT_FADE_DURATION;
                     float attack_w = Mathf.Lerp(DAMAGING_COMPONENT_WIDTH_MIN, DAMAGING_COMPONENT_WIDTH_MAX, 1-phaseT);
                     UpdateAttackAlpha(1 - phaseT);
+                    UpdateSpawnOrb(1 - phaseT);
                     damagingParent.transform.localScale = new Vector3(attack_w, attack_w, 1);
                     if (phaseT > 1) { gameObject.SetActive(false); }
                     break;
                 }
         }
     }
-
+    private void UpdateSpawnOrb(float t) 
+    {
+        spawnOrbMR.transform.localScale = Vector3.one * t * SPAWN_ORB_PARENT_SIZE_MAX;
+    }
     private void UpdateWarningAlpha(float a) 
     {
         warningMR.material.SetFloat("_Alpha", a);

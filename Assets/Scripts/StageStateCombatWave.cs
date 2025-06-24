@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class StageStateCombatWave : StageStateBase
 {
     private List<WaveSpawnTimerData> spawnTimers;
+    private List<WaveKillRequirementData> killRequirements;
 
     private Dictionary<string, int> trackedSpawns;
     private StageWaveSetupSO.EnemyWave waveData;
@@ -29,7 +30,7 @@ public class StageStateCombatWave : StageStateBase
 
     public override bool IsFinished()
     {
-        return waveDurationRemaining <= 0;
+        return waveDurationRemaining <= 0 && killRequirements.Count == 0;
     }
 
     public override void StateEnd()
@@ -50,8 +51,18 @@ public class StageStateCombatWave : StageStateBase
     }
     private void TrackEnemy(string id, bool addedToStage) 
     {
+
         if (!trackedSpawns.ContainsKey(id)) { trackedSpawns.Add(id, 0); }
         trackedSpawns[id] += addedToStage ? 1 : -1;
+
+        if (!addedToStage) 
+        {
+            for (int i = killRequirements.Count - 1; i >= 0; i--)
+            {
+                if (killRequirements[i].enemyID == id) { killRequirements[i].count--; }
+                if (killRequirements[i].count <= 0) { killRequirements.RemoveAt(i); }
+            }
+        }
     }
     private int GetEnemyCount(string id) 
     {
@@ -75,6 +86,14 @@ public class StageStateCombatWave : StageStateBase
             wstd.maxWaveSpawns = waveData.EnemySpawns[i].MaxSpawnsDuringWave;
             wstd.maxConcurrentSpawns = waveData.EnemySpawns[i].MaxConcurrentSpawns;
             spawnTimers.Add(wstd);
+        }
+        killRequirements = new List<WaveKillRequirementData>();
+        for (int i = 0; i < waveData.KillRequirements.Count; i++) 
+        {
+            WaveKillRequirementData kr = new WaveKillRequirementData();
+            kr.enemyID = waveData.KillRequirements[i].ID;
+            kr.count = waveData.KillRequirements[i].Count;
+            killRequirements.Add(kr);
         }
         canSpawnChests = waveData.CanSpawnChests;
         waveDurationRemaining = waveDurationMax * StageManagerBase.GetStageStat(StageStatGroup.StageStat.WaveDurationMult);
@@ -131,7 +150,11 @@ public class StageStateCombatWave : StageStateBase
     {
         return GameState.EnemyWave;
     }
-
+    private class WaveKillRequirementData 
+    {
+        public string enemyID;
+        public int count;
+    }
     private class WaveSpawnTimerData 
     {
         public string spawnID;

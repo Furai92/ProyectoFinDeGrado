@@ -6,6 +6,8 @@ public class HudEnemyHealthBarElement : MonoBehaviour
 {
     [SerializeField] private Image fill;
     [SerializeField] private Image filltrail;
+    [SerializeField] private Transform bossTag;
+    [SerializeField] private Transform eliteTag;
     [SerializeField] private List<GameObject> extraBarIcons;
 
     public EnemyEntity TrackedEnemy { get; private set; }
@@ -23,6 +25,8 @@ public class HudEnemyHealthBarElement : MonoBehaviour
     {
         mcam = c;
         TrackedEnemy = e;
+        bossTag.gameObject.SetActive(e.Rank == GameEnums.EnemyRank.Boss);
+        eliteTag.gameObject.SetActive(e.Rank == GameEnums.EnemyRank.Elite);
         gameObject.SetActive(true);
         UpdateFill();
         filltrail.fillAmount = fill.fillAmount;

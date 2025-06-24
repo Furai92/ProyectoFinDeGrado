@@ -50,9 +50,10 @@ public class EnemyEntity : MonoBehaviour
     [SerializeField] private EnemyAiSO AiFile;
     [field: SerializeField] public float MaxCombatDistance { get; private set; }
     [field: SerializeField] public bool RequiresLosForCombat { get; private set; }
+    [field: SerializeField] public string OutOfCombatStateOverride { get; private set; }
 
     
-    private AiStateBase pathfindingSearchState;
+    private AiStateBase outOfCombatState;
     private AiStateBase currentState;
     private AiStateBase combatRootState;
     private float outOfCombatSpeedMult;
@@ -144,7 +145,16 @@ public class EnemyEntity : MonoBehaviour
     }
     private void SetupAi() 
     {
-        pathfindingSearchState = new AiStatePathfindingSearch();
+        if (OutOfCombatStateOverride != "")
+        {
+            AiStateBase oocState = System.Activator.CreateInstance(System.Type.GetType(OutOfCombatStateOverride)) as AiStateBase;
+            outOfCombatState = oocState != null ? oocState : new AiStatePathfindingSearch();
+        }
+        else
+        {
+            outOfCombatState = new AiStatePathfindingSearch();
+        }
+
         combatRootState = AiFile.GenerateAiTree();
         if (IsInCombatRange()) 
         {
@@ -153,7 +163,7 @@ public class EnemyEntity : MonoBehaviour
         }
         else 
         {
-            currentState = pathfindingSearchState;
+            currentState = outOfCombatState;
             inCombat = false;
         }
         currentState.StartState(this);
@@ -183,7 +193,7 @@ public class EnemyEntity : MonoBehaviour
             else
             {
                 if (inCombat) { outOfCombatSpeedMult = 1; }
-                currentState = pathfindingSearchState;
+                currentState = outOfCombatState;
                 inCombat = false;
             }
             currentState.StartState(this);
@@ -300,6 +310,10 @@ public class EnemyEntity : MonoBehaviour
         {
             OnEntityStunned();
         }
+    }
+    public void Teleport(Vector3 pos) 
+    {
+        transform.position = new Vector3(pos.x, 0, pos.z);
     }
     public void RemoveStatus(GameEnums.DamageElement e) 
     {

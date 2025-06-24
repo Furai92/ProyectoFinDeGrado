@@ -14,9 +14,11 @@ public class PlayerMeleeAttack : PlayerAttackBase
     private float t;
     private float randomInclination;
 
+    private const float ANIM_SIZE_MIN = 0.75f;
+    private const float ANIM_SIZE_MAX = 1f;
     private const float LIFETIME = 0.2f;
     private const float ANIM_ROTATION = 65f;
-    private const float RANDOM_INCLINATION_RANGE = 7.5f;
+    private const float RANDOM_INCLINATION_RANGE = 10f;
 
     public override void SetUp(Vector3 pos, float dir, WeaponAttackSetupData sd, PlayerAttackBase parentAttack)
     {
@@ -54,6 +56,7 @@ public class PlayerMeleeAttack : PlayerAttackBase
     }
     private void UpdateAnimation(float animT) 
     {
+        rotationParent.transform.localScale = Vector3.one * Mathf.Lerp(ANIM_SIZE_MIN, ANIM_SIZE_MAX, animT);
         rotationParent.transform.localRotation = reversedAnim ? Quaternion.Euler(0, Mathf.Lerp(-ANIM_ROTATION, ANIM_ROTATION, animT), randomInclination) : Quaternion.Euler(0, Mathf.Lerp(ANIM_ROTATION, -ANIM_ROTATION, animT), randomInclination);
         mrColored.material.SetFloat("_AnimT", animT);
         mrFlash.material.SetFloat("_AnimT", animT);

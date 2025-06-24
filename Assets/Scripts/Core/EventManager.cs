@@ -117,7 +117,7 @@ public class EventManager
     {
         AllPlayersReadyEvent?.Invoke();
     }
-    public static void OnUiEnemyHealthBarDisabled(HudEnemyHealthBarElement hpb) 
+    public static void OnUiEnemyHealthBarDisabled(HudEnemyHealthBarElement hpb)
     {
         UiEnemyHealthBarDisabledEvent.Invoke(hpb);
     }

@@ -9,6 +9,7 @@ public class HudWaveStatusManager : MonoBehaviour
     private enum NotificationType { WaveStarted, WaveEnded, ChestSpawned, GetReady }
 
     [SerializeField] private TextMeshProUGUI waveTimer;
+    [SerializeField] private TextMeshProUGUI waveName;
     [SerializeField] private TextMeshProUGUI readyInfoText;
     [SerializeField] private Transform visibilityParent;
     [SerializeField] private TextMeshProUGUI waveNotificationText;
@@ -60,6 +61,7 @@ public class HudWaveStatusManager : MonoBehaviour
     {
         readyInfoText.gameObject.SetActive(StageManagerBase.GetCurrentStateType() == StageStateBase.GameState.Rest && IngameMenuManager.GetActiveMenu() == null);
         waveTimer.gameObject.SetActive(StageManagerBase.GetCurrentStateType() == StageStateBase.GameState.EnemyWave && IngameMenuManager.GetActiveMenu() == null);
+        waveName.text = StageManagerBase.GetCurrentStateType() == StageStateBase.GameState.EnemyWave ? string.Format("Wave {0}", StageManagerBase.GetWaveCount()+1) : "";
     }
 
 

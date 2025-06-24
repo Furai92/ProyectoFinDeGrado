@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class test_deleteme : MonoBehaviour
 {
-    public MeshRenderer m1;
-    public MeshRenderer m2;
+    public Transform a;
+    public Transform b;
+    public Transform c;
+    public Transform d;
+    public Transform e;
 
+    public float aimdir;
+    public float spacing;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Update()
     {
-        m1.material.SetColor("_Color", Color.red);
-        m2.material.SetColor("_Color", Color.white);
-    }
+        a.SetPositionAndRotation(transform.position, Quaternion.Euler(0, aimdir, 0));
+        b.SetPositionAndRotation(transform.position + GameTools.OffsetFromAngle(-aimdir + 90, spacing), Quaternion.Euler(0, aimdir, 0));
+        c.SetPositionAndRotation(transform.position + GameTools.OffsetFromAngle(-aimdir - 90, spacing), Quaternion.Euler(0, aimdir, 0));
+        d.SetPositionAndRotation(transform.position + GameTools.OffsetFromAngle(-aimdir + 90, spacing * 2), Quaternion.Euler(0, aimdir, 0));
+        e.SetPositionAndRotation(transform.position + GameTools.OffsetFromAngle(-aimdir - 90, spacing * 2), Quaternion.Euler(0, aimdir, 0));
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

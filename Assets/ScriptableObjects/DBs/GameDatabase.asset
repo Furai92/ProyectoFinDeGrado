@@ -27,15 +27,25 @@ MonoBehaviour:
   - {fileID: 6007917864536491662, guid: 05ec1c7b2fb71bf4db7eaa8eaa0b138f, type: 3}
   - {fileID: 6007917864536491662, guid: 0764a6030fe26c342a1b817fb65d5d8b, type: 3}
   - {fileID: 6007917864536491662, guid: 31704b9d1bc46c640b98f5299d8f9db0, type: 3}
+  - {fileID: 3629847205612530865, guid: 3dbdbd24cf725c049873a133d6cd857e, type: 3}
+  - {fileID: 3629847205612530865, guid: 6853829a1ac02b443b2b645be71eb874, type: 3}
   <EnemyAttackPrefabs>k__BackingField:
   - <ID>k__BackingField: SLOW_ORB
     <Data>k__BackingField: {fileID: 7397320916023109853, guid: b265df20be3bd27439f28b35618dc7e8, type: 3}
   - <ID>k__BackingField: MELEE_SPIN
     <Data>k__BackingField: {fileID: 3746625057581498513, guid: b9224d28f7e282d44a93baad738eed88, type: 3}
+  - <ID>k__BackingField: UNLINKED_MELEE_SPIN
+    <Data>k__BackingField: {fileID: 3746625057581498513, guid: ab6fcfcda27c7a44c9adc53a998fbe6c, type: 3}
   - <ID>k__BackingField: FIREBOMB
     <Data>k__BackingField: {fileID: 6445567525718638580, guid: 2aab97147ce126d4da32b5f2b0398748, type: 3}
   - <ID>k__BackingField: BEAM
     <Data>k__BackingField: {fileID: 5598505143166327596, guid: e6023eba246022d45b6a8b35a6d53fc5, type: 3}
+  - <ID>k__BackingField: UNLINKED_BEAM
+    <Data>k__BackingField: {fileID: 5598505143166327596, guid: 361333f33d853ea4fbf9c9bbf4b00a06, type: 3}
+  - <ID>k__BackingField: WARP
+    <Data>k__BackingField: {fileID: 7957926321759332733, guid: c11dca99fb9bb94439dcc426b6e967aa, type: 3}
+  - <ID>k__BackingField: FIRE_WARP
+    <Data>k__BackingField: {fileID: 5858003654462077895, guid: 3263f6fa36ce07945b5ae4d6b6e9c439, type: 3}
   <ImpactEffects>k__BackingField:
   - <ID>k__BackingField: STANDARD
     <Data>k__BackingField: {fileID: 442362864815450504, guid: 373164311b3eab14ea3ec6d00c4aba42, type: 3}
@@ -193,6 +203,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1dcb7c2ca42cdd44a965ac5c74513ac6, type: 2}
   - {fileID: 11400000, guid: 12ac7b76864d99d49b11e19686614d28, type: 2}
   - {fileID: 11400000, guid: 141f2d8232a330c49a8bb0a08fb34e2a, type: 2}
+  <AudioEffects>k__BackingField: []
   <DeflectedAttackPrefab>k__BackingField: {fileID: 4974119249572614419, guid: 270485de71924c348b1a2241c0e68023, type: 3}
   <CurrencyPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 58d370f50cb707a44a0d8c3efc6513f1, type: 3}
   <HealthPickupPrefab>k__BackingField: {fileID: 4246623293500637985, guid: 1a5578860ea483141b3cd041aeacd903, type: 3}

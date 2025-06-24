@@ -34,7 +34,7 @@ MonoBehaviour:
   <Splash>k__BackingField: 0
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 1
-  <Timescale>k__BackingField: 1
+  <Timescale>k__BackingField: 5
   <Knockback>k__BackingField: 5
   <CoreParts>k__BackingField:
   - {fileID: 11400000, guid: e7966524555e372428a9775795ce8391, type: 2}
