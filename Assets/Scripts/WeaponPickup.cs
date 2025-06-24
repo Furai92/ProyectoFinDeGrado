@@ -5,6 +5,8 @@ public class WeaponPickup : Interactable
     [SerializeField] private Transform visualParent;
     [SerializeField] private ParticleSystem ps;
     [SerializeField] private ColorDatabaseSO cdb;
+    [SerializeField] private Transform meleeVisual;
+    [SerializeField] private Transform rangedVisual;
 
     private InteractableInfo info;
 
@@ -15,6 +17,8 @@ public class WeaponPickup : Interactable
     {
         ParticleSystem.MainModule m = ps.main; m.startColor = cdb.RarityToColor(wd.Rarity);
         transform.position = new Vector3(wpos.x, SPAWN_HEIGHT, wpos.z);
+        meleeVisual.gameObject.SetActive(wd.BaseWeapon.Slot == WeaponSO.WeaponSlot.Melee);
+        rangedVisual.gameObject.SetActive(wd.BaseWeapon.Slot == WeaponSO.WeaponSlot.Ranged);
         info = new InteractableInfo()
         {
             color = Color.white,
