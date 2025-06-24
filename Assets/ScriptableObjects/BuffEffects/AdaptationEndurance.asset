@@ -15,8 +15,8 @@ MonoBehaviour:
   <ID>k__BackingField: ADAPTATION_END
   <MaxStacks>k__BackingField: 1
   <Duration>k__BackingField: -1
-  <BuffColor>k__BackingField: {r: 0, g: 0.6543069, b: 1, a: 1}
-  <Icon>k__BackingField: {fileID: 21300000, guid: 5da51ee32ff72914aa6ab37b65e9e6e1, type: 3}
+  <BuffColor>k__BackingField: {r: 0, g: 1, b: 0.53780746, a: 1}
+  <Icon>k__BackingField: {fileID: -682484238, guid: 7358778b6556d5348a885b24599cf4b1, type: 3}
   <Effects>k__BackingField:
   - <First>k__BackingField: 4
     <Second>k__BackingField: 15

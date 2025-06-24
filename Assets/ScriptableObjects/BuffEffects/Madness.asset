@@ -15,7 +15,7 @@ MonoBehaviour:
   <ID>k__BackingField: MADNESS
   <MaxStacks>k__BackingField: 1
   <Duration>k__BackingField: -1
-  <BuffColor>k__BackingField: {r: 0.3114303, g: 0, b: 0.3490566, a: 1}
-  <Icon>k__BackingField: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  <BuffColor>k__BackingField: {r: 0.531827, g: 0, b: 0.8396226, a: 1}
+  <Icon>k__BackingField: {fileID: -508063643, guid: 7358778b6556d5348a885b24599cf4b1, type: 3}
   <Effects>k__BackingField: []
   <Flags>k__BackingField: 01000000

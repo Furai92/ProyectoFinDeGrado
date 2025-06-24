@@ -324,7 +324,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9012975498816331178, guid: d840066c21d0a0149a41ffdc3af5aaa3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9012975499943088137, guid: d840066c21d0a0149a41ffdc3af5aaa3, type: 3}
       propertyPath: m_Controller
@@ -397,6 +397,10 @@ PrefabInstance:
     - target: {fileID: 9012975499952979853, guid: d840066c21d0a0149a41ffdc3af5aaa3, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9012975500247887144, guid: d840066c21d0a0149a41ffdc3af5aaa3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9012975500247887146, guid: d840066c21d0a0149a41ffdc3af5aaa3, type: 3}
       propertyPath: m_Materials.Array.size
