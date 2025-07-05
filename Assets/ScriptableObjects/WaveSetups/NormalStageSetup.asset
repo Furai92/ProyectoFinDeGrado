@@ -13,6 +13,27 @@ MonoBehaviour:
   m_Name: NormalStageSetup
   m_EditorClassIdentifier: 
   <Waves>k__BackingField:
+  - <Duration>k__BackingField: -1
+    <KillRequirements>k__BackingField:
+    - <ID>k__BackingField: BOSS
+      <Count>k__BackingField: 1
+    <CanSpawnChests>k__BackingField: 0
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 1
+    - <ID>k__BackingField: BOSS
+      <Cooldown>k__BackingField: 0
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: 1
+      <MaxConcurrentSpawns>k__BackingField: 1
   - <Duration>k__BackingField: 40
     <KillRequirements>k__BackingField: []
     <CanSpawnChests>k__BackingField: 1
@@ -127,24 +148,3 @@ MonoBehaviour:
       <Delay>k__BackingField: 25
       <MaxSpawnsDuringWave>k__BackingField: -1
       <MaxConcurrentSpawns>k__BackingField: 2
-  - <Duration>k__BackingField: -1
-    <KillRequirements>k__BackingField:
-    - <ID>k__BackingField: BOSS
-      <Count>k__BackingField: 1
-    <CanSpawnChests>k__BackingField: 0
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 2
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-    - <ID>k__BackingField: SOLDIER
-      <Cooldown>k__BackingField: 2
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 1
-    - <ID>k__BackingField: BOSS
-      <Cooldown>k__BackingField: 0
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: 1
-      <MaxConcurrentSpawns>k__BackingField: 1

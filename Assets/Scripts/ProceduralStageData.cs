@@ -18,6 +18,7 @@ public class ProceduralStageData : IMapData
     private const float CHANCE_TO_ROOM_PER_CONNECTION = 20f;
     private const float DECO_CHANCE_BASE = 10f;
     private const float DECO_CHANCE_PER_NEARBY_NODE = 10f;
+    private const float GROUND_PLANE_HEIGHT = -15f;
 
     public ProceduralStageData(int seed, int size, ProceduralStagePropertiesSO stageProperties, Transform instParent) 
     {
@@ -267,6 +268,12 @@ public class ProceduralStageData : IMapData
             GameObject rp = GameObject.Instantiate(stageProperties.DecoPrefabs[Random.Range(0, stageProperties.DecoPrefabs.Count)], instParent) as GameObject;
             rp.GetComponent<StageDeco>().SetUp(stageDecos[i]);
             rp.name = string.Format("deco_{0}_{1}", stageDecos[i].pos_x, stageDecos[i].pos_y);
+        }
+        // Create the ground plane
+        if (stageProperties.GroundPlanePrefab != null) 
+        {
+            GameObject gp = GameObject.Instantiate(stageProperties.GroundPlanePrefab, instParent) as GameObject;
+            gp.transform.position = new Vector3(firstRoom.piece.gameObject.transform.position.x, GROUND_PLANE_HEIGHT, firstRoom.piece.gameObject.transform.position.z);
         }
         // Setup enemy spawn positions
         // TO DO: Improve logic, for now just use room center

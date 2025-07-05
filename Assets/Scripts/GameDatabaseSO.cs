@@ -14,6 +14,7 @@ public class GameDatabaseSO : ScriptableObject
     [field: SerializeField] public List<BuffEffectSO> BuffEffects { get; private set; }
     [field: SerializeField] public List<DifficultyLevelSO> DifficultyLevels { get; private set; }
     [field: SerializeField] public List<SerializedIdentifiedPair<AudioClip>> AudioEffects { get; private set; }
+    [field: SerializeField] public List<MilestoneSO> Milestones { get; private set; }
 
     [Header("Ungrouped prefabs")]
     [field: SerializeField] public GameObject DeflectedAttackPrefab { get; private set; }

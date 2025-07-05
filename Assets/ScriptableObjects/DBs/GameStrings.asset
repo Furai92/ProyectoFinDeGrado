@@ -88,6 +88,8 @@ MonoBehaviour:
     <Data>k__BackingField: Select a starter defensive tech.
   - <ID>k__BackingField: NEWRUN_MENU_HEADER_2
     <Data>k__BackingField: Select a difficulty level
+  - <ID>k__BackingField: NEWRUN_MENU_BOOSTED_CHANCE
+    <Data>k__BackingField: The chance of finding [{0}] tech in the shop will be increased.
   - <ID>k__BackingField: DIF_NAME_EASY
     <Data>k__BackingField: Easy
   - <ID>k__BackingField: DIF_NAME_NORMAL
@@ -821,4 +823,92 @@ MonoBehaviour:
     <Data>k__BackingField: All enemies have an extra health bar.
   - <ID>k__BackingField: DIF_BASE_NAME
     <Data>k__BackingField: Chaos
+  - <ID>k__BackingField: MIL_NAME_SLAYER_1
+    <Data>k__BackingField: Slayer 1
+  - <ID>k__BackingField: MIL_NAME_SLAYER_2
+    <Data>k__BackingField: Slayer 2
+  - <ID>k__BackingField: MIL_NAME_SLAYER_3
+    <Data>k__BackingField: Slayer 3
+  - <ID>k__BackingField: MIL_NAME_SLAYER_4
+    <Data>k__BackingField: Slayer 4
+  - <ID>k__BackingField: MIL_DESC_SLAYER_1
+    <Data>k__BackingField: Defeat a total of 50 enemies across all your runs.
+  - <ID>k__BackingField: MIL_DESC_SLAYER_2
+    <Data>k__BackingField: Defeat a 100 enemies across all your runs.
+  - <ID>k__BackingField: MIL_DESC_SLAYER_3
+    <Data>k__BackingField: Defeat a total of 200 enemies across all your runs.
+  - <ID>k__BackingField: MIL_DESC_SLAYER_4
+    <Data>k__BackingField: Defeat a total of 500 enemies across all your runs.
+  - <ID>k__BackingField: MIL_NAME_VICTORY_1
+    <Data>k__BackingField: Chaotic Victory 1
+  - <ID>k__BackingField: MIL_NAME_VICTORY_2
+    <Data>k__BackingField: Chaotic Victory 2
+  - <ID>k__BackingField: MIL_NAME_VICTORY_3
+    <Data>k__BackingField: Chaotic Victory 3
+  - <ID>k__BackingField: MIL_NAME_VICTORY_4
+    <Data>k__BackingField: Chaotic Victory 4
+  - <ID>k__BackingField: MIL_NAME_VICTORY_5
+    <Data>k__BackingField: Chaotic Victory 5
+  - <ID>k__BackingField: MIL_NAME_VICTORY_6
+    <Data>k__BackingField: Chaotic Victory 6
+  - <ID>k__BackingField: MIL_NAME_VICTORY_7
+    <Data>k__BackingField: Chaotic Victory 7
+  - <ID>k__BackingField: MIL_NAME_VICTORY_8
+    <Data>k__BackingField: Chaotic Victory 8
+  - <ID>k__BackingField: MIL_NAME_VICTORY_9
+    <Data>k__BackingField: Chaotic Victory 9
+  - <ID>k__BackingField: MIL_NAME_VICTORY_10
+    <Data>k__BackingField: Definitive victory
+  - <ID>k__BackingField: MIL_DESC_VICTORY_1
+    <Data>k__BackingField: Achieve a win on difficulty chaos 1
+  - <ID>k__BackingField: MIL_DESC_VICTORY_2
+    <Data>k__BackingField: Achieve a win on difficulty chaos 2
+  - <ID>k__BackingField: MIL_DESC_VICTORY_3
+    <Data>k__BackingField: Achieve a win on difficulty chaos 3
+  - <ID>k__BackingField: MIL_DESC_VICTORY_4
+    <Data>k__BackingField: Achieve a win on difficulty chaos 4
+  - <ID>k__BackingField: MIL_DESC_VICTORY_5
+    <Data>k__BackingField: Achieve a win on difficulty chaos 5
+  - <ID>k__BackingField: MIL_DESC_VICTORY_6
+    <Data>k__BackingField: Achieve a win on difficulty chaos 6
+  - <ID>k__BackingField: MIL_DESC_VICTORY_7
+    <Data>k__BackingField: Achieve a win on difficulty chaos 7
+  - <ID>k__BackingField: MIL_DESC_VICTORY_8
+    <Data>k__BackingField: Achieve a win on difficulty chaos 8
+  - <ID>k__BackingField: MIL_DESC_VICTORY_9
+    <Data>k__BackingField: Achieve a win on difficulty chaos 9
+  - <ID>k__BackingField: MIL_DESC_VICTORY_10
+    <Data>k__BackingField: Achieve a win on difficulty chaos 10.
+  - <ID>k__BackingField: MIL_NAME_CREDIT_COLLECTOR_1
+    <Data>k__BackingField: Credit Collector 1
+  - <ID>k__BackingField: MIL_NAME_CREDIT_COLLECTOR_2
+    <Data>k__BackingField: Credit Collector 2
+  - <ID>k__BackingField: MIL_NAME_CREDIT_COLLECTOR_3
+    <Data>k__BackingField: Credit Collector 3
+  - <ID>k__BackingField: MIL_NAME_CREDIT_COLLECTOR_4
+    <Data>k__BackingField: Credit Collector 4
+  - <ID>k__BackingField: MIL_DESC_CREDIT_COLLECTOR_1
+    <Data>k__BackingField: Across all your runs, collect a total of 200 credits.
+  - <ID>k__BackingField: MIL_DESC_CREDIT_COLLECTOR_2
+    <Data>k__BackingField: Across all your runs, collect a total of 400 credits.
+  - <ID>k__BackingField: MIL_DESC_CREDIT_COLLECTOR_3
+    <Data>k__BackingField: Across all your runs, collect a total of 1000 credits.
+  - <ID>k__BackingField: MIL_DESC_CREDIT_COLLECTOR_4
+    <Data>k__BackingField: Across all your runs, collect a total of 2000 credits.
+  - <ID>k__BackingField: MIL_NAME_TREASURE_FINDER_1
+    <Data>k__BackingField: Treasure Finder 1
+  - <ID>k__BackingField: MIL_NAME_TREASURE_FINDER_2
+    <Data>k__BackingField: Treasure Finder 2
+  - <ID>k__BackingField: MIL_NAME_TREASURE_FINDER_3
+    <Data>k__BackingField: Treasure Finder 3
+  - <ID>k__BackingField: MIL_NAME_TREASURE_FINDER_4
+    <Data>k__BackingField: Treasure Finder 4
+  - <ID>k__BackingField: MIL_DESC_TREASURE_FINDER_1
+    <Data>k__BackingField: Across all your runs, open a total of 10 chests.
+  - <ID>k__BackingField: MIL_DESC_TREASURE_FINDER_2
+    <Data>k__BackingField: Across all your runs, open a total of 20 chests.
+  - <ID>k__BackingField: MIL_DESC_TREASURE_FINDER_3
+    <Data>k__BackingField: Across all your runs, open a total of 50 chests.
+  - <ID>k__BackingField: MIL_DESC_TREASURE_FINDER_4
+    <Data>k__BackingField: Across all your runs, open a total of 100 chests.
   <Keywords>k__BackingField: []

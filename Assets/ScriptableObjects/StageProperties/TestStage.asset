@@ -19,3 +19,4 @@ MonoBehaviour:
   DecoPrefabs:
   - {fileID: 991592059765072839, guid: da4e61d85f49f834eb1cfe73e3895a44, type: 3}
   - {fileID: 991592059765072839, guid: f6188387371ffb84b93043a894b4c6bf, type: 3}
+  GroundPlanePrefab: {fileID: 3512763503042916200, guid: b7feabc17064dae4ab6600738b54adb2, type: 3}

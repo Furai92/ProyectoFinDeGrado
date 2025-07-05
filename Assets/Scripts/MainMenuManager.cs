@@ -5,12 +5,13 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private ProceduralStagePropertiesSO backgroundStageProperties;
     [SerializeField] private Transform backgroundStageParent;
     [SerializeField] private MainMenuTravellingCamera travellingCam;
-    [SerializeField] private HudSettingsMenu settingsMenu;
     [SerializeField] private Transform mainStateParent;
+    [SerializeField] private HudSettingsMenu settingsMenu;
     [SerializeField] private HudNewRunMenu newRunMenu;
     [SerializeField] private HudCollectionMenu collectionMenu;
     [SerializeField] private HudPreviousRunRecapMenu previousRunRecapMenu;
     [SerializeField] private HudHowToPlayMenu howToPlayMenu;
+    [SerializeField] private HudMilestoneMenu milestoneMenu;
 
     private ProceduralStageData backgroundStage;
 
@@ -33,6 +34,8 @@ public class MainMenuManager : MonoBehaviour
         if (activeMenu == m) { activeMenu = null; }
 
         UpdateFocus();
+
+        SaveDataManager.SaveToFile();
     }
     private void ToggleMenu(IGameMenu m) 
     {
@@ -47,7 +50,6 @@ public class MainMenuManager : MonoBehaviour
             m.OpenMenu();
             activeMenu = m;
         }
-
         UpdateFocus();
     }
     private void UpdateFocus() 
@@ -71,6 +73,10 @@ public class MainMenuManager : MonoBehaviour
     public void OnHowToPlayClicked() 
     {
         ToggleMenu(howToPlayMenu);
+    }
+    public void OnMilestoneClicked()
+    {
+        ToggleMenu(milestoneMenu);
     }
     public void OnQuitClicked() 
     {
