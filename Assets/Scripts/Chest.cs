@@ -48,7 +48,7 @@ public class Chest : Interactable
     public override void OnInteract(int playerIndex)
     {
         gameObject.SetActive(false);
-
+        EventManager.OnChestOpened();
 
         for (int i = 0; i < BASE_HEALTH_DROP_RATE; i++) 
         {
