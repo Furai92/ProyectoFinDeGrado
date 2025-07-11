@@ -29,6 +29,8 @@ public class HudWeaponCard : MonoBehaviour
     [SerializeField] private Image rarityHighlight;
     [SerializeField] private TextMeshProUGUI rarityText;
 
+    private const float ELEM_PANEL_COLOR_MULT = 0.5f;
+
     public void SetUp(WeaponData w) 
     {
         // Name panel
@@ -42,7 +44,7 @@ public class HudWeaponCard : MonoBehaviour
         elementNameText.text = sdb.ElementToName(w.Stats.Element);
         elementDescText.text = sdb.ElementToDesc(w.Stats.Element);
         elementHighlight.color = elementColor;
-        elementPanelBackground.color = new Color(elementColor.r, elementColor.g, elementColor.b, elementPanelBackground.color.a);
+        elementPanelBackground.color = new Color(elementColor.r * ELEM_PANEL_COLOR_MULT, elementColor.g * ELEM_PANEL_COLOR_MULT, elementColor.b * ELEM_PANEL_COLOR_MULT, elementPanelBackground.color.a);
 
         // Rarity
         rarityText.text = sdb.RarityToName(w.Rarity);

@@ -633,8 +633,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   debugRangedWeaponSO: {fileID: 11400000, guid: 0bbc29d06fc9b664d85a10220a06273f, type: 2}
   debugMeleeWeaponSO: {fileID: 11400000, guid: a5babf4ad9ea6224da1205e9e8c5acae, type: 2}
-  debugTechSO:
-  - {fileID: 11400000, guid: 54671cff97261794fb682fdf7ddcd811, type: 2}
+  debugTechSO: []
   damageHitboxRB: {fileID: 7100754279420976169}
   m_camTargetTransform: {fileID: 5009270293795097312}
   m_camVerticalRotationAxis: {fileID: 7811943070042775098}
