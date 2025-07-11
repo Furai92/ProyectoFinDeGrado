@@ -7,6 +7,5 @@ public class PreLoad : MonoBehaviour
     {
         SaveDataManager.LoadFromFile();
         SceneManager.LoadScene("MainMenu");
-
     }
 }

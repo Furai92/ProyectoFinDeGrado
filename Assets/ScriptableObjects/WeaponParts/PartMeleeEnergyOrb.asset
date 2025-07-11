@@ -26,9 +26,9 @@ MonoBehaviour:
   <CriticalDamageMultiplier>k__BackingField: 1
   <SizeMultiplier>k__BackingField: 1
   <HeatGenerationMultiplier>k__BackingField: 1.25
-  <SplashModifier>k__BackingField: 5
+  <SplashModifier>k__BackingField: 2
   <SpreadModifier>k__BackingField: 0
-  <BouncesModifier>k__BackingField: 3
+  <BouncesModifier>k__BackingField: 1
   <PiercesModifier>k__BackingField: 0
-  <TimescaleMultiplier>k__BackingField: 0.5
+  <TimescaleMultiplier>k__BackingField: 0.75
   <KnockbackModifier>k__BackingField: 0

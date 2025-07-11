@@ -13,7 +13,15 @@ public class HudDifficultyLevelCard : MonoBehaviour
 
     public void SetUp(DifficultyLevelSO d)
     {
-        difName.text = string.Format("{0} {1}", sdb.GetString("DIF_BASE_NAME"), d.DifficultyIndex);
-        difPanel.color = Color.Lerp(cdb.GetColor("DIF_LOW"), cdb.GetColor("DIF_HIGH"),d.DifficultyIndex / DIFFICULTY_COUNT);
+        if (d == null)
+        {
+            difName.text = sdb.GetString("DIF_NAME_LOCKED");
+            difPanel.color = Color.gray;
+        }
+        else 
+        {
+            difName.text = string.Format("{0} {1}", sdb.GetString("DIF_BASE_NAME"), d.DifficultyIndex);
+            difPanel.color = Color.Lerp(cdb.GetColor("DIF_LOW"), cdb.GetColor("DIF_HIGH"), d.DifficultyIndex / DIFFICULTY_COUNT);
+        }
     }
 }

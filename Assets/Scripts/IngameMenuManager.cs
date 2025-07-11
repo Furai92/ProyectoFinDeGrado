@@ -100,6 +100,10 @@ public class IngameMenuManager : MonoBehaviour
         ToggleMenu(shopMenu);
         UpdateFocus();
     }
+    public void OnQuitClicked()
+    {
+        EventManager.OnStageAbandoned();
+    }
     public void OnNextMenuButtonClicked() 
     {
         currentMenuIndex++;

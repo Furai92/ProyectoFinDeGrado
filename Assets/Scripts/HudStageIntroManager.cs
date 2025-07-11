@@ -16,7 +16,7 @@ public class HudStageIntroManager : MonoBehaviour
 
     private void OnEnable()
     {
-        stageNameText.text = "Test Stage";
+        stageNameText.text = "Demo Stage";
         pressToBeginText.text = "- Press R to begin -";
 
         difficultyCard.SetUp(PersistentDataManager.GetCurrentDifficulty());

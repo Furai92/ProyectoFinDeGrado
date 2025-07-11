@@ -18,8 +18,8 @@ public class StageStateCombatWave : StageStateBase
     private const float ENEMY_DAMAGE_SCALING = 0.05f;
     private const float CHEST_SPAWN_COOLDOWN = 10f;
     private const float SPAWN_CHECK_INTERVAL = 0.5f;
-    private const float WEAPON_LEVEL_FACTOR_GAIN_PER_COMBAT = 0.5f;
-    private const int MAX_ENEMIES = 20;
+    private const float WEAPON_LEVEL_FACTOR_GAIN_PER_COMBAT = 1.33f;
+    private const int MAX_ENEMIES = 25;
 
     public StageStateCombatWave(StageWaveSetupSO.EnemyWave w) 
     {

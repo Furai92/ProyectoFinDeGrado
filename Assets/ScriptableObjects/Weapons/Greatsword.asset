@@ -44,7 +44,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d39dcf47c1079f42968b5e2ca8d3890, type: 2}
   <RareParts>k__BackingField:
   - {fileID: 11400000, guid: f62b9c5b3db0c1b4bad99fbb5a65ca25, type: 2}
+  - {fileID: 11400000, guid: 6f266f12181b7f54b9ec45dc3a5dc421, type: 2}
+  - {fileID: 11400000, guid: 7023c46d094679145ad389f0e49d7ac9, type: 2}
   <ExoticParts>k__BackingField:
   - {fileID: 11400000, guid: f62b9c5b3db0c1b4bad99fbb5a65ca25, type: 2}
+  - {fileID: 11400000, guid: 6f266f12181b7f54b9ec45dc3a5dc421, type: 2}
+  - {fileID: 11400000, guid: 7023c46d094679145ad389f0e49d7ac9, type: 2}
   <PrototypeParts>k__BackingField:
   - {fileID: 11400000, guid: 6dc47abefb58d8d449ebe19c508a314a, type: 2}

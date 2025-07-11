@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageStatsTracker : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class StageStatsTracker : MonoBehaviour
         EventManager.CurrencyUpdateEvent += OnCurrencyUpdated;
         EventManager.EnemyDisabledEvent += OnEnemyDefeated;
         EventManager.ChestOpenedEvent += OnChestOpened;
+        EventManager.StageAbandonedEvent += OnStageAbandoned;
     }
     private void OnDisable()
     {
@@ -25,6 +27,13 @@ public class StageStatsTracker : MonoBehaviour
         EventManager.CurrencyUpdateEvent -= OnCurrencyUpdated;
         EventManager.EnemyDisabledEvent -= OnEnemyDefeated;
         EventManager.ChestOpenedEvent -= OnChestOpened;
+        EventManager.StageAbandonedEvent -= OnStageAbandoned;
+    }
+    private void OnStageAbandoned() 
+    {
+        record.result = StageRecord.Result.Abandoned;
+        PersistentDataManager.AddStageRecord(record);
+        SceneManager.LoadScene("MainMenu");
     }
     private void OnEnemyDirectDamageTaken(float mag, int clevel, GameEnums.DamageElement elem, GameEnums.DamageType dtype, EnemyEntity target) 
     {
@@ -38,7 +47,7 @@ public class StageStatsTracker : MonoBehaviour
     {
         if (s == StageStateBase.GameState.Victory) 
         {
-            record.victory = true;
+            record.result = StageRecord.Result.Victory;
             PersistentDataManager.AddStageRecord(record);
             string difficultyProgressID = string.Format("WINS_CHAOS_{0}", PersistentDataManager.GetCurrentDifficulty().DifficultyIndex);
             PersistentDataManager.AddGameProgress(difficultyProgressID, 1);
@@ -58,12 +67,13 @@ public class StageStatsTracker : MonoBehaviour
     }
     private void OnPlayerDefeated() 
     {
-        record.victory = false;
+        record.result = StageRecord.Result.Defeat;
         PersistentDataManager.AddStageRecord(record);
     }
     public class StageRecord
     {
-        public bool victory;
+        public enum Result { Victory, Defeat, Abandoned }
+        public Result result;
         public float[] directDamageRecords;
         public float[] statusDamageRecords;
 
@@ -71,7 +81,7 @@ public class StageStatsTracker : MonoBehaviour
         {
             directDamageRecords = new float[GameEnums.DAMAGE_ELEMENTS];
             statusDamageRecords = new float[GameEnums.DAMAGE_ELEMENTS];
-            victory = false;
+            result = Result.Defeat;
         }
     }
 }

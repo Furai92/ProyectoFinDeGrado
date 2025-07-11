@@ -15,7 +15,7 @@ public class EnemyAttackBeam : EnemyAttackBase
     private int warningTicks;
     private CombatWarningLine warning;
 
-    private const float DAMAGE = 125f;
+    private const float DAMAGE = 100f;
     private const float SPAWN_ORB_PARENT_SIZE_MAX = 4.5f;
     private const float WARNING_WIDTH_MIN = 0.1f;
     private const float WARNING_WIDTH_MAX = 1.5f;

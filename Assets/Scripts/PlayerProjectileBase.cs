@@ -6,7 +6,8 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
     [Header("Visual references")]
     [SerializeField] private Transform visual;
     [SerializeField] protected TrailRenderer tr;
-    [SerializeField] private ColorDatabaseSO cdb;
+    [SerializeField] protected ColorDatabaseSO cdb;
+    [SerializeField] private ParticleSystem ps;
 
     [Space]
     [Header("Params")]
@@ -48,6 +49,7 @@ public abstract class PlayerProjectileBase : PlayerAttackBase
         tr.endWidth = 0;
         tr.startColor = tr.endColor = cdb.ElementToColor(setupData.Element);
         tr.AddPosition(visual.position);
+        if (ps != null) { ParticleSystem.MainModule m = ps.main; m.startColor = tr.startColor; }
         visual.gameObject.SetActive(true);
         gameObject.SetActive(true);
         OnBulletSpawn();

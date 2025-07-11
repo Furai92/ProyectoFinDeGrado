@@ -11,9 +11,9 @@ public class WeaponData
     public int Level { get; private set; }
 
     private const float EXTRA_DAMAGE_PER_LEVEL = 0.15f;
-    private const float RARITY_CHANCE_RARE = 25f;
-    private const float RARITY_CHANCE_EXOTIC = 5f;
-    private const float RARITY_CHANCE_PROTOTYPE = 1f;
+    private const float RARITY_CHANCE_RARE = 35f;
+    private const float RARITY_CHANCE_EXOTIC = 10f;
+    private const float RARITY_CHANCE_PROTOTYPE = 5f;
 
     public WeaponData(WeaponSO baseWeapon, float levelFactor) 
     {

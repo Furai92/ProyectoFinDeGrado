@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealthPickup : AutoPickup
 {
-    private const float BASE_HEALING = 10;
+    private const float BASE_HEALING = 20;
 
     public override void OnPickup(PlayerEntity p)
     {

@@ -19,13 +19,13 @@ public class HudShop : MonoBehaviour, IGameMenu
     private int refreshesDone;
     private List<TechSO> techInStock;
 
-    private const float TECH_CHANCE_RARE = 25f;
-    private const float TECH_CHANCE_EXOTIC = 5f;
-    private const float TECH_CHANCE_PROTOTYPE = 1f;
+    private const float TECH_CHANCE_RARE = 35f;
+    private const float TECH_CHANCE_EXOTIC = 10f;
+    private const float TECH_CHANCE_PROTOTYPE = 5f;
     private const float TECH_PRICE_COMMON = 5f;
-    private const float TECH_PRICE_RARE = 15f;
-    private const float TECH_PRICE_EXOTIC = 30f;
-    private const float TECH_PRICE_PROTOTYPE = 50f;
+    private const float TECH_PRICE_RARE = 10f;
+    private const float TECH_PRICE_EXOTIC = 20f;
+    private const float TECH_PRICE_PROTOTYPE = 35f;
     private const float REFRESH_COST_BASE = 0f;
     private const float REFRESH_COST_SCALING = 1f;
 

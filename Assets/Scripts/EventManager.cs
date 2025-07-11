@@ -40,6 +40,7 @@ public class EventManager
     public static event Action AllPlayersReadyEvent;
     public static event Action<int> ChestDisabledEvent;
     public static event Action ChestOpenedEvent;
+    public static event Action StageAbandonedEvent;
 
     // UI
     public static event Action<HudEnemyHealthBarElement> UiEnemyHealthBarDisabledEvent;
@@ -50,6 +51,10 @@ public class EventManager
     // Game System 
     public static event Action GameSettingsChangedEvent;
 
+    public static void OnStageAbandoned() 
+    {
+        StageAbandonedEvent?.Invoke();
+    }
     public static void OnChestOpened() 
     {
         ChestOpenedEvent?.Invoke();

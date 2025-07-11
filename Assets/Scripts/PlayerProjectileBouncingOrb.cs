@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerProjectileBouncingOrb : PlayerProjectileBase
 {
     [SerializeField] private Transform bounceVisualParent;
+    [SerializeField] private MeshRenderer mr;
 
     private float bounceT;
 
@@ -10,6 +11,7 @@ public class PlayerProjectileBouncingOrb : PlayerProjectileBase
     private const float BOUNCE_VISUAL_HEIGHT_MIN = -0.8f;
     private const float BOUNCE_VISUAL_HEIGHT_MAX = 2f;
     private const float BOUNCES_PER_SECOND = 1f;
+    private const float ORB_ALPHA = 0.8f;
 
     private void UpdateBounceVisual()
     {
@@ -23,10 +25,13 @@ public class PlayerProjectileBouncingOrb : PlayerProjectileBase
 
     public override void OnBulletSpawn()
     {
+        mr.material.SetColor("_Color", cdb.ElementToColor(setupData.Element));
+        mr.material.SetFloat("_Alpha", ORB_ALPHA);
         bounceT = INITIAL_BOUNCE_T;
         UpdateBounceVisual();
         tr.Clear();
         tr.AddPosition(bounceVisualParent.position);
+        mr.gameObject.SetActive(true);
     }
 
     public override void OnFixedUpdate()
@@ -39,7 +44,11 @@ public class PlayerProjectileBouncingOrb : PlayerProjectileBase
             Explode(transform.position);
             setupData.Bounces--;
             bounceT = 0;
-            if (setupData.Bounces < 0) { SetRemoveable(); }
+            if (setupData.Bounces < 0) 
+            {
+                SetRemoveable();
+                mr.gameObject.SetActive(false);
+            }
         }
     }
 

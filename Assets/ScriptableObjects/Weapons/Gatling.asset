@@ -45,6 +45,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
   - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
   - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
+  - {fileID: 11400000, guid: 6f266f12181b7f54b9ec45dc3a5dc421, type: 2}
+  - {fileID: 11400000, guid: 7023c46d094679145ad389f0e49d7ac9, type: 2}
   <ExoticParts>k__BackingField:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
   - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
@@ -54,3 +56,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
   - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  - {fileID: 11400000, guid: 92a512f720cd26943b73fdf6a5613328, type: 2}

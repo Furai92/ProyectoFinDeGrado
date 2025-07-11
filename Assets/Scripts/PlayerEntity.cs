@@ -287,6 +287,9 @@ public class PlayerEntity : NetworkBehaviour
                 Attack(s, attackDir + echoRandomSpread, false, false);
             }
         }
+
+        // Audio
+        SFXManager.PlaySFX(s == WeaponSO.WeaponSlot.Melee ? "ATTACK_MELEE" : "ATTACK_RANGED");
     }
     private void ClampCamVerticalRotation()
     {

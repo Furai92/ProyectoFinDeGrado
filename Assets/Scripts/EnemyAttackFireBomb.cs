@@ -14,7 +14,7 @@ public class EnemyAttackFireBomb : EnemyAttackBase
     private float phaseT;
     private float randomizedYScale;
 
-    private const float POOL_DAMAGE = 25f;
+    private const float POOL_DAMAGE = 20f;
     private const float POOL_DAMAGE_TICKRATE = 0.5f;
     private const float ORB_FLIGHT_HEIGHT = 2f;
     private const float ORB_FLIGHT_DURATION = 2f;

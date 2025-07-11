@@ -79,6 +79,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7a7c8dc9eb29cd4f80fab5b4f9e0581, type: 2}
   - {fileID: 11400000, guid: eb23916cd4e0b58428d7f7ff41fb165f, type: 2}
   - {fileID: 11400000, guid: 3c64912eb658af643a16553caee646ef, type: 2}
+  - {fileID: 11400000, guid: 3c4e7af1341da2f4e90d2cb56a36692f, type: 2}
   <Techs>k__BackingField:
   - {fileID: 11400000, guid: 757b271452c834049a03857ab80ba70f, type: 2}
   - {fileID: 11400000, guid: d872e5c0fc6298c45a68a2752e555927, type: 2}
@@ -205,7 +206,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1dcb7c2ca42cdd44a965ac5c74513ac6, type: 2}
   - {fileID: 11400000, guid: 12ac7b76864d99d49b11e19686614d28, type: 2}
   - {fileID: 11400000, guid: 141f2d8232a330c49a8bb0a08fb34e2a, type: 2}
-  <AudioEffects>k__BackingField: []
+  <AudioEffects>k__BackingField:
+  - <ID>k__BackingField: ATTACK_RANGED
+    <Data>k__BackingField: {fileID: 8300000, guid: b0a4e9d6a2e19ea40ba8f8df1e316569, type: 3}
+  - <ID>k__BackingField: ATTACK_MELEE
+    <Data>k__BackingField: {fileID: 8300000, guid: 321cd5be991052344838d18691d7716f, type: 3}
+  - <ID>k__BackingField: WARNING
+    <Data>k__BackingField: {fileID: 8300000, guid: 58fed5cfc9772114eb760fb66b1903b3, type: 3}
   <Milestones>k__BackingField:
   - {fileID: 11400000, guid: 8f0438d8fd5b39c4d999ba9b299653d2, type: 2}
   - {fileID: 11400000, guid: 588593742c61734498495b9c862461db, type: 2}

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1249688411672139137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.509}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -143,7 +143,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.59550476
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -151,8 +151,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.13832301
-        value: 0.14337058
+        time: 1
+        value: 0
         inSlope: -0.0035201022
         outSlope: -0.0035201022
         tangentMode: 0
@@ -268,7 +268,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: c8b04eb79ff7fd3449dafa94abbcf839, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -338,8 +338,10 @@ MonoBehaviour:
   visual: {fileID: 2669836707400734209}
   tr: {fileID: 2097504512603557878}
   cdb: {fileID: 11400000, guid: 65eecbe3f4e293d40a2157b29b42a957, type: 2}
+  ps: {fileID: 0}
   EntityCollisions: 0
   UnlimitedWallBounces: 1
   ExplodeOnWallCollision: 0
   MaxTravelDistance: 200
   bounceVisualParent: {fileID: 2669836707400734209}
+  mr: {fileID: 7156969938283628410}

@@ -13,6 +13,177 @@ MonoBehaviour:
   m_Name: NormalStageSetup
   m_EditorClassIdentifier: 
   <Waves>k__BackingField:
+  - <Duration>k__BackingField: 40
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 20
+  - <Duration>k__BackingField: 50
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 4
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+  - <Duration>k__BackingField: 60
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 1.5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 10
+      <Delay>k__BackingField: 20
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+  - <Duration>k__BackingField: 60
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 1.5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 6
+    - <ID>k__BackingField: SNIPER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 30
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 6
+  - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 8
+      <Delay>k__BackingField: 15
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 8
+      <Delay>k__BackingField: 15
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+  - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: SNIPER
+      <Cooldown>k__BackingField: 5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: WARPER
+      <Cooldown>k__BackingField: 5
+      <Delay>k__BackingField: 30
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+    - <ID>k__BackingField: HEAVY_GUNNER
+      <Cooldown>k__BackingField: 10
+      <Delay>k__BackingField: 30
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 4
+  - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: HEAVY_GUNNER
+      <Cooldown>k__BackingField: 5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 5
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: WARPER
+      <Cooldown>k__BackingField: 5
+      <Delay>k__BackingField: 60
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+  - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: SNIPER
+      <Cooldown>k__BackingField: 3
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: WARPER
+      <Cooldown>k__BackingField: 8
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+  - <Duration>k__BackingField: 80
+    <KillRequirements>k__BackingField: []
+    <CanSpawnChests>k__BackingField: 1
+    <EnemySpawns>k__BackingField:
+    - <ID>k__BackingField: SOLDIER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: GUNNER
+      <Cooldown>k__BackingField: 2
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 10
+    - <ID>k__BackingField: BOMBER
+      <Cooldown>k__BackingField: 10
+      <Delay>k__BackingField: 15
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
+    - <ID>k__BackingField: SNIPER
+      <Cooldown>k__BackingField: 8
+      <Delay>k__BackingField: 15
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: HEAVY_GUNNER
+      <Cooldown>k__BackingField: 8
+      <Delay>k__BackingField: 15
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 5
+    - <ID>k__BackingField: WARPER
+      <Cooldown>k__BackingField: 10
+      <Delay>k__BackingField: 0
+      <MaxSpawnsDuringWave>k__BackingField: -1
+      <MaxConcurrentSpawns>k__BackingField: 2
   - <Duration>k__BackingField: -1
     <KillRequirements>k__BackingField:
     - <ID>k__BackingField: BOSS
@@ -34,117 +205,3 @@ MonoBehaviour:
       <Delay>k__BackingField: 0
       <MaxSpawnsDuringWave>k__BackingField: 1
       <MaxConcurrentSpawns>k__BackingField: 1
-  - <Duration>k__BackingField: 40
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 3
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 20
-  - <Duration>k__BackingField: 60
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: SOLDIER
-      <Cooldown>k__BackingField: 4
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 2
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-  - <Duration>k__BackingField: 80
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 1.5
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: BOMBER
-      <Cooldown>k__BackingField: 10
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-    - <ID>k__BackingField: HEAVY_GUNNER
-      <Cooldown>k__BackingField: 1
-      <Delay>k__BackingField: 10
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-  - <Duration>k__BackingField: 80
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 1.5
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: BOMBER
-      <Cooldown>k__BackingField: 10
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-    - <ID>k__BackingField: HEAVY_GUNNER
-      <Cooldown>k__BackingField: 1
-      <Delay>k__BackingField: 10
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-    - <ID>k__BackingField: WARPER
-      <Cooldown>k__BackingField: 1
-      <Delay>k__BackingField: 15
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 1
-    - <ID>k__BackingField: SNIPER
-      <Cooldown>k__BackingField: 5
-      <Delay>k__BackingField: 15
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-  - <Duration>k__BackingField: 80
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: SOLDIER
-      <Cooldown>k__BackingField: 2
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 1.5
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: 5
-      <MaxConcurrentSpawns>k__BackingField: -1
-    - <ID>k__BackingField: BOMBER
-      <Cooldown>k__BackingField: 8
-      <Delay>k__BackingField: 15
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-  - <Duration>k__BackingField: 80
-    <KillRequirements>k__BackingField: []
-    <CanSpawnChests>k__BackingField: 1
-    <EnemySpawns>k__BackingField:
-    - <ID>k__BackingField: SOLDIER
-      <Cooldown>k__BackingField: 2
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: GUNNER
-      <Cooldown>k__BackingField: 1.5
-      <Delay>k__BackingField: 0
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 5
-    - <ID>k__BackingField: BOMBER
-      <Cooldown>k__BackingField: 10
-      <Delay>k__BackingField: 15
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2
-    - <ID>k__BackingField: SNIPER
-      <Cooldown>k__BackingField: 10
-      <Delay>k__BackingField: 25
-      <MaxSpawnsDuringWave>k__BackingField: -1
-      <MaxConcurrentSpawns>k__BackingField: 2

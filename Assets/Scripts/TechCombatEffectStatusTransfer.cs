@@ -6,6 +6,7 @@ public class TechCombatEffectStatusTransfer : TechCombatEffect
     [SerializeField] private ParticleSystem impactPS;
     [SerializeField] private ColorDatabaseSO cdb;
     [SerializeField] private Transform visualParent;
+    [SerializeField] private MeshRenderer mr;
 
     private Vector3 spawnPos;
     private Vector3 targetPos;
@@ -18,6 +19,7 @@ public class TechCombatEffectStatusTransfer : TechCombatEffect
     private const float SPAWN_DURATION = 0.5f;
     private const float CHASE_SPEED_GAIN_RATE = 6f;
     private const float REMOVE_DELAY = 1.5f;
+    private const float MAT_ALPHA = 0.9f;
 
     protected override void Initialize(Vector3 pos, float dir)
     {
@@ -31,6 +33,8 @@ public class TechCombatEffectStatusTransfer : TechCombatEffect
         targetPos = spawnPos + new Vector3(0, FLY_HEIGHT, 0);
         ParticleSystem.MainModule m = ps.main; m.startColor = cdb.ElementToColor(SetupData.element);
         ParticleSystem.MainModule m2 = impactPS.main; m2.startColor = m.startColor;
+        mr.material.SetColor("_Color", cdb.ElementToColor(SetupData.element));
+        mr.material.SetFloat("_Alpha", MAT_ALPHA);
     }
     private void OnEnable()
     {

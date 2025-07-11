@@ -19,7 +19,7 @@ public class EnemyAttackWarpStrike : EnemyAttackBase
     private const float VISUAL_WIDTH_END = 1.2f;
     public const float WARNING_DURATION = 1.75f;
     public const float LINGER_DURATION = 0.5f;
-    private const float WARNING_PHASE_FOLLOW_PLAYER_PERCENT = 0.5f;
+    private const float WARNING_PHASE_FOLLOW_PLAYER_PERCENT = 0.4f;
     private const float REMOVE_DELAY = 1f;
     private const float BASE_DAMAGE = 75f;
     private const float SIZE = 12f;

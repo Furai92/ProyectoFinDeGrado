@@ -35,7 +35,7 @@ MonoBehaviour:
   <Bounces>k__BackingField: 0
   <Pierces>k__BackingField: 1
   <Timescale>k__BackingField: 20
-  <Knockback>k__BackingField: 2
+  <Knockback>k__BackingField: 1
   <CoreParts>k__BackingField:
   - {fileID: 11400000, guid: 456173e10a623b24593791025b67104a, type: 2}
   - {fileID: 11400000, guid: 9a3a6c437b5dbca4c9ec95b64f7b0a6c, type: 2}
@@ -49,8 +49,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
   - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
   - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
-  - {fileID: 11400000, guid: c0ff11bedf0d3f04f910f2620bd9065e, type: 2}
   <PrototypeParts>k__BackingField:
-  - {fileID: 11400000, guid: 1e64498b706306a49a63bda1daca1441, type: 2}
   - {fileID: 11400000, guid: b152159e29343aa4f9f277d7b633d4a1, type: 2}
   - {fileID: 11400000, guid: 74ce8fe50234250438cf1acd723e9221, type: 2}
+  - {fileID: 11400000, guid: 92a512f720cd26943b73fdf6a5613328, type: 2}

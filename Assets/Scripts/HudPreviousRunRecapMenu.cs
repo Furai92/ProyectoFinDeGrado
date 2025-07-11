@@ -42,8 +42,28 @@ public class HudPreviousRunRecapMenu : MonoBehaviour, IGameMenu
     {
         StageStatsTracker.StageRecord record = PersistentDataManager.GetPreviousStageRecord();
 
-        runResultText.text = record.victory ? sdb.GetString("RUN_RESULT_VICTORY") : sdb.GetString("RUN_RESULT_DEFEAT");
-        runResultText.color = record.victory ? Color.green : Color.red;
+        switch (record.result) 
+        {
+            case StageStatsTracker.StageRecord.Result.Victory:
+                {
+                    runResultText.text = sdb.GetString("RUN_RESULT_VICTORY");
+                    runResultText.color = Color.green;
+                    break;
+                }
+            case StageStatsTracker.StageRecord.Result.Defeat:
+                {
+                    runResultText.text = sdb.GetString("RUN_RESULT_DEFEAT");
+                    runResultText.color = Color.red;
+                    break;
+                }
+            case StageStatsTracker.StageRecord.Result.Abandoned:
+                {
+                    runResultText.text = sdb.GetString("RUN_RESULT_ABANDON");
+                    runResultText.color = Color.white;
+                    break;
+                }
+        }
+
 
         for (int i = 0; i < damageRecapElements.Count; i++) 
         {

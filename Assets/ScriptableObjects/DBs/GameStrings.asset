@@ -17,6 +17,8 @@ MonoBehaviour:
     <Data>k__BackingField: Victory!
   - <ID>k__BackingField: RUN_RESULT_DEFEAT
     <Data>k__BackingField: Defeat...
+  - <ID>k__BackingField: RUN_RESULT_ABANDON
+    <Data>k__BackingField: Abandoned
   - <ID>k__BackingField: STATUS_NAME_NONELEMENTAL
     <Data>k__BackingField: No Effect
   - <ID>k__BackingField: STATUS_NAME_FIRE
@@ -799,6 +801,8 @@ MonoBehaviour:
     <Data>k__BackingField: Gatling
   - <ID>k__BackingField: WPN_NAME_SHOTGUN
     <Data>k__BackingField: Shotgun
+  - <ID>k__BackingField: WPN_NAME_PLASMA_CASTER
+    <Data>k__BackingField: Plasma Caster
   - <ID>k__BackingField: DIF_DESC_0
     <Data>k__BackingField: Base difficulty.
   - <ID>k__BackingField: DIF_DESC_1
@@ -821,8 +825,12 @@ MonoBehaviour:
     <Data>k__BackingField: Elite enemies can appear.
   - <ID>k__BackingField: DIF_DESC_10
     <Data>k__BackingField: All enemies have an extra health bar.
+  - <ID>k__BackingField: DIF_DESC_LOCKED
+    <Data>k__BackingField: Complete the previous difficulty to unlock
   - <ID>k__BackingField: DIF_BASE_NAME
     <Data>k__BackingField: Chaos
+  - <ID>k__BackingField: DIF_NAME_LOCKED
+    <Data>k__BackingField: '[LOCKED]'
   - <ID>k__BackingField: MIL_NAME_SLAYER_1
     <Data>k__BackingField: Slayer 1
   - <ID>k__BackingField: MIL_NAME_SLAYER_2
@@ -911,4 +919,14 @@ MonoBehaviour:
     <Data>k__BackingField: Across all your runs, open a total of 50 chests.
   - <ID>k__BackingField: MIL_DESC_TREASURE_FINDER_4
     <Data>k__BackingField: Across all your runs, open a total of 100 chests.
+  - <ID>k__BackingField: PART_DESC_MELEE_LIGHT
+    <Data>k__BackingField: +20% firerate, -20% heat
+  - <ID>k__BackingField: PART_DESC_MELEE_HEAVY
+    <Data>k__BackingField: -20% firerate, +50% damage
+  - <ID>k__BackingField: PART_DESC_LETHAL
+    <Data>k__BackingField: +30% critical damage
+  - <ID>k__BackingField: PART_DESC_ELEMENTAL
+    <Data>k__BackingField: +30% status buildup
+  - <ID>k__BackingField: PART_DESC_MELEE_ENERGY_ORB
+    <Data>k__BackingField: Attacks create energy orbs
   <Keywords>k__BackingField: []

@@ -40,7 +40,7 @@ public class StageMusicManager : MonoBehaviour
     }
     private void OnSettingsChanged() 
     {
-        settingsMult = GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MusicVolume);
+        settingsMult = GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MusicVolume) * GameSettingsManager.GetSetting(GameSettingsManager.GameSetting.MasterVolume);
         UpdateAudioVolume();
     }
     private void UpdateAudioVolume() 

@@ -4942,6 +4942,7 @@ MonoBehaviour:
   impactPS: {fileID: 2709488733012218680}
   cdb: {fileID: 11400000, guid: 65eecbe3f4e293d40a2157b29b42a957, type: 2}
   visualParent: {fileID: 7733968698079566711}
+  mr: {fileID: 8887489147474740788}
 --- !u!1 &7805301213400636417
 GameObject:
   m_ObjectHideFlags: 0
@@ -5007,7 +5008,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: aac93bb8316313947a801bd0547925ee, type: 2}
+  - {fileID: 2100000, guid: c8b04eb79ff7fd3449dafa94abbcf839, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

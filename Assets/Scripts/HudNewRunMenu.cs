@@ -38,7 +38,6 @@ public class HudNewRunMenu : MonoBehaviour, IGameMenu
     private void UpdatePage() 
     {
         headerMain.text = sdb.GetString("NEWRUN_MENU_HEADER_MAIN");
-        difficultyCard.SetUp(database.DifficultyLevels[difficultySelectIndex]);
         difficultyCard.gameObject.SetActive(currentPage == 2);
         difficultyDesc.gameObject.SetActive(currentPage == 2);
         difficultyDescAccumulative.gameObject.SetActive(currentPage == 2 && difficultySelectIndex != 0);
@@ -68,7 +67,17 @@ public class HudNewRunMenu : MonoBehaviour, IGameMenu
                 {
                     techBoostedChanceDesc.gameObject.SetActive(false);
                     pageDisplay.UpdateDisplay(database.DifficultyLevels.Count, difficultySelectIndex);
-                    difficultyDesc.text = sdb.GetString(database.DifficultyLevels[difficultySelectIndex].DescID);
+
+                    if (difficultySelectIndex > 1 && PersistentDataManager.GetGameProgress(string.Format("WINS_CHAOS_{0}", difficultySelectIndex)) == 0)
+                    {
+                        difficultyDesc.text = sdb.GetString("DIF_DESC_LOCKED");
+                        difficultyCard.SetUp(null);
+                    }
+                    else 
+                    {
+                        difficultyDesc.text = sdb.GetString(database.DifficultyLevels[difficultySelectIndex].DescID);
+                        difficultyCard.SetUp(database.DifficultyLevels[difficultySelectIndex]);
+                    }
                     headerSub.text = sdb.GetString("NEWRUN_MENU_HEADER_2");
                     break;
                 }
@@ -95,7 +104,12 @@ public class HudNewRunMenu : MonoBehaviour, IGameMenu
                 }
             case 2:
                 {
+                    if (difficultySelectIndex > 1 && PersistentDataManager.GetGameProgress(string.Format("WINS_CHAOS_{0}", difficultySelectIndex - 1)) == 0) 
+                    {
+                        return;
+                    }
                     StartRun();
+
                     break;
                 }
         }

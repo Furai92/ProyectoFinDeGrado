@@ -28,6 +28,8 @@ public class HudCombatWarningElement : MonoBehaviour
         eventWorldPosition = pos;
         cam = c;
         removeTime = Time.time + LIFETIME;
+
+        if (cam.WorldToScreenPoint(pos).z < MAXIMUM_WORLD_TO_SCREEN_Z) { SFXManager.PlaySFX("WARNING"); }
     }
     private void Update()
     {
